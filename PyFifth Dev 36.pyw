@@ -3207,8 +3207,9 @@ class CharacterSheet:
             self.CoinValueAndWeightHolderFrame.grid(row=2, column=1, sticky=NSEW)
             self.CoinValueHeader = Label(self.CoinValueAndWeightHolderFrame, text="Coin Value\n(gp)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.CoinValueHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-            self.CoinValueHeader.bind("<Button-1>", self.SpendCoins)
-            StatusBarInst.TooltipConfig(self.CoinValueHeader, "Left-click to spend coins.")
+            self.CoinValueHeader.bind("<Button-1>", self.GainCoins)
+            self.CoinValueHeader.bind("<Button-3>", self.SpendCoins)
+            StatusBarInst.TooltipConfig(self.CoinValueHeader, "Left-click to gain coins.  Right-click to spend.")
             self.CoinValueEntry = EntryExtended(self.CoinValueAndWeightHolderFrame, width=13, justify=CENTER, textvariable=self.CoinValueEntryVar, state=DISABLED, disabledforeground="black",
                                                 disabledbackground="light gray",
                                                 cursor="arrow")
@@ -3247,7 +3248,7 @@ class CharacterSheet:
             self.InventoryListCountHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Count", SearchMode=True))
             self.InventoryListCountHeader.bind("<Button-3>", lambda event: self.Sort("Count", Reverse=True))
             StatusBarInst.TooltipConfig(self.InventoryListCountHeader, GlobalInst.SortTooltipString)
-            self.InventoryListUnitWeightHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Unit Weight\n(lb.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListUnitWeightHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Unit Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListUnitWeightHeader.grid(row=0, column=2, sticky=NSEW)
             self.InventoryListUnitWeightHeader.bind("<Button-1>", lambda event: self.Sort("Unit Weight"))
             self.InventoryListUnitWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Weight", SearchMode=True))
@@ -3265,7 +3266,7 @@ class CharacterSheet:
             self.InventoryListUnitValueDenominationHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Value Denomination", SearchMode=True))
             self.InventoryListUnitValueDenominationHeader.bind("<Button-3>", lambda event: self.Sort("Value Denomination", Reverse=True))
             StatusBarInst.TooltipConfig(self.InventoryListUnitValueDenominationHeader, GlobalInst.SortTooltipString)
-            self.InventoryListTotalWeightHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Total Weight\n(lb.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListTotalWeightHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Total Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListTotalWeightHeader.grid(row=0, column=5, sticky=NSEW)
             self.InventoryListTotalWeightHeader.bind("<Button-1>", lambda event: self.Sort("Total Weight"))
             self.InventoryListTotalWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Weight", SearchMode=True))
@@ -3533,7 +3534,7 @@ class CharacterSheet:
 
         def SpendCoins(self, event):
             # Create Config Window and Wait
-            SpendCoinsMenuInst = self.SpendCoinsMenu(WindowInst, self.SpendingCoins)
+            SpendCoinsMenuInst = SpendCoinsMenu(WindowInst, self.SpendingCoins)
             WindowInst.wait_window(SpendCoinsMenuInst.Window)
 
             # Handle Variables
@@ -3541,271 +3542,15 @@ class CharacterSheet:
                 for Denomination in SpendCoinsMenuInst.Remaining.keys():
                     self.SpendingCoins[Denomination].set(SpendCoinsMenuInst.Remaining[Denomination].get())
 
-        class SpendCoinsMenu:
-            def __init__(self, master, Coins):
-                # Store Parameters
-                self.Coins = Coins
+        def GainCoins(self, event):
+            # Create Config Window and Wait
+            GainCoinsMenuInst = GainCoinsMenu(WindowInst, self.SpendingCoins)
+            WindowInst.wait_window(GainCoinsMenuInst.Window)
 
-                # Variables
-                self.DataSubmitted = BooleanVar()
-                self.SpendCPEntryVar = StringVar()
-                self.SpendSPEntryVar = StringVar()
-                self.SpendEPEntryVar = StringVar()
-                self.SpendGPEntryVar = StringVar()
-                self.SpendPPEntryVar = StringVar()
-                self.RemainingCPEntryVar = StringVar(value=self.Coins["CP"].get())
-                self.RemainingSPEntryVar = StringVar(value=self.Coins["SP"].get())
-                self.RemainingEPEntryVar = StringVar(value=self.Coins["EP"].get())
-                self.RemainingGPEntryVar = StringVar(value=self.Coins["GP"].get())
-                self.RemainingPPEntryVar = StringVar(value=self.Coins["PP"].get())
-                self.MatchValuesAfterSpendingEntryVar = StringVar()
-                self.MatchValuesComparatorEntryVar = StringVar()
-                self.MatchValuesRemainingEntryVar = StringVar()
-
-                # Remaining Dictionary
-                self.Remaining = {}
-                self.Remaining["CP"] = self.RemainingCPEntryVar
-                self.Remaining["SP"] = self.RemainingSPEntryVar
-                self.Remaining["EP"] = self.RemainingEPEntryVar
-                self.Remaining["GP"] = self.RemainingGPEntryVar
-                self.Remaining["PP"] = self.RemainingPPEntryVar
-
-                # Create Window
-                self.Window = Toplevel(master)
-                self.Window.wm_attributes("-toolwindow", 1)
-                self.Window.wm_title("Spend Coins")
-
-                # Spend
-                self.SpendFrame = LabelFrame(self.Window, text="Spend:")
-                self.SpendFrame.grid_columnconfigure(0, weight=1)
-                self.SpendFrame.grid_columnconfigure(1, weight=1)
-                self.SpendFrame.grid_columnconfigure(2, weight=1)
-                self.SpendFrame.grid_columnconfigure(3, weight=1)
-                self.SpendFrame.grid_columnconfigure(4, weight=1)
-                self.SpendFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-                self.SpendCPHeader = Label(self.SpendFrame, text="CP", bd=2, relief=GROOVE)
-                self.SpendCPHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-                self.SpendSPHeader = Label(self.SpendFrame, text="SP", bd=2, relief=GROOVE)
-                self.SpendSPHeader.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
-                self.SpendEPHeader = Label(self.SpendFrame, text="EP", bd=2, relief=GROOVE)
-                self.SpendEPHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
-                self.SpendGPHeader = Label(self.SpendFrame, text="GP", bd=2, relief=GROOVE)
-                self.SpendGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
-                self.SpendPPHeader = Label(self.SpendFrame, text="PP", bd=2, relief=GROOVE)
-                self.SpendPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-                self.SpendCPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendCPEntryVar, justify=CENTER, width=5)
-                self.SpendCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-                self.SpendSPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendSPEntryVar, justify=CENTER, width=5)
-                self.SpendSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-                self.SpendEPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendEPEntryVar, justify=CENTER, width=5)
-                self.SpendEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-                self.SpendGPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendGPEntryVar, justify=CENTER, width=5)
-                self.SpendGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
-                self.SpendPPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendPPEntryVar, justify=CENTER, width=5)
-                self.SpendPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
-
-                # Match Values
-                self.MatchValuesFrame = LabelFrame(self.Window, text="Match Values:")
-                self.MatchValuesFrame.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-                self.MatchValuesAfterSpendingHeader = Label(self.MatchValuesFrame, text="Value After\nSpending (CP)", bd=2, relief=GROOVE)
-                self.MatchValuesAfterSpendingHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-                self.MatchValuesAfterSpendingEntry = EntryExtended(self.MatchValuesFrame, textvariable=self.MatchValuesAfterSpendingEntryVar, width=20, state=DISABLED, disabledforeground="black",
-                                                                   disabledbackground="light gray",
-                                                                   cursor="arrow", justify=CENTER)
-                self.MatchValuesAfterSpendingEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-                self.MatchValuesComparatorEntry = EntryExtended(self.MatchValuesFrame, textvariable=self.MatchValuesComparatorEntryVar, width=5, state=DISABLED, disabledforeground="black",
-                                                                disabledbackground="lightgray", cursor="arrow",
-                                                                justify=CENTER)
-                self.MatchValuesComparatorEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-                self.MatchValuesRemainingHeader = Label(self.MatchValuesFrame, text="Remaining Coins\nValue (CP)", bd=2, relief=GROOVE)
-                self.MatchValuesRemainingHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
-                self.MatchValuesRemainingEntry = EntryExtended(self.MatchValuesFrame, textvariable=self.MatchValuesRemainingEntryVar, width=20, state=DISABLED, disabledforeground="black",
-                                                               disabledbackground="light gray",
-                                                               cursor="arrow", justify=CENTER)
-                self.MatchValuesRemainingEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-
-                # Remaining
-                self.RemainingFrame = LabelFrame(self.Window, text="Remaining:")
-                self.RemainingFrame.grid_columnconfigure(0, weight=1)
-                self.RemainingFrame.grid_columnconfigure(1, weight=1)
-                self.RemainingFrame.grid_columnconfigure(2, weight=1)
-                self.RemainingFrame.grid_columnconfigure(3, weight=1)
-                self.RemainingFrame.grid_columnconfigure(4, weight=1)
-                self.RemainingFrame.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
-                self.RemainingCPHeader = Label(self.RemainingFrame, text="CP", bd=2, relief=GROOVE)
-                self.RemainingCPHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-                self.RemainingSPHeader = Label(self.RemainingFrame, text="SP", bd=2, relief=GROOVE)
-                self.RemainingSPHeader.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
-                self.RemainingEPHeader = Label(self.RemainingFrame, text="EP", bd=2, relief=GROOVE)
-                self.RemainingEPHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
-                self.RemainingGPHeader = Label(self.RemainingFrame, text="GP", bd=2, relief=GROOVE)
-                self.RemainingGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
-                self.RemainingPPHeader = Label(self.RemainingFrame, text="PP", bd=2, relief=GROOVE)
-                self.RemainingPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-                self.RemainingCPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingCPEntryVar, justify=CENTER, width=5)
-                self.RemainingCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-                self.RemainingSPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingSPEntryVar, justify=CENTER, width=5)
-                self.RemainingSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-                self.RemainingEPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingEPEntryVar, justify=CENTER, width=5)
-                self.RemainingEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-                self.RemainingGPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingGPEntryVar, justify=CENTER, width=5)
-                self.RemainingGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
-                self.RemainingPPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingPPEntryVar, justify=CENTER, width=5)
-                self.RemainingPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
-
-                # Values Key
-                self.ValuesKeyStringCP = "1 cp"
-                self.ValuesKeyStringSP = str(self.Coins["SPValueAsCP"]) + " cp"
-                self.ValuesKeyStringEP = str(self.Coins["EPValueAsCP"]) + " cp"
-                self.ValuesKeyStringGP = str(self.Coins["GPValueAsCP"]) + " cp"
-                self.ValuesKeyStringPP = str(self.Coins["PPValueAsCP"]) + " cp"
-                self.ValuesKeyFont = font.Font(size=6)
-                self.ValuesKeyCPLabel = Label(self.RemainingFrame, text=self.ValuesKeyStringCP, font=self.ValuesKeyFont)
-                self.ValuesKeyCPLabel.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
-                self.ValuesKeySPLabel = Label(self.RemainingFrame, text=self.ValuesKeyStringSP, font=self.ValuesKeyFont)
-                self.ValuesKeySPLabel.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
-                self.ValuesKeyEPLabel = Label(self.RemainingFrame, text=self.ValuesKeyStringEP, font=self.ValuesKeyFont)
-                self.ValuesKeyEPLabel.grid(row=2, column=2, sticky=NSEW, padx=2, pady=2)
-                self.ValuesKeyGPLabel = Label(self.RemainingFrame, text=self.ValuesKeyStringGP, font=self.ValuesKeyFont)
-                self.ValuesKeyGPLabel.grid(row=2, column=3, sticky=NSEW, padx=2, pady=2)
-                self.ValuesKeyPPLabel = Label(self.RemainingFrame, text=self.ValuesKeyStringPP, font=self.ValuesKeyFont)
-                self.ValuesKeyPPLabel.grid(row=2, column=4, sticky=NSEW, padx=2, pady=2)
-
-                # ButtonsFrame
-                self.ButtonsFrame = Frame(self.Window)
-                self.ButtonsFrame.grid_columnconfigure(0, weight=1)
-                self.ButtonsFrame.grid_columnconfigure(1, weight=1)
-                self.ButtonsFrame.grid_columnconfigure(2, weight=1)
-                self.ButtonsFrame.grid(row=3, column=0, sticky=NSEW)
-
-                # Submit Button
-                self.SubmitButton = Button(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
-                self.SubmitButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-
-                # Calculate Button
-                self.CalculateButton = Button(self.ButtonsFrame, text="Calculate", command=self.Calculate, bg=GlobalInst.ButtonColor)
-                self.CalculateButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
-
-                # Cancel Button
-                self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
-                self.CancelButton.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
-
-                # Prevent Main Window Input
-                self.Window.grab_set()
-
-                # Handle Config Window Geometry and Focus
-                GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst)
-                self.Window.focus_force()
-
-                # Initial Calculation
-                self.Calculate(ValidateSpending=True)
-
-                # Focus on Spend CP Entry
-                self.SpendCPEntry.focus_set()
-
-            def Submit(self):
-                if self.Calculate(ValidateSpending=True):
-                    pass
-                else:
-                    return
-                self.DataSubmitted.set(True)
-                self.Window.destroy()
-
-            def ValidEntry(self):
-                try:
-                    SpendCPInt = GlobalInst.GetStringVarAsNumber(self.SpendCPEntryVar)
-                    SpendSPInt = GlobalInst.GetStringVarAsNumber(self.SpendSPEntryVar)
-                    SpendEPInt = GlobalInst.GetStringVarAsNumber(self.SpendEPEntryVar)
-                    SpendGPInt = GlobalInst.GetStringVarAsNumber(self.SpendGPEntryVar)
-                    SpendPPInt = GlobalInst.GetStringVarAsNumber(self.SpendPPEntryVar)
-                    RemainingCPInt = GlobalInst.GetStringVarAsNumber(self.RemainingCPEntryVar)
-                    RemainingSPInt = GlobalInst.GetStringVarAsNumber(self.RemainingSPEntryVar)
-                    RemainingEPInt = GlobalInst.GetStringVarAsNumber(self.RemainingEPEntryVar)
-                    RemainingGPInt = GlobalInst.GetStringVarAsNumber(self.RemainingGPEntryVar)
-                    RemainingPPInt = GlobalInst.GetStringVarAsNumber(self.RemainingPPEntryVar)
-                except:
-                    messagebox.showerror("Invalid Entry", "Coins must be whole numbers.")
-                    return False
-                CoinIntsList = [SpendCPInt, SpendSPInt, SpendEPInt, SpendGPInt, SpendPPInt, RemainingCPInt, RemainingSPInt, RemainingEPInt, RemainingGPInt, RemainingPPInt]
-                for CoinInt in CoinIntsList:
-                    if CoinInt < 0:
-                        messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
-                        return False
-                return True
-
-            def Calculate(self, ValidateSpending=False):
-                # Validate Entry
-                if self.ValidEntry():
-                    pass
-                else:
-                    return
-
-                # Get CP Value of Current Coins
-                CurrentCoinsCPAsCPValue = GlobalInst.GetStringVarAsNumber(self.Coins["CP"], Mode="Decimal")
-                CurrentCoinsSPAsCPValue = GlobalInst.GetStringVarAsNumber(self.Coins["SP"], Mode="Decimal") * self.Coins["SPValueAsCP"]
-                CurrentCoinsEPAsCPValue = GlobalInst.GetStringVarAsNumber(self.Coins["EP"], Mode="Decimal") * self.Coins["EPValueAsCP"]
-                CurrentCoinsGPAsCPValue = GlobalInst.GetStringVarAsNumber(self.Coins["GP"], Mode="Decimal") * self.Coins["GPValueAsCP"]
-                CurrentCoinsPPAsCPValue = GlobalInst.GetStringVarAsNumber(self.Coins["PP"], Mode="Decimal") * self.Coins["PPValueAsCP"]
-                CurrentCoinsValue = CurrentCoinsCPAsCPValue + CurrentCoinsSPAsCPValue + CurrentCoinsEPAsCPValue + CurrentCoinsGPAsCPValue + CurrentCoinsPPAsCPValue
-                CurrentCoinsValueInt = int(CurrentCoinsValue)
-
-                # Get CP Value of Spend Amount
-                SpendCPAsCPValue = GlobalInst.GetStringVarAsNumber(self.SpendCPEntryVar, Mode="Decimal")
-                SpendSPAsCPValue = GlobalInst.GetStringVarAsNumber(self.SpendSPEntryVar, Mode="Decimal") * self.Coins["SPValueAsCP"]
-                SpendEPAsCPValue = GlobalInst.GetStringVarAsNumber(self.SpendEPEntryVar, Mode="Decimal") * self.Coins["EPValueAsCP"]
-                SpendGPAsCPValue = GlobalInst.GetStringVarAsNumber(self.SpendGPEntryVar, Mode="Decimal") * self.Coins["GPValueAsCP"]
-                SpendPPAsCPValue = GlobalInst.GetStringVarAsNumber(self.SpendPPEntryVar, Mode="Decimal") * self.Coins["PPValueAsCP"]
-                SpendValue = SpendCPAsCPValue + SpendSPAsCPValue + SpendEPAsCPValue + SpendGPAsCPValue + SpendPPAsCPValue
-                SpendValueInt = int(SpendValue)
-
-                # Generate Value After Spending
-                ValueAfterSpending = CurrentCoinsValueInt - SpendValueInt
-
-                # Get CP Value of Remaining Amount
-                RemainingCPAsCPValue = GlobalInst.GetStringVarAsNumber(self.RemainingCPEntryVar, Mode="Decimal")
-                RemainingSPAsCPValue = GlobalInst.GetStringVarAsNumber(self.RemainingSPEntryVar, Mode="Decimal") * self.Coins["SPValueAsCP"]
-                RemainingEPAsCPValue = GlobalInst.GetStringVarAsNumber(self.RemainingEPEntryVar, Mode="Decimal") * self.Coins["EPValueAsCP"]
-                RemainingGPAsCPValue = GlobalInst.GetStringVarAsNumber(self.RemainingGPEntryVar, Mode="Decimal") * self.Coins["GPValueAsCP"]
-                RemainingPPAsCPValue = GlobalInst.GetStringVarAsNumber(self.RemainingPPEntryVar, Mode="Decimal") * self.Coins["PPValueAsCP"]
-                RemainingValue = RemainingCPAsCPValue + RemainingSPAsCPValue + RemainingEPAsCPValue + RemainingGPAsCPValue + RemainingPPAsCPValue
-                RemainingValueInt = int(RemainingValue)
-
-                # Generate Strings
-                ValueAfterSpendingString = str(ValueAfterSpending)
-                RemainingValueString = str(RemainingValueInt)
-                if ValueAfterSpending == RemainingValue:
-                    ComparatorString = "="
-                else:
-                    if ValueAfterSpending < RemainingValue:
-                        ComparatorString = "<"
-                    else:
-                        ComparatorString = ">"
-
-                # Set Vars
-                self.MatchValuesAfterSpendingEntryVar.set(ValueAfterSpendingString)
-                self.MatchValuesComparatorEntryVar.set(ComparatorString)
-                self.MatchValuesRemainingEntryVar.set(RemainingValueString)
-
-                # Set Match Colors
-                EntriesToColor = [self.MatchValuesAfterSpendingEntry, self.MatchValuesComparatorEntry, self.MatchValuesRemainingEntry]
-                if ComparatorString in ["<", ">"]:
-                    for EntryToColor in EntriesToColor:
-                        EntryToColor.configure(disabledforeground="red")
-                else:
-                    for EntryToColor in EntriesToColor:
-                        EntryToColor.configure(disabledforeground="green")
-
-                # Check If Spending Is Valid
-                if ValidateSpending:
-                    if ComparatorString is "=":
-                        return True
-                    else:
-                        messagebox.showerror("Spending Invalid", "The value of your coins after spending and the value of the coins you have remaining must match.\n\nAdjust coins remaining until the values are equal.")
-                        return False
-
-            def Cancel(self):
-                self.DataSubmitted.set(False)
-                self.Window.destroy()
+            # Handle Variables
+            if GainCoinsMenuInst.DataSubmitted.get():
+                for Denomination, Gain in GainCoinsMenuInst.Gained.items():
+                    self.SpendingCoins[Denomination].set(str(GlobalInst.GetStringVarAsNumber(self.SpendingCoins[Denomination]) + GlobalInst.GetStringVarAsNumber(Gain)))
 
         class InventoryEntry:
             def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesTuple, Row):
@@ -3973,7 +3718,7 @@ class CharacterSheet:
                 self.CategoryEntryVar.UpdateTag("InventoryListMagicItemCategoryEntryVar" + str(self.Row))
                 self.RarityEntryVar.UpdateTag("InventoryListMagicItemRarityEntryVar" + str(self.Row))
                 self.DescriptionVar.UpdateTag("InventoryListMagicItemDescriptionVar" + str(self.Row))
-                self.SortOrderVar.UpdateTag("SortOrderVar" + str(self.Row))
+                self.SortOrderVar.UpdateTag("InventoryListSortOrderVar" + str(self.Row))
 
             class ItemDescriptionMenu:
                 def __init__(self, master, ItemDescriptionVars):
@@ -4835,18 +4580,23 @@ class SpendCoinsMenu:
         self.SpendPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
         self.SpendCPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendCPEntryVar, justify=CENTER, width=5)
         self.SpendCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendCPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.SpendSPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendSPEntryVar, justify=CENTER, width=5)
         self.SpendSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendSPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.SpendEPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendEPEntryVar, justify=CENTER, width=5)
         self.SpendEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendEPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.SpendGPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendGPEntryVar, justify=CENTER, width=5)
         self.SpendGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendGPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.SpendPPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendPPEntryVar, justify=CENTER, width=5)
         self.SpendPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendPPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
 
         # Match Values
@@ -4889,18 +4639,23 @@ class SpendCoinsMenu:
         self.RemainingPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
         self.RemainingCPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingCPEntryVar, justify=CENTER, width=5)
         self.RemainingCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingCPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.RemainingSPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingSPEntryVar, justify=CENTER, width=5)
         self.RemainingSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingSPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.RemainingEPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingEPEntryVar, justify=CENTER, width=5)
         self.RemainingEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingEPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.RemainingGPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingGPEntryVar, justify=CENTER, width=5)
         self.RemainingGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingGPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.RemainingPPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingPPEntryVar, justify=CENTER, width=5)
         self.RemainingPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingPPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
 
         # Values Key
@@ -5032,6 +4787,116 @@ class SpendCoinsMenu:
             else:
                 messagebox.showerror("Spending Invalid", "The value of your coins after spending and the value of the coins you have remaining must match.\n\nAdjust coins remaining until the values are equal.")
                 return False
+
+    def Cancel(self):
+        self.DataSubmitted.set(False)
+        self.Window.destroy()
+
+
+class GainCoinsMenu:
+    def __init__(self, master, Coins):
+        # Store Parameters
+        self.Coins = Coins
+
+        # Variables
+        self.DataSubmitted = BooleanVar()
+        self.GainedCPEntryVar = StringVar()
+        self.GainedSPEntryVar = StringVar()
+        self.GainedEPEntryVar = StringVar()
+        self.GainedGPEntryVar = StringVar()
+        self.GainedPPEntryVar = StringVar()
+
+        # Gained Dictionary
+        self.Gained = {}
+        self.Gained["CP"] = self.GainedCPEntryVar
+        self.Gained["SP"] = self.GainedSPEntryVar
+        self.Gained["EP"] = self.GainedEPEntryVar
+        self.Gained["GP"] = self.GainedGPEntryVar
+        self.Gained["PP"] = self.GainedPPEntryVar
+
+        # Create Window
+        self.Window = Toplevel(master)
+        self.Window.wm_attributes("-toolwindow", 1)
+        self.Window.wm_title("Gain Coins")
+
+        # Spend
+        self.GainFrame = Frame(self.Window)
+        self.GainFrame.grid_columnconfigure(0, weight=1)
+        self.GainFrame.grid_columnconfigure(1, weight=1)
+        self.GainFrame.grid_columnconfigure(2, weight=1)
+        self.GainFrame.grid_columnconfigure(3, weight=1)
+        self.GainFrame.grid_columnconfigure(4, weight=1)
+        self.GainFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+        self.GainCPHeader = Label(self.GainFrame, text="CP", bd=2, relief=GROOVE)
+        self.GainCPHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+        self.GainSPHeader = Label(self.GainFrame, text="SP", bd=2, relief=GROOVE)
+        self.GainSPHeader.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+        self.GainEPHeader = Label(self.GainFrame, text="EP", bd=2, relief=GROOVE)
+        self.GainEPHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
+        self.GainGPHeader = Label(self.GainFrame, text="GP", bd=2, relief=GROOVE)
+        self.GainGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
+        self.GainPPHeader = Label(self.GainFrame, text="PP", bd=2, relief=GROOVE)
+        self.GainPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
+        self.GainCPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedCPEntryVar, justify=CENTER, width=5)
+        self.GainCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainCPEntry.bind("<Return>", lambda event: self.Submit())
+        self.GainCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.GainSPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedSPEntryVar, justify=CENTER, width=5)
+        self.GainSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainSPEntry.bind("<Return>", lambda event: self.Submit())
+        self.GainSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+        self.GainEPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedEPEntryVar, justify=CENTER, width=5)
+        self.GainEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainEPEntry.bind("<Return>", lambda event: self.Submit())
+        self.GainEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
+        self.GainGPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedGPEntryVar, justify=CENTER, width=5)
+        self.GainGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainGPEntry.bind("<Return>", lambda event: self.Submit())
+        self.GainGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
+        self.GainPPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedPPEntryVar, justify=CENTER, width=5)
+        self.GainPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainPPEntry.bind("<Return>", lambda event: self.Submit())
+        self.GainPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
+
+        # ButtonsFrame
+        self.ButtonsFrame = Frame(self.Window)
+        self.ButtonsFrame.grid_columnconfigure(0, weight=1)
+        self.ButtonsFrame.grid_columnconfigure(1, weight=1)
+        self.ButtonsFrame.grid(row=1, column=0, sticky=NSEW)
+
+        # Submit Button
+        self.SubmitButton = Button(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+        self.SubmitButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+
+        # Cancel Button
+        self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+        self.CancelButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+
+        # Prevent Main Window Input
+        self.Window.grab_set()
+
+        # Handle Config Window Geometry and Focus
+        GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst)
+        self.Window.focus_force()
+
+        # Focus on Spend CP Entry
+        self.GainCPEntry.focus_set()
+
+    def ValidCoinsEntry(self, NewText):
+        if NewText is "": return True
+        try:
+            NewTextInt = int(NewText)
+        except:
+            messagebox.showerror("Invalid Entry", "Coins must be whole numbers.")
+            return False
+        if NewTextInt < 0:
+            messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
+            return False
+        return True
+
+    def Submit(self):
+        self.DataSubmitted.set(True)
+        self.Window.destroy()
 
     def Cancel(self):
         self.DataSubmitted.set(False)
@@ -7537,8 +7402,12 @@ class HoardSheet:
         self.ValueGP = Decimal(1)
         self.ValuePP = Decimal(10)
         self.WeightPerCoin = Decimal(0.02)
-        self.CoinValueEntryVar = StringVar()
-        self.CoinWeightEntryVar = StringVar()
+        self.StatsCoinsValueEntryVar = StringVar()
+        self.StatsCoinsWeightEntryVar = StringVar()
+        self.StatsItemsValueEntryVar = StringVar()
+        self.StatsItemsWeightEntryVar = StringVar()
+        self.StatsTotalValueEntryVar = StringVar()
+        self.StatsTotalWeightEntryVar = StringVar()
         self.ScrollingDisabledVar = BooleanVar(value=False)
 
         # Spending Coins Dictionary
@@ -7564,19 +7433,22 @@ class HoardSheet:
 
         # Hoard Header
         self.HoardHeaderFrame = LabelFrame(master, text="Basic Hoard Info:")
-        self.HoardHeaderFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+        self.HoardHeaderFrame.grid_columnconfigure(1, weight=1)
+        self.HoardHeaderFrame.grid_columnconfigure(3, weight=1)
+        self.HoardHeaderFrame.grid_columnconfigure(5, weight=1)
+        self.HoardHeaderFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
         self.HoardNameLabel = Label(self.HoardHeaderFrame, text="Name or Owners:")
         self.HoardNameLabel.grid(row=0, column=0, sticky=E)
         self.HoardNameEntry = EntryExtended(self.HoardHeaderFrame, textvariable=self.HoardNameEntryVar, justify=CENTER, width=30)
         self.HoardNameEntry.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
         self.HoardLocationLabel = Label(self.HoardHeaderFrame, text="Location:")
-        self.HoardLocationLabel.grid(row=1, column=0, sticky=E)
+        self.HoardLocationLabel.grid(row=0, column=2, sticky=E)
         self.HoardLocationEntry = EntryExtended(self.HoardHeaderFrame, textvariable=self.HoardLocationEntryVar, justify=CENTER, width=30)
-        self.HoardLocationEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+        self.HoardLocationEntry.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.HoardStorageCostsLabel = Label(self.HoardHeaderFrame, text="Storage Costs:")
-        self.HoardStorageCostsLabel.grid(row=2, column=0, sticky=E)
+        self.HoardStorageCostsLabel.grid(row=0, column=4, sticky=E)
         self.HoardStorageCostsEntry = EntryExtended(self.HoardHeaderFrame, textvariable=self.HoardStorageCostsEntryVar, justify=CENTER, width=30)
-        self.HoardStorageCostsEntry.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
+        self.HoardStorageCostsEntry.grid(row=0, column=5, sticky=NSEW, padx=2, pady=2)
 
         # Coins
         self.CoinsFrame = LabelFrame(master, text="Coins:")
@@ -7615,13 +7487,15 @@ class HoardSheet:
         self.CoinsEntryPP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryPPVar)
         self.CoinsEntryPP.ConfigureValidation(self.ValidCoinsEntry, "key")
         self.CoinsEntryPP.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
-        self.SpendCoinsButton = Button(self.CoinsFrame, text="Spend", bg=GlobalInst.ButtonColor, command=self.SpendCoins)
-        self.SpendCoinsButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.GainCoinsButton = Button(self.CoinsFrame, text="Gain", bg=GlobalInst.ButtonColor, command=self.GainCoins)
-        self.GainCoinsButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+        self.GainCoinsButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.SpendCoinsButton = Button(self.CoinsFrame, text="Spend", bg=GlobalInst.ButtonColor, command=self.SpendCoins)
+        self.SpendCoinsButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Stats
         self.StatsFrame = LabelFrame(master, text="Hoard Stats:")
+        self.StatsFrame.grid_columnconfigure(1, weight=1)
+        self.StatsFrame.grid_columnconfigure(2, weight=1)
         self.StatsFrame.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
         self.StatsCoinsHeader = Label(self.StatsFrame, text="Coins", bd=2, relief=GROOVE)
         self.StatsCoinsHeader.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
@@ -7633,7 +7507,18 @@ class HoardSheet:
         self.StatsValueHeader.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
         self.StatsWeightHeader = Label(self.StatsFrame, text="Weight (lbs.)", bd=2, relief=GROOVE)
         self.StatsWeightHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
-        # TODO:  Entries
+        self.StatsCoinsValueEntry = EntryExtended(self.StatsFrame, textvariable=self.StatsCoinsValueEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow", width=5)
+        self.StatsCoinsValueEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+        self.StatsCoinsWeightEntry = EntryExtended(self.StatsFrame, textvariable=self.StatsCoinsWeightEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow", width=5)
+        self.StatsCoinsWeightEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
+        self.StatsItemsValueEntry = EntryExtended(self.StatsFrame, textvariable=self.StatsItemsValueEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow", width=5)
+        self.StatsItemsValueEntry.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
+        self.StatsItemsWeightEntry = EntryExtended(self.StatsFrame, textvariable=self.StatsItemsWeightEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow", width=5)
+        self.StatsItemsWeightEntry.grid(row=2, column=2, sticky=NSEW, padx=2, pady=2)
+        self.StatsTotalValueEntry = EntryExtended(self.StatsFrame, textvariable=self.StatsTotalValueEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow", width=5)
+        self.StatsTotalValueEntry.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
+        self.StatsTotalWeightEntry = EntryExtended(self.StatsFrame, textvariable=self.StatsTotalWeightEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow", width=5)
+        self.StatsTotalWeightEntry.grid(row=3, column=2, sticky=NSEW, padx=2, pady=2)
 
         # Notes
         self.HoardNotesFrame = LabelFrame(master, text="Notes:")
@@ -7642,9 +7527,76 @@ class HoardSheet:
         self.HoardNotesField.grid(row=0, column=0, sticky=NSEW)
 
         # Treasure Items
-        self.TreasureItems = LabelFrame(master, text="Treasure Items:")
-        self.TreasureItems.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2, rowspan=3)
-        # TODO:  Create this interface and its functions
+        self.TreasureItemsFrame = LabelFrame(master, text="Treasure Items:")
+        self.TreasureItemsFrame.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2, rowspan=3)
+
+        # Treasure Items Scrolled Canvas
+        self.TreasureItemsScrolledCanvas = ScrolledCanvas(self.TreasureItemsFrame, Height=324, Width=622, ScrollingDisabledVar=self.ScrollingDisabledVar)
+        self.TreasureItemsScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
+
+        # Treasure Items Headers
+        self.TreasureItemsListNameHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListNameHeader.grid(row=0, column=0, sticky=NSEW)
+        self.TreasureItemsListNameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
+        self.TreasureItemsListNameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
+        self.TreasureItemsListNameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
+        StatusBarInst.TooltipConfig(self.TreasureItemsListNameHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListCountHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Count", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListCountHeader.grid(row=0, column=1, sticky=NSEW)
+        self.TreasureItemsListCountHeader.bind("<Button-1>", lambda event: self.Sort("Count"))
+        self.TreasureItemsListCountHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Count", SearchMode=True))
+        self.TreasureItemsListCountHeader.bind("<Button-3>", lambda event: self.Sort("Count", Reverse=True))
+        StatusBarInst.TooltipConfig(self.TreasureItemsListCountHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListUnitWeightHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Unit Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListUnitWeightHeader.grid(row=0, column=2, sticky=NSEW)
+        self.TreasureItemsListUnitWeightHeader.bind("<Button-1>", lambda event: self.Sort("Unit Weight"))
+        self.TreasureItemsListUnitWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Weight", SearchMode=True))
+        self.TreasureItemsListUnitWeightHeader.bind("<Button-3>", lambda event: self.Sort("Unit Weight", Reverse=True))
+        StatusBarInst.TooltipConfig(self.TreasureItemsListUnitWeightHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListUnitValueHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Unit Value", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListUnitValueHeader.grid(row=0, column=3, sticky=NSEW)
+        self.TreasureItemsListUnitValueHeader.bind("<Button-1>", lambda event: self.Sort("Unit Value"))
+        self.TreasureItemsListUnitValueHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Value", SearchMode=True))
+        self.TreasureItemsListUnitValueHeader.bind("<Button-3>", lambda event: self.Sort("Unit Value", Reverse=True))
+        StatusBarInst.TooltipConfig(self.TreasureItemsListUnitValueHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListUnitValueDenominationHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Value\nDenom.", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListUnitValueDenominationHeader.grid(row=0, column=4, sticky=NSEW)
+        self.TreasureItemsListUnitValueDenominationHeader.bind("<Button-1>", lambda event: self.Sort("Value Denomination"))
+        self.TreasureItemsListUnitValueDenominationHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Value Denomination", SearchMode=True))
+        self.TreasureItemsListUnitValueDenominationHeader.bind("<Button-3>", lambda event: self.Sort("Value Denomination", Reverse=True))
+        StatusBarInst.TooltipConfig(self.TreasureItemsListUnitValueDenominationHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListTotalWeightHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Total Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListTotalWeightHeader.grid(row=0, column=5, sticky=NSEW)
+        self.TreasureItemsListTotalWeightHeader.bind("<Button-1>", lambda event: self.Sort("Total Weight"))
+        self.TreasureItemsListTotalWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Weight", SearchMode=True))
+        self.TreasureItemsListTotalWeightHeader.bind("<Button-3>", lambda event: self.Sort("Total Weight", Reverse=True))
+        StatusBarInst.TooltipConfig(self.TreasureItemsListTotalWeightHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListTotalValueHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Total Value\n(gp)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListTotalValueHeader.grid(row=0, column=6, sticky=NSEW)
+        self.TreasureItemsListTotalValueHeader.bind("<Button-1>", lambda event: self.Sort("Total Value"))
+        self.TreasureItemsListTotalValueHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Value", SearchMode=True))
+        self.TreasureItemsListTotalValueHeader.bind("<Button-3>", lambda event: self.Sort("Total Value", Reverse=True))
+        StatusBarInst.TooltipConfig(self.TreasureItemsListTotalValueHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListSortOrderHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListSortOrderHeader.grid(row=0, column=7, sticky=NSEW)
+        self.TreasureItemsListSortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
+        self.TreasureItemsListSortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
+        self.TreasureItemsListSortOrderHeader.bind("<Button-3>", lambda event: self.Sort("Sort Order", Reverse=True))
+        StatusBarInst.TooltipConfig(self.TreasureItemsListSortOrderHeader, GlobalInst.SortTooltipString)
+
+        # Treasure Item Entries List
+        self.TreasureItemEntriesList = []
+
+        # Sort Order Values
+        self.SortOrderValuesString = "\"\""
+        for CurrentIndex in range(1, 201):
+            self.SortOrderValuesString += "," + str(CurrentIndex)
+        self.SortOrderValuesTuple = eval(self.SortOrderValuesString)
+
+        # Treasure Item Entries
+        for CurrentIndex in range(1, 201):
+            CurrentEntry = self.TreasureItemEntry(self.TreasureItemsScrolledCanvas.WindowFrame, self.TreasureItemEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesTuple, CurrentIndex)
+            CurrentEntry.Display(CurrentIndex)
 
     def ValidCoinsEntry(self, NewText):
         if NewText is "": return True
@@ -7668,13 +7620,411 @@ class HoardSheet:
             for Denomination in SpendCoinsMenuInst.Remaining.keys():
                 self.SpendingCoins[Denomination].set(SpendCoinsMenuInst.Remaining[Denomination].get())
 
-    # TODO:  Finish this function
     def GainCoins(self):
-        pass
+        # Create Config Window and Wait
+        GainCoinsMenuInst = GainCoinsMenu(WindowInst, self.SpendingCoins)
+        WindowInst.wait_window(GainCoinsMenuInst.Window)
 
-    # TODO:  Finish this function
+        # Handle Variables
+        if GainCoinsMenuInst.DataSubmitted.get():
+            for Denomination, Gain in GainCoinsMenuInst.Gained.items():
+                self.SpendingCoins[Denomination].set(str(GlobalInst.GetStringVarAsNumber(self.SpendingCoins[Denomination]) + GlobalInst.GetStringVarAsNumber(Gain)))
+
     def UpdateHoardStats(self):
-        pass
+        # Coin Counts
+        CPCount = GlobalInst.GetStringVarAsNumber(self.CoinsEntryCPVar, Mode="Decimal")
+        SPCount = GlobalInst.GetStringVarAsNumber(self.CoinsEntrySPVar, Mode="Decimal")
+        EPCount = GlobalInst.GetStringVarAsNumber(self.CoinsEntryEPVar, Mode="Decimal")
+        GPCount = GlobalInst.GetStringVarAsNumber(self.CoinsEntryGPVar, Mode="Decimal")
+        PPCount = GlobalInst.GetStringVarAsNumber(self.CoinsEntryPPVar, Mode="Decimal")
+        TotalCoinCount = CPCount + SPCount + EPCount + GPCount + PPCount
+
+        # Coin Value
+        CoinValue = Decimal(0)
+        CoinValue += CPCount * self.ValueCP
+        CoinValue += SPCount * self.ValueSP
+        CoinValue += EPCount * self.ValueEP
+        CoinValue += GPCount * self.ValueGP
+        CoinValue += PPCount * self.ValuePP
+        self.StatsCoinsValueEntryVar.set(str(CoinValue.quantize(Decimal("0.01"))))
+
+        # Coin Weight
+        CoinWeight = Decimal(TotalCoinCount * self.WeightPerCoin)
+        self.StatsCoinsWeightEntryVar.set(str(CoinWeight.quantize(Decimal("0.01"))))
+
+        # Weights and Values
+        Weights = {}
+        Weights["Total"] = Decimal(0)
+        Weights["Coins"] = Decimal(0)
+        Weights["TreasureItems"] = Decimal(0)
+        Weights[""] = Decimal(0)
+
+        Values = {}
+        Values["Total"] = Decimal(0)
+        Values["Coins"] = Decimal(0)
+        Values["TreasureItems"] = Decimal(0)
+        Values[""] = Decimal(0)
+
+        # Add Coins to Total Weight and Value
+        Weights["Total"] += CoinWeight
+        Values["Total"] += CoinValue
+
+        # Loop Through Inventory List
+        for Entry in self.TreasureItemEntriesList:
+            # Set Up Local Variables
+            Count = GlobalInst.GetStringVarAsNumber(Entry.CountEntryVar)
+            ValueDenomination = Entry.UnitValueDenominationVar.get()
+
+            # Total Weight and Value
+            TotalItemWeight = GlobalInst.GetStringVarAsNumber(Entry.UnitWeightEntryVar, Mode="Decimal") * Decimal(Count)
+            TotalItemValue = GlobalInst.GetStringVarAsNumber(Entry.UnitValueEntryVar, Mode="Decimal") * Decimal(Count)
+
+            # Calculate Value in GP
+            TotalItemValue *= self.DenominationValues[ValueDenomination]
+
+            Entry.TotalWeightEntryVar.set(str(TotalItemWeight.quantize(Decimal("0.01"))))
+            Entry.TotalValueEntryVar.set(str(TotalItemValue.quantize(Decimal("0.01"))))
+
+            # Totals
+            Weights["Total"] += TotalItemWeight
+            Values["Total"] += TotalItemValue
+            Weights["TreasureItems"] += TotalItemWeight
+            Values["TreasureItems"] += TotalItemValue
+
+        # Set Entries
+        self.StatsTotalWeightEntryVar.set(str(Weights["Total"].quantize(Decimal("0.01"))))
+        self.StatsItemsWeightEntryVar.set(str(Weights["TreasureItems"].quantize(Decimal("0.01"))))
+        self.StatsTotalValueEntryVar.set(str(Values["Total"].quantize(Decimal("0.01"))))
+        self.StatsItemsValueEntryVar.set(str(Values["TreasureItems"].quantize(Decimal("0.01"))))
+
+    def Sort(self, Column, Reverse=False, SearchMode=False):
+        # List to Sort
+        ListToSort = []
+
+        if SearchMode:
+            # Get Search String
+            SearchStringPrompt = StringPrompt(WindowInst, "Search", "What do you want to search for?")
+            WindowInst.wait_window(SearchStringPrompt.Window)
+            if SearchStringPrompt.DataSubmitted.get():
+                SearchString = SearchStringPrompt.StringEntryVar.get()
+            else:
+                return
+
+            # Add Fields to List
+            for CurrentEntry in self.TreasureItemEntriesList:
+                ListToSort.append((CurrentEntry, CurrentEntry.SortFields[Column].get().lower()))
+
+            # Sort the List
+            SortedList = sorted(ListToSort, key=lambda x: (x[1] == "", SearchString not in x[1]))
+        else:
+            if Column == "Name":
+                # Add Fields to List
+                for CurrentEntry in self.TreasureItemEntriesList:
+                    ListToSort.append((CurrentEntry, CurrentEntry.SortFields[Column].get()))
+
+                # Sort the List
+                SortedList = sorted(ListToSort, key=lambda x: ((not Reverse and x[1] == "") or (Reverse and x[1] != ""), x[1].lower()), reverse=Reverse)
+            elif Column == "Count" or Column == "Sort Order":
+                # Add Fields to List
+                for CurrentEntry in self.TreasureItemEntriesList:
+                    ListToSort.append((CurrentEntry, GlobalInst.GetStringVarAsNumber(CurrentEntry.SortFields[Column])))
+
+                # Sort the List
+                SortedList = sorted(ListToSort, key=lambda x: ((not Reverse and x[1] == 0) or (Reverse and x[1] != 0), x[1]), reverse=Reverse)
+            elif Column == "Unit Value":
+                # Add Fields to List
+                for CurrentEntry in self.TreasureItemEntriesList:
+                    ListToSort.append((CurrentEntry, CurrentEntry.SortFields["Name"].get(), max(1, GlobalInst.GetStringVarAsNumber(CurrentEntry.SortFields["Count"])),
+                                       GlobalInst.GetStringVarAsNumber(CurrentEntry.SortFields["Total Value"], Mode="Float")))
+
+                # Sort the List
+                SortedList = sorted(ListToSort, key=lambda x: ((not Reverse and x[1] == "") or (Reverse and x[1] != ""), x[3] / x[2]), reverse=Reverse)
+            elif Column == "Value Denomination":
+                # Add Fields to List
+                for CurrentEntry in self.TreasureItemEntriesList:
+                    ListToSort.append((CurrentEntry, CurrentEntry.SortFields["Name"].get(), CurrentEntry.SortFields[Column].get()))
+
+                # Sort the List
+                SortedList = sorted(ListToSort, key=lambda x: ((not Reverse and x[1] == "") or (Reverse and x[1] != ""), x[2].lower()), reverse=Reverse)
+            elif Column == "Total Weight" or Column == "Total Value" or Column == "Unit Weight":
+                # Add Fields to List
+                for CurrentEntry in self.TreasureItemEntriesList:
+                    ListToSort.append((CurrentEntry, CurrentEntry.SortFields["Name"].get(), GlobalInst.GetStringVarAsNumber(CurrentEntry.SortFields[Column], Mode="Float")))
+
+                # Sort the List
+                SortedList = sorted(ListToSort, key=lambda x: ((not Reverse and x[1] == "") or (Reverse and x[1] != ""), x[2]), reverse=Reverse)
+            else:
+                return
+
+        # Adjust Entries to New Order
+        for CurrentIndex in range(len(SortedList)):
+            SortedList[CurrentIndex][0].Display(CurrentIndex + 1)
+
+        # Flag Save Prompt
+        SavingAndOpeningInst.SavePrompt = True
+
+        # Update Window Title
+        WindowInst.UpdateWindowTitle()
+
+    class TreasureItemEntry:
+        def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesTuple, Row):
+            # Store Parameters
+            self.master = master
+            self.ScrollingDisabledVar = ScrollingDisabledVar
+            self.SortOrderValuesTuple = SortOrderValuesTuple
+            self.Row = Row
+
+            # Variables
+            self.NameEntryVar = SavedStringVar()
+            self.CountEntryVar = SavedStringVar()
+            self.CountEntryVar.trace_add("write", lambda a, b, c: HoardSheetInst.UpdateHoardStats())
+            self.UnitWeightEntryVar = SavedStringVar()
+            self.UnitWeightEntryVar.trace_add("write", lambda a, b, c: HoardSheetInst.UpdateHoardStats())
+            self.UnitValueEntryVar = SavedStringVar()
+            self.UnitValueEntryVar.trace_add("write", lambda a, b, c: HoardSheetInst.UpdateHoardStats())
+            self.UnitValueDenominationVar = SavedStringVar()
+            self.UnitValueDenominationVar.trace_add("write", lambda a, b, c: HoardSheetInst.UpdateHoardStats())
+            self.TotalWeightEntryVar = StringVar()
+            self.TotalValueEntryVar = StringVar()
+            self.CategoryEntryVar = SavedStringVar()
+            self.RarityEntryVar = SavedStringVar()
+            self.DescriptionVar = SavedStringVar()
+            self.SortOrderVar = SavedStringVar()
+
+            # Item Description Vars
+            self.ItemDescriptionVars = {}
+            self.ItemDescriptionVars["NameEntryVar"] = self.NameEntryVar
+            self.ItemDescriptionVars["CategoryEntryVar"] = self.CategoryEntryVar
+            self.ItemDescriptionVars["RarityEntryVar"] = self.RarityEntryVar
+            self.ItemDescriptionVars["DescriptionVar"] = self.DescriptionVar
+
+            # Sort Fields
+            self.SortFields = {}
+            self.SortFields["Name"] = self.NameEntryVar
+            self.SortFields["Count"] = self.CountEntryVar
+            self.SortFields["Unit Weight"] = self.UnitWeightEntryVar
+            self.SortFields["Unit Value"] = self.UnitValueEntryVar
+            self.SortFields["Value Denomination"] = self.UnitValueDenominationVar
+            self.SortFields["Total Weight"] = self.TotalWeightEntryVar
+            self.SortFields["Total Value"] = self.TotalValueEntryVar
+            self.SortFields["Sort Order"] = self.SortOrderVar
+
+            # Add to List
+            List.append(self)
+
+            # Name Entry
+            self.NameEntry = EntryExtended(master, width=35, textvariable=self.NameEntryVar, justify=CENTER, bg=GlobalInst.ButtonColor)
+            self.NameEntry.bind("<Button-3>", self.ConfigureItemDescription)
+            self.NameEntry.bind("<Shift-Button-3>", self.ExchangeForCoins)
+            StatusBarInst.TooltipConfig(self.NameEntry, "Right-click on the name field to set an item description.  Shift+right-click to exchange for coins.")
+
+            # Count Entry
+            self.CountEntry = EntryExtended(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
+            self.CountEntry.ConfigureValidation(self.ValidCountEntry, "key")
+
+            # Unit Weight Entry
+            self.UnitWeightEntry = EntryExtended(master, width=4, textvariable=self.UnitWeightEntryVar, justify=CENTER)
+            self.UnitWeightEntry.ConfigureValidation(self.ValidWeightEntry, "key")
+
+            # Unit Value Entry
+            self.UnitValueEntry = EntryExtended(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
+            self.UnitValueEntry.ConfigureValidation(self.ValidValueEntry, "key")
+
+            # Unit Value Denomination
+            self.UnitValueDenomination = ttk.Combobox(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
+            self.UnitValueDenomination.bind("<Enter>", self.DisableScrolling)
+            self.UnitValueDenomination.bind("<Leave>", self.EnableScrolling)
+
+            # Total Weight Entry
+            self.TotalWeightEntry = EntryExtended(master, width=4, textvariable=self.TotalWeightEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow")
+
+            # Total Value Entry
+            self.TotalValueEntry = EntryExtended(master, width=4, textvariable=self.TotalValueEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow")
+
+            # Sort Order
+            self.SortOrder = ttk.Combobox(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+            self.SortOrder.bind("<Enter>", self.DisableScrolling)
+            self.SortOrder.bind("<Leave>", self.EnableScrolling)
+
+        def ValidCountEntry(self, NewText):
+            if NewText is "": return True
+            try:
+                NewTextInt = int(NewText)
+            except:
+                messagebox.showerror("Invalid Entry", "Inventory item counts must be whole numbers.")
+                return False
+            if NewTextInt < 0:
+                messagebox.showerror("Invalid Entry", "Inventory item counts cannot be less than 0.")
+                return False
+            return True
+
+        def ValidWeightEntry(self, NewText):
+            if NewText is "": return True
+            try:
+                NewTextFloat = float(NewText)
+            except:
+                messagebox.showerror("Invalid Entry", "Inventory item unit weights must be numbers.")
+                return False
+            if NewTextFloat < 0:
+                messagebox.showerror("Invalid Entry", "Inventory item unit weights cannot be less than 0.")
+                return False
+            return True
+
+        def ValidValueEntry(self, NewText):
+            if NewText is "": return True
+            try:
+                NewTextFloat = float(NewText)
+            except:
+                messagebox.showerror("Invalid Entry", "Inventory item unit values must be numbers.")
+                return False
+            if NewTextFloat < 0:
+                messagebox.showerror("Invalid Entry", "Inventory item unit values cannot be less than 0.")
+                return False
+            return True
+
+        def DisableScrolling(self, event):
+            self.ScrollingDisabledVar.set(True)
+
+        def EnableScrolling(self, event):
+            self.ScrollingDisabledVar.set(False)
+
+        def ConfigureItemDescription(self, event):
+            # Create Window and Wait
+            ItemDescriptionMenuInst = self.ItemDescriptionMenu(WindowInst, self.ItemDescriptionVars)
+            WindowInst.wait_window(ItemDescriptionMenuInst.Window)
+
+            # Handle Variables
+            if ItemDescriptionMenuInst.DataSubmitted.get():
+                for Tag, Var in ItemDescriptionMenuInst.Vars.items():
+                    self.ItemDescriptionVars[Tag].set(Var.get())
+
+        def ExchangeForCoins(self, event):
+            # Confirm
+            ExchangeConfirm = messagebox.askyesno("Exchange for Coins", "Are you sure you want to exchange this item entry for coins?  This cannot be undone.")
+            if not ExchangeConfirm:
+                return
+
+            # Get Var Values
+            UnitValueDenom = self.UnitValueDenominationVar.get().upper()
+            UnitValue = GlobalInst.GetStringVarAsNumber(self.UnitValueEntryVar)
+            Count = GlobalInst.GetStringVarAsNumber(self.CountEntryVar)
+
+            # Exchange If Valid
+            if UnitValueDenom is not "" and UnitValue > 0 and Count > 0:
+                TotalValueGained = UnitValue * Count
+                HoardSheetInst.SpendingCoins[UnitValueDenom].set(str(GlobalInst.GetStringVarAsNumber(HoardSheetInst.SpendingCoins[UnitValueDenom]) + TotalValueGained))
+            else:
+                messagebox.showerror("Invalid Exchange Value", "Unit values and counts must be positive and a denomination must be chosen to exchange an item entry for coins.")
+                return
+
+            # Set Entry to Defaults
+            self.NameEntryVar.set("")
+            self.CategoryEntryVar.set("")
+            self.RarityEntryVar.set("")
+            self.DescriptionVar.set("")
+            self.CountEntryVar.set("")
+            self.UnitWeightEntryVar.set("")
+            self.UnitValueEntryVar.set("")
+            self.UnitValueDenominationVar.set("")
+            self.SortOrderVar.set("")
+
+        def Display(self, Row):
+            self.Row = Row
+
+            # Set Row Size
+            self.master.grid_rowconfigure(self.Row, minsize=26)
+
+            # Place in Grid
+            self.NameEntry.grid(row=self.Row, column=0, sticky=NSEW)
+            self.CountEntry.grid(row=self.Row, column=1, sticky=NSEW)
+            self.UnitWeightEntry.grid(row=self.Row, column=2, sticky=NSEW)
+            self.UnitValueEntry.grid(row=self.Row, column=3, sticky=NSEW)
+            self.UnitValueDenomination.grid(row=self.Row, column=4, sticky=NSEW)
+            self.TotalWeightEntry.grid(row=self.Row, column=5, sticky=NSEW)
+            self.TotalValueEntry.grid(row=self.Row, column=6, sticky=NSEW)
+            self.SortOrder.grid(row=self.Row, column=7, sticky=NSEW)
+
+            # Update Tags
+            self.NameEntryVar.UpdateTag("TreasureItemListNameEntryVar" + str(self.Row))
+            self.CountEntryVar.UpdateTag("TreasureItemListCountEntryVar" + str(self.Row))
+            self.UnitWeightEntryVar.UpdateTag("TreasureItemListUnitWeightEntryVar" + str(self.Row))
+            self.UnitValueEntryVar.UpdateTag("TreasureItemListUnitValueEntryVar" + str(self.Row))
+            self.UnitValueDenominationVar.UpdateTag("TreasureItemListUnitValueDenominationVar" + str(self.Row))
+            self.CategoryEntryVar.UpdateTag("TreasureItemListMagicItemCategoryEntryVar" + str(self.Row))
+            self.RarityEntryVar.UpdateTag("TreasureItemListMagicItemRarityEntryVar" + str(self.Row))
+            self.DescriptionVar.UpdateTag("TreasureItemListMagicItemDescriptionVar" + str(self.Row))
+            self.SortOrderVar.UpdateTag("TreasureItemListSortOrderVar" + str(self.Row))
+
+        class ItemDescriptionMenu:
+            def __init__(self, master, ItemDescriptionVars):
+                self.DataSubmitted = BooleanVar()
+                self.Vars = {}
+                self.Vars["NameEntryVar"] = StringVar(value=ItemDescriptionVars["NameEntryVar"].get())
+                self.Vars["CategoryEntryVar"] = StringVar(value=ItemDescriptionVars["CategoryEntryVar"].get())
+                self.Vars["RarityEntryVar"] = StringVar(value=ItemDescriptionVars["RarityEntryVar"].get())
+                self.Vars["DescriptionVar"] = StringVar(value=ItemDescriptionVars["DescriptionVar"].get())
+
+                # Create Window
+                self.Window = Toplevel(master)
+                self.Window.wm_attributes("-toolwindow", 1)
+                self.Window.wm_title("Item Description")
+
+                # Name Entry
+                self.NameFrame = LabelFrame(self.Window, text="Name:")
+                self.NameFrame.grid_columnconfigure(0, weight=1)
+                self.NameFrame.grid(row=0, column=0, columnspan=2, padx=2, pady=2, sticky=NSEW)
+                self.NameEntry = EntryExtended(self.NameFrame, justify=CENTER, width=35, textvariable=self.Vars["NameEntryVar"])
+                self.NameEntry.grid(row=0, column=0, sticky=NSEW)
+
+                # Category Entry
+                self.CategoryFrame = LabelFrame(self.Window, text="Category:")
+                self.CategoryFrame.grid_columnconfigure(0, weight=1)
+                self.CategoryFrame.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
+                self.CategoryEntry = EntryExtended(self.CategoryFrame, justify=CENTER, textvariable=self.Vars["CategoryEntryVar"], width=15)
+                self.CategoryEntry.grid(row=0, column=0, sticky=NSEW)
+
+                # Rarity Entry
+                self.RarityFrame = LabelFrame(self.Window, text="Rarity:")
+                self.RarityFrame.grid_columnconfigure(0, weight=1)
+                self.RarityFrame.grid(row=1, column=1, padx=2, pady=2, sticky=NSEW)
+                self.RarityEntry = EntryExtended(self.RarityFrame, justify=CENTER, textvariable=self.Vars["RarityEntryVar"], width=15)
+                self.RarityEntry.grid(row=0, column=0, sticky=NSEW)
+
+                # Description Field
+                self.DescriptionFrame = LabelFrame(self.Window, text="Description:")
+                self.DescriptionFrame.grid(row=2, column=0, columnspan=2, padx=2, pady=2, sticky=NSEW)
+                self.DescriptionField = ScrolledText(self.DescriptionFrame, Width=250, Height=300)
+                self.DescriptionField.grid(row=0, column=0)
+                self.DescriptionField.Text.insert(1.0, self.Vars["DescriptionVar"].get())
+
+                # Buttons
+                self.ButtonFrame = Frame(self.Window)
+                self.ButtonFrame.grid_columnconfigure(0, weight=1)
+                self.ButtonFrame.grid_columnconfigure(1, weight=1)
+                self.ButtonFrame.grid(row=3, column=0, columnspan=2, sticky=NSEW)
+                self.SubmitButton = Button(self.ButtonFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                self.SubmitButton.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
+                self.CancelButton = Button(self.ButtonFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                self.CancelButton.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
+
+                # Prevent Main Window Input
+                self.Window.grab_set()
+
+                # Handle Config Window Geometry and Focus
+                GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst)
+                self.Window.focus_force()
+
+                # Focus on Name Entry
+                self.NameEntry.focus_set()
+
+            def Submit(self):
+                self.DataSubmitted.set(True)
+                self.Vars["DescriptionVar"].set(self.DescriptionField.get())
+                self.Window.destroy()
+
+            def Cancel(self):
+                self.DataSubmitted.set(False)
+                self.Window.destroy()
 
 
 class MenuBar:
