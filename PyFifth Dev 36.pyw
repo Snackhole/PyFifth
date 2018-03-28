@@ -407,7 +407,6 @@ class SavingAndOpening:
         self.Opening = True
 
         # Reset Saved Fields to Default Values
-        # TODO:  Does the hoard sheet have values that need to be accounted for in the new file function?
         for Field in SavingAndOpeningInst.SavedData.values():
             if WindowInst.Mode in ["DiceRoller", "EncounterManager", "CharacterSheet", "NPCSheet"]:
                 if Field == DiceRollerInst.CritMinimumEntryVar:
@@ -8667,8 +8666,7 @@ if __name__ == "__main__":
     MinimumResolutions["CreatureDataUtility"] = (802, 766)
     MinimumResolutions["CoinCalculator"] = (291, 216)
     MinimumResolutions["NPCSheet"] = (1262, 785)
-    # TODO:  Proper resolution numbers for Hoard Sheet mode
-    MinimumResolutions["HoardSheet"] = (1262, 785)
+    MinimumResolutions["HoardSheet"] = (957, 483)
 
     # Create Window
     WindowInst = Window(ModeSelectInst.ModeSelected, WindowTitles[ModeSelectInst.ModeSelected])
