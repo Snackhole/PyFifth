@@ -1,0 +1,5 @@
+Parameters:
+	"PyFifth Dev 36.pyw" --clean --windowed --name="PyFifth" --icon=PyFifthIcon.ico --add-data="PyFifthIcon.ico;." --workpath=./Executables/Build --distpath=./Executables/Final
+
+Interpreter Options:
+	-m PyInstaller
