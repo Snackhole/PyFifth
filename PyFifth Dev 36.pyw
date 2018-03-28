@@ -182,6 +182,7 @@ class SavingAndOpening:
         self.FileTypes["EncounterManager"] = self.FileType("Encounter file", ".enc", "Save Encounter File", "Open Encounter File", "Encounter Data.txt")
         self.FileTypes["CharacterSheet"] = self.FileType("Character file", ".char", "Save Character File", "Open Character File", "Character Data.txt")
         self.FileTypes["NPCSheet"] = self.FileType("NPC file", ".npc", "Save NPC File", "Open NPC File", "NPC Data.txt")
+        self.FileTypes["HoardSheet"] = self.FileType("Hoard file", ".hrd", "Save Hoard File", "Open Hoard File", "Hoard Data.txt")
 
         # Bind Closing Protocol
         WindowInst.wm_protocol("WM_DELETE_WINDOW", self.CloseWindow)
@@ -338,6 +339,10 @@ class SavingAndOpening:
             if WindowMode is "NPCSheet":
                 CreatureDataInst.UpdateStats()
 
+            # Hoard Sheet Stats
+            if WindowMode is "HoardSheet":
+                HoardSheetInst.UpdateHoardStats()
+
             # Small Pause
             sleep(0.5)
 
@@ -402,6 +407,7 @@ class SavingAndOpening:
         self.Opening = True
 
         # Reset Saved Fields to Default Values
+        # TODO:  Does the hoard sheet have values that need to be accounted for in the new file function?
         for Field in SavingAndOpeningInst.SavedData.values():
             if WindowInst.Mode in ["DiceRoller", "EncounterManager", "CharacterSheet", "NPCSheet"]:
                 if Field == DiceRollerInst.CritMinimumEntryVar:
@@ -4765,6 +4771,273 @@ class CoinCalculator:
         self.Window.destroy()
 
 
+class SpendCoinsMenu:
+    def __init__(self, master, Coins):
+        # Store Parameters
+        self.Coins = Coins
+
+        # Variables
+        self.DataSubmitted = BooleanVar()
+        self.SpendCPEntryVar = StringVar()
+        self.SpendCPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+        self.SpendSPEntryVar = StringVar()
+        self.SpendSPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+        self.SpendEPEntryVar = StringVar()
+        self.SpendEPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+        self.SpendGPEntryVar = StringVar()
+        self.SpendGPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+        self.SpendPPEntryVar = StringVar()
+        self.SpendPPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+        self.RemainingCPEntryVar = StringVar(value=self.Coins["CP"].get())
+        self.RemainingCPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+        self.RemainingSPEntryVar = StringVar(value=self.Coins["SP"].get())
+        self.RemainingSPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+        self.RemainingEPEntryVar = StringVar(value=self.Coins["EP"].get())
+        self.RemainingEPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+        self.RemainingGPEntryVar = StringVar(value=self.Coins["GP"].get())
+        self.RemainingGPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+        self.RemainingPPEntryVar = StringVar(value=self.Coins["PP"].get())
+        self.RemainingPPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+        self.MatchValuesAfterSpendingEntryVar = StringVar()
+        self.MatchValuesComparatorEntryVar = StringVar()
+        self.MatchValuesRemainingEntryVar = StringVar()
+
+        # Remaining Dictionary
+        self.Remaining = {}
+        self.Remaining["CP"] = self.RemainingCPEntryVar
+        self.Remaining["SP"] = self.RemainingSPEntryVar
+        self.Remaining["EP"] = self.RemainingEPEntryVar
+        self.Remaining["GP"] = self.RemainingGPEntryVar
+        self.Remaining["PP"] = self.RemainingPPEntryVar
+
+        # Create Window
+        self.Window = Toplevel(master)
+        self.Window.wm_attributes("-toolwindow", 1)
+        self.Window.wm_title("Spend Coins")
+
+        # Spend
+        self.SpendFrame = LabelFrame(self.Window, text="Spend:")
+        self.SpendFrame.grid_columnconfigure(0, weight=1)
+        self.SpendFrame.grid_columnconfigure(1, weight=1)
+        self.SpendFrame.grid_columnconfigure(2, weight=1)
+        self.SpendFrame.grid_columnconfigure(3, weight=1)
+        self.SpendFrame.grid_columnconfigure(4, weight=1)
+        self.SpendFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+        self.SpendCPHeader = Label(self.SpendFrame, text="CP", bd=2, relief=GROOVE)
+        self.SpendCPHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+        self.SpendSPHeader = Label(self.SpendFrame, text="SP", bd=2, relief=GROOVE)
+        self.SpendSPHeader.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+        self.SpendEPHeader = Label(self.SpendFrame, text="EP", bd=2, relief=GROOVE)
+        self.SpendEPHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
+        self.SpendGPHeader = Label(self.SpendFrame, text="GP", bd=2, relief=GROOVE)
+        self.SpendGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
+        self.SpendPPHeader = Label(self.SpendFrame, text="PP", bd=2, relief=GROOVE)
+        self.SpendPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
+        self.SpendCPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendCPEntryVar, justify=CENTER, width=5)
+        self.SpendCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.SpendSPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendSPEntryVar, justify=CENTER, width=5)
+        self.SpendSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+        self.SpendEPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendEPEntryVar, justify=CENTER, width=5)
+        self.SpendEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
+        self.SpendGPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendGPEntryVar, justify=CENTER, width=5)
+        self.SpendGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
+        self.SpendPPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendPPEntryVar, justify=CENTER, width=5)
+        self.SpendPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
+
+        # Match Values
+        self.MatchValuesFrame = LabelFrame(self.Window, text="Match Values:")
+        self.MatchValuesFrame.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.MatchValuesAfterSpendingHeader = Label(self.MatchValuesFrame, text="Value After\nSpending (CP)", bd=2, relief=GROOVE)
+        self.MatchValuesAfterSpendingHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+        self.MatchValuesAfterSpendingEntry = EntryExtended(self.MatchValuesFrame, textvariable=self.MatchValuesAfterSpendingEntryVar, width=20, state=DISABLED, disabledforeground="black",
+                                                           disabledbackground="light gray",
+                                                           cursor="arrow", justify=CENTER)
+        self.MatchValuesAfterSpendingEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.MatchValuesComparatorEntry = EntryExtended(self.MatchValuesFrame, textvariable=self.MatchValuesComparatorEntryVar, width=5, state=DISABLED, disabledforeground="black",
+                                                        disabledbackground="lightgray", cursor="arrow",
+                                                        justify=CENTER)
+        self.MatchValuesComparatorEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+        self.MatchValuesRemainingHeader = Label(self.MatchValuesFrame, text="Remaining Coins\nValue (CP)", bd=2, relief=GROOVE)
+        self.MatchValuesRemainingHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
+        self.MatchValuesRemainingEntry = EntryExtended(self.MatchValuesFrame, textvariable=self.MatchValuesRemainingEntryVar, width=20, state=DISABLED, disabledforeground="black",
+                                                       disabledbackground="light gray",
+                                                       cursor="arrow", justify=CENTER)
+        self.MatchValuesRemainingEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
+
+        # Remaining
+        self.RemainingFrame = LabelFrame(self.Window, text="Remaining:")
+        self.RemainingFrame.grid_columnconfigure(0, weight=1)
+        self.RemainingFrame.grid_columnconfigure(1, weight=1)
+        self.RemainingFrame.grid_columnconfigure(2, weight=1)
+        self.RemainingFrame.grid_columnconfigure(3, weight=1)
+        self.RemainingFrame.grid_columnconfigure(4, weight=1)
+        self.RemainingFrame.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+        self.RemainingCPHeader = Label(self.RemainingFrame, text="CP", bd=2, relief=GROOVE)
+        self.RemainingCPHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+        self.RemainingSPHeader = Label(self.RemainingFrame, text="SP", bd=2, relief=GROOVE)
+        self.RemainingSPHeader.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+        self.RemainingEPHeader = Label(self.RemainingFrame, text="EP", bd=2, relief=GROOVE)
+        self.RemainingEPHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
+        self.RemainingGPHeader = Label(self.RemainingFrame, text="GP", bd=2, relief=GROOVE)
+        self.RemainingGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
+        self.RemainingPPHeader = Label(self.RemainingFrame, text="PP", bd=2, relief=GROOVE)
+        self.RemainingPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
+        self.RemainingCPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingCPEntryVar, justify=CENTER, width=5)
+        self.RemainingCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.RemainingSPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingSPEntryVar, justify=CENTER, width=5)
+        self.RemainingSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+        self.RemainingEPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingEPEntryVar, justify=CENTER, width=5)
+        self.RemainingEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
+        self.RemainingGPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingGPEntryVar, justify=CENTER, width=5)
+        self.RemainingGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
+        self.RemainingPPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingPPEntryVar, justify=CENTER, width=5)
+        self.RemainingPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
+
+        # Values Key
+        self.ValuesKeyStringCP = "1 cp"
+        self.ValuesKeyStringSP = str(self.Coins["SPValueAsCP"]) + " cp"
+        self.ValuesKeyStringEP = str(self.Coins["EPValueAsCP"]) + " cp"
+        self.ValuesKeyStringGP = str(self.Coins["GPValueAsCP"]) + " cp"
+        self.ValuesKeyStringPP = str(self.Coins["PPValueAsCP"]) + " cp"
+        self.ValuesKeyFont = font.Font(size=6)
+        self.ValuesKeyCPLabel = Label(self.RemainingFrame, text=self.ValuesKeyStringCP, font=self.ValuesKeyFont)
+        self.ValuesKeyCPLabel.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+        self.ValuesKeySPLabel = Label(self.RemainingFrame, text=self.ValuesKeyStringSP, font=self.ValuesKeyFont)
+        self.ValuesKeySPLabel.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
+        self.ValuesKeyEPLabel = Label(self.RemainingFrame, text=self.ValuesKeyStringEP, font=self.ValuesKeyFont)
+        self.ValuesKeyEPLabel.grid(row=2, column=2, sticky=NSEW, padx=2, pady=2)
+        self.ValuesKeyGPLabel = Label(self.RemainingFrame, text=self.ValuesKeyStringGP, font=self.ValuesKeyFont)
+        self.ValuesKeyGPLabel.grid(row=2, column=3, sticky=NSEW, padx=2, pady=2)
+        self.ValuesKeyPPLabel = Label(self.RemainingFrame, text=self.ValuesKeyStringPP, font=self.ValuesKeyFont)
+        self.ValuesKeyPPLabel.grid(row=2, column=4, sticky=NSEW, padx=2, pady=2)
+
+        # ButtonsFrame
+        self.ButtonsFrame = Frame(self.Window)
+        self.ButtonsFrame.grid_columnconfigure(0, weight=1)
+        self.ButtonsFrame.grid_columnconfigure(1, weight=1)
+        self.ButtonsFrame.grid(row=3, column=0, sticky=NSEW)
+
+        # Submit Button
+        self.SubmitButton = Button(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+        self.SubmitButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+
+        # Cancel Button
+        self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+        self.CancelButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+
+        # Prevent Main Window Input
+        self.Window.grab_set()
+
+        # Handle Config Window Geometry and Focus
+        GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst)
+        self.Window.focus_force()
+
+        # Initial Calculation
+        self.Calculate(ValidateSpending=True)
+
+        # Focus on Spend CP Entry
+        self.SpendCPEntry.focus_set()
+
+    def ValidCoinsEntry(self, NewText):
+        if NewText is "": return True
+        try:
+            NewTextInt = int(NewText)
+        except:
+            messagebox.showerror("Invalid Entry", "Coins must be whole numbers.")
+            return False
+        if NewTextInt < 0:
+            messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
+            return False
+        return True
+
+    def Submit(self):
+        if self.Calculate(ValidateSpending=True):
+            pass
+        else:
+            return
+        self.DataSubmitted.set(True)
+        self.Window.destroy()
+
+    def Calculate(self, ValidateSpending=False):
+
+        # Get CP Value of Current Coins
+        CurrentCoinsCPAsCPValue = GlobalInst.GetStringVarAsNumber(self.Coins["CP"], Mode="Decimal")
+        CurrentCoinsSPAsCPValue = GlobalInst.GetStringVarAsNumber(self.Coins["SP"], Mode="Decimal") * self.Coins["SPValueAsCP"]
+        CurrentCoinsEPAsCPValue = GlobalInst.GetStringVarAsNumber(self.Coins["EP"], Mode="Decimal") * self.Coins["EPValueAsCP"]
+        CurrentCoinsGPAsCPValue = GlobalInst.GetStringVarAsNumber(self.Coins["GP"], Mode="Decimal") * self.Coins["GPValueAsCP"]
+        CurrentCoinsPPAsCPValue = GlobalInst.GetStringVarAsNumber(self.Coins["PP"], Mode="Decimal") * self.Coins["PPValueAsCP"]
+        CurrentCoinsValue = CurrentCoinsCPAsCPValue + CurrentCoinsSPAsCPValue + CurrentCoinsEPAsCPValue + CurrentCoinsGPAsCPValue + CurrentCoinsPPAsCPValue
+        CurrentCoinsValueInt = int(CurrentCoinsValue)
+
+        # Get CP Value of Spend Amount
+        SpendCPAsCPValue = GlobalInst.GetStringVarAsNumber(self.SpendCPEntryVar, Mode="Decimal")
+        SpendSPAsCPValue = GlobalInst.GetStringVarAsNumber(self.SpendSPEntryVar, Mode="Decimal") * self.Coins["SPValueAsCP"]
+        SpendEPAsCPValue = GlobalInst.GetStringVarAsNumber(self.SpendEPEntryVar, Mode="Decimal") * self.Coins["EPValueAsCP"]
+        SpendGPAsCPValue = GlobalInst.GetStringVarAsNumber(self.SpendGPEntryVar, Mode="Decimal") * self.Coins["GPValueAsCP"]
+        SpendPPAsCPValue = GlobalInst.GetStringVarAsNumber(self.SpendPPEntryVar, Mode="Decimal") * self.Coins["PPValueAsCP"]
+        SpendValue = SpendCPAsCPValue + SpendSPAsCPValue + SpendEPAsCPValue + SpendGPAsCPValue + SpendPPAsCPValue
+        SpendValueInt = int(SpendValue)
+
+        # Generate Value After Spending
+        ValueAfterSpending = CurrentCoinsValueInt - SpendValueInt
+
+        # Get CP Value of Remaining Amount
+        RemainingCPAsCPValue = GlobalInst.GetStringVarAsNumber(self.RemainingCPEntryVar, Mode="Decimal")
+        RemainingSPAsCPValue = GlobalInst.GetStringVarAsNumber(self.RemainingSPEntryVar, Mode="Decimal") * self.Coins["SPValueAsCP"]
+        RemainingEPAsCPValue = GlobalInst.GetStringVarAsNumber(self.RemainingEPEntryVar, Mode="Decimal") * self.Coins["EPValueAsCP"]
+        RemainingGPAsCPValue = GlobalInst.GetStringVarAsNumber(self.RemainingGPEntryVar, Mode="Decimal") * self.Coins["GPValueAsCP"]
+        RemainingPPAsCPValue = GlobalInst.GetStringVarAsNumber(self.RemainingPPEntryVar, Mode="Decimal") * self.Coins["PPValueAsCP"]
+        RemainingValue = RemainingCPAsCPValue + RemainingSPAsCPValue + RemainingEPAsCPValue + RemainingGPAsCPValue + RemainingPPAsCPValue
+        RemainingValueInt = int(RemainingValue)
+
+        # Generate Strings
+        ValueAfterSpendingString = str(ValueAfterSpending)
+        RemainingValueString = str(RemainingValueInt)
+        if ValueAfterSpending == RemainingValue:
+            ComparatorString = "="
+        else:
+            if ValueAfterSpending < RemainingValue:
+                ComparatorString = "<"
+            else:
+                ComparatorString = ">"
+
+        # Set Vars
+        self.MatchValuesAfterSpendingEntryVar.set(ValueAfterSpendingString)
+        self.MatchValuesComparatorEntryVar.set(ComparatorString)
+        self.MatchValuesRemainingEntryVar.set(RemainingValueString)
+
+        # Set Match Colors
+        EntriesToColor = [self.MatchValuesAfterSpendingEntry, self.MatchValuesComparatorEntry, self.MatchValuesRemainingEntry]
+        if ComparatorString in ["<", ">"]:
+            for EntryToColor in EntriesToColor:
+                EntryToColor.configure(disabledforeground="red")
+        else:
+            for EntryToColor in EntriesToColor:
+                EntryToColor.configure(disabledforeground="green")
+
+        # Check If Spending Is Valid
+        if ValidateSpending:
+            if ComparatorString is "=":
+                return True
+            else:
+                messagebox.showerror("Spending Invalid", "The value of your coins after spending and the value of the coins you have remaining must match.\n\nAdjust coins remaining until the values are equal.")
+                return False
+
+    def Cancel(self):
+        self.DataSubmitted.set(False)
+        self.Window.destroy()
+
+
 class StatModifier:
     def __init__(self, master, EventString, TooltipText, BonusTo, Cursor="arrow", ACMode=False, DiceRollerMode=False, Prefix="", Suffix=""):
         # Store Parameters
@@ -7242,6 +7515,168 @@ class CompactInitiativeOrder:
             return False
 
 
+class HoardSheet:
+    def __init__(self, master):
+        # Variables
+        self.HoardNameEntryVar = SavedStringVar("HoardNameEntryVar")
+        self.HoardLocationEntryVar = SavedStringVar("HoardLocationEntryVar")
+        self.HoardStorageCostsEntryVar = SavedStringVar("HoardStorageCostsEntryVar")
+        self.CoinsEntryCPVar = SavedStringVar("CoinsEntryCPVar")
+        self.CoinsEntryCPVar.trace_add("write", lambda a, b, c: self.UpdateHoardStats())
+        self.CoinsEntrySPVar = SavedStringVar("CoinsEntrySPVar")
+        self.CoinsEntrySPVar.trace_add("write", lambda a, b, c: self.UpdateHoardStats())
+        self.CoinsEntryEPVar = SavedStringVar("CoinsEntryEPVar")
+        self.CoinsEntryEPVar.trace_add("write", lambda a, b, c: self.UpdateHoardStats())
+        self.CoinsEntryGPVar = SavedStringVar("CoinsEntryGPVar")
+        self.CoinsEntryGPVar.trace_add("write", lambda a, b, c: self.UpdateHoardStats())
+        self.CoinsEntryPPVar = SavedStringVar("CoinsEntryPPVar")
+        self.CoinsEntryPPVar.trace_add("write", lambda a, b, c: self.UpdateHoardStats())
+        self.ValueCP = Decimal(0.01)
+        self.ValueSP = Decimal(0.1)
+        self.ValueEP = Decimal(0.5)
+        self.ValueGP = Decimal(1)
+        self.ValuePP = Decimal(10)
+        self.WeightPerCoin = Decimal(0.02)
+        self.CoinValueEntryVar = StringVar()
+        self.CoinWeightEntryVar = StringVar()
+        self.ScrollingDisabledVar = BooleanVar(value=False)
+
+        # Spending Coins Dictionary
+        self.SpendingCoins = {}
+        self.SpendingCoins["CP"] = self.CoinsEntryCPVar
+        self.SpendingCoins["SP"] = self.CoinsEntrySPVar
+        self.SpendingCoins["EP"] = self.CoinsEntryEPVar
+        self.SpendingCoins["GP"] = self.CoinsEntryGPVar
+        self.SpendingCoins["PP"] = self.CoinsEntryPPVar
+        self.SpendingCoins["SPValueAsCP"] = Decimal(10)
+        self.SpendingCoins["EPValueAsCP"] = Decimal(50)
+        self.SpendingCoins["GPValueAsCP"] = Decimal(100)
+        self.SpendingCoins["PPValueAsCP"] = Decimal(1000)
+
+        # Denomination Values Dictionary
+        self.DenominationValues = {}
+        self.DenominationValues["cp"] = self.ValueCP
+        self.DenominationValues["sp"] = self.ValueSP
+        self.DenominationValues["ep"] = self.ValueEP
+        self.DenominationValues["gp"] = self.ValueGP
+        self.DenominationValues["pp"] = self.ValuePP
+        self.DenominationValues[""] = 0
+
+        # Hoard Header
+        self.HoardHeaderFrame = LabelFrame(master, text="Basic Hoard Info:")
+        self.HoardHeaderFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+        self.HoardNameLabel = Label(self.HoardHeaderFrame, text="Name or Owners:")
+        self.HoardNameLabel.grid(row=0, column=0, sticky=E)
+        self.HoardNameEntry = EntryExtended(self.HoardHeaderFrame, textvariable=self.HoardNameEntryVar, justify=CENTER, width=30)
+        self.HoardNameEntry.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+        self.HoardLocationLabel = Label(self.HoardHeaderFrame, text="Location:")
+        self.HoardLocationLabel.grid(row=1, column=0, sticky=E)
+        self.HoardLocationEntry = EntryExtended(self.HoardHeaderFrame, textvariable=self.HoardLocationEntryVar, justify=CENTER, width=30)
+        self.HoardLocationEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+        self.HoardStorageCostsLabel = Label(self.HoardHeaderFrame, text="Storage Costs:")
+        self.HoardStorageCostsLabel.grid(row=2, column=0, sticky=E)
+        self.HoardStorageCostsEntry = EntryExtended(self.HoardHeaderFrame, textvariable=self.HoardStorageCostsEntryVar, justify=CENTER, width=30)
+        self.HoardStorageCostsEntry.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
+
+        # Coins
+        self.CoinsFrame = LabelFrame(master, text="Coins:")
+        self.CoinsFrame.grid_columnconfigure(0, weight=1)
+        self.CoinsFrame.grid_columnconfigure(1, weight=1)
+        self.CoinsFrame.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.CoinsInputHolderFrame = Frame(self.CoinsFrame)
+        self.CoinsInputHolderFrame.grid_columnconfigure(0, weight=1)
+        self.CoinsInputHolderFrame.grid_columnconfigure(1, weight=1)
+        self.CoinsInputHolderFrame.grid_columnconfigure(2, weight=1)
+        self.CoinsInputHolderFrame.grid_columnconfigure(3, weight=1)
+        self.CoinsInputHolderFrame.grid_columnconfigure(4, weight=1)
+        self.CoinsInputHolderFrame.grid(row=0, column=0, columnspan=2, sticky=NSEW)
+        self.CoinsHeaderCP = Label(self.CoinsInputHolderFrame, text="CP", bd=2, relief=GROOVE)
+        self.CoinsHeaderCP.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+        self.CoinsEntryCP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryCPVar)
+        self.CoinsEntryCP.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CoinsEntryCP.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.CoinsHeaderSP = Label(self.CoinsInputHolderFrame, text="SP", bd=2, relief=GROOVE)
+        self.CoinsHeaderSP.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+        self.CoinsEntrySP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntrySPVar)
+        self.CoinsEntrySP.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CoinsEntrySP.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+        self.CoinsHeaderEP = Label(self.CoinsInputHolderFrame, text="EP", bd=2, relief=GROOVE)
+        self.CoinsHeaderEP.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
+        self.CoinsEntryEP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryEPVar)
+        self.CoinsEntryEP.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CoinsEntryEP.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
+        self.CoinsHeaderGP = Label(self.CoinsInputHolderFrame, text="GP", bd=2, relief=GROOVE)
+        self.CoinsHeaderGP.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
+        self.CoinsEntryGP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryGPVar)
+        self.CoinsEntryGP.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CoinsEntryGP.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
+        self.CoinsHeaderPP = Label(self.CoinsInputHolderFrame, text="PP", bd=2, relief=GROOVE)
+        self.CoinsHeaderPP.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
+        self.CoinsEntryPP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryPPVar)
+        self.CoinsEntryPP.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CoinsEntryPP.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
+        self.SpendCoinsButton = Button(self.CoinsFrame, text="Spend", bg=GlobalInst.ButtonColor, command=self.SpendCoins)
+        self.SpendCoinsButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.GainCoinsButton = Button(self.CoinsFrame, text="Gain", bg=GlobalInst.ButtonColor, command=self.GainCoins)
+        self.GainCoinsButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+
+        # Stats
+        self.StatsFrame = LabelFrame(master, text="Hoard Stats:")
+        self.StatsFrame.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+        self.StatsCoinsHeader = Label(self.StatsFrame, text="Coins", bd=2, relief=GROOVE)
+        self.StatsCoinsHeader.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.StatsItemsHeader = Label(self.StatsFrame, text="Items", bd=2, relief=GROOVE)
+        self.StatsItemsHeader.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+        self.StatsTotalHeader = Label(self.StatsFrame, text="Total", bd=2, relief=GROOVE)
+        self.StatsTotalHeader.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
+        self.StatsValueHeader = Label(self.StatsFrame, text="Value (gp)", bd=2, relief=GROOVE)
+        self.StatsValueHeader.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+        self.StatsWeightHeader = Label(self.StatsFrame, text="Weight (lbs.)", bd=2, relief=GROOVE)
+        self.StatsWeightHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
+        # TODO:  Entries
+
+        # Notes
+        self.HoardNotesFrame = LabelFrame(master, text="Notes:")
+        self.HoardNotesFrame.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
+        self.HoardNotesField = ScrolledText(self.HoardNotesFrame, SavedDataTag="HoardNotesField", Width=286)
+        self.HoardNotesField.grid(row=0, column=0, sticky=NSEW)
+
+        # Treasure Items
+        self.TreasureItems = LabelFrame(master, text="Treasure Items:")
+        self.TreasureItems.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2, rowspan=3)
+        # TODO:  Create this interface and its functions
+
+    def ValidCoinsEntry(self, NewText):
+        if NewText is "": return True
+        try:
+            NewTextInt = int(NewText)
+        except:
+            messagebox.showerror("Invalid Entry", "Coins must be whole numbers.")
+            return False
+        if NewTextInt < 0:
+            messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
+            return False
+        return True
+
+    def SpendCoins(self):
+        # Create Config Window and Wait
+        SpendCoinsMenuInst = SpendCoinsMenu(WindowInst, self.SpendingCoins)
+        WindowInst.wait_window(SpendCoinsMenuInst.Window)
+
+        # Handle Variables
+        if SpendCoinsMenuInst.DataSubmitted.get():
+            for Denomination in SpendCoinsMenuInst.Remaining.keys():
+                self.SpendingCoins[Denomination].set(SpendCoinsMenuInst.Remaining[Denomination].get())
+
+    # TODO:  Finish this function
+    def GainCoins(self):
+        pass
+
+    # TODO:  Finish this function
+    def UpdateHoardStats(self):
+        pass
+
+
 class MenuBar:
     def __init__(self, master):
         # Menu Bar
@@ -7316,6 +7751,10 @@ class StatusBar:
             self.Column = 0
             self.ColumnSpan = 2
         elif WindowInst.Mode is "NPCSheet":
+            self.Row = 1
+            self.Column = 0
+            self.ColumnSpan = 2
+        elif WindowInst.Mode is "HoardSheet":
             self.Row = 1
             self.Column = 0
             self.ColumnSpan = 2
@@ -7739,29 +8178,33 @@ class ModeSelect(Tk):
         self.CharacterSheetModeButton = Button(self, text="Character Sheet", command=lambda: self.SelectMode("CharacterSheet"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
         self.CharacterSheetModeButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
 
+        # Hoard Sheet Button
+        self.HoardSheetButton = Button(self, text="Hoard Sheet", command=lambda: self.SelectMode("HoardSheet"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
+        self.HoardSheetButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
+
         # Dice Roller Button
         self.DiceRollerModeButton = Button(self, text="Dice Roller", command=lambda: self.SelectMode("DiceRoller"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.DiceRollerModeButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.DiceRollerModeButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Encounter Manager Button
         self.EncounterManagerModeButton = Button(self, text="Encounter Manager", command=lambda: self.SelectMode("EncounterManager"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.EncounterManagerModeButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+        self.EncounterManagerModeButton.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Compact Initiative
         self.CompactInitiativeModeButton = Button(self, text="Compact Initiative Order", command=lambda: self.SelectMode("CompactInitiativeOrder"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.CompactInitiativeModeButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+        self.CompactInitiativeModeButton.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
 
         # NPC Sheet Button
         self.NPCSheetModeButton = Button(self, text="NPC Sheet", command=lambda: self.SelectMode("NPCSheet"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.NPCSheetModeButton.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
+        self.NPCSheetModeButton.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Creature Data Utility Button
         self.CreatureDataUtilityModeButton = Button(self, text="Creature Data Utility", command=lambda: self.SelectMode("CreatureDataUtility"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.CreatureDataUtilityModeButton.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
+        self.CreatureDataUtilityModeButton.grid(row=4, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Coin Calculator Button
         self.CoinCalculatorModeButton = Button(self, text="Coin Calculator", command=lambda: self.SelectMode("CoinCalculator"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.CoinCalculatorModeButton.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
+        self.CoinCalculatorModeButton.grid(row=4, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Initial Window Behavior
         GlobalInst.WindowGeometry(self)
@@ -7816,13 +8259,15 @@ class Window(Tk):
             Prefix = EncounterHeaderInst.EncounterNameEntryVar.get()
         elif self.Mode is "CharacterSheet":
             Prefix = CharacterSheetInst.CharacterNameEntryVar.get()
+        elif self.Mode is "HoardSheet":
+            Prefix = HoardSheetInst.HoardNameEntryVar.get()
         else:
             Prefix = ""
         if Prefix != "":
             Prefix += " - "
 
         # Current Open File and Save Prompt
-        if self.Mode in ["CharacterSheet", "EncounterManager", "CreatureDataUtility", "DiceRoller", "NPCSheet"]:
+        if self.Mode in ["CharacterSheet", "EncounterManager", "CreatureDataUtility", "DiceRoller", "NPCSheet", "HoardSheet"]:
             CurrentOpenFile = SavingAndOpeningInst.CurrentOpenFilePath.get()
             if CurrentOpenFile != "":
                 CurrentOpenFile = " [" + os.path.basename(CurrentOpenFile) + "]"
@@ -7861,6 +8306,7 @@ if __name__ == "__main__":
     WindowTitles["CreatureDataUtility"] = "Creature Data Utility - " + GlobalInst.ScriptName
     WindowTitles["CoinCalculator"] = "Coin Calculator - " + GlobalInst.ScriptName
     WindowTitles["NPCSheet"] = "NPC Sheet - " + GlobalInst.ScriptName
+    WindowTitles["HoardSheet"] = "Hoard Sheet - " + GlobalInst.ScriptName
 
     # Minimum Resolutions
     MinimumResolutions = {}
@@ -7871,6 +8317,8 @@ if __name__ == "__main__":
     MinimumResolutions["CreatureDataUtility"] = (802, 766)
     MinimumResolutions["CoinCalculator"] = (291, 216)
     MinimumResolutions["NPCSheet"] = (1262, 785)
+    # TODO:  Proper resolution numbers for Hoard Sheet mode
+    MinimumResolutions["HoardSheet"] = (1262, 785)
 
     # Create Window
     WindowInst = Window(ModeSelectInst.ModeSelected, WindowTitles[ModeSelectInst.ModeSelected])
@@ -7918,6 +8366,13 @@ if __name__ == "__main__":
         MenuBarInst = MenuBar(WindowInst)
         SavingAndOpeningInst.TrackModifiedFields()
         GlobalInst.SetupStatModifiers()
+    elif WindowInst.Mode is "HoardSheet":
+        StatusBarInst = StatusBar(WindowInst)
+        SavingAndOpeningInst = SavingAndOpening()
+        HoardSheetInst = HoardSheet(WindowInst.WidgetMaster)
+        MenuBarInst = MenuBar(WindowInst)
+        SavingAndOpeningInst.TrackModifiedFields()
+        HoardSheetInst.UpdateHoardStats()
 
     # Configure Window
     GlobalInst.WindowGeometry(WindowInst)
