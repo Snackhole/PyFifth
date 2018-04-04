@@ -4366,10 +4366,15 @@ class CharacterSheet:
 class CoinCalculator:
     def __init__(self, master, DialogMode=False):
         self.CPEntryVar = StringVar()
+        self.CPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
         self.SPEntryVar = StringVar()
+        self.SPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
         self.EPEntryVar = StringVar()
+        self.EPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
         self.GPEntryVar = StringVar()
+        self.GPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
         self.PPEntryVar = StringVar()
+        self.PPEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
         self.CPOutputEntryVar = StringVar()
         self.SPOutputEntryVar = StringVar()
         self.EPOutputEntryVar = StringVar()
@@ -4418,14 +4423,19 @@ class CoinCalculator:
 
         # Input Entries
         self.CPEntry = EntryExtended(self.TableFrame, textvariable=self.CPEntryVar, justify=CENTER, width=20)
+        self.CPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
         self.CPEntry.grid(row=1, column=1, sticky=NSEW)
         self.SPEntry = EntryExtended(self.TableFrame, textvariable=self.SPEntryVar, justify=CENTER, width=20)
+        self.SPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
         self.SPEntry.grid(row=2, column=1, sticky=NSEW)
         self.EPEntry = EntryExtended(self.TableFrame, textvariable=self.EPEntryVar, justify=CENTER, width=20)
+        self.EPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
         self.EPEntry.grid(row=3, column=1, sticky=NSEW)
         self.GPEntry = EntryExtended(self.TableFrame, textvariable=self.GPEntryVar, justify=CENTER, width=20)
+        self.GPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
         self.GPEntry.grid(row=4, column=1, sticky=NSEW)
         self.PPEntry = EntryExtended(self.TableFrame, textvariable=self.PPEntryVar, justify=CENTER, width=20)
+        self.PPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
         self.PPEntry.grid(row=5, column=1, sticky=NSEW)
 
         # Output Entries
@@ -4443,18 +4453,11 @@ class CoinCalculator:
                                                cursor="arrow")
         self.WeightOutputEntry.grid(row=6, column=2, sticky=NSEW)
 
-        # Buttons
-        self.ButtonsFrame = Frame(self.WidgetMaster)
-        self.ButtonsFrame.grid_columnconfigure(0, weight=1)
-        self.ButtonsFrame.grid(row=1, column=0, sticky=NSEW)
-        self.CalculateButton = Button(self.ButtonsFrame, text="Calculate", command=self.Calculate, bg=GlobalInst.ButtonColor)
-        self.CalculateButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-
         # Additional Dialog Setup
         if DialogMode:
-            self.ButtonsFrame.grid_columnconfigure(1, weight=1)
-            self.CloseButton = Button(self.ButtonsFrame, text="Close", command=self.Close, bg=GlobalInst.ButtonColor)
-            self.CloseButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+            # Close Button
+            self.CloseButton = Button(self.WidgetMaster, text="Close", command=self.Close, bg=GlobalInst.ButtonColor)
+            self.CloseButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
 
             # Prevent Main Window Input
             self.Window.grab_set()
@@ -4466,28 +4469,19 @@ class CoinCalculator:
             # Focus on CP Entry
             self.CPEntry.focus_set()
 
-    def ValidEntry(self):
+    def ValidCoinsEntry(self, NewText):
+        if NewText is "": return True
         try:
-            CPInput = GlobalInst.GetStringVarAsNumber(self.CPEntryVar)
-            SPInput = GlobalInst.GetStringVarAsNumber(self.SPEntryVar)
-            EPInput = GlobalInst.GetStringVarAsNumber(self.EPEntryVar)
-            GPInput = GlobalInst.GetStringVarAsNumber(self.GPEntryVar)
-            PPInput = GlobalInst.GetStringVarAsNumber(self.PPEntryVar)
+            NewTextInt = int(NewText)
         except:
             messagebox.showerror("Invalid Entry", "Coins must be whole numbers.")
             return False
-        if CPInput < 0 or SPInput < 0 or EPInput < 0 or GPInput < 0 or PPInput < 0:
-            messagebox.showerror("Invalid Entry", "Coins cannot be negative.")
+        if NewTextInt < 0:
+            messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
             return False
         return True
 
     def Calculate(self):
-        # Check Inputs
-        if self.ValidEntry():
-            pass
-        else:
-            return
-
         # Get Inputs as Decimals
         CPInput = GlobalInst.GetStringVarAsNumber(self.CPEntryVar, Mode="Decimal")
         SPInput = GlobalInst.GetStringVarAsNumber(self.SPEntryVar, Mode="Decimal")
