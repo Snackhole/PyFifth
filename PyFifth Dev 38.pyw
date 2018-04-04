@@ -164,6 +164,50 @@ class Global:
         Widget.tk_focusPrev().focus_set()
         return "break"
 
+    # Validation Functions
+    def ValidateNumberFromString(self, NewText, NotANumberString, Mode="Int", MinValue=None, LessThanMinString="", MaxValue=None, MoreThanMaxString=""):
+        if NewText is "": return True
+        try:
+            if Mode is "Int":
+                NewTextNumber = int(NewText)
+            elif Mode is "Float":
+                NewTextNumber = float(NewText)
+            else:
+                return False
+        except:
+            messagebox.showerror("Invalid Entry", NotANumberString)
+            return False
+        if MinValue is not None:
+            if NewTextNumber < MinValue:
+                messagebox.showerror("Invalid Entry", LessThanMinString)
+                return False
+        if MaxValue is not None:
+            if NewTextNumber > MaxValue:
+                messagebox.showerror("Invalid Entry", MoreThanMaxString)
+                return False
+        return True
+
+    def ValidSpellSlotValue(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Spell slots must be whole numbers.", MinValue=0, LessThanMinString="Spell slots cannot be less than 0.")
+
+    def ValidCoinsEntry(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Coins must be whole numbers.", MinValue=0, LessThanMinString="Coins cannot be less than 0.")
+
+    def InventoryValidCountEntry(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Inventory item counts must be whole numbers.", MinValue=0, LessThanMinString="Inventory item counts cannot be less than 0.")
+
+    def InventoryValidWeightEntry(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Inventory item unit weights must be numbers.", Mode="Float", MinValue=0, LessThanMinString="Inventory item unit weights cannot be less than 0.")
+
+    def InventoryValidValueEntry(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Inventory item unit values must be numbers.", Mode="Float", MinValue=0, LessThanMinString="Inventory item unit values cannot be less than 0.")
+
+    def ValidProficiencyEntry(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Proficiency must be a whole number.")
+
+    def ValidAbilityEntry(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Ability modifiers must be whole numbers.")
+
 
 # Saving
 class SavingAndOpening:
@@ -2949,24 +2993,12 @@ class CharacterSheet:
 
                 # Slots
                 self.SlotsEntry = EntryExtended(master, width=1, justify=CENTER, textvariable=self.SlotsEntryVar)
-                self.SlotsEntry.ConfigureValidation(self.ValidSpellSlotValue, "key")
+                self.SlotsEntry.ConfigureValidation(GlobalInst.ValidSpellSlotValue, "key")
                 self.SlotsEntry.grid(row=self.Row, column=1, padx=2, pady=2, sticky=NSEW)
 
                 # Used
                 self.UsedEntry = EntryExtended(master, width=1, justify=CENTER, textvariable=self.UsedEntryVar)
                 self.UsedEntry.grid(row=self.Row, column=2, padx=2, pady=2, sticky=NSEW)
-
-            def ValidSpellSlotValue(self, NewText):
-                if NewText is "": return True
-                try:
-                    NewTextInt = int(NewText)
-                except:
-                    messagebox.showerror("Invalid Entry", "Spell slots must be whole numbers.")
-                    return False
-                if NewTextInt < 0:
-                    messagebox.showerror("Invalid Entry", "Spell slots must be greater than 0.")
-                    return False
-                return True
 
         class ExpendOrRestoreSpellPointsMenu:
             def __init__(self, master, Mode):
@@ -3176,27 +3208,27 @@ class CharacterSheet:
             self.CoinsHeaderCP = Label(self.CoinsInputHolderFrame, text="CP", bd=2, relief=GROOVE)
             self.CoinsHeaderCP.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
             self.CoinsEntryCP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryCPVar)
-            self.CoinsEntryCP.ConfigureValidation(self.ValidCoinsEntry, "key")
+            self.CoinsEntryCP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
             self.CoinsEntryCP.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
             self.CoinsHeaderSP = Label(self.CoinsInputHolderFrame, text="SP", bd=2, relief=GROOVE)
             self.CoinsHeaderSP.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
             self.CoinsEntrySP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntrySPVar)
-            self.CoinsEntrySP.ConfigureValidation(self.ValidCoinsEntry, "key")
+            self.CoinsEntrySP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
             self.CoinsEntrySP.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
             self.CoinsHeaderEP = Label(self.CoinsInputHolderFrame, text="EP", bd=2, relief=GROOVE)
             self.CoinsHeaderEP.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
             self.CoinsEntryEP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryEPVar)
-            self.CoinsEntryEP.ConfigureValidation(self.ValidCoinsEntry, "key")
+            self.CoinsEntryEP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
             self.CoinsEntryEP.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
             self.CoinsHeaderGP = Label(self.CoinsInputHolderFrame, text="GP", bd=2, relief=GROOVE)
             self.CoinsHeaderGP.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
             self.CoinsEntryGP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryGPVar)
-            self.CoinsEntryGP.ConfigureValidation(self.ValidCoinsEntry, "key")
+            self.CoinsEntryGP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
             self.CoinsEntryGP.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
             self.CoinsHeaderPP = Label(self.CoinsInputHolderFrame, text="PP", bd=2, relief=GROOVE)
             self.CoinsHeaderPP.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
             self.CoinsEntryPP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryPPVar)
-            self.CoinsEntryPP.ConfigureValidation(self.ValidCoinsEntry, "key")
+            self.CoinsEntryPP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
             self.CoinsEntryPP.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
 
             # Coin Value and Weight
@@ -3514,18 +3546,6 @@ class CharacterSheet:
                 Entry.CategoryTagVar.set("")
                 Entry.SortOrderVar.set("")
 
-        def ValidCoinsEntry(self, NewText):
-            if NewText is "": return True
-            try:
-                NewTextInt = int(NewText)
-            except:
-                messagebox.showerror("Invalid Entry", "Coins must be whole numbers.")
-                return False
-            if NewTextInt < 0:
-                messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
-                return False
-            return True
-
         def OpenCoinCalculator(self):
             # Create Coin Calculator Window and Wait
             self.CoinCalculatorInst = CoinCalculator(WindowInst, DialogMode=True)
@@ -3607,15 +3627,15 @@ class CharacterSheet:
 
                 # Count Entry
                 self.CountEntry = EntryExtended(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
-                self.CountEntry.ConfigureValidation(self.ValidCountEntry, "key")
+                self.CountEntry.ConfigureValidation(GlobalInst.InventoryValidCountEntry, "key")
 
                 # Unit Weight Entry
                 self.UnitWeightEntry = EntryExtended(master, width=4, textvariable=self.UnitWeightEntryVar, justify=CENTER)
-                self.UnitWeightEntry.ConfigureValidation(self.ValidWeightEntry, "key")
+                self.UnitWeightEntry.ConfigureValidation(GlobalInst.InventoryValidWeightEntry, "key")
 
                 # Unit Value Entry
                 self.UnitValueEntry = EntryExtended(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
-                self.UnitValueEntry.ConfigureValidation(self.ValidValueEntry, "key")
+                self.UnitValueEntry.ConfigureValidation(GlobalInst.InventoryValidValueEntry, "key")
 
                 # Unit Value Denomination
                 self.UnitValueDenomination = ttk.Combobox(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
@@ -3637,42 +3657,6 @@ class CharacterSheet:
                 self.SortOrder = ttk.Combobox(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
                 self.SortOrder.bind("<Enter>", self.DisableScrolling)
                 self.SortOrder.bind("<Leave>", self.EnableScrolling)
-
-            def ValidCountEntry(self, NewText):
-                if NewText is "": return True
-                try:
-                    NewTextInt = int(NewText)
-                except:
-                    messagebox.showerror("Invalid Entry", "Inventory item counts must be whole numbers.")
-                    return False
-                if NewTextInt < 0:
-                    messagebox.showerror("Invalid Entry", "Inventory item counts cannot be less than 0.")
-                    return False
-                return True
-
-            def ValidWeightEntry(self, NewText):
-                if NewText is "": return True
-                try:
-                    NewTextFloat = float(NewText)
-                except:
-                    messagebox.showerror("Invalid Entry", "Inventory item unit weights must be numbers.")
-                    return False
-                if NewTextFloat < 0:
-                    messagebox.showerror("Invalid Entry", "Inventory item unit weights cannot be less than 0.")
-                    return False
-                return True
-
-            def ValidValueEntry(self, NewText):
-                if NewText is "": return True
-                try:
-                    NewTextFloat = float(NewText)
-                except:
-                    messagebox.showerror("Invalid Entry", "Inventory item unit values must be numbers.")
-                    return False
-                if NewTextFloat < 0:
-                    messagebox.showerror("Invalid Entry", "Inventory item unit values cannot be less than 0.")
-                    return False
-                return True
 
             def DisableScrolling(self, event):
                 self.ScrollingDisabledVar.set(True)
@@ -4423,19 +4407,19 @@ class CoinCalculator:
 
         # Input Entries
         self.CPEntry = EntryExtended(self.TableFrame, textvariable=self.CPEntryVar, justify=CENTER, width=20)
-        self.CPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.CPEntry.grid(row=1, column=1, sticky=NSEW)
         self.SPEntry = EntryExtended(self.TableFrame, textvariable=self.SPEntryVar, justify=CENTER, width=20)
-        self.SPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.SPEntry.grid(row=2, column=1, sticky=NSEW)
         self.EPEntry = EntryExtended(self.TableFrame, textvariable=self.EPEntryVar, justify=CENTER, width=20)
-        self.EPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.EPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.EPEntry.grid(row=3, column=1, sticky=NSEW)
         self.GPEntry = EntryExtended(self.TableFrame, textvariable=self.GPEntryVar, justify=CENTER, width=20)
-        self.GPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.GPEntry.grid(row=4, column=1, sticky=NSEW)
         self.PPEntry = EntryExtended(self.TableFrame, textvariable=self.PPEntryVar, justify=CENTER, width=20)
-        self.PPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.PPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.PPEntry.grid(row=5, column=1, sticky=NSEW)
 
         # Output Entries
@@ -4468,18 +4452,6 @@ class CoinCalculator:
 
             # Focus on CP Entry
             self.CPEntry.focus_set()
-
-    def ValidCoinsEntry(self, NewText):
-        if NewText is "": return True
-        try:
-            NewTextInt = int(NewText)
-        except:
-            messagebox.showerror("Invalid Entry", "Coins must be whole numbers.")
-            return False
-        if NewTextInt < 0:
-            messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
-            return False
-        return True
 
     def Calculate(self):
         # Get Inputs as Decimals
@@ -4572,27 +4544,27 @@ class SpendCoinsMenu:
         self.SpendPPHeader = Label(self.SpendFrame, text="PP", bd=2, relief=GROOVE)
         self.SpendPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
         self.SpendCPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendCPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.SpendCPTooltip = Tooltip(self.SpendCPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendCPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.SpendSPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendSPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.SpendSPTooltip = Tooltip(self.SpendSPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendSPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.SpendEPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendEPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.SpendEPTooltip = Tooltip(self.SpendEPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendEPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.SpendGPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendGPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.SpendGPTooltip = Tooltip(self.SpendGPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendGPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.SpendPPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendPPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.SpendPPTooltip = Tooltip(self.SpendPPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendPPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
@@ -4636,27 +4608,27 @@ class SpendCoinsMenu:
         self.RemainingPPHeader = Label(self.RemainingFrame, text="PP", bd=2, relief=GROOVE)
         self.RemainingPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
         self.RemainingCPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingCPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.RemainingCPTooltip = Tooltip(self.RemainingCPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingCPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.RemainingSPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingSPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.RemainingSPTooltip = Tooltip(self.RemainingSPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingSPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.RemainingEPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingEPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.RemainingEPTooltip = Tooltip(self.RemainingEPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingEPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.RemainingGPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingGPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.RemainingGPTooltip = Tooltip(self.RemainingGPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingGPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.RemainingPPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingPPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.RemainingPPTooltip = Tooltip(self.RemainingPPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingPPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
@@ -4739,18 +4711,6 @@ class SpendCoinsMenu:
 
         # Focus on Spend CP Entry
         self.SpendCPEntry.focus_set()
-
-    def ValidCoinsEntry(self, NewText):
-        if NewText is "": return True
-        try:
-            NewTextInt = int(NewText)
-        except:
-            messagebox.showerror("Invalid Entry", "Coins must be whole numbers.")
-            return False
-        if NewTextInt < 0:
-            messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
-            return False
-        return True
 
     def MouseWheelEvent(self, event, EntryVar, MinValue=None, MaxValue=None):
         try:
@@ -4890,27 +4850,27 @@ class GainCoinsMenu:
         self.GainPPHeader = Label(self.GainFrame, text="PP", bd=2, relief=GROOVE)
         self.GainPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
         self.GainCPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainCPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.GainCPTooltip = Tooltip(self.GainCPEntry, "Scroll the mouse wheel or type to change.")
         self.GainCPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.GainSPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainSPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.GainSPTooltip = Tooltip(self.GainSPEntry, "Scroll the mouse wheel or type to change.")
         self.GainSPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.GainEPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainEPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.GainEPTooltip = Tooltip(self.GainEPEntry, "Scroll the mouse wheel or type to change.")
         self.GainEPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.GainGPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainGPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.GainGPTooltip = Tooltip(self.GainGPEntry, "Scroll the mouse wheel or type to change.")
         self.GainGPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.GainPPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainPPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.GainPPTooltip = Tooltip(self.GainPPEntry, "Scroll the mouse wheel or type to change.")
         self.GainPPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
@@ -4957,18 +4917,6 @@ class GainCoinsMenu:
 
         # Focus on Spend CP Entry
         self.GainCPEntry.focus_set()
-
-    def ValidCoinsEntry(self, NewText):
-        if NewText is "": return True
-        try:
-            NewTextInt = int(NewText)
-        except:
-            messagebox.showerror("Invalid Entry", "Coins must be whole numbers.")
-            return False
-        if NewTextInt < 0:
-            messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
-            return False
-        return True
 
     def MouseWheelEvent(self, event, EntryVar, MinValue=None, MaxValue=None):
         try:
@@ -5775,11 +5723,11 @@ class CreatureData:
             self.ProficiencyEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.ProficiencyEntryVar))
 
         # Proficiency Entry Validation
-        self.ProficiencyEntry.ConfigureValidation(self.ValidProficiencyEntry, "key")
+        self.ProficiencyEntry.ConfigureValidation(GlobalInst.ValidProficiencyEntry, "key")
 
         # Ability Entry Validation
         for AbilityEntryWidget in [self.AbilitiesStrengthEntry, self.AbilitiesDexterityEntry, self.AbilitiesConstitutionEntry, self.AbilitiesIntelligenceEntry, self.AbilitiesWisdomEntry, self.AbilitiesCharismaEntry]:
-            AbilityEntryWidget.ConfigureValidation(self.ValidAbilityEntry, "key")
+            AbilityEntryWidget.ConfigureValidation(GlobalInst.ValidAbilityEntry, "key")
 
         # NPC Sheet Auto Calculation
         if WindowInst.Mode is "NPCSheet":
@@ -5975,24 +5923,6 @@ class CreatureData:
             return False
         if TempHP < 0 or MaxHP < 1:
             messagebox.showerror("Invalid Entry", "Temp HP cannot be negative and max HP must be positive.")
-            return False
-        return True
-
-    def ValidProficiencyEntry(self, NewText):
-        if NewText is "": return True
-        try:
-            int(NewText)
-        except:
-            messagebox.showerror("Invalid Entry", "Proficiency must be a whole number.")
-            return False
-        return True
-
-    def ValidAbilityEntry(self, NewText):
-        if NewText is "": return True
-        try:
-            int(NewText)
-        except:
-            messagebox.showerror("Invalid Entry", "Ability modifiers must be whole numbers.")
             return False
         return True
 
@@ -7557,27 +7487,27 @@ class HoardSheet:
         self.CoinsHeaderCP = Label(self.CoinsInputHolderFrame, text="CP", bd=2, relief=GROOVE)
         self.CoinsHeaderCP.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
         self.CoinsEntryCP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryCPVar)
-        self.CoinsEntryCP.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CoinsEntryCP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.CoinsEntryCP.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.CoinsHeaderSP = Label(self.CoinsInputHolderFrame, text="SP", bd=2, relief=GROOVE)
         self.CoinsHeaderSP.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
         self.CoinsEntrySP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntrySPVar)
-        self.CoinsEntrySP.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CoinsEntrySP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.CoinsEntrySP.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.CoinsHeaderEP = Label(self.CoinsInputHolderFrame, text="EP", bd=2, relief=GROOVE)
         self.CoinsHeaderEP.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
         self.CoinsEntryEP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryEPVar)
-        self.CoinsEntryEP.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CoinsEntryEP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.CoinsEntryEP.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.CoinsHeaderGP = Label(self.CoinsInputHolderFrame, text="GP", bd=2, relief=GROOVE)
         self.CoinsHeaderGP.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.CoinsEntryGP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryGPVar)
-        self.CoinsEntryGP.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CoinsEntryGP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.CoinsEntryGP.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.CoinsHeaderPP = Label(self.CoinsInputHolderFrame, text="PP", bd=2, relief=GROOVE)
         self.CoinsHeaderPP.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
         self.CoinsEntryPP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryPPVar)
-        self.CoinsEntryPP.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.CoinsEntryPP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
         self.CoinsEntryPP.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
         self.GainCoinsButton = Button(self.CoinsFrame, text="Gain", bg=GlobalInst.ButtonColor, command=self.GainCoins)
         self.GainCoinsButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
@@ -7689,18 +7619,6 @@ class HoardSheet:
         for CurrentIndex in range(1, 201):
             CurrentEntry = self.TreasureItemEntry(self.TreasureItemsScrolledCanvas.WindowFrame, self.TreasureItemEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesTuple, CurrentIndex)
             CurrentEntry.Display(CurrentIndex)
-
-    def ValidCoinsEntry(self, NewText):
-        if NewText is "": return True
-        try:
-            NewTextInt = int(NewText)
-        except:
-            messagebox.showerror("Invalid Entry", "Coins must be whole numbers.")
-            return False
-        if NewTextInt < 0:
-            messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
-            return False
-        return True
 
     def SpendCoins(self):
         # Create Config Window and Wait
@@ -7917,15 +7835,15 @@ class HoardSheet:
 
             # Count Entry
             self.CountEntry = EntryExtended(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
-            self.CountEntry.ConfigureValidation(self.ValidCountEntry, "key")
+            self.CountEntry.ConfigureValidation(GlobalInst.InventoryValidCountEntry, "key")
 
             # Unit Weight Entry
             self.UnitWeightEntry = EntryExtended(master, width=4, textvariable=self.UnitWeightEntryVar, justify=CENTER)
-            self.UnitWeightEntry.ConfigureValidation(self.ValidWeightEntry, "key")
+            self.UnitWeightEntry.ConfigureValidation(GlobalInst.InventoryValidWeightEntry, "key")
 
             # Unit Value Entry
             self.UnitValueEntry = EntryExtended(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
-            self.UnitValueEntry.ConfigureValidation(self.ValidValueEntry, "key")
+            self.UnitValueEntry.ConfigureValidation(GlobalInst.InventoryValidValueEntry, "key")
 
             # Unit Value Denomination
             self.UnitValueDenomination = ttk.Combobox(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
@@ -7942,42 +7860,6 @@ class HoardSheet:
             self.SortOrder = ttk.Combobox(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
             self.SortOrder.bind("<Enter>", self.DisableScrolling)
             self.SortOrder.bind("<Leave>", self.EnableScrolling)
-
-        def ValidCountEntry(self, NewText):
-            if NewText is "": return True
-            try:
-                NewTextInt = int(NewText)
-            except:
-                messagebox.showerror("Invalid Entry", "Inventory item counts must be whole numbers.")
-                return False
-            if NewTextInt < 0:
-                messagebox.showerror("Invalid Entry", "Inventory item counts cannot be less than 0.")
-                return False
-            return True
-
-        def ValidWeightEntry(self, NewText):
-            if NewText is "": return True
-            try:
-                NewTextFloat = float(NewText)
-            except:
-                messagebox.showerror("Invalid Entry", "Inventory item unit weights must be numbers.")
-                return False
-            if NewTextFloat < 0:
-                messagebox.showerror("Invalid Entry", "Inventory item unit weights cannot be less than 0.")
-                return False
-            return True
-
-        def ValidValueEntry(self, NewText):
-            if NewText is "": return True
-            try:
-                NewTextFloat = float(NewText)
-            except:
-                messagebox.showerror("Invalid Entry", "Inventory item unit values must be numbers.")
-                return False
-            if NewTextFloat < 0:
-                messagebox.showerror("Invalid Entry", "Inventory item unit values cannot be less than 0.")
-                return False
-            return True
 
         def DisableScrolling(self, event):
             self.ScrollingDisabledVar.set(True)
