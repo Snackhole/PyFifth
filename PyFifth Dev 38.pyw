@@ -234,7 +234,19 @@ class Global:
         return self.ValidateNumberFromString(NewText, "Initiative roll must be a whole number.")
 
     def ValidMaxHPData(self, NewText):
-        return self.ValidateNumberFromString(NewText, "All max HP data must be in the form of whole numbers.",  MinValue=0, LessThanMinString="Max HP data cannot be less than 0.")
+        return self.ValidateNumberFromString(NewText, "All max HP data must be in the form of whole numbers.", MinValue=0, LessThanMinString="Max HP data cannot be less than 0.")
+
+    def ValidStatModifierACBase(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Base AC must be a whole number.")
+
+    def ValidStatModifierMultiplier(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Multipliers must be numbers", Mode="Float")
+
+    def ValidStatModifierMinMax(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Minimums and maximums must be whole numbers.")
+
+    def ValidStatModifierManualMod(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Manual modifier must be a whole number.")
 
 
 # Saving
@@ -5235,6 +5247,7 @@ class StatModifier:
                 self.ACBaseFrame.grid_columnconfigure(0, weight=1)
                 self.ACBaseFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2, columnspan=5)
                 self.ACBaseEntry = EntryExtended(self.ACBaseFrame, justify=CENTER, width=5, textvariable=self.Variables["ACBaseEntryVar"])
+                self.ACBaseEntry.ConfigureValidation(GlobalInst.ValidStatModifierACBase, "key")
                 self.ACBaseEntry.grid(row=0, column=0, sticky=NSEW)
 
             # Headers
@@ -5268,21 +5281,29 @@ class StatModifier:
 
             # Multiplier Entries
             self.StrengthMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["StrengthMultiplierEntryVar"])
+            self.StrengthMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
             self.StrengthMultiplierEntry.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
             self.DexterityMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["DexterityMultiplierEntryVar"])
+            self.DexterityMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
             self.DexterityMultiplierEntry.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
             self.ConstitutionMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ConstitutionMultiplierEntryVar"])
+            self.ConstitutionMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
             self.ConstitutionMultiplierEntry.grid(row=4, column=1, sticky=NSEW, padx=2, pady=2)
             self.IntelligenceMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["IntelligenceMultiplierEntryVar"])
+            self.IntelligenceMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
             self.IntelligenceMultiplierEntry.grid(row=5, column=1, sticky=NSEW, padx=2, pady=2)
             self.WisdomMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["WisdomMultiplierEntryVar"])
+            self.WisdomMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
             self.WisdomMultiplierEntry.grid(row=6, column=1, sticky=NSEW, padx=2, pady=2)
             self.CharismaMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["CharismaMultiplierEntryVar"])
+            self.CharismaMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
             self.CharismaMultiplierEntry.grid(row=7, column=1, sticky=NSEW, padx=2, pady=2)
             self.ProficiencyMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMultiplierEntryVar"])
+            self.ProficiencyMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
             self.ProficiencyMultiplierEntry.grid(row=8, column=1, sticky=NSEW, padx=2, pady=2)
             if WindowInst.Mode is "CharacterSheet":
                 self.LevelMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMultiplierEntryVar"])
+                self.LevelMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
                 self.LevelMultiplierEntry.grid(row=9, column=1, sticky=NSEW, padx=2, pady=2)
 
             # Round Up Boxes
@@ -5306,40 +5327,56 @@ class StatModifier:
 
             # Min Entries
             self.StrengthMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["StrengthMinEntryVar"])
+            self.StrengthMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.StrengthMinEntry.grid(row=2, column=3, sticky=NSEW, padx=2, pady=2)
             self.DexterityMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["DexterityMinEntryVar"])
+            self.DexterityMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.DexterityMinEntry.grid(row=3, column=3, sticky=NSEW, padx=2, pady=2)
             self.ConstitutionMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ConstitutionMinEntryVar"])
+            self.ConstitutionMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.ConstitutionMinEntry.grid(row=4, column=3, sticky=NSEW, padx=2, pady=2)
             self.IntelligenceMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["IntelligenceMinEntryVar"])
+            self.IntelligenceMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.IntelligenceMinEntry.grid(row=5, column=3, sticky=NSEW, padx=2, pady=2)
             self.WisdomMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["WisdomMinEntryVar"])
+            self.WisdomMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.WisdomMinEntry.grid(row=6, column=3, sticky=NSEW, padx=2, pady=2)
             self.CharismaMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["CharismaMinEntryVar"])
+            self.CharismaMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.CharismaMinEntry.grid(row=7, column=3, sticky=NSEW, padx=2, pady=2)
             self.ProficiencyMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMinEntryVar"])
+            self.ProficiencyMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.ProficiencyMinEntry.grid(row=8, column=3, sticky=NSEW, padx=2, pady=2)
             if WindowInst.Mode is "CharacterSheet":
                 self.LevelMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMinEntryVar"])
+                self.LevelMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
                 self.LevelMinEntry.grid(row=9, column=3, sticky=NSEW, padx=2, pady=2)
 
             # Max Entries
             self.StrengthMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["StrengthMaxEntryVar"])
+            self.StrengthMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.StrengthMaxEntry.grid(row=2, column=4, sticky=NSEW, padx=2, pady=2)
             self.DexterityMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["DexterityMaxEntryVar"])
+            self.DexterityMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.DexterityMaxEntry.grid(row=3, column=4, sticky=NSEW, padx=2, pady=2)
             self.ConstitutionMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ConstitutionMaxEntryVar"])
+            self.ConstitutionMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.ConstitutionMaxEntry.grid(row=4, column=4, sticky=NSEW, padx=2, pady=2)
             self.IntelligenceMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["IntelligenceMaxEntryVar"])
+            self.IntelligenceMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.IntelligenceMaxEntry.grid(row=5, column=4, sticky=NSEW, padx=2, pady=2)
             self.WisdomMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["WisdomMaxEntryVar"])
+            self.WisdomMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.WisdomMaxEntry.grid(row=6, column=4, sticky=NSEW, padx=2, pady=2)
             self.CharismaMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["CharismaMaxEntryVar"])
+            self.CharismaMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.CharismaMaxEntry.grid(row=7, column=4, sticky=NSEW, padx=2, pady=2)
             self.ProficiencyMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMaxEntryVar"])
+            self.ProficiencyMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.ProficiencyMaxEntry.grid(row=8, column=4, sticky=NSEW, padx=2, pady=2)
             if WindowInst.Mode is "CharacterSheet":
                 self.LevelMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMaxEntryVar"])
+                self.LevelMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
                 self.LevelMaxEntry.grid(row=9, column=4, sticky=NSEW, padx=2, pady=2)
 
             # Manual Modifier
@@ -5347,6 +5384,7 @@ class StatModifier:
             self.ManualModifierFrame.grid_columnconfigure(0, weight=1)
             self.ManualModifierFrame.grid(row=10, column=0, columnspan=5, sticky=NSEW, padx=2, pady=2)
             self.ManualModifierEntry = EntryExtended(self.ManualModifierFrame, justify=CENTER, width=5, textvariable=self.Variables["ManualModifierEntryVar"])
+            self.ManualModifierEntry.ConfigureValidation(GlobalInst.ValidStatModifierManualMod, "key")
             self.ManualModifierEntry.grid(row=0, column=0, sticky=NSEW)
 
             # Buttons
@@ -5379,10 +5417,6 @@ class StatModifier:
                 self.StrengthMultiplierEntry.focus_set()
 
         def Submit(self):
-            if self.ValidEntry():
-                pass
-            else:
-                return
             self.DataSubmitted.set(True)
             if self.DiceRollerMode:
                 self.Variables["ModifiersSubmitted"].set(True)
@@ -5400,54 +5434,6 @@ class StatModifier:
         def Cancel(self):
             self.DataSubmitted.set(False)
             self.Window.destroy()
-
-        def ValidEntry(self):
-            try:
-                GlobalInst.GetStringVarAsNumber(self.Variables["StrengthMultiplierEntryVar"], Mode="Float")
-                GlobalInst.GetStringVarAsNumber(self.Variables["DexterityMultiplierEntryVar"], Mode="Float")
-                GlobalInst.GetStringVarAsNumber(self.Variables["ConstitutionMultiplierEntryVar"], Mode="Float")
-                GlobalInst.GetStringVarAsNumber(self.Variables["IntelligenceMultiplierEntryVar"], Mode="Float")
-                GlobalInst.GetStringVarAsNumber(self.Variables["WisdomMultiplierEntryVar"], Mode="Float")
-                GlobalInst.GetStringVarAsNumber(self.Variables["CharismaMultiplierEntryVar"], Mode="Float")
-                GlobalInst.GetStringVarAsNumber(self.Variables["ProficiencyMultiplierEntryVar"], Mode="Float")
-                if WindowInst.Mode is "CharacterSheet":
-                    GlobalInst.GetStringVarAsNumber(self.Variables["LevelMultiplierEntryVar"], Mode="Float")
-            except:
-                messagebox.showerror("Invalid Entry", "Multipliers must be numbers.")
-                return False
-            try:
-                GlobalInst.GetStringVarAsNumber(self.Variables["StrengthMinEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["DexterityMinEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["ConstitutionMinEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["IntelligenceMinEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["WisdomMinEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["CharismaMinEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["ProficiencyMinEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["StrengthMaxEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["DexterityMaxEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["ConstitutionMaxEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["IntelligenceMaxEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["WisdomMaxEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["CharismaMaxEntryVar"])
-                GlobalInst.GetStringVarAsNumber(self.Variables["ProficiencyMaxEntryVar"])
-                if WindowInst.Mode is "CharacterSheet":
-                    GlobalInst.GetStringVarAsNumber(self.Variables["LevelMinEntryVar"])
-                    GlobalInst.GetStringVarAsNumber(self.Variables["LevelMaxEntryVar"])
-            except:
-                messagebox.showerror("Invalid Entry", "Minimums and maximums must be whole numbers.")
-                return False
-            try:
-                GlobalInst.GetStringVarAsNumber(self.Variables["ManualModifierEntryVar"])
-            except:
-                messagebox.showerror("Invalid Entry", "Manual modifier must be a whole number.")
-                return False
-            if self.ACMode:
-                try:
-                    GlobalInst.GetStringVarAsNumber(self.Variables["ACBaseEntryVar"])
-                except:
-                    messagebox.showerror("Invalid Entry", "Base AC must be a whole number.")
-                    return False
-            return True
 
 
 class AbilityScoreDerivatives:
@@ -8328,7 +8314,8 @@ class IntegerPrompt:
         return GlobalInst.GetStringVarAsNumber(self.IntegerEntryVar)
 
     def ValidEntry(self, NewText):
-        return GlobalInst.ValidateNumberFromString(NewText, "Must be a whole number.", MinValue=self.MinValue, LessThanMinString="Must be at least " + str(self.MinValue) + ".", MaxValue=self.MaxValue, MoreThanMaxString="Must be no more than " + str(self.MaxValue) + ".")
+        return GlobalInst.ValidateNumberFromString(NewText, "Must be a whole number.", MinValue=self.MinValue, LessThanMinString="Must be at least " + str(self.MinValue) + ".", MaxValue=self.MaxValue,
+                                                   MoreThanMaxString="Must be no more than " + str(self.MaxValue) + ".")
 
 
 class StringPrompt:
