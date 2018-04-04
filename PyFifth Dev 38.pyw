@@ -190,6 +190,9 @@ class Global:
     def ValidSpellSlotValue(self, NewText):
         return self.ValidateNumberFromString(NewText, "Spell slots must be whole numbers.", MinValue=0, LessThanMinString="Spell slots cannot be less than 0.")
 
+    def ValidSpellPointGainOrLossManualAmount(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Manual amount must be a whole number.", MinValue=0, LessThanMinString="Manual amount cannot be less than 0.")
+
     def ValidCoinsEntry(self, NewText):
         return self.ValidateNumberFromString(NewText, "Coins must be whole numbers.", MinValue=0, LessThanMinString="Coins cannot be less than 0.")
 
@@ -3041,6 +3044,7 @@ class CharacterSheet:
                 self.SpellSlotDropdown = ttk.Combobox(self.Window, textvariable=self.SpellSlotDropdownVar, values=("", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"), width=4, state="readonly", justify=CENTER)
                 self.SpellSlotDropdown.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
                 self.ManualAmountEntry = EntryExtended(self.Window, justify=CENTER, width=5, textvariable=self.ManualAmountEntryVar)
+                self.ManualAmountEntry.ConfigureValidation(GlobalInst.ValidSpellPointGainOrLossManualAmount, "key")
                 self.ManualAmountEntry.grid(row=1, column=1, padx=2, pady=2, sticky=NSEW)
 
                 # Buttons
@@ -3061,27 +3065,12 @@ class CharacterSheet:
                 self.Window.focus_force()
 
             def Submit(self):
-                if self.ValidManualInput():
-                    pass
-                else:
-                    return
                 self.DataSubmitted.set(True)
                 self.Window.destroy()
 
             def Cancel(self):
                 self.DataSubmitted.set(False)
                 self.Window.destroy()
-
-            def ValidManualInput(self):
-                try:
-                    ManualInput = GlobalInst.GetStringVarAsNumber(self.ManualAmountEntryVar)
-                except:
-                    messagebox.showerror("Invalid Entry", "Manual amount must be a whole number.")
-                    return False
-                if ManualInput < 0:
-                    messagebox.showerror("Invalid Entry", "Manual amount cannot be negative.")
-                    return False
-                return True
 
     # Inventory
     class Inventory:
