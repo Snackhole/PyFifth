@@ -6630,6 +6630,7 @@ class InitiativeOrder:
         self.RoundFrame.grid_columnconfigure(0, weight=1)
         self.RoundFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
         self.RoundEntry = EntryExtended(self.RoundFrame, textvariable=self.RoundEntryVar, font=self.InitiativeDataFont, width=5, justify=CENTER)
+        self.RoundEntry.ConfigureValidation(GlobalInst.ValidRound, "key")
         self.RoundEntry.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
 
         # New Round Button
@@ -6741,11 +6742,6 @@ class InitiativeOrder:
             Entry.TurnDoneOff()
 
     def SortInitiativeOrder(self):
-        if self.ValidInitiatives():
-            pass
-        else:
-            return
-
         # List to Sort
         ListToSort = []
 
@@ -6769,23 +6765,10 @@ class InitiativeOrder:
         WindowInst.UpdateWindowTitle()
 
     def ValidRound(self):
-        try:
-            Round = GlobalInst.GetStringVarAsNumber(self.RoundEntryVar)
-        except:
-            messagebox.showerror("Invalid Entry", "Round must be a whole number.")
-            return False
+        Round = GlobalInst.GetStringVarAsNumber(self.RoundEntryVar)
         if Round <= 0:
             messagebox.showerror("Invalid Entry", "Round must be greater than 0.")
             return False
-        return True
-
-    def ValidInitiatives(self):
-        for Entry in self.InitiativeEntriesList:
-            try:
-                GlobalInst.GetStringVarAsNumber(Entry.InitiativeEntryResultEntryVar)
-            except:
-                messagebox.showerror("Invalid Entry", "Initiative rolls must be whole numbers.")
-                return False
         return True
 
     class InitiativeEntry:
@@ -6838,6 +6821,7 @@ class InitiativeOrder:
 
             # Initiative Entry
             self.InitiativeEntryResultEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryResultEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
+            self.InitiativeEntryResultEntry.ConfigureValidation(GlobalInst.ValidInitiative, "key")
             self.InitiativeEntryResultEntry.bind("<Button-3>", lambda event: self.ToggleTurnDone())
             self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
 
