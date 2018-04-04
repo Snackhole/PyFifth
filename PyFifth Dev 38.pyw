@@ -5661,7 +5661,7 @@ class CreatureData:
         self.ProficiencyFrame = LabelFrame(self.SizeTypeTagsAlignmentAndProficiencyFrame, text="Proficiency Bonus:")
         self.ProficiencyFrame.grid_columnconfigure(0, weight=1)
         self.ProficiencyFrame.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
-        self.ProficiencyEntry = EntryExtended(self.ProficiencyFrame, justify=CENTER, width=5, textvariable=self.ProficiencyEntryVar)
+        self.ProficiencyEntry = EntryExtended(self.ProficiencyFrame, justify=CENTER, width=5, textvariable=self.ProficiencyEntryVar, bg=GlobalInst.ButtonColor)
         self.ProficiencyEntry.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
 
         # HP, AC, Speed, CR, and Experience Entries Frame
@@ -5684,13 +5684,11 @@ class CreatureData:
         self.CurrentHPFrame = LabelFrame(self.HPACSpeedCRExperienceEntriesFrame, text="Current HP:")
         self.CurrentHPFrame.grid_columnconfigure(0, weight=1)
         self.CurrentHPFrame.grid(row=3, column=0, padx=2, pady=2, sticky=NSEW)
-        self.CurrentHPEntry = EntryExtended(self.CurrentHPFrame, justify=CENTER, width=3, textvariable=self.CurrentHPEntryVar)
+        self.CurrentHPEntry = EntryExtended(self.CurrentHPFrame, justify=CENTER, width=3, textvariable=self.CurrentHPEntryVar, bg=GlobalInst.ButtonColor)
         self.CurrentHPEntry.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-        if WindowInst.Mode is "NPCSheet":
-            self.CurrentHPEntry.configure(bg=GlobalInst.ButtonColor)
-            self.CurrentHPEntry.bind("<Button-3>", lambda event: self.Damage())
-            self.CurrentHPEntry.bind("<Shift-Button-3>", lambda event: self.Heal())
-            self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.")
+        self.CurrentHPEntry.bind("<Button-3>", lambda event: self.Damage())
+        self.CurrentHPEntry.bind("<Shift-Button-3>", lambda event: self.Heal())
+        self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.")
 
         # Max HP Entry
         self.MaxHPFrame = LabelFrame(self.HPACSpeedCRExperienceEntriesFrame, text="Max HP:")
@@ -5730,68 +5728,68 @@ class CreatureData:
         self.AbilitiesFrame.grid(row=2, column=1, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesStrengthHeader = Label(self.AbilitiesFrame, text="STR", bd=2, relief=GROOVE)
         self.AbilitiesStrengthHeader.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-        self.AbilitiesStrengthEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesStrengthEntryVar)
+        self.AbilitiesStrengthEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesStrengthEntryVar, bg=GlobalInst.ButtonColor)
         self.AbilitiesStrengthEntry.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesDexterityHeader = Label(self.AbilitiesFrame, text="DEX", bd=2, relief=GROOVE)
         self.AbilitiesDexterityHeader.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
-        self.AbilitiesDexterityEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesDexterityEntryVar)
+        self.AbilitiesDexterityEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesDexterityEntryVar, bg=GlobalInst.ButtonColor)
         self.AbilitiesDexterityEntry.grid(row=1, column=1, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesConstitutionHeader = Label(self.AbilitiesFrame, text="CON", bd=2, relief=GROOVE)
         self.AbilitiesConstitutionHeader.grid(row=0, column=2, padx=2, pady=2, sticky=NSEW)
-        self.AbilitiesConstitutionEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesConstitutionEntryVar)
+        self.AbilitiesConstitutionEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesConstitutionEntryVar, bg=GlobalInst.ButtonColor)
         self.AbilitiesConstitutionEntry.grid(row=1, column=2, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesIntelligenceHeader = Label(self.AbilitiesFrame, text="INT", bd=2, relief=GROOVE)
         self.AbilitiesIntelligenceHeader.grid(row=2, column=0, padx=2, pady=2, sticky=NSEW)
-        self.AbilitiesIntelligenceEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesIntelligenceEntryVar)
+        self.AbilitiesIntelligenceEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesIntelligenceEntryVar, bg=GlobalInst.ButtonColor)
         self.AbilitiesIntelligenceEntry.grid(row=3, column=0, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesWisdomHeader = Label(self.AbilitiesFrame, text="WIS", bd=2, relief=GROOVE)
         self.AbilitiesWisdomHeader.grid(row=2, column=1, padx=2, pady=2, sticky=NSEW)
-        self.AbilitiesWisdomEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesWisdomEntryVar)
+        self.AbilitiesWisdomEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesWisdomEntryVar, bg=GlobalInst.ButtonColor)
         self.AbilitiesWisdomEntry.grid(row=3, column=1, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesCharismaHeader = Label(self.AbilitiesFrame, text="CHA", bd=2, relief=GROOVE)
         self.AbilitiesCharismaHeader.grid(row=2, column=2, padx=2, pady=2, sticky=NSEW)
-        self.AbilitiesCharismaEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesCharismaEntryVar)
+        self.AbilitiesCharismaEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesCharismaEntryVar, bg=GlobalInst.ButtonColor)
         self.AbilitiesCharismaEntry.grid(row=3, column=2, padx=2, pady=2, sticky=NSEW)
 
-        # NPC Sheet Mouse Wheel Configuration and Entry Validation
+        # Mouse Wheel Configuration
+        for EntryWidget in [self.AbilitiesStrengthEntry, self.AbilitiesDexterityEntry, self.AbilitiesConstitutionEntry, self.AbilitiesIntelligenceEntry, self.AbilitiesWisdomEntry, self.AbilitiesCharismaEntry,
+                            self.ProficiencyEntry]:
+            self.EntryTooltip = Tooltip(EntryWidget, "Scroll the mouse wheel or type to change the modifier.")
+
+        if GlobalInst.OS == "Windows" or GlobalInst.OS == "Darwin":
+            self.AbilitiesStrengthEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesStrengthEntryVar))
+            self.AbilitiesDexterityEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesDexterityEntryVar))
+            self.AbilitiesConstitutionEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesConstitutionEntryVar))
+            self.AbilitiesIntelligenceEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesIntelligenceEntryVar))
+            self.AbilitiesWisdomEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesWisdomEntryVar))
+            self.AbilitiesCharismaEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesCharismaEntryVar))
+            self.ProficiencyEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.ProficiencyEntryVar))
+        elif GlobalInst.OS == "Linux":
+            self.AbilitiesStrengthEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesStrengthEntryVar))
+            self.AbilitiesStrengthEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesStrengthEntryVar))
+            self.AbilitiesDexterityEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesDexterityEntryVar))
+            self.AbilitiesDexterityEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesDexterityEntryVar))
+            self.AbilitiesConstitutionEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesConstitutionEntryVar))
+            self.AbilitiesConstitutionEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesConstitutionEntryVar))
+            self.AbilitiesIntelligenceEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesIntelligenceEntryVar))
+            self.AbilitiesIntelligenceEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesIntelligenceEntryVar))
+            self.AbilitiesWisdomEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesWisdomEntryVar))
+            self.AbilitiesWisdomEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesWisdomEntryVar))
+            self.AbilitiesCharismaEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesCharismaEntryVar))
+            self.AbilitiesCharismaEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesCharismaEntryVar))
+            self.ProficiencyEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.ProficiencyEntryVar))
+            self.ProficiencyEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.ProficiencyEntryVar))
+
+        # Proficiency Entry Validation
+        self.ProficiencyEntry.ConfigureValidation(self.ValidProficiencyEntry, "key")
+
+        # Ability Entry Validation
+        for AbilityEntryWidget in [self.AbilitiesStrengthEntry, self.AbilitiesDexterityEntry, self.AbilitiesConstitutionEntry, self.AbilitiesIntelligenceEntry, self.AbilitiesWisdomEntry, self.AbilitiesCharismaEntry]:
+            AbilityEntryWidget.ConfigureValidation(self.ValidAbilityEntry, "key")
+
+        # NPC Sheet Auto Calculation
         if WindowInst.Mode is "NPCSheet":
-            # Mouse Wheel Configuration
-            for EntryWidget in [self.AbilitiesStrengthEntry, self.AbilitiesDexterityEntry, self.AbilitiesConstitutionEntry, self.AbilitiesIntelligenceEntry, self.AbilitiesWisdomEntry, self.AbilitiesCharismaEntry,
-                                self.ProficiencyEntry]:
-                EntryWidget.configure(bg=GlobalInst.ButtonColor)
-                self.EntryTooltip = Tooltip(EntryWidget, "Scroll the mouse wheel or type to change the modifier.")
-
-            if GlobalInst.OS == "Windows" or GlobalInst.OS == "Darwin":
-                self.AbilitiesStrengthEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesStrengthEntryVar))
-                self.AbilitiesDexterityEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesDexterityEntryVar))
-                self.AbilitiesConstitutionEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesConstitutionEntryVar))
-                self.AbilitiesIntelligenceEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesIntelligenceEntryVar))
-                self.AbilitiesWisdomEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesWisdomEntryVar))
-                self.AbilitiesCharismaEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesCharismaEntryVar))
-                self.ProficiencyEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.ProficiencyEntryVar))
-            elif GlobalInst.OS == "Linux":
-                self.AbilitiesStrengthEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesStrengthEntryVar))
-                self.AbilitiesStrengthEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesStrengthEntryVar))
-                self.AbilitiesDexterityEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesDexterityEntryVar))
-                self.AbilitiesDexterityEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesDexterityEntryVar))
-                self.AbilitiesConstitutionEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesConstitutionEntryVar))
-                self.AbilitiesConstitutionEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesConstitutionEntryVar))
-                self.AbilitiesIntelligenceEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesIntelligenceEntryVar))
-                self.AbilitiesIntelligenceEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesIntelligenceEntryVar))
-                self.AbilitiesWisdomEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesWisdomEntryVar))
-                self.AbilitiesWisdomEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesWisdomEntryVar))
-                self.AbilitiesCharismaEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.AbilitiesCharismaEntryVar))
-                self.AbilitiesCharismaEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.AbilitiesCharismaEntryVar))
-                self.ProficiencyEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.ProficiencyEntryVar))
-                self.ProficiencyEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.ProficiencyEntryVar))
-
-            # Proficiency Entry Validation
-            self.ProficiencyEntry.ConfigureValidation(self.ValidProficiencyEntry, "key")
             self.ProficiencyEntryVar.trace_add("write", lambda a, b, c: self.UpdateStats())
-
-            # Ability Entry Validation
-            for AbilityEntryWidget in [self.AbilitiesStrengthEntry, self.AbilitiesDexterityEntry, self.AbilitiesConstitutionEntry, self.AbilitiesIntelligenceEntry, self.AbilitiesWisdomEntry, self.AbilitiesCharismaEntry]:
-                AbilityEntryWidget.ConfigureValidation(self.ValidAbilityEntry, "key")
             for AbilityEntryVar in [self.AbilitiesStrengthEntryVar, self.AbilitiesDexterityEntryVar, self.AbilitiesConstitutionEntryVar, self.AbilitiesIntelligenceEntryVar, self.AbilitiesWisdomEntryVar,
                                     self.AbilitiesCharismaEntryVar]:
                 AbilityEntryVar.trace_add("write", lambda a, b, c: self.UpdateStats())
