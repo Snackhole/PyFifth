@@ -4577,24 +4577,29 @@ class SpendCoinsMenu:
         self.SpendGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.SpendPPHeader = Label(self.SpendFrame, text="PP", bd=2, relief=GROOVE)
         self.SpendPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-        self.SpendCPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendCPEntryVar, justify=CENTER, width=5)
+        self.SpendCPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.SpendCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendCPTooltip = Tooltip(self.SpendCPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendCPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-        self.SpendSPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendSPEntryVar, justify=CENTER, width=5)
+        self.SpendSPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.SpendSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendSPTooltip = Tooltip(self.SpendSPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendSPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-        self.SpendEPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendEPEntryVar, justify=CENTER, width=5)
+        self.SpendEPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.SpendEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendEPTooltip = Tooltip(self.SpendEPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendEPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-        self.SpendGPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendGPEntryVar, justify=CENTER, width=5)
+        self.SpendGPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.SpendGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendGPTooltip = Tooltip(self.SpendGPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendGPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
-        self.SpendPPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendPPEntryVar, justify=CENTER, width=5)
+        self.SpendPPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.SpendPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.SpendPPTooltip = Tooltip(self.SpendPPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendPPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
 
@@ -4636,24 +4641,29 @@ class SpendCoinsMenu:
         self.RemainingGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.RemainingPPHeader = Label(self.RemainingFrame, text="PP", bd=2, relief=GROOVE)
         self.RemainingPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-        self.RemainingCPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingCPEntryVar, justify=CENTER, width=5)
+        self.RemainingCPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingCPTooltip = Tooltip(self.RemainingCPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingCPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-        self.RemainingSPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingSPEntryVar, justify=CENTER, width=5)
+        self.RemainingSPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingSPTooltip = Tooltip(self.RemainingSPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingSPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-        self.RemainingEPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingEPEntryVar, justify=CENTER, width=5)
+        self.RemainingEPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingEPTooltip = Tooltip(self.RemainingEPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingEPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-        self.RemainingGPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingGPEntryVar, justify=CENTER, width=5)
+        self.RemainingGPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingGPTooltip = Tooltip(self.RemainingGPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingGPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
-        self.RemainingPPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingPPEntryVar, justify=CENTER, width=5)
+        self.RemainingPPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.RemainingPPTooltip = Tooltip(self.RemainingPPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingPPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
 
@@ -4689,6 +4699,40 @@ class SpendCoinsMenu:
         self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
         self.CancelButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
 
+        # Mouse Wheel Bindings
+        if GlobalInst.OS == "Windows" or GlobalInst.OS == "Darwin":
+            self.SpendCPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.SpendCPEntryVar, MinValue=0))
+            self.SpendSPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.SpendSPEntryVar, MinValue=0))
+            self.SpendEPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.SpendEPEntryVar, MinValue=0))
+            self.SpendGPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.SpendGPEntryVar, MinValue=0))
+            self.SpendPPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.SpendPPEntryVar, MinValue=0))
+            self.RemainingCPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.RemainingCPEntryVar, MinValue=0))
+            self.RemainingSPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.RemainingSPEntryVar, MinValue=0))
+            self.RemainingEPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.RemainingEPEntryVar, MinValue=0))
+            self.RemainingGPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.RemainingGPEntryVar, MinValue=0))
+            self.RemainingPPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.RemainingPPEntryVar, MinValue=0))
+        elif GlobalInst.OS == "Linux":
+            self.SpendCPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.SpendCPEntryVar, MinValue=0))
+            self.SpendCPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.SpendCPEntryVar, MinValue=0))
+            self.SpendSPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.SpendSPEntryVar, MinValue=0))
+            self.SpendSPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.SpendSPEntryVar, MinValue=0))
+            self.SpendEPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.SpendEPEntryVar, MinValue=0))
+            self.SpendEPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.SpendEPEntryVar, MinValue=0))
+            self.SpendGPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.SpendGPEntryVar, MinValue=0))
+            self.SpendGPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.SpendGPEntryVar, MinValue=0))
+            self.SpendPPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.SpendPPEntryVar, MinValue=0))
+            self.SpendPPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.SpendPPEntryVar, MinValue=0))
+            self.RemainingCPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.RemainingCPEntryVar, MinValue=0))
+            self.RemainingCPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.RemainingCPEntryVar, MinValue=0))
+            self.RemainingSPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.RemainingSPEntryVar, MinValue=0))
+            self.RemainingSPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.RemainingSPEntryVar, MinValue=0))
+            self.RemainingEPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.RemainingEPEntryVar, MinValue=0))
+            self.RemainingEPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.RemainingEPEntryVar, MinValue=0))
+            self.RemainingGPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.RemainingGPEntryVar, MinValue=0))
+            self.RemainingGPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.RemainingGPEntryVar, MinValue=0))
+            self.RemainingPPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.RemainingPPEntryVar, MinValue=0))
+            self.RemainingPPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.RemainingPPEntryVar, MinValue=0))
+
         # Prevent Main Window Input
         self.Window.grab_set()
 
@@ -4713,6 +4757,24 @@ class SpendCoinsMenu:
             messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
             return False
         return True
+
+    def MouseWheelEvent(self, event, EntryVar, MinValue=None, MaxValue=None):
+        try:
+            OldValue = GlobalInst.GetStringVarAsNumber(EntryVar)
+        except ValueError:
+            OldValue = 0
+        if event.delta > 0:
+            ScrollDistance = 1
+        elif event.delta < 0:
+            ScrollDistance = -1
+        else:
+            ScrollDistance = 0
+        NewValue = OldValue + ScrollDistance
+        if MinValue != None:
+            NewValue = max(MinValue, NewValue)
+        if MaxValue != None:
+            NewValue = min(MaxValue, NewValue)
+        EntryVar.set(str(NewValue))
 
     def Submit(self):
         if self.Calculate(ValidateSpending=True):
@@ -4833,24 +4895,29 @@ class GainCoinsMenu:
         self.GainGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.GainPPHeader = Label(self.GainFrame, text="PP", bd=2, relief=GROOVE)
         self.GainPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-        self.GainCPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedCPEntryVar, justify=CENTER, width=5)
+        self.GainCPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.GainCPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainCPTooltip = Tooltip(self.GainCPEntry, "Scroll the mouse wheel or type to change.")
         self.GainCPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-        self.GainSPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedSPEntryVar, justify=CENTER, width=5)
+        self.GainSPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.GainSPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainSPTooltip = Tooltip(self.GainSPEntry, "Scroll the mouse wheel or type to change.")
         self.GainSPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-        self.GainEPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedEPEntryVar, justify=CENTER, width=5)
+        self.GainEPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.GainEPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainEPTooltip = Tooltip(self.GainEPEntry, "Scroll the mouse wheel or type to change.")
         self.GainEPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-        self.GainGPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedGPEntryVar, justify=CENTER, width=5)
+        self.GainGPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.GainGPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainGPTooltip = Tooltip(self.GainGPEntry, "Scroll the mouse wheel or type to change.")
         self.GainGPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
-        self.GainPPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedPPEntryVar, justify=CENTER, width=5)
+        self.GainPPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.GainPPEntry.ConfigureValidation(self.ValidCoinsEntry, "key")
+        self.GainPPTooltip = Tooltip(self.GainPPEntry, "Scroll the mouse wheel or type to change.")
         self.GainPPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
 
@@ -4867,6 +4934,25 @@ class GainCoinsMenu:
         # Cancel Button
         self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
         self.CancelButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+
+        # Mouse Wheel Bindings
+        if GlobalInst.OS == "Windows" or GlobalInst.OS == "Darwin":
+            self.GainCPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.GainedCPEntryVar, MinValue=0))
+            self.GainSPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.GainedSPEntryVar, MinValue=0))
+            self.GainEPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.GainedEPEntryVar, MinValue=0))
+            self.GainGPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.GainedGPEntryVar, MinValue=0))
+            self.GainPPEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.GainedPPEntryVar, MinValue=0))
+        elif GlobalInst.OS == "Linux":
+            self.GainCPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.GainedCPEntryVar, MinValue=0))
+            self.GainCPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.GainedCPEntryVar, MinValue=0))
+            self.GainSPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.GainedSPEntryVar, MinValue=0))
+            self.GainSPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.GainedSPEntryVar, MinValue=0))
+            self.GainEPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.GainedEPEntryVar, MinValue=0))
+            self.GainEPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.GainedEPEntryVar, MinValue=0))
+            self.GainGPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.GainedGPEntryVar, MinValue=0))
+            self.GainGPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.GainedGPEntryVar, MinValue=0))
+            self.GainPPEntry.bind("<Button-4>", lambda event: self.MouseWheelEvent(event, self.GainedPPEntryVar, MinValue=0))
+            self.GainPPEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.GainedPPEntryVar, MinValue=0))
 
         # Prevent Main Window Input
         self.Window.grab_set()
@@ -4889,6 +4975,24 @@ class GainCoinsMenu:
             messagebox.showerror("Invalid Entry", "Coins must be positive or 0.")
             return False
         return True
+
+    def MouseWheelEvent(self, event, EntryVar, MinValue=None, MaxValue=None):
+        try:
+            OldValue = GlobalInst.GetStringVarAsNumber(EntryVar)
+        except ValueError:
+            OldValue = 0
+        if event.delta > 0:
+            ScrollDistance = 1
+        elif event.delta < 0:
+            ScrollDistance = -1
+        else:
+            ScrollDistance = 0
+        NewValue = OldValue + ScrollDistance
+        if MinValue != None:
+            NewValue = max(MinValue, NewValue)
+        if MaxValue != None:
+            NewValue = min(MaxValue, NewValue)
+        EntryVar.set(str(NewValue))
 
     def Submit(self):
         self.DataSubmitted.set(True)
@@ -8499,6 +8603,62 @@ class OpenErrorsPrompt:
 
     def OK(self):
         self.Window.destroy()
+
+
+class Tooltip:
+    def __init__(self, Widget, Text):
+        # Store Parameters
+        self.Widget = Widget
+        self.Text = Text
+        self.ID = None
+        self.TooltipWindow = None
+
+        # Variables
+        self.WaitTime = 1000
+        self.WrapLength = 200
+
+        # Bindings
+        self.Widget.bind("<Enter>", lambda event: self.Hover())
+        self.Widget.bind("<Leave>", lambda event: self.Leave())
+        self.Widget.bind("<ButtonPress>", lambda event: self.Leave())
+
+    def Hover(self):
+        self.ScheduleTooltip()
+
+    def Leave(self):
+        self.UnscheduleTooltip()
+        self.HideTip()
+
+    def ScheduleTooltip(self):
+        self.UnscheduleTooltip()
+        self.ID = self.Widget.after(self.WaitTime, self.ShowTooltip)
+
+    def UnscheduleTooltip(self):
+        ID = self.ID
+        self.ID = None
+        if ID:
+            self.Widget.after_cancel(ID)
+
+    def ShowTooltip(self):
+        # Position
+        PositionX, PositionY, Width, Height = self.Widget.bbox("insert")
+        PositionX += self.Widget.winfo_rootx() + 30
+        PositionY += self.Widget.winfo_rooty() + 30
+
+        # Create and Configure Tooltip Window
+        self.TooltipWindow = Toplevel(self.Widget)
+        self.TooltipWindow.wm_overrideredirect(True)
+        self.TooltipWindow.wm_geometry("+" + str(PositionX) + "+" + str(PositionY))
+
+        # Create Label
+        TooltipLabel = Label(self.TooltipWindow, text=self.Text, justify=LEFT, background="white", relief=SOLID, bd=1, wraplength=self.WrapLength)
+        TooltipLabel.grid(row=0, column=0, ipadx=1, ipady=1)
+
+    def HideTip(self):
+        TooltipWindow = self.TooltipWindow
+        self.TooltipWindow = None
+        if TooltipWindow:
+            TooltipWindow.destroy()
 
 
 # Mode Select
