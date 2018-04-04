@@ -205,6 +205,9 @@ class Global:
     def InventoryValidValueEntry(self, NewText):
         return self.ValidateNumberFromString(NewText, "Inventory item unit values must be numbers.", Mode="Float", MinValue=0, LessThanMinString="Inventory item unit values cannot be less than 0.")
 
+    def ValidConsumptionRate(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Consumption rate must be a number.", Mode="Float", MinValue=0, LessThanMinString="Consumption rate cannot be less than 0.")
+
     def ValidProficiencyEntry(self, NewText):
         return self.ValidateNumberFromString(NewText, "Proficiency must be a whole number.")
 
@@ -3851,6 +3854,7 @@ class CharacterSheet:
                     self.ConsumptionRateHeader = Label(self.TableFrame, text="How many pounds of supplies tagged\n\"" + self.Tag + "\" do you consume daily?", bd=2, relief=GROOVE, justify=LEFT)
                     self.ConsumptionRateHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
                     self.ConsumptionRateEntry = EntryExtended(self.TableFrame, width=20, textvariable=self.ConsumptionRateEntryVar, justify=CENTER)
+                    self.ConsumptionRateEntry.ConfigureValidation(GlobalInst.ValidConsumptionRate, "key")
                     self.ConsumptionRateEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
                     self.ConsumptionRateEntry.bind("<Return>", lambda event: self.Submit())
 
@@ -3873,10 +3877,6 @@ class CharacterSheet:
                     self.ConsumptionRateEntry.focus_set()
 
                 def Submit(self):
-                    if self.ValidEntry():
-                        pass
-                    else:
-                        return
                     self.DataSubmitted.set(True)
                     self.Window.destroy()
 
@@ -3888,17 +3888,6 @@ class CharacterSheet:
 
                 def GetData(self):
                     return GlobalInst.GetStringVarAsNumber(self.ConsumptionRateEntryVar, Mode="Decimal")
-
-                def ValidEntry(self):
-                    try:
-                        EntryValue = GlobalInst.GetStringVarAsNumber(self.ConsumptionRateEntryVar, Mode="Decimal")
-                    except:
-                        messagebox.showerror("Invalid Entry", "Must be a number.")
-                        return False
-                    if EntryValue < 0:
-                        messagebox.showerror("Invalid Entry", "Must be at least 0.")
-                        return False
-                    return True
 
     # Notes
     class Notes:
