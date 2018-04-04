@@ -233,6 +233,9 @@ class Global:
     def ValidInitiative(self, NewText):
         return self.ValidateNumberFromString(NewText, "Initiative roll must be a whole number.")
 
+    def ValidMaxHPData(self, NewText):
+        return self.ValidateNumberFromString(NewText, "All max HP data must be in the form of whole numbers.",  MinValue=0, LessThanMinString="Max HP data cannot be less than 0.")
+
 
 # Saving
 class SavingAndOpening:
@@ -2043,82 +2046,102 @@ class CharacterSheet:
                 self.HPAtEachLevelFirstLabel = Label(self.HPAtEachLevelFrame, text="1st", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelFirstLabel.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFirstEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["1"])
+                self.HPAtEachLevelFirstEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelFirstEntry.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSecondLabel = Label(self.HPAtEachLevelFrame, text="2nd", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelSecondLabel.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSecondEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["2"])
+                self.HPAtEachLevelSecondEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelSecondEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelThirdLabel = Label(self.HPAtEachLevelFrame, text="3rd", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelThirdLabel.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelThirdEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["3"])
+                self.HPAtEachLevelThirdEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelThirdEntry.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFourthLabel = Label(self.HPAtEachLevelFrame, text="4th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelFourthLabel.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFourthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["4"])
+                self.HPAtEachLevelFourthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelFourthEntry.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFifthLabel = Label(self.HPAtEachLevelFrame, text="5th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelFifthLabel.grid(row=4, column=0, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFifthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["5"])
+                self.HPAtEachLevelFifthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelFifthEntry.grid(row=4, column=1, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSixthLabel = Label(self.HPAtEachLevelFrame, text="6th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelSixthLabel.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSixthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["6"])
+                self.HPAtEachLevelSixthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelSixthEntry.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSeventhLabel = Label(self.HPAtEachLevelFrame, text="7th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelSeventhLabel.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSeventhEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["7"])
+                self.HPAtEachLevelSeventhEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelSeventhEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelEighthLabel = Label(self.HPAtEachLevelFrame, text="8th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelEighthLabel.grid(row=2, column=2, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelEighthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["8"])
+                self.HPAtEachLevelEighthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelEighthEntry.grid(row=2, column=3, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelNinthLabel = Label(self.HPAtEachLevelFrame, text="9th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelNinthLabel.grid(row=3, column=2, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelNinthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["9"])
+                self.HPAtEachLevelNinthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelNinthEntry.grid(row=3, column=3, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelTenthLabel = Label(self.HPAtEachLevelFrame, text="10th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelTenthLabel.grid(row=4, column=2, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelTenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["10"])
+                self.HPAtEachLevelTenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelTenthEntry.grid(row=4, column=3, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelEleventhLabel = Label(self.HPAtEachLevelFrame, text="11th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelEleventhLabel.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelEleventhEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["11"])
+                self.HPAtEachLevelEleventhEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelEleventhEntry.grid(row=0, column=5, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelTwelfthLabel = Label(self.HPAtEachLevelFrame, text="12th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelTwelfthLabel.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelTwelfthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["12"])
+                self.HPAtEachLevelTwelfthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelTwelfthEntry.grid(row=1, column=5, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelThirteenthLabel = Label(self.HPAtEachLevelFrame, text="13th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelThirteenthLabel.grid(row=2, column=4, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelThirteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["13"])
+                self.HPAtEachLevelThirteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelThirteenthEntry.grid(row=2, column=5, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFourteenthLabel = Label(self.HPAtEachLevelFrame, text="14th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelFourteenthLabel.grid(row=3, column=4, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFourteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["14"])
+                self.HPAtEachLevelFourteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelFourteenthEntry.grid(row=3, column=5, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFifteenthLabel = Label(self.HPAtEachLevelFrame, text="15th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelFifteenthLabel.grid(row=4, column=4, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFifteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["15"])
+                self.HPAtEachLevelFifteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelFifteenthEntry.grid(row=4, column=5, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSixteenthLabel = Label(self.HPAtEachLevelFrame, text="16th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelSixteenthLabel.grid(row=0, column=6, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSixteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["16"])
+                self.HPAtEachLevelSixteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelSixteenthEntry.grid(row=0, column=7, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSeventeenthLabel = Label(self.HPAtEachLevelFrame, text="17th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelSeventeenthLabel.grid(row=1, column=6, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSeventeenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["17"])
+                self.HPAtEachLevelSeventeenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelSeventeenthEntry.grid(row=1, column=7, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelEighteenthLabel = Label(self.HPAtEachLevelFrame, text="18th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelEighteenthLabel.grid(row=2, column=6, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelEighteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["18"])
+                self.HPAtEachLevelEighteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelEighteenthEntry.grid(row=2, column=7, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelNineteenthLabel = Label(self.HPAtEachLevelFrame, text="19th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelNineteenthLabel.grid(row=3, column=6, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelNineteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["19"])
+                self.HPAtEachLevelNineteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelNineteenthEntry.grid(row=3, column=7, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelTwentiethLabel = Label(self.HPAtEachLevelFrame, text="20th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelTwentiethLabel.grid(row=4, column=6, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelTwentiethEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["20"])
+                self.HPAtEachLevelTwentiethEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPAtEachLevelTwentiethEntry.grid(row=4, column=7, sticky=NSEW, padx=2, pady=2)
 
                 # Additional HP Per Level
@@ -2126,6 +2149,7 @@ class CharacterSheet:
                 self.AdditionalHPPerLevelFrame.grid_columnconfigure(0, weight=1)
                 self.AdditionalHPPerLevelFrame.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
                 self.AdditionalHPPerLevelEntry = EntryExtended(self.AdditionalHPPerLevelFrame, textvariable=self.MaxHPData["HPPerLevel"], width=5, justify=CENTER)
+                self.AdditionalHPPerLevelEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.AdditionalHPPerLevelEntry.grid(row=0, column=0, sticky=NSEW)
 
                 # HP Override
@@ -2133,6 +2157,7 @@ class CharacterSheet:
                 self.HPOverrideFrame.grid_columnconfigure(0, weight=1)
                 self.HPOverrideFrame.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
                 self.HPOverrideEntry = EntryExtended(self.HPOverrideFrame, textvariable=self.MaxHPData["HPOverride"], width=5, justify=CENTER)
+                self.HPOverrideEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
                 self.HPOverrideEntry.grid(row=0, column=0, sticky=NSEW)
 
                 # Submit Button
@@ -2154,28 +2179,12 @@ class CharacterSheet:
                 self.HPAtEachLevelFirstEntry.focus_set()
 
             def Submit(self):
-                if self.ValidEntry():
-                    pass
-                else:
-                    return
                 self.DataSubmitted.set(True)
                 self.Window.destroy()
 
             def Cancel(self):
                 self.DataSubmitted.set(False)
                 self.Window.destroy()
-
-            def ValidEntry(self):
-                for Var in self.MaxHPData.values():
-                    try:
-                        VarInt = GlobalInst.GetStringVarAsNumber(Var)
-                    except:
-                        messagebox.showerror("Invalid Entry", "All max HP data must be in the form of whole numbers.")
-                        return False
-                    if VarInt < 0:
-                        messagebox.showerror("Invalid Entry", "Max HP data cannot be negative.")
-                        return False
-                return True
 
         class FeaturesAndCreatureStats:
             def __init__(self, master):
