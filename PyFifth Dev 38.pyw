@@ -218,13 +218,15 @@ class Global:
         return self.ValidateNumberFromString(NewText, "Modifier must be a whole number.")
 
     def ValidCritMinimum(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Crit minimum must be a whole number.", MinValue=1, LessThanMinString="Crit minimum cannot be less than 1.", MaxValue=20, MoreThanMaxString="Crit minimum cannot be more than 20.")
+        return self.ValidateNumberFromString(NewText, "Crit minimum must be a whole number.", MinValue=1, LessThanMinString="Crit minimum cannot be less than 1.", MaxValue=20,
+                                             MoreThanMaxString="Crit minimum cannot be more than 20.")
 
     def ValidRound(self, NewText):
         return self.ValidateNumberFromString(NewText, "Round must be a whole number.", MinValue=1, LessThanMinString="Round must be greater than 0.")
 
     def ValidInitiative(self, NewText):
         return self.ValidateNumberFromString(NewText, "Initiative roll must be a whole number.")
+
 
 # Saving
 class SavingAndOpening:
@@ -1919,7 +1921,7 @@ class CharacterSheet:
                 CurrentHP = GlobalInst.GetStringVarAsNumber(self.MaxHPEntryVar)
             else:
                 CurrentHP = GlobalInst.GetStringVarAsNumber(self.CurrentHPEntryVar)
-            DamagePrompt = IntegerPrompt(WindowInst, "Damage", "How much damage?", MinValue=1)
+            DamagePrompt = IntegerPrompt(WindowInst, "Damage", "How much damage?", MinValue=0)
             WindowInst.wait_window(DamagePrompt.Window)
             if DamagePrompt.DataSubmitted.get():
                 Damage = DamagePrompt.GetData()
@@ -1946,7 +1948,7 @@ class CharacterSheet:
                 return
             CurrentHP = GlobalInst.GetStringVarAsNumber(self.CurrentHPEntryVar)
             MaxHP = GlobalInst.GetStringVarAsNumber(self.MaxHPEntryVar)
-            HealingPrompt = IntegerPrompt(WindowInst, "Heal", "How much healing?", MinValue=1)
+            HealingPrompt = IntegerPrompt(WindowInst, "Heal", "How much healing?", MinValue=0)
             WindowInst.wait_window(HealingPrompt.Window)
             if HealingPrompt.DataSubmitted.get():
                 Healing = HealingPrompt.GetData()
@@ -5895,7 +5897,7 @@ class CreatureData:
             CurrentHP = GlobalInst.GetStringVarAsNumber(self.MaxHPEntryVar)
         else:
             CurrentHP = GlobalInst.GetStringVarAsNumber(self.CurrentHPEntryVar)
-        DamagePrompt = IntegerPrompt(WindowInst, "Damage", "How much damage?", MinValue=1)
+        DamagePrompt = IntegerPrompt(WindowInst, "Damage", "How much damage?", MinValue=0)
         WindowInst.wait_window(DamagePrompt.Window)
         if DamagePrompt.DataSubmitted.get():
             Damage = DamagePrompt.GetData()
@@ -5918,7 +5920,7 @@ class CreatureData:
             return
         CurrentHP = GlobalInst.GetStringVarAsNumber(self.CurrentHPEntryVar)
         MaxHP = GlobalInst.GetStringVarAsNumber(self.MaxHPEntryVar)
-        HealingPrompt = IntegerPrompt(WindowInst, "Heal", "How much healing?", MinValue=1)
+        HealingPrompt = IntegerPrompt(WindowInst, "Heal", "How much healing?", MinValue=0)
         WindowInst.wait_window(HealingPrompt.Window)
         if HealingPrompt.DataSubmitted.get():
             Healing = HealingPrompt.GetData()
@@ -6998,7 +7000,7 @@ class InitiativeOrder:
                 CurrentHP = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryMaxHPEntryVar)
             else:
                 CurrentHP = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryCurrentHPEntryVar)
-            DamagePrompt = IntegerPrompt(WindowInst, "Damage", "How much damage?", MinValue=1)
+            DamagePrompt = IntegerPrompt(WindowInst, "Damage", "How much damage?", MinValue=0)
             WindowInst.wait_window(DamagePrompt.Window)
             if DamagePrompt.DataSubmitted.get():
                 Damage = DamagePrompt.GetData()
@@ -7030,7 +7032,7 @@ class InitiativeOrder:
                 return
             CurrentHP = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryCurrentHPEntryVar)
             MaxHP = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryMaxHPEntryVar)
-            HealingPrompt = IntegerPrompt(WindowInst, "Heal", "How much healing?", MinValue=1)
+            HealingPrompt = IntegerPrompt(WindowInst, "Heal", "How much healing?", MinValue=0)
             WindowInst.wait_window(HealingPrompt.Window)
             if HealingPrompt.DataSubmitted.get():
                 Healing = HealingPrompt.GetData()
@@ -8303,6 +8305,7 @@ class IntegerPrompt:
         self.IntegerHeader = Label(self.TableFrame, text=self.Header, bd=2, relief=GROOVE)
         self.IntegerHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
         self.IntegerEntry = EntryExtended(self.TableFrame, width=20, textvariable=self.IntegerEntryVar, justify=CENTER)
+        self.IntegerEntry.ConfigureValidation(self.ValidEntry, "key")
         self.IntegerEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.IntegerEntry.bind("<Return>", lambda event: self.Submit())
 
@@ -8325,10 +8328,6 @@ class IntegerPrompt:
         self.IntegerEntry.focus_set()
 
     def Submit(self):
-        if self.ValidEntry():
-            pass
-        else:
-            return
         self.DataSubmitted.set(True)
         self.Window.destroy()
 
@@ -8341,21 +8340,8 @@ class IntegerPrompt:
     def GetData(self):
         return GlobalInst.GetStringVarAsNumber(self.IntegerEntryVar)
 
-    def ValidEntry(self):
-        try:
-            EntryValue = GlobalInst.GetStringVarAsNumber(self.IntegerEntryVar)
-        except:
-            messagebox.showerror("Invalid Entry", "Must be a whole number.")
-            return False
-        if self.MinValue != None:
-            if EntryValue < self.MinValue:
-                messagebox.showerror("Invalid Entry", "Must be at least " + str(self.MinValue) + ".")
-                return False
-        if self.MaxValue != None:
-            if EntryValue > self.MaxValue:
-                messagebox.showerror("Invalid Entry", "Must be no more than " + str(self.MaxValue) + ".")
-                return False
-        return True
+    def ValidEntry(self, NewText):
+        return GlobalInst.ValidateNumberFromString(NewText, "Must be a whole number.", MinValue=self.MinValue, LessThanMinString="Must be at least " + str(self.MinValue) + ".", MaxValue=self.MaxValue, MoreThanMaxString="Must be no more than " + str(self.MaxValue) + ".")
 
 
 class StringPrompt:
