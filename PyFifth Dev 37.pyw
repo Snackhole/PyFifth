@@ -1734,7 +1734,7 @@ class CharacterSheet:
             self.CurrentHPEntry.grid(row=0, column=0, sticky=NSEW)
             self.CurrentHPEntry.bind("<Button-3>", lambda event: self.Damage())
             self.CurrentHPEntry.bind("<Shift-Button-3>", lambda event: self.Heal())
-            StatusBarInst.TooltipConfig(self.CurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.")
+            self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.")
 
             # Max HP
             self.MaxHPFrame = LabelFrame(self.HPFrame, text="Max HP:")
@@ -1746,7 +1746,7 @@ class CharacterSheet:
                                             disabledforeground="black")
             self.MaxHPEntry.grid(row=0, column=0, sticky=NSEW)
             self.MaxHPEntry.bind("<Button-1>", self.SetMaxHPData)
-            StatusBarInst.TooltipConfig(self.MaxHPEntry, "Left-click to set max HP.")
+            self.MaxHPTooltip = Tooltip(self.MaxHPEntry, "Left-click to set max HP.")
 
             # Hit Dice
             self.HitDiceFrame = LabelFrame(self.VitalityFrame, text="Hit Dice:")
@@ -1797,7 +1797,7 @@ class CharacterSheet:
             self.ACEntry = EntryExtended(self.ACFrame, width=9, justify=CENTER, textvariable=self.ACEntryVar, font=self.ACInitiativeSpeedFontSize)
             self.ACEntry.grid(row=0, column=0, sticky=NSEW)
             self.ACEntryStatModifierInst = StatModifier(self.ACEntry, "<Button-1>", "Left-click to set AC data.", "", ACMode=True, Prefix="ACEntry")
-            StatusBarInst.TooltipConfig(self.ACEntry, "Left-click on AC to set data.")
+            self.ACTooltip = Tooltip(self.ACEntry, "Left-click on AC to set data.")
 
             # Initiative
             self.InitiativeFrame = LabelFrame(self.ACInitiativeSpeedFrame, text="Initiative:")
@@ -2127,13 +2127,13 @@ class CharacterSheet:
                 self.NameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
                 self.NameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
                 self.NameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
-                StatusBarInst.TooltipConfig(self.NameHeader, GlobalInst.SortTooltipString)
+                self.NameTooltip = Tooltip(self.NameHeader, GlobalInst.SortTooltipString)
                 self.SortOrderHeader = Label(self.FeaturesScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
                 self.SortOrderHeader.grid(row=0, column=1, sticky=NSEW)
                 self.SortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
                 self.SortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
                 self.SortOrderHeader.bind("<Button-3>", lambda event: self.Sort("Sort Order", Reverse=True))
-                StatusBarInst.TooltipConfig(self.SortOrderHeader, GlobalInst.SortTooltipString)
+                self.SortOrderTooltip = Tooltip(self.SortOrderHeader, GlobalInst.SortTooltipString)
 
                 # Features Entries List
                 self.FeatureOrCreatureStatsEntriesList = []
@@ -2280,7 +2280,7 @@ class CharacterSheet:
                     self.NameEntry = EntryExtended(master, width=45, justify=CENTER, state=DISABLED, disabledbackground=GlobalInst.ButtonColor, disabledforeground="black", textvariable=self.NameEntryVar, cursor="arrow")
                     self.NameEntry.bind("<Button-1>", self.SetFeature)
                     self.NameEntry.bind("<Button-3>", self.SetCreatureStats)
-                    StatusBarInst.TooltipConfig(self.NameEntry, "Left-click on a feature or creature stats entry to set a feature.  Right-click to set creature stats.")
+                    self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a feature or creature stats entry to set a feature.  Right-click to set creature stats.")
 
                     # Sort Order
                     self.SortOrder = ttk.Combobox(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
@@ -2506,7 +2506,7 @@ class CharacterSheet:
             self.SpellPointsRemainingEntry.grid(row=2, column=1, padx=2, pady=2, sticky=NSEW)
             self.SpellPointsRemainingEntry.bind("<Button-1>", self.ExpendSpellPoints)
             self.SpellPointsRemainingEntry.bind("<Button-3>", self.RestoreSpellPoints)
-            StatusBarInst.TooltipConfig(self.SpellPointsRemainingEntry, "Left-click on the spell points remaining to expend points.  Right-click to restore.")
+            self.SpellPointsRemainingTooltip = Tooltip(self.SpellPointsRemainingEntry, "Left-click on the spell points remaining to expend points.  Right-click to restore.")
 
             # Spell Entries Frame
             self.SpellEntriesFrame = LabelFrame(master, text="Spells:")
@@ -2663,19 +2663,19 @@ class CharacterSheet:
                 self.PreparedHeader.grid(row=0, column=0, sticky=NSEW)
                 self.PreparedHeader.bind("<Button-1>", lambda event: self.Sort("Prepared"))
                 self.PreparedHeader.bind("<Button-3>", lambda event: self.Sort("Prepared", Reverse=True))
-                StatusBarInst.TooltipConfig(self.PreparedHeader, GlobalInst.SortTooltipString[:-29])
+                self.PreparedTooltip = Tooltip(self.PreparedHeader, GlobalInst.SortTooltipString[:-29])
                 self.NameHeader = Label(self.SpellListScrolledCanvas.WindowFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
                 self.NameHeader.grid(row=0, column=1, sticky=NSEW)
                 self.NameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
                 self.NameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
                 self.NameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
-                StatusBarInst.TooltipConfig(self.NameHeader, GlobalInst.SortTooltipString)
+                self.NameTooltip = Tooltip(self.NameHeader, GlobalInst.SortTooltipString)
                 self.SortOrderHeader = Label(self.SpellListScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
                 self.SortOrderHeader.grid(row=0, column=2, sticky=NSEW)
                 self.SortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
                 self.SortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
                 self.SortOrderHeader.bind("<Button-3>", lambda event: self.Sort("Sort Order", Reverse=True))
-                StatusBarInst.TooltipConfig(self.SortOrderHeader, GlobalInst.SortTooltipString)
+                self.SortOrderTooltip = Tooltip(self.SortOrderHeader, GlobalInst.SortTooltipString)
 
                 # Spell List Entries List
                 self.SpellListEntriesList = []
@@ -2791,7 +2791,7 @@ class CharacterSheet:
                     self.NameEntry = EntryExtended(master.WindowFrame, width=42, justify=CENTER, state=DISABLED, disabledbackground=GlobalInst.ButtonColor, disabledforeground="black", textvariable=self.NameEntryVar,
                                                    cursor="arrow")
                     self.NameEntry.bind("<Button-1>", self.Set)
-                    StatusBarInst.TooltipConfig(self.NameEntry, "Left-click on a spell list entry to set a name and description.")
+                    self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a spell list entry to set a name and description.")
 
                     # Sort Order
                     self.SortOrder = ttk.Combobox(master.WindowFrame, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
@@ -3208,7 +3208,7 @@ class CharacterSheet:
             self.CoinValueHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
             self.CoinValueHeader.bind("<Button-1>", self.GainCoins)
             self.CoinValueHeader.bind("<Button-3>", self.SpendCoins)
-            StatusBarInst.TooltipConfig(self.CoinValueHeader, "Left-click to gain coins.  Right-click to spend.")
+            self.CoinValueTooltip = Tooltip(self.CoinValueHeader, "Left-click to gain coins.  Right-click to spend.")
             self.CoinValueEntry = EntryExtended(self.CoinValueAndWeightHolderFrame, width=13, justify=CENTER, textvariable=self.CoinValueEntryVar, state=DISABLED, disabledforeground="black",
                                                 disabledbackground="light gray",
                                                 cursor="arrow")
@@ -3240,55 +3240,55 @@ class CharacterSheet:
             self.InventoryListNameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
             self.InventoryListNameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
             self.InventoryListNameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
-            StatusBarInst.TooltipConfig(self.InventoryListNameHeader, GlobalInst.SortTooltipString)
+            self.InventoryListNameTooltip = Tooltip(self.InventoryListNameHeader, GlobalInst.SortTooltipString)
             self.InventoryListCountHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Count", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListCountHeader.grid(row=0, column=1, sticky=NSEW)
             self.InventoryListCountHeader.bind("<Button-1>", lambda event: self.Sort("Count"))
             self.InventoryListCountHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Count", SearchMode=True))
             self.InventoryListCountHeader.bind("<Button-3>", lambda event: self.Sort("Count", Reverse=True))
-            StatusBarInst.TooltipConfig(self.InventoryListCountHeader, GlobalInst.SortTooltipString)
+            self.InventoryListCountTooltip = Tooltip(self.InventoryListCountHeader, GlobalInst.SortTooltipString)
             self.InventoryListUnitWeightHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Unit Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListUnitWeightHeader.grid(row=0, column=2, sticky=NSEW)
             self.InventoryListUnitWeightHeader.bind("<Button-1>", lambda event: self.Sort("Unit Weight"))
             self.InventoryListUnitWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Weight", SearchMode=True))
             self.InventoryListUnitWeightHeader.bind("<Button-3>", lambda event: self.Sort("Unit Weight", Reverse=True))
-            StatusBarInst.TooltipConfig(self.InventoryListUnitWeightHeader, GlobalInst.SortTooltipString)
+            self.InventoryListUnitWeightTooltip = Tooltip(self.InventoryListUnitWeightHeader, GlobalInst.SortTooltipString)
             self.InventoryListUnitValueHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Unit Value", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListUnitValueHeader.grid(row=0, column=3, sticky=NSEW)
             self.InventoryListUnitValueHeader.bind("<Button-1>", lambda event: self.Sort("Unit Value"))
             self.InventoryListUnitValueHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Value", SearchMode=True))
             self.InventoryListUnitValueHeader.bind("<Button-3>", lambda event: self.Sort("Unit Value", Reverse=True))
-            StatusBarInst.TooltipConfig(self.InventoryListUnitValueHeader, GlobalInst.SortTooltipString)
+            self.InventoryListUnitValueTooltip = Tooltip(self.InventoryListUnitValueHeader, GlobalInst.SortTooltipString)
             self.InventoryListUnitValueDenominationHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Value\nDenom.", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListUnitValueDenominationHeader.grid(row=0, column=4, sticky=NSEW)
             self.InventoryListUnitValueDenominationHeader.bind("<Button-1>", lambda event: self.Sort("Value Denomination"))
             self.InventoryListUnitValueDenominationHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Value Denomination", SearchMode=True))
             self.InventoryListUnitValueDenominationHeader.bind("<Button-3>", lambda event: self.Sort("Value Denomination", Reverse=True))
-            StatusBarInst.TooltipConfig(self.InventoryListUnitValueDenominationHeader, GlobalInst.SortTooltipString)
+            self.InventoryListUnitValueDenominationTooltip = Tooltip(self.InventoryListUnitValueDenominationHeader, GlobalInst.SortTooltipString)
             self.InventoryListTotalWeightHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Total Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListTotalWeightHeader.grid(row=0, column=5, sticky=NSEW)
             self.InventoryListTotalWeightHeader.bind("<Button-1>", lambda event: self.Sort("Total Weight"))
             self.InventoryListTotalWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Weight", SearchMode=True))
             self.InventoryListTotalWeightHeader.bind("<Button-3>", lambda event: self.Sort("Total Weight", Reverse=True))
-            StatusBarInst.TooltipConfig(self.InventoryListTotalWeightHeader, GlobalInst.SortTooltipString)
+            self.InventoryListTotalWeightTooltip = Tooltip(self.InventoryListTotalWeightHeader, GlobalInst.SortTooltipString)
             self.InventoryListTotalValueHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Total Value\n(gp)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListTotalValueHeader.grid(row=0, column=6, sticky=NSEW)
             self.InventoryListTotalValueHeader.bind("<Button-1>", lambda event: self.Sort("Total Value"))
             self.InventoryListTotalValueHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Value", SearchMode=True))
             self.InventoryListTotalValueHeader.bind("<Button-3>", lambda event: self.Sort("Total Value", Reverse=True))
-            StatusBarInst.TooltipConfig(self.InventoryListTotalValueHeader, GlobalInst.SortTooltipString)
+            self.InventoryListTotalValueTooltip = Tooltip(self.InventoryListTotalValueHeader, GlobalInst.SortTooltipString)
             self.InventoryListTagHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Tag", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListTagHeader.grid(row=0, column=7, sticky=NSEW)
             self.InventoryListTagHeader.bind("<Button-1>", lambda event: self.Sort("Tag"))
             self.InventoryListTagHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Tag", SearchMode=True))
             self.InventoryListTagHeader.bind("<Button-3>", lambda event: self.Sort("Tag", Reverse=True))
-            StatusBarInst.TooltipConfig(self.InventoryListTagHeader, GlobalInst.SortTooltipString)
+            self.InventoryListTagTooltip = Tooltip(self.InventoryListTagHeader, GlobalInst.SortTooltipString)
             self.InventoryListSortOrderHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListSortOrderHeader.grid(row=0, column=8, sticky=NSEW)
             self.InventoryListSortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
             self.InventoryListSortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
             self.InventoryListSortOrderHeader.bind("<Button-3>", lambda event: self.Sort("Sort Order", Reverse=True))
-            StatusBarInst.TooltipConfig(self.InventoryListSortOrderHeader, GlobalInst.SortTooltipString)
+            self.InventoryListSortOrderTooltip = Tooltip(self.InventoryListSortOrderHeader, GlobalInst.SortTooltipString)
 
             # Inventory Entries List
             self.InventoryEntriesList = []
@@ -3603,7 +3603,7 @@ class CharacterSheet:
                 # Name Entry
                 self.NameEntry = EntryExtended(master, width=35, textvariable=self.NameEntryVar, justify=CENTER, bg=GlobalInst.ButtonColor)
                 self.NameEntry.bind("<Button-3>", self.ConfigureItemDescription)
-                StatusBarInst.TooltipConfig(self.NameEntry, "Right-click on the name field to set an item description.")
+                self.NameTooltip = Tooltip(self.NameEntry, "Right-click on the name field to set an item description.")
 
                 # Count Entry
                 self.CountEntry = EntryExtended(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
@@ -3820,7 +3820,7 @@ class CharacterSheet:
                                                cursor="arrow")
                 self.DaysEntry.grid(row=1, column=1, sticky=NSEW)
                 self.DaysEntry.bind("<Button-1>", self.SetConsumptionRate)
-                StatusBarInst.TooltipConfig(self.DaysEntry, "Left-click to set the consumption rate per day for supplies.")
+                self.DaysTooltip = Tooltip(self.DaysEntry, "Left-click to set the consumption rate per day for supplies.")
 
             def grid(self, *args, **kwargs):
                 self.SupplyDisplayFrame.grid(*args, **kwargs)
@@ -3940,13 +3940,13 @@ class CharacterSheet:
             self.NameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
             self.NameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
             self.NameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
-            StatusBarInst.TooltipConfig(self.NameHeader, GlobalInst.SortTooltipString)
+            self.NameTooltip = Tooltip(self.NameHeader, GlobalInst.SortTooltipString)
             self.SortOrderHeader = Label(self.AdditionalNotesScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.SortOrderHeader.grid(row=0, column=1, sticky=NSEW)
             self.SortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
             self.SortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
             self.SortOrderHeader.bind("<Button-3>", lambda event: self.Sort("Sort Order", Reverse=True))
-            StatusBarInst.TooltipConfig(self.SortOrderHeader, GlobalInst.SortTooltipString)
+            self.SortOrderTooltip = Tooltip(self.SortOrderHeader, GlobalInst.SortTooltipString)
 
             # Additional Notes Entries List
             self.AdditionalNotesEntriesList = []
@@ -4038,7 +4038,7 @@ class CharacterSheet:
                 # Name Entry
                 self.NameEntry = EntryExtended(master, width=28, justify=CENTER, state=DISABLED, disabledbackground=GlobalInst.ButtonColor, disabledforeground="black", textvariable=self.NameEntryVar, cursor="arrow")
                 self.NameEntry.bind("<Button-1>", self.SetNote)
-                StatusBarInst.TooltipConfig(self.NameEntry, "Left-click on a note entry to set a note.")
+                self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a note entry to set a note.")
 
                 # Sort Order
                 self.SortOrder = ttk.Combobox(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
@@ -5056,7 +5056,7 @@ class StatModifier:
         # Configure Master (Should Be Entry Widget)
         master.configure(state=DISABLED if not self.DiceRollerMode else NORMAL, bg=GlobalInst.ButtonColor, fg="black", disabledbackground=GlobalInst.ButtonColor, disabledforeground="black", cursor=Cursor)
         master.bind(self.EventString, lambda event: self.SetModifier(ACMode=self.ACMode, DiceRollerMode=self.DiceRollerMode))
-        StatusBarInst.TooltipConfig(master, self.TooltipText)
+        self.Tooltip = Tooltip(master, self.TooltipText)
 
     def GetModifier(self):
         StrengthMod = self.GetSingleStatMod(GlobalInst.StatModifierEntries["Strength"], self.Variables["StrengthMultiplierEntryVar"], self.Variables["StrengthMultiplierRoundUpBoxVar"],
@@ -5690,7 +5690,7 @@ class CreatureData:
             self.CurrentHPEntry.configure(bg=GlobalInst.ButtonColor)
             self.CurrentHPEntry.bind("<Button-3>", lambda event: self.Damage())
             self.CurrentHPEntry.bind("<Shift-Button-3>", lambda event: self.Heal())
-            StatusBarInst.TooltipConfig(self.CurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.")
+            self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.")
 
         # Max HP Entry
         self.MaxHPFrame = LabelFrame(self.HPACSpeedCRExperienceEntriesFrame, text="Max HP:")
@@ -5759,7 +5759,7 @@ class CreatureData:
             for EntryWidget in [self.AbilitiesStrengthEntry, self.AbilitiesDexterityEntry, self.AbilitiesConstitutionEntry, self.AbilitiesIntelligenceEntry, self.AbilitiesWisdomEntry, self.AbilitiesCharismaEntry,
                                 self.ProficiencyEntry]:
                 EntryWidget.configure(bg=GlobalInst.ButtonColor)
-                StatusBarInst.TooltipConfig(EntryWidget, "Scroll the mouse wheel or type to change the modifier.")
+                self.EntryTooltip = Tooltip(EntryWidget, "Scroll the mouse wheel or type to change the modifier.")
 
             if GlobalInst.OS == "Windows" or GlobalInst.OS == "Darwin":
                 self.AbilitiesStrengthEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesStrengthEntryVar))
@@ -6188,21 +6188,21 @@ class DiceRoller:
         # Number of Dice
         self.DiceNumberEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.DiceNumberEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
         self.DiceNumberEntry.grid(row=0, column=0, rowspan=2, padx=2, pady=2, sticky=NSEW)
-        StatusBarInst.TooltipConfig(self.DiceNumberEntry, "Scroll the mouse wheel or type to change the number of dice.")
+        self.DiceNumberTooltip = Tooltip(self.DiceNumberEntry, "Scroll the mouse wheel or type to change the number of dice.")
 
         # Die Type
         self.DieTypeLabel = Label(self.DiceEntryAndButtonsFrame, text="d", font=self.DiceEntryFont)
         self.DieTypeLabel.grid(row=0, column=1, rowspan=2, sticky=NSEW)
         self.DieTypeEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.DieTypeEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
         self.DieTypeEntry.grid(row=0, column=2, rowspan=2, padx=2, pady=2, sticky=NSEW)
-        StatusBarInst.TooltipConfig(self.DieTypeEntry, "Scroll the mouse wheel or type to change the die type.")
+        self.DieTypeTooltip = Tooltip(self.DieTypeEntry, "Scroll the mouse wheel or type to change the die type.")
 
         # Modifier
         self.ModifierLabel = Label(self.DiceEntryAndButtonsFrame, text="+", font=self.DiceEntryFont)
         self.ModifierLabel.grid(row=0, column=3, rowspan=2, sticky=NSEW)
         self.ModifierEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.ModifierEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
         self.ModifierEntry.grid(row=0, column=4, rowspan=2, padx=2, pady=2, sticky=NSEW)
-        StatusBarInst.TooltipConfig(self.ModifierEntry, "Scroll the mouse wheel or type to change the modifier.")
+        self.ModifierTooltip = Tooltip(self.ModifierEntry, "Scroll the mouse wheel or type to change the modifier.")
 
         # Die Steps
         self.DieStep = {}
@@ -6247,7 +6247,7 @@ class DiceRoller:
         self.ResultsField.grid(row=0, column=0, padx=2, pady=2)
         self.ResultsField.Text.bind("<Button-1>", self.CopyResults)
         self.ResultsField.Text.bind("<Button-3>", self.ClearResults)
-        StatusBarInst.TooltipConfig(self.ResultsField.ScrolledTextFrame, "Left-click to copy results to the clipboard.  Right-click to clear.")
+        self.ResultsFieldTooltip = Tooltip(self.ResultsField.ScrolledTextFrame, "Left-click to copy results to the clipboard.  Right-click to clear.")
 
         # Preset Rolls
         self.PresetRollsInst = self.PresetRolls(self.DiceRollerFrame, self.ResultsField, self.CritMinimumEntryVar, self.PresetRollsFrameRow, self.PresetRollsScrolledCanvasHeight, self.PresetRollsScrolledCanvasWidth)
@@ -6431,7 +6431,7 @@ class DiceRoller:
             self.PresetRollsScrolledCanvasNameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
             self.PresetRollsScrolledCanvasNameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
             self.PresetRollsScrolledCanvasNameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
-            StatusBarInst.TooltipConfig(self.PresetRollsScrolledCanvasNameHeader, GlobalInst.SortTooltipString)
+            self.PresetRollsScrolledCanvasNameTooltip = Tooltip(self.PresetRollsScrolledCanvasNameHeader, GlobalInst.SortTooltipString)
             self.PresetRollsScrolledCanvasRollHeader = Label(self.PresetRollsScrolledCanvas.WindowFrame, text="Roll", bd=2, relief=GROOVE)
             self.PresetRollsScrolledCanvasRollHeader.grid(row=0, column=1, sticky=NSEW, columnspan=6)
             self.PresetRollsScrolledCanvasSortOrderHeader = Label(self.PresetRollsScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
@@ -6439,7 +6439,7 @@ class DiceRoller:
             self.PresetRollsScrolledCanvasSortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
             self.PresetRollsScrolledCanvasSortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
             self.PresetRollsScrolledCanvasSortOrderHeader.bind("<Button-3>", lambda event: self.Sort("Sort Order", Reverse=True))
-            StatusBarInst.TooltipConfig(self.PresetRollsScrolledCanvasSortOrderHeader, GlobalInst.SortTooltipString)
+            self.PresetRollsScrolledCanvasSortOrderTooltip = Tooltip(self.PresetRollsScrolledCanvasSortOrderHeader, GlobalInst.SortTooltipString)
 
             # Preset Rolls List
             self.PresetRollsList = []
@@ -6702,25 +6702,25 @@ class InitiativeOrder:
         self.NewRoundButton = Button(self.InitiativeDataFrame, text="New Round", command=self.NewRound, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.NewRoundButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-r>", lambda event: self.NewRound())
-        StatusBarInst.TooltipConfig(self.NewRoundButton, "Keyboard Shortcut:  Ctrl+R")
+        self.NewRoundTooltip = Tooltip(self.NewRoundButton, "Keyboard Shortcut:  Ctrl+R")
 
         # Next Turn Button
         self.NextTurnButton = Button(self.InitiativeDataFrame, text="Next Turn", command=self.NextTurn, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.NextTurnButton.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-t>", lambda event: self.NextTurn())
-        StatusBarInst.TooltipConfig(self.NextTurnButton, "Keyboard Shortcut:  Ctrl+T")
+        self.NextTurnTooltip = Tooltip(self.NextTurnButton, "Keyboard Shortcut:  Ctrl+T")
 
         # Clear Turns Button
         self.ClearTurnsButton = Button(self.InitiativeDataFrame, text="Clear Turns", command=self.ClearTurns, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.ClearTurnsButton.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-T>", lambda event: self.ClearTurns())
-        StatusBarInst.TooltipConfig(self.ClearTurnsButton, "Keyboard Shortcut:  Ctrl+Shift+T")
+        self.ClearTurnsTooltip = Tooltip(self.ClearTurnsButton, "Keyboard Shortcut:  Ctrl+Shift+T")
 
         # Sort Initiative Order Button
         self.SortInitiativeOrderButton = Button(self.InitiativeDataFrame, text="Sort Initiative Order", command=self.SortInitiativeOrder, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.SortInitiativeOrderButton.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-i>", lambda event: self.SortInitiativeOrder())
-        StatusBarInst.TooltipConfig(self.SortInitiativeOrderButton, "Keyboard Shortcut:  Ctrl+I")
+        self.SortInitiativeOrderTooltip = Tooltip(self.SortInitiativeOrderButton, "Keyboard Shortcut:  Ctrl+I")
 
         # Initiative Order Scrolled Canvas
         self.InitiativeOrderScrolledCanvasFrame = Frame(self.InitiativeOrderFrame)
@@ -6905,7 +6905,7 @@ class InitiativeOrder:
             # Initiative Entry
             self.InitiativeEntryResultEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryResultEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
             self.InitiativeEntryResultEntry.bind("<Button-3>", lambda event: self.ToggleTurnDone())
-            StatusBarInst.TooltipConfig(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
+            self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
 
             # Tie Priority Dropdown
             self.InitiativeEntryTiePriorityDropdown = ttk.Combobox(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
@@ -6918,7 +6918,7 @@ class InitiativeOrder:
             self.InitiativeEntryNameEntry.bind("<Button-3>", self.SetCreatureStats)
             self.InitiativeEntryNameEntry.bind("<Shift-Button-3>", self.Duplicate)
             self.InitiativeEntryNameEntry.bind("<Control-Button-3>", self.Clear)
-            StatusBarInst.TooltipConfig(self.InitiativeEntryNameEntry, "Right-click to set additional creature info.  Shift+right-click to duplicate.  Ctrl+right-click to clear.")
+            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click to set additional creature info.  Shift+right-click to duplicate.  Ctrl+right-click to clear.")
 
             # AC Entry
             self.InitiativeEntryACEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryACEntryVar, justify=CENTER, width=5)
@@ -6931,7 +6931,7 @@ class InitiativeOrder:
             self.InitiativeEntryCurrentHPEntry.bind("<Button-3>", lambda event: self.Damage())
             self.InitiativeEntryCurrentHPEntry.bind("<Shift-Button-3>", lambda event: self.Heal())
             self.InitiativeEntryCurrentHPEntry.bind("<Control-Button-3>", lambda event: self.ToggleDead())
-            StatusBarInst.TooltipConfig(self.InitiativeEntryCurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.  Control+right-click to toggle dead.")
+            self.InitiativeEntryCurrentHPTooltip = Tooltip(self.InitiativeEntryCurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.  Control+right-click to toggle dead.")
 
             # Max HP Entry
             self.InitiativeEntryMaxHPEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryMaxHPEntryVar, justify=CENTER, width=5)
@@ -7267,25 +7267,25 @@ class CompactInitiativeOrder:
         self.ClearTurnsButton = Button(self.InitiativeDataFrame, text="Clear Turns", command=self.ClearTurns, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.ClearTurnsButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-T>", lambda event: self.ClearTurns())
-        StatusBarInst.TooltipConfig(self.ClearTurnsButton, "Keyboard Shortcut:  Ctrl+Shift+T")
+        self.ClearTurnsTooltip = Tooltip(self.ClearTurnsButton, "Keyboard Shortcut:  Ctrl+Shift+T")
 
         # Sort Initiative Order Button
         self.SortInitiativeOrderButton = Button(self.InitiativeDataFrame, text="Sort Initiative Order", command=self.SortInitiativeOrder, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.SortInitiativeOrderButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-i>", lambda event: self.SortInitiativeOrder())
-        StatusBarInst.TooltipConfig(self.SortInitiativeOrderButton, "Keyboard Shortcut:  Ctrl+I")
+        self.SortInitiativeOrderTooltip = Tooltip(self.SortInitiativeOrderButton, "Keyboard Shortcut:  Ctrl+I")
 
         # Next Turn Button
         self.NextTurnButton = Button(self.InitiativeDataFrame, text="Next Turn", command=self.NextTurn, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.NextTurnButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-t>", lambda event: self.NextTurn())
-        StatusBarInst.TooltipConfig(self.NextTurnButton, "Keyboard Shortcut:  Ctrl+T")
+        self.NextTurnTooltip = Tooltip(self.NextTurnButton, "Keyboard Shortcut:  Ctrl+T")
 
         # New Round Button
         self.NewRoundButton = Button(self.InitiativeDataFrame, text="New Round", command=self.NewRound, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.NewRoundButton.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-r>", lambda event: self.NewRound())
-        StatusBarInst.TooltipConfig(self.NewRoundButton, "Keyboard Shortcut:  Ctrl+R")
+        self.NewRoundTooltip = Tooltip(self.NewRoundButton, "Keyboard Shortcut:  Ctrl+R")
 
         # Initiative Order Scrolled Canvas
         self.InitiativeOrderScrolledCanvasFrame = Frame(master)
@@ -7405,7 +7405,7 @@ class CompactInitiativeOrder:
             # Initiative Entry
             self.InitiativeEntryResultEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryResultEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
             self.InitiativeEntryResultEntry.bind("<Button-3>", lambda event: self.ToggleTurnDone())
-            StatusBarInst.TooltipConfig(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
+            self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
 
             # Tie Priority Dropdown
             self.InitiativeEntryTiePriorityDropdown = ttk.Combobox(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
@@ -7417,7 +7417,7 @@ class CompactInitiativeOrder:
             self.InitiativeEntryNameEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryNameEntryVar, justify=CENTER, width=35, bg=GlobalInst.ButtonColor)
             self.InitiativeEntryNameEntry.bind("<Button-3>", self.Duplicate)
             self.InitiativeEntryNameEntry.bind("<Shift-Button-3>", self.Clear)
-            StatusBarInst.TooltipConfig(self.InitiativeEntryNameEntry, "Right-click to duplicate.  Shift+right-click to clear.")
+            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click to duplicate.  Shift+right-click to clear.")
 
         def Display(self, Row):
             self.Row = Row
@@ -7640,49 +7640,49 @@ class HoardSheet:
         self.TreasureItemsListNameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
         self.TreasureItemsListNameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
         self.TreasureItemsListNameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
-        StatusBarInst.TooltipConfig(self.TreasureItemsListNameHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListNameTooltip = Tooltip(self.TreasureItemsListNameHeader, GlobalInst.SortTooltipString)
         self.TreasureItemsListCountHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Count", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListCountHeader.grid(row=0, column=1, sticky=NSEW)
         self.TreasureItemsListCountHeader.bind("<Button-1>", lambda event: self.Sort("Count"))
         self.TreasureItemsListCountHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Count", SearchMode=True))
         self.TreasureItemsListCountHeader.bind("<Button-3>", lambda event: self.Sort("Count", Reverse=True))
-        StatusBarInst.TooltipConfig(self.TreasureItemsListCountHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListCountTooltip = Tooltip(self.TreasureItemsListCountHeader, GlobalInst.SortTooltipString)
         self.TreasureItemsListUnitWeightHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Unit Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListUnitWeightHeader.grid(row=0, column=2, sticky=NSEW)
         self.TreasureItemsListUnitWeightHeader.bind("<Button-1>", lambda event: self.Sort("Unit Weight"))
         self.TreasureItemsListUnitWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Weight", SearchMode=True))
         self.TreasureItemsListUnitWeightHeader.bind("<Button-3>", lambda event: self.Sort("Unit Weight", Reverse=True))
-        StatusBarInst.TooltipConfig(self.TreasureItemsListUnitWeightHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListUnitWeightTooltip = Tooltip(self.TreasureItemsListUnitWeightHeader, GlobalInst.SortTooltipString)
         self.TreasureItemsListUnitValueHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Unit Value", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListUnitValueHeader.grid(row=0, column=3, sticky=NSEW)
         self.TreasureItemsListUnitValueHeader.bind("<Button-1>", lambda event: self.Sort("Unit Value"))
         self.TreasureItemsListUnitValueHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Value", SearchMode=True))
         self.TreasureItemsListUnitValueHeader.bind("<Button-3>", lambda event: self.Sort("Unit Value", Reverse=True))
-        StatusBarInst.TooltipConfig(self.TreasureItemsListUnitValueHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListUnitValueTooltip = Tooltip(self.TreasureItemsListUnitValueHeader, GlobalInst.SortTooltipString)
         self.TreasureItemsListUnitValueDenominationHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Value\nDenom.", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListUnitValueDenominationHeader.grid(row=0, column=4, sticky=NSEW)
         self.TreasureItemsListUnitValueDenominationHeader.bind("<Button-1>", lambda event: self.Sort("Value Denomination"))
         self.TreasureItemsListUnitValueDenominationHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Value Denomination", SearchMode=True))
         self.TreasureItemsListUnitValueDenominationHeader.bind("<Button-3>", lambda event: self.Sort("Value Denomination", Reverse=True))
-        StatusBarInst.TooltipConfig(self.TreasureItemsListUnitValueDenominationHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListUnitValueDenominationTooltip = Tooltip(self.TreasureItemsListUnitValueDenominationHeader, GlobalInst.SortTooltipString)
         self.TreasureItemsListTotalWeightHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Total Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListTotalWeightHeader.grid(row=0, column=5, sticky=NSEW)
         self.TreasureItemsListTotalWeightHeader.bind("<Button-1>", lambda event: self.Sort("Total Weight"))
         self.TreasureItemsListTotalWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Weight", SearchMode=True))
         self.TreasureItemsListTotalWeightHeader.bind("<Button-3>", lambda event: self.Sort("Total Weight", Reverse=True))
-        StatusBarInst.TooltipConfig(self.TreasureItemsListTotalWeightHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListTotalWeightTooltip = Tooltip(self.TreasureItemsListTotalWeightHeader, GlobalInst.SortTooltipString)
         self.TreasureItemsListTotalValueHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Total Value\n(gp)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListTotalValueHeader.grid(row=0, column=6, sticky=NSEW)
         self.TreasureItemsListTotalValueHeader.bind("<Button-1>", lambda event: self.Sort("Total Value"))
         self.TreasureItemsListTotalValueHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Value", SearchMode=True))
         self.TreasureItemsListTotalValueHeader.bind("<Button-3>", lambda event: self.Sort("Total Value", Reverse=True))
-        StatusBarInst.TooltipConfig(self.TreasureItemsListTotalValueHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListTotalValueTooltip = Tooltip(self.TreasureItemsListTotalValueHeader, GlobalInst.SortTooltipString)
         self.TreasureItemsListSortOrderHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListSortOrderHeader.grid(row=0, column=7, sticky=NSEW)
         self.TreasureItemsListSortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
         self.TreasureItemsListSortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
         self.TreasureItemsListSortOrderHeader.bind("<Button-3>", lambda event: self.Sort("Sort Order", Reverse=True))
-        StatusBarInst.TooltipConfig(self.TreasureItemsListSortOrderHeader, GlobalInst.SortTooltipString)
+        self.TreasureItemsListSortOrderTooltip = Tooltip(self.TreasureItemsListSortOrderHeader, GlobalInst.SortTooltipString)
 
         # Treasure Item Entries List
         self.TreasureItemEntriesList = []
@@ -7916,7 +7916,7 @@ class HoardSheet:
             self.NameEntry = EntryExtended(master, width=35, textvariable=self.NameEntryVar, justify=CENTER, bg=GlobalInst.ButtonColor)
             self.NameEntry.bind("<Button-3>", self.ConfigureItemDescription)
             self.NameEntry.bind("<Shift-Button-3>", self.ExchangeForCoins)
-            StatusBarInst.TooltipConfig(self.NameEntry, "Right-click on the name field to set an item description.  Shift+right-click to exchange for coins.")
+            self.NameTooltip = Tooltip(self.NameEntry, "Right-click on the name field to set an item description.  Shift+right-click to exchange for coins.")
 
             # Count Entry
             self.CountEntry = EntryExtended(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
@@ -8233,10 +8233,6 @@ class StatusBar:
         if Unlock:
             self.StatusBarLockedVar.set(False)
         self.StatusBarTextVar.set(Text)
-
-    def TooltipConfig(self, Widget, TooltipText, LeaveText="Status", EnterLock=False, EnterUnlock=False, LeaveLock=False, LeaveUnlock=False):
-        Widget.bind("<Enter>", lambda event: self.StatusBarSetText(TooltipText, Lock=EnterLock, Unlock=EnterUnlock))
-        Widget.bind("<Leave>", lambda event: self.StatusBarSetText(LeaveText, Lock=LeaveLock, Unlock=LeaveUnlock))
 
     def FlashStatus(self, Text, Duration=2000):
         StatusBarInst.StatusBarSetText(Text, Lock=True)
@@ -8641,9 +8637,8 @@ class Tooltip:
 
     def ShowTooltip(self):
         # Position
-        PositionX, PositionY, Width, Height = self.Widget.bbox("insert")
-        PositionX += self.Widget.winfo_rootx() + 30
-        PositionY += self.Widget.winfo_rooty() + 30
+        PositionX = WindowInst.winfo_pointerx() + 15
+        PositionY = WindowInst.winfo_pointery() + 15
 
         # Create and Configure Tooltip Window
         self.TooltipWindow = Toplevel(self.Widget)
