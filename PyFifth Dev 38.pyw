@@ -208,6 +208,18 @@ class Global:
     def ValidAbilityEntry(self, NewText):
         return self.ValidateNumberFromString(NewText, "Ability modifiers must be whole numbers.")
 
+    def ValidDiceNumber(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Dice number must be a whole number.", MinValue=1, LessThanMinString="Dice number cannot be less than 1.")
+
+    def ValidDieType(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Die type must be a whole number.", MinValue=1, LessThanMinString="Die type cannot be less than 1.")
+
+    def ValidModifier(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Modifier must be a whole number.")
+
+    def ValidCritMinimum(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Crit minimum must be a whole number.", MinValue=1, LessThanMinString="Crit minimum cannot be less than 1.", MaxValue=20, MoreThanMaxString="Crit minimum cannot be more than 20.")
+
 
 # Saving
 class SavingAndOpening:
@@ -6109,6 +6121,7 @@ class DiceRoller:
 
         # Number of Dice
         self.DiceNumberEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.DiceNumberEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
+        self.DiceNumberEntry.ConfigureValidation(GlobalInst.ValidDiceNumber, "key")
         self.DiceNumberEntry.grid(row=0, column=0, rowspan=2, padx=2, pady=2, sticky=NSEW)
         self.DiceNumberTooltip = Tooltip(self.DiceNumberEntry, "Scroll the mouse wheel or type to change the number of dice.")
 
@@ -6116,6 +6129,7 @@ class DiceRoller:
         self.DieTypeLabel = Label(self.DiceEntryAndButtonsFrame, text="d", font=self.DiceEntryFont)
         self.DieTypeLabel.grid(row=0, column=1, rowspan=2, sticky=NSEW)
         self.DieTypeEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.DieTypeEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
+        self.DieTypeEntry.ConfigureValidation(GlobalInst.ValidDieType, "key")
         self.DieTypeEntry.grid(row=0, column=2, rowspan=2, padx=2, pady=2, sticky=NSEW)
         self.DieTypeTooltip = Tooltip(self.DieTypeEntry, "Scroll the mouse wheel or type to change the die type.")
 
@@ -6123,6 +6137,7 @@ class DiceRoller:
         self.ModifierLabel = Label(self.DiceEntryAndButtonsFrame, text="+", font=self.DiceEntryFont)
         self.ModifierLabel.grid(row=0, column=3, rowspan=2, sticky=NSEW)
         self.ModifierEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.ModifierEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
+        self.ModifierEntry.ConfigureValidation(GlobalInst.ValidModifier, "key")
         self.ModifierEntry.grid(row=0, column=4, rowspan=2, padx=2, pady=2, sticky=NSEW)
         self.ModifierTooltip = Tooltip(self.ModifierEntry, "Scroll the mouse wheel or type to change the modifier.")
 
@@ -6160,6 +6175,7 @@ class DiceRoller:
         self.CritMinimumFrame.grid_columnconfigure(0, weight=1)
         self.CritMinimumFrame.grid(row=1, column=6, padx=2, pady=2, sticky=NSEW)
         self.CritMinimumEntry = EntryExtended(self.CritMinimumFrame, textvariable=self.CritMinimumEntryVar, justify=CENTER, width=5)
+        self.CritMinimumEntry.ConfigureValidation(GlobalInst.ValidCritMinimum, "key")
         self.CritMinimumEntry.grid(row=0, column=0, sticky=NSEW)
 
         # Results
@@ -6263,23 +6279,14 @@ class DiceRoller:
         self.UpdateResultsField(ResultText)
 
     def ValidDiceEntry(self):
-        try:
-            DiceNumber = GlobalInst.GetStringVarAsNumber(self.DiceNumberEntryVar)
-            DieType = GlobalInst.GetStringVarAsNumber(self.DieTypeEntryVar)
-            Modifier = GlobalInst.GetStringVarAsNumber(self.ModifierEntryVar)
-        except:
-            messagebox.showerror("Invalid Entry", "Can't roll anything but whole numbers.")
-            return False
+        DiceNumber = GlobalInst.GetStringVarAsNumber(self.DiceNumberEntryVar)
+        DieType = GlobalInst.GetStringVarAsNumber(self.DieTypeEntryVar)
         if DiceNumber < 1 or DieType < 1:
             messagebox.showerror("Invalid Entry", "Can't roll unless dice and die type are positive.")
             return False
-        try:
-            CritRangeValue = GlobalInst.GetStringVarAsNumber(self.CritMinimumEntryVar)
-        except:
-            messagebox.showerror("Invalid Entry", "Crit range must be a whole number.")
-            return False
-        if CritRangeValue <= 0 or CritRangeValue >= 21:
-            messagebox.showerror("Invalid Entry", "Crit range must be between 1 and 20.")
+        CritMinimum = GlobalInst.GetStringVarAsNumber(self.CritMinimumEntryVar)
+        if CritMinimum <= 0 or CritMinimum >= 21:
+            messagebox.showerror("Invalid Entry", "Can't roll unless crit minimum is between 1 and 20.")
             return False
         return True
 
