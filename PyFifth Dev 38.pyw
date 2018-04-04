@@ -7858,6 +7858,11 @@ class HoardSheet:
         # Update Window Title
         WindowInst.UpdateWindowTitle()
 
+    def OpenCoinCalculator(self):
+        # Create Coin Calculator Window and Wait
+        self.CoinCalculatorInst = CoinCalculator(WindowInst, DialogMode=True)
+        WindowInst.wait_window(self.CoinCalculatorInst.Window)
+
     class TreasureItemEntry:
         def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesTuple, Row):
             # Store Parameters
@@ -8162,6 +8167,9 @@ class MenuBar:
 
             # Settings Menu
             self.MenuBar.add_command(label="Settings", command=CharacterSheetInst.Settings)
+
+        if WindowInst.Mode is "HoardSheet":
+            self.MenuBar.add_command(label="Coin Calculator", command=HoardSheetInst.OpenCoinCalculator)
 
         if WindowInst.Mode is "NPCSheet":
             # Update Stats Button
