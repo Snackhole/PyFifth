@@ -60,7 +60,7 @@ class Global:
 
     def SetupStatModifiers(self):
         self.StatModifierEntries = {}
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             self.StatModifierEntries["Strength"] = Inst["AbilitiesAndSavingThrows"].StrengthEntry.AbilityEntryModifierVar
             self.StatModifierEntries["Dexterity"] = Inst["AbilitiesAndSavingThrows"].DexterityEntry.AbilityEntryModifierVar
             self.StatModifierEntries["Constitution"] = Inst["AbilitiesAndSavingThrows"].ConstitutionEntry.AbilityEntryModifierVar
@@ -69,7 +69,7 @@ class Global:
             self.StatModifierEntries["Charisma"] = Inst["AbilitiesAndSavingThrows"].CharismaEntry.AbilityEntryModifierVar
             self.StatModifierEntries["Proficiency"] = CharacterSheetInst.ProficiencyBonusEntryVar
             self.StatModifierEntries["Level"] = CharacterSheetInst.CharacterLevelDropdownVar
-        elif WindowInst.Mode is "NPCSheet":
+        elif WindowInst.Mode == "NPCSheet":
             self.StatModifierEntries["Strength"] = CreatureDataInst.AbilitiesStrengthEntryVar
             self.StatModifierEntries["Dexterity"] = CreatureDataInst.AbilitiesDexterityEntryVar
             self.StatModifierEntries["Constitution"] = CreatureDataInst.AbilitiesConstitutionEntryVar
@@ -80,22 +80,22 @@ class Global:
 
     # Interception of Conflicting Bindings
     def InterceptEvents(self, Widget):
-        if type(Widget) is ScrolledText.TrackableText:
+        if isinstance(Widget, ScrolledText.TrackableText):
             Widget.bind("<<Paste>>", lambda event: self.Paste(Widget))
             Widget.bind("<Tab>", lambda event: self.NextFocus(Widget))
             Widget.bind("<Shift-Tab>", lambda event: self.PreviousFocus(Widget))
         if WindowInst.Mode in ["CreatureDataUtility", "DiceRoller", "EncounterManager", "CharacterSheet", "NPCSheet"]:
             Widget.bind("<Control-o>", self.OpenButton)
-            if WindowInst.Mode is "CharacterSheet":
+            if WindowInst.Mode == "CharacterSheet":
                 Widget.bind("<Control-d>", self.UpdateStatsAndInventory)
-            if WindowInst.Mode is "NPCSheet":
+            if WindowInst.Mode == "NPCSheet":
                 Widget.bind("<Control-d>", self.UpdateStats)
-        if WindowInst.Mode is "EncounterManager":
+        if WindowInst.Mode == "EncounterManager":
             Widget.bind("<Control-r>", self.NewRoundEncounterManager)
             Widget.bind("<Control-t>", self.NextTurnEncounterManager)
             Widget.bind("<Control-T>", self.ClearTurnsEncounterManager)
             Widget.bind("<Control-i>", self.SortInitiativeOrderEncounterManager)
-        if WindowInst.Mode is "CompactInitiativeOrder":
+        if WindowInst.Mode == "CompactInitiativeOrder":
             Widget.bind("<Control-r>", self.NewRoundCompactInitiativeOrder)
             Widget.bind("<Control-t>", self.NextTurnCompactInitiativeOrder)
             Widget.bind("<Control-T>", self.ClearTurnsCompactInitiativeOrder)
@@ -166,11 +166,11 @@ class Global:
 
     # Validation Functions
     def ValidateNumberFromString(self, NewText, NotANumberString, Mode="Int", MinValue=None, LessThanMinString="", MaxValue=None, MoreThanMaxString=""):
-        if NewText is "": return True
+        if NewText == "": return True
         try:
-            if Mode is "Int":
+            if Mode == "Int":
                 NewTextNumber = int(NewText)
-            elif Mode is "Float":
+            elif Mode == "Float":
                 NewTextNumber = float(NewText)
             else:
                 return False
@@ -318,7 +318,7 @@ class SavingAndOpening:
                     SaveFile.write(TextFileName)
 
                     # Character Portrait
-                    if WindowMode is "CharacterSheet":
+                    if WindowMode == "CharacterSheet":
                         if self.SavedData["PortraitSelectedVar"].get():
                             PortraitFileName = "Portrait.gif"
                             Inst["Portrait"].PortraitImage.write(PortraitFileName)
@@ -420,7 +420,7 @@ class SavingAndOpening:
                     self.OpenData(TextFile)
 
                 # Character Portrait
-                if WindowMode is "CharacterSheet":
+                if WindowMode == "CharacterSheet":
                     if self.SavedData["PortraitSelectedVar"].get():
                         PortraitFileName = "Portrait.gif"
                         OpenFile.extract(PortraitFileName)
@@ -434,15 +434,15 @@ class SavingAndOpening:
             self.CurrentOpenFilePath.set(OpenFileName)
 
             # Character Sheet Stats and Inventory
-            if WindowMode is "CharacterSheet":
+            if WindowMode == "CharacterSheet":
                 CharacterSheetInst.UpdateStatsAndInventory()
 
             # NPC Sheet Stats
-            if WindowMode is "NPCSheet":
+            if WindowMode == "NPCSheet":
                 CreatureDataInst.UpdateStats()
 
             # Hoard Sheet Stats
-            if WindowMode is "HoardSheet":
+            if WindowMode == "HoardSheet":
                 HoardSheetInst.UpdateHoardStats()
 
             # Small Pause
@@ -480,7 +480,7 @@ class SavingAndOpening:
                     except KeyError:
                         self.OpenErrors = True
                         self.OpenErrorsString += Line
-        if WindowInst.Mode is "Encounter Manager":
+        if WindowInst.Mode == "Encounter Manager":
             for Entry in InitiativeOrderInst.InitiativeEntriesList:
                 if Entry.InitiativeEntryTurnDoneVar.get():
                     Entry.TurnDoneOn()
@@ -490,7 +490,7 @@ class SavingAndOpening:
                     Entry.DeadOn()
                 else:
                     Entry.DeadOff()
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             CharacterSheetInst.SpellcasterToggle()
             CharacterSheetInst.PortraitToggle()
         self.Opening = False
@@ -514,7 +514,7 @@ class SavingAndOpening:
                 if Field == DiceRollerInst.CritMinimumEntryVar:
                     Field.set("20")
                     continue
-            if WindowInst.Mode is "CharacterSheet":
+            if WindowInst.Mode == "CharacterSheet":
                 if Field in [CharacterSheetInst.SpellcasterBoxVar, CharacterSheetInst.ConcentrationCheckPromptBoxVar, CharacterSheetInst.PortraitBoxVar]:
                     Field.set(True)
                     continue
@@ -540,13 +540,13 @@ class SavingAndOpening:
             DiceRollerInst.ModifierEntryVar.set("0")
 
         # Encounter Manager Defaults
-        if WindowInst.Mode is "EncounterManager":
+        if WindowInst.Mode == "EncounterManager":
             for Entry in InitiativeOrderInst.InitiativeEntriesList:
                 Entry.TurnDoneOff()
                 Entry.DeadOff()
 
         # Character Sheet Defaults
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             # Clear Portrait
             Inst["Portrait"].Clear()
 
@@ -618,7 +618,7 @@ class SavingAndOpening:
             Inst["Spellcasting"].SpellPointsMaxEntryStatModifierInst.DefaultValues()
 
         # NPC Sheet Defaults
-        if WindowInst.Mode is "NPCSheet":
+        if WindowInst.Mode == "NPCSheet":
             # Set All Preset Roll Modifiers to Default Values
             for Entry in Inst["PresetRolls"].PresetRollsList:
                 Entry.PresetRollModifierEntryStatModifierInst.DefaultValues()
@@ -636,7 +636,7 @@ class SavingAndOpening:
         WindowInst.UpdateWindowTitle()
 
         # Calculate Stats
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             CharacterSheetInst.UpdateStatsAndInventory()
 
         # Flash Status
@@ -1513,7 +1513,7 @@ class CharacterSheet:
                         self.AbilityEntryTotal.grid(row=Row, column=6, sticky=NSEW, padx=2, pady=2)
 
                     def Calculate(self):
-                        if self.AbilityBaseVar.get() is "":
+                        if self.AbilityBaseVar.get() == "":
                             self.AbilityTotalVar.set("N/A")
                             self.AbilityEntryTotal.configure(disabledforeground="red")
                             return False
@@ -1605,7 +1605,7 @@ class CharacterSheet:
                             return False
                         FieldAssignmentsList = []
                         for Field in self.RollAssignFieldsList:
-                            if Field.RollDropdownVar.get() is "":
+                            if Field.RollDropdownVar.get() == "":
                                 messagebox.showerror("Invalid Entry", "All scores must be assigned to an ability.")
                                 return False
                             FieldAssignmentsList.append(Field.RollDropdownVar.get())
@@ -1694,7 +1694,7 @@ class CharacterSheet:
 
                     def Calculate(self):
                         for Field in self.PointBuyFieldsList:
-                            if Field.ScoreEntryVar.get() is "":
+                            if Field.ScoreEntryVar.get() == "":
                                 self.PointBuyEntryVar.set("N/A")
                                 return False
                         PointsRemaining = 27
@@ -1730,7 +1730,7 @@ class CharacterSheet:
                         for Field in self.PointBuyFieldsList:
                             for Entry in self.AbilitiesDataConfigInst.EntriesList:
                                 FieldShortName = Field.AbilityNameShort
-                                if Entry.AbilityNameShort is FieldShortName:
+                                if Entry.AbilityNameShort == FieldShortName:
                                     Entry.AbilityBaseVar.set(Field.ScoreEntryVar.get())
                         self.PointBuyFrame.destroy()
                         GlobalInst.WindowGeometry(self.master, IsDialog=True, DialogMaster=WindowInst, WidthOffset=-self.PointBuyWidthOffset)
@@ -2146,7 +2146,7 @@ class CharacterSheet:
                 CharacterSheetInst.UpdateStatsAndInventory()
 
         def CalculateMaxHP(self, ConstitutionModifier, CharacterLevelValue):
-            if self.MaxHPVars["HPOverride"].get() is not "":
+            if self.MaxHPVars["HPOverride"].get() != "":
                 MaxHP = GlobalInst.GetStringVarAsNumber(self.MaxHPVars["HPOverride"])
             else:
                 MaxHP = 0
@@ -4938,7 +4938,7 @@ class SpendCoinsMenu:
 
         # Check If Spending Is Valid
         if ValidateSpending:
-            if ComparatorString is "=":
+            if ComparatorString == "=":
                 return True
             else:
                 messagebox.showerror("Spending Invalid", "The value of your coins after spending and the value of the coins you have remaining must match.\n\nAdjust coins remaining until the values are equal.")
@@ -5097,44 +5097,44 @@ class StatModifier:
 
         # Variables
         self.Variables = {}
-        self.Variables["StrengthMultiplierEntryVar"] = SavedStringVar(Prefix + "StrengthMultiplierEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["DexterityMultiplierEntryVar"] = SavedStringVar(Prefix + "DexterityMultiplierEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["ConstitutionMultiplierEntryVar"] = SavedStringVar(Prefix + "ConstitutionMultiplierEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["IntelligenceMultiplierEntryVar"] = SavedStringVar(Prefix + "IntelligenceMultiplierEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["WisdomMultiplierEntryVar"] = SavedStringVar(Prefix + "WisdomMultiplierEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["CharismaMultiplierEntryVar"] = SavedStringVar(Prefix + "CharismaMultiplierEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["ProficiencyMultiplierEntryVar"] = SavedStringVar(Prefix + "ProficiencyMultiplierEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["ManualModifierEntryVar"] = SavedStringVar(Prefix + "ManualModifierEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["StrengthMinEntryVar"] = SavedStringVar(Prefix + "StrengthMinEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["DexterityMinEntryVar"] = SavedStringVar(Prefix + "DexterityMinEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["ConstitutionMinEntryVar"] = SavedStringVar(Prefix + "ConstitutionMinEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["IntelligenceMinEntryVar"] = SavedStringVar(Prefix + "IntelligenceMinEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["WisdomMinEntryVar"] = SavedStringVar(Prefix + "WisdomMinEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["CharismaMinEntryVar"] = SavedStringVar(Prefix + "CharismaMinEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["ProficiencyMinEntryVar"] = SavedStringVar(Prefix + "ProficiencyMinEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["StrengthMaxEntryVar"] = SavedStringVar(Prefix + "StrengthMaxEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["DexterityMaxEntryVar"] = SavedStringVar(Prefix + "DexterityMaxEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["ConstitutionMaxEntryVar"] = SavedStringVar(Prefix + "ConstitutionMaxEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["IntelligenceMaxEntryVar"] = SavedStringVar(Prefix + "IntelligenceMaxEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["WisdomMaxEntryVar"] = SavedStringVar(Prefix + "WisdomMaxEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["CharismaMaxEntryVar"] = SavedStringVar(Prefix + "CharismaMaxEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["ProficiencyMaxEntryVar"] = SavedStringVar(Prefix + "ProficiencyMaxEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["StrengthMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "StrengthMultiplierRoundUpBoxVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["DexterityMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "DexterityMultiplierRoundUpBoxVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["ConstitutionMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "ConstitutionMultiplierRoundUpBoxVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["IntelligenceMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "IntelligenceMultiplierRoundUpBoxVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["WisdomMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "WisdomMultiplierRoundUpBoxVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["CharismaMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "CharismaMultiplierRoundUpBoxVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        self.Variables["ProficiencyMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "ProficiencyMultiplierRoundUpBoxVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
+        self.Variables["StrengthMultiplierEntryVar"] = SavedStringVar(Prefix + "StrengthMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["DexterityMultiplierEntryVar"] = SavedStringVar(Prefix + "DexterityMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["ConstitutionMultiplierEntryVar"] = SavedStringVar(Prefix + "ConstitutionMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["IntelligenceMultiplierEntryVar"] = SavedStringVar(Prefix + "IntelligenceMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["WisdomMultiplierEntryVar"] = SavedStringVar(Prefix + "WisdomMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["CharismaMultiplierEntryVar"] = SavedStringVar(Prefix + "CharismaMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["ProficiencyMultiplierEntryVar"] = SavedStringVar(Prefix + "ProficiencyMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["ManualModifierEntryVar"] = SavedStringVar(Prefix + "ManualModifierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["StrengthMinEntryVar"] = SavedStringVar(Prefix + "StrengthMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["DexterityMinEntryVar"] = SavedStringVar(Prefix + "DexterityMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["ConstitutionMinEntryVar"] = SavedStringVar(Prefix + "ConstitutionMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["IntelligenceMinEntryVar"] = SavedStringVar(Prefix + "IntelligenceMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["WisdomMinEntryVar"] = SavedStringVar(Prefix + "WisdomMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["CharismaMinEntryVar"] = SavedStringVar(Prefix + "CharismaMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["ProficiencyMinEntryVar"] = SavedStringVar(Prefix + "ProficiencyMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["StrengthMaxEntryVar"] = SavedStringVar(Prefix + "StrengthMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["DexterityMaxEntryVar"] = SavedStringVar(Prefix + "DexterityMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["ConstitutionMaxEntryVar"] = SavedStringVar(Prefix + "ConstitutionMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["IntelligenceMaxEntryVar"] = SavedStringVar(Prefix + "IntelligenceMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["WisdomMaxEntryVar"] = SavedStringVar(Prefix + "WisdomMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["CharismaMaxEntryVar"] = SavedStringVar(Prefix + "CharismaMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["ProficiencyMaxEntryVar"] = SavedStringVar(Prefix + "ProficiencyMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["StrengthMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "StrengthMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["DexterityMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "DexterityMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["ConstitutionMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "ConstitutionMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["IntelligenceMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "IntelligenceMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["WisdomMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "WisdomMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["CharismaMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "CharismaMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["ProficiencyMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "ProficiencyMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
         if self.ACMode:
-            self.Variables["ACBaseEntryVar"] = SavedStringVar(Prefix + "ACBaseEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
+            self.Variables["ACBaseEntryVar"] = SavedStringVar(Prefix + "ACBaseEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
         if self.DiceRollerMode:
-            self.Variables["ModifiersSubmitted"] = SavedBooleanVar(Prefix + "ModifiersSubmitted" + Suffix if Prefix is not "" or Suffix is not "" else None)
-        if WindowInst.Mode is "CharacterSheet":
-            self.Variables["LevelMultiplierEntryVar"] = SavedStringVar(Prefix + "LevelMultiplierEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-            self.Variables["LevelMinEntryVar"] = SavedStringVar(Prefix + "LevelMinEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-            self.Variables["LevelMaxEntryVar"] = SavedStringVar(Prefix + "LevelMaxEntryVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
-            self.Variables["LevelMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "LevelMultiplierRoundUpBoxVar" + Suffix if Prefix is not "" or Suffix is not "" else None)
+            self.Variables["ModifiersSubmitted"] = SavedBooleanVar(Prefix + "ModifiersSubmitted" + Suffix if Prefix != "" or Suffix != "" else None)
+        if WindowInst.Mode == "CharacterSheet":
+            self.Variables["LevelMultiplierEntryVar"] = SavedStringVar(Prefix + "LevelMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+            self.Variables["LevelMinEntryVar"] = SavedStringVar(Prefix + "LevelMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+            self.Variables["LevelMaxEntryVar"] = SavedStringVar(Prefix + "LevelMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+            self.Variables["LevelMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "LevelMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
 
         # Configure Master (Should Be Entry Widget)
         master.configure(state=DISABLED if not self.DiceRollerMode else NORMAL, bg=GlobalInst.ButtonColor, fg="black", disabledbackground=GlobalInst.ButtonColor, disabledforeground="black", cursor=Cursor)
@@ -5161,7 +5161,7 @@ class StatModifier:
             ACBase = GlobalInst.GetStringVarAsNumber(self.Variables["ACBaseEntryVar"])
         else:
             ACBase = 0
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             LevelMod = self.GetSingleStatMod(GlobalInst.StatModifierEntries["Level"], self.Variables["LevelMultiplierEntryVar"], self.Variables["LevelMultiplierRoundUpBoxVar"], self.Variables["LevelMaxEntryVar"],
                                              self.Variables["LevelMinEntryVar"])
         else:
@@ -5216,9 +5216,9 @@ class StatModifier:
                     self.Variables[Tag].set(Var.get())
 
         # Update Stats and Inventory
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             CharacterSheetInst.UpdateStatsAndInventory()
-        elif WindowInst.Mode is "NPCSheet":
+        elif WindowInst.Mode == "NPCSheet":
             CreatureDataInst.UpdateStats()
 
     def UpdateTags(self, Prefix="", Suffix=""):
@@ -5255,7 +5255,7 @@ class StatModifier:
             self.Variables["ACBaseEntryVar"].UpdateTag(Prefix + "ACBaseEntryVar" + Suffix)
         if self.DiceRollerMode:
             self.Variables["ModifiersSubmitted"].UpdateTag(Prefix + "ModifiersSubmitted" + Suffix)
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             self.Variables["LevelMultiplierEntryVar"].UpdateTag(Prefix + "LevelMultiplierEntryVar" + Suffix)
             self.Variables["LevelMinEntryVar"].UpdateTag(Prefix + "LevelMinEntryVar" + Suffix)
             self.Variables["LevelMaxEntryVar"].UpdateTag(Prefix + "LevelMaxEntryVar" + Suffix)
@@ -5295,7 +5295,7 @@ class StatModifier:
             self.Variables["ACBaseEntryVar"].set("")
         if self.DiceRollerMode:
             self.Variables["ModifiersSubmitted"].set(False)
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             self.Variables["LevelMultiplierEntryVar"].set("")
             self.Variables["LevelMinEntryVar"].set("")
             self.Variables["LevelMaxEntryVar"].set("")
@@ -5344,7 +5344,7 @@ class StatModifier:
                 self.Variables["ACBaseEntryVar"] = StringVar(value=CurrentVariables["ACBaseEntryVar"].get())
             if self.DiceRollerMode:
                 self.Variables["ModifiersSubmitted"] = BooleanVar(value=CurrentVariables["ModifiersSubmitted"].get())
-            if WindowInst.Mode is "CharacterSheet":
+            if WindowInst.Mode == "CharacterSheet":
                 self.Variables["LevelMultiplierEntryVar"] = StringVar(value=CurrentVariables["LevelMultiplierEntryVar"].get())
                 self.Variables["LevelMinEntryVar"] = StringVar(value=CurrentVariables["LevelMinEntryVar"].get())
                 self.Variables["LevelMaxEntryVar"] = StringVar(value=CurrentVariables["LevelMaxEntryVar"].get())
@@ -5398,7 +5398,7 @@ class StatModifier:
             self.CharismaLabel.grid(row=7, column=0, sticky=NSEW, padx=2, pady=2)
             self.ProficiencyLabel = Label(self.TableFrame, text="Proficiency")
             self.ProficiencyLabel.grid(row=8, column=0, sticky=NSEW, padx=2, pady=2)
-            if WindowInst.Mode is "CharacterSheet":
+            if WindowInst.Mode == "CharacterSheet":
                 self.LevelLabel = Label(self.TableFrame, text="Level")
                 self.LevelLabel.grid(row=9, column=0, sticky=NSEW, padx=2, pady=2)
 
@@ -5424,7 +5424,7 @@ class StatModifier:
             self.ProficiencyMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMultiplierEntryVar"])
             self.ProficiencyMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
             self.ProficiencyMultiplierEntry.grid(row=8, column=1, sticky=NSEW, padx=2, pady=2)
-            if WindowInst.Mode is "CharacterSheet":
+            if WindowInst.Mode == "CharacterSheet":
                 self.LevelMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMultiplierEntryVar"])
                 self.LevelMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
                 self.LevelMultiplierEntry.grid(row=9, column=1, sticky=NSEW, padx=2, pady=2)
@@ -5444,7 +5444,7 @@ class StatModifier:
             self.CharismaMultiplierRoundUpBox.grid(row=7, column=2, sticky=NSEW, padx=2, pady=2)
             self.ProficiencyMultiplierRoundUpBox = Checkbutton(self.TableFrame, variable=self.Variables["ProficiencyMultiplierRoundUpBoxVar"])
             self.ProficiencyMultiplierRoundUpBox.grid(row=8, column=2, sticky=NSEW, padx=2, pady=2)
-            if WindowInst.Mode is "CharacterSheet":
+            if WindowInst.Mode == "CharacterSheet":
                 self.LevelMultiplierRoundUpBox = Checkbutton(self.TableFrame, variable=self.Variables["LevelMultiplierRoundUpBoxVar"])
                 self.LevelMultiplierRoundUpBox.grid(row=9, column=2, sticky=NSEW, padx=2, pady=2)
 
@@ -5470,7 +5470,7 @@ class StatModifier:
             self.ProficiencyMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMinEntryVar"])
             self.ProficiencyMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.ProficiencyMinEntry.grid(row=8, column=3, sticky=NSEW, padx=2, pady=2)
-            if WindowInst.Mode is "CharacterSheet":
+            if WindowInst.Mode == "CharacterSheet":
                 self.LevelMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMinEntryVar"])
                 self.LevelMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
                 self.LevelMinEntry.grid(row=9, column=3, sticky=NSEW, padx=2, pady=2)
@@ -5497,7 +5497,7 @@ class StatModifier:
             self.ProficiencyMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMaxEntryVar"])
             self.ProficiencyMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
             self.ProficiencyMaxEntry.grid(row=8, column=4, sticky=NSEW, padx=2, pady=2)
-            if WindowInst.Mode is "CharacterSheet":
+            if WindowInst.Mode == "CharacterSheet":
                 self.LevelMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMaxEntryVar"])
                 self.LevelMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
                 self.LevelMaxEntry.grid(row=9, column=4, sticky=NSEW, padx=2, pady=2)
@@ -5599,7 +5599,7 @@ class AbilityScoreDerivatives:
         DiceRollerInst.DiceNumberEntryVar.set(1)
         DiceRollerInst.DieTypeEntryVar.set(20)
         AttackTypeString = self.AbilityScoreSelectionDropdownVar.get()
-        if self.AttackTypeStringSuffix is not "":
+        if self.AttackTypeStringSuffix != "":
             AttackTypeString += " " + self.AttackTypeStringSuffix
         DiceRollerInst.Roll(AttackTypeString + " Attack:\n")
 
@@ -5625,7 +5625,7 @@ class CreatureData:
             self.AbilitiesIntelligenceEntryVar = SavedStringVar("AbilitiesIntelligenceEntryVar")
             self.AbilitiesWisdomEntryVar = SavedStringVar("AbilitiesWisdomEntryVar")
             self.AbilitiesCharismaEntryVar = SavedStringVar("AbilitiesCharismaEntryVar")
-            if WindowInst.Mode is "NPCSheet":
+            if WindowInst.Mode == "NPCSheet":
                 self.OpenErrors = False
                 self.OpenErrorsString = ""
 
@@ -5667,7 +5667,7 @@ class CreatureData:
 
         # Create Window (Element)
         if not DialogMode:
-            if WindowInst.Mode is "NPCSheet":
+            if WindowInst.Mode == "NPCSheet":
                 self.CreatureDataFrame = LabelFrame(master, text="NPC Stats, Inventory, and Notes:")
             else:
                 self.CreatureDataFrame = Frame(master)
@@ -5845,7 +5845,7 @@ class CreatureData:
             AbilityEntryWidget.ConfigureValidation(GlobalInst.ValidAbilityEntry, "key")
 
         # NPC Sheet Auto Calculation
-        if WindowInst.Mode is "NPCSheet":
+        if WindowInst.Mode == "NPCSheet":
             self.ProficiencyEntryVar.trace_add("write", lambda a, b, c: self.UpdateStats())
             for AbilityEntryVar in [self.AbilitiesStrengthEntryVar, self.AbilitiesDexterityEntryVar, self.AbilitiesConstitutionEntryVar, self.AbilitiesIntelligenceEntryVar, self.AbilitiesWisdomEntryVar,
                                     self.AbilitiesCharismaEntryVar]:
@@ -5907,7 +5907,7 @@ class CreatureData:
         self.NotesField.grid(row=0, column=0)
 
         # Create Creature Stats Fields Dictionary
-        if DialogMode or WindowInst.Mode is "NPCSheet":
+        if DialogMode or WindowInst.Mode == "NPCSheet":
             self.CreatureStatsFields = {}
             self.CreatureStatsFields["NameEntryVar"] = self.NameEntryVar
             self.CreatureStatsFields["ACEntryVar"] = self.ACEntryVar
@@ -6150,7 +6150,7 @@ class CreatureData:
 class DiceRoller:
     def __init__(self, master):
         # Configure Mode Parameters
-        if WindowInst.Mode is "DiceRoller":
+        if WindowInst.Mode == "DiceRoller":
             self.Row = 0
             self.Column = 0
             self.RowSpan = 1
@@ -6161,7 +6161,7 @@ class DiceRoller:
             self.PresetRollsFrameRow = 2
             self.PresetRollsScrolledCanvasHeight = 262
             self.PresetRollsScrolledCanvasWidth = 418
-        elif WindowInst.Mode is "EncounterManager":
+        elif WindowInst.Mode == "EncounterManager":
             self.Row = 0
             self.Column = 1
             self.RowSpan = 2
@@ -6172,7 +6172,7 @@ class DiceRoller:
             self.PresetRollsFrameRow = 3
             self.PresetRollsScrolledCanvasHeight = 405
             self.PresetRollsScrolledCanvasWidth = 418
-        elif WindowInst.Mode is "CharacterSheet":
+        elif WindowInst.Mode == "CharacterSheet":
             self.Row = 0
             self.Column = 1
             self.RowSpan = 1
@@ -6183,7 +6183,7 @@ class DiceRoller:
             self.PresetRollsFrameRow = 3
             self.PresetRollsScrolledCanvasHeight = 288
             self.PresetRollsScrolledCanvasWidth = 423
-        elif WindowInst.Mode is "NPCSheet":
+        elif WindowInst.Mode == "NPCSheet":
             self.Row = 0
             self.Column = 1
             self.RowSpan = 1
@@ -6200,13 +6200,13 @@ class DiceRoller:
         self.DieTypeEntryVar = StringVar(value="20")
         self.ModifierEntryVar = StringVar(value="0")
         self.CritMinimumEntryVar = SavedStringVar("CritMinimumEntryVar", DefaultValue="20")
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             self.InspirationBoxVar = SavedBooleanVar("InspirationBoxVar")
             self.InspirationTrueColor = "#7aff63"
             self.InspirationFalseColor = GlobalInst.ButtonColor
 
         # Dice Roller Frame
-        if WindowInst.Mode is "DiceRoller":
+        if WindowInst.Mode == "DiceRoller":
             self.DiceRollerFrame = Frame(master)
         else:
             self.DiceRollerFrame = LabelFrame(master, text="Dice Roller:")
@@ -6295,7 +6295,7 @@ class DiceRoller:
         Inst["PresetRolls"] = self.PresetRollsInst
 
         # Inspiration Box
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             # Inspiration Box Font
             self.InspirationBoxFont = font.Font(size=16)
 
@@ -6343,7 +6343,7 @@ class DiceRoller:
             CritResultText = " (Crit!)"
         elif CritFailure:
             LuckyText = ""
-            if WindowInst.Mode is "CharacterSheet":
+            if WindowInst.Mode == "CharacterSheet":
                 if CharacterSheetInst.LuckyHalflingBoxVar.get():
                     LuckyText = "  But you're lucky, so if this was an attack roll, ability check, or saving throw, you get to roll again one time!"
             CritResultText = " (Crit Fail!" + LuckyText + ")"
@@ -7967,7 +7967,7 @@ class HoardSheet:
             Count = GlobalInst.GetStringVarAsNumber(self.CountEntryVar)
 
             # Exchange If Valid
-            if UnitValueDenom is not "" and UnitValue > 0 and Count > 0:
+            if UnitValueDenom != "" and UnitValue > 0 and Count > 0:
                 TotalValueGained = UnitValue * Count
                 HoardSheetInst.SpendingCoins[UnitValueDenom].set(str(GlobalInst.GetStringVarAsNumber(HoardSheetInst.SpendingCoins[UnitValueDenom]) + TotalValueGained))
             else:
@@ -8101,7 +8101,7 @@ class MenuBar:
         WindowInst.bind("<Control-s>", lambda event: SavingAndOpeningInst.SaveButton())
         self.FileMenu.add_command(label="Save As", command=lambda: SavingAndOpeningInst.SaveButton(SaveAs=True), accelerator="Ctrl+Shift+S")
         WindowInst.bind("<Control-S>", lambda event: SavingAndOpeningInst.SaveButton(SaveAs=True))
-        if WindowInst.Mode is "NPCSheet":
+        if WindowInst.Mode == "NPCSheet":
             self.FileMenu.add_separator()
             self.FileMenu.add_command(label="Import Creature Data", command=CreatureDataInst.Import)
             self.FileMenu.add_command(label="Export Creature Data", command=CreatureDataInst.Export)
@@ -8113,7 +8113,7 @@ class MenuBar:
         self.FileMenu.add_command(label="Exit", command=lambda: WindowInst.CloseWindow(CheckForSave=True))
         self.MenuBar.add_cascade(label="File", menu=self.FileMenu)
 
-        if WindowInst.Mode is "CharacterSheet":
+        if WindowInst.Mode == "CharacterSheet":
             # Commands Menu
             self.CommandsMenu = Menu(self.MenuBar, tearoff=0)
             self.CommandsMenu.add_command(label="Update Stats and Inventory", command=CharacterSheetInst.UpdateStatsAndInventory, accelerator="Ctrl+D")
@@ -8128,10 +8128,10 @@ class MenuBar:
             # Settings Menu
             self.MenuBar.add_command(label="Settings", command=CharacterSheetInst.Settings)
 
-        if WindowInst.Mode is "HoardSheet":
+        if WindowInst.Mode == "HoardSheet":
             self.MenuBar.add_command(label="Coin Calculator", command=HoardSheetInst.OpenCoinCalculator)
 
-        if WindowInst.Mode is "NPCSheet":
+        if WindowInst.Mode == "NPCSheet":
             # Update Stats Button
             self.MenuBar.add_command(label="Update Stats (Ctrl+D)", command=CreatureDataInst.UpdateStats)
             WindowInst.bind("<Control-d>", lambda event: CreatureDataInst.UpdateStats())
@@ -8140,31 +8140,31 @@ class MenuBar:
 class StatusBar:
     def __init__(self, master):
         # Configure Mode Parameters
-        if WindowInst.Mode is "CreatureDataUtility":
+        if WindowInst.Mode == "CreatureDataUtility":
             self.Row = 1
             self.Column = 0
             self.ColumnSpan = 1
-        if WindowInst.Mode is "DiceRoller":
+        if WindowInst.Mode == "DiceRoller":
             self.Row = 1
             self.Column = 0
             self.ColumnSpan = 1
-        elif WindowInst.Mode is "EncounterManager":
+        elif WindowInst.Mode == "EncounterManager":
             self.Row = 2
             self.Column = 0
             self.ColumnSpan = 2
-        elif WindowInst.Mode is "CompactInitiativeOrder":
+        elif WindowInst.Mode == "CompactInitiativeOrder":
             self.Row = 1
             self.Column = 0
             self.ColumnSpan = 1
-        elif WindowInst.Mode is "CharacterSheet":
+        elif WindowInst.Mode == "CharacterSheet":
             self.Row = 1
             self.Column = 0
             self.ColumnSpan = 2
-        elif WindowInst.Mode is "NPCSheet":
+        elif WindowInst.Mode == "NPCSheet":
             self.Row = 1
             self.Column = 0
             self.ColumnSpan = 2
-        elif WindowInst.Mode is "HoardSheet":
+        elif WindowInst.Mode == "HoardSheet":
             self.Row = 1
             self.Column = 0
             self.ColumnSpan = 2
@@ -8699,13 +8699,13 @@ class Window(Tk):
 
     def UpdateWindowTitle(self):
         # Prefix
-        if self.Mode is "CreatureDataUtility" or self.Mode is "NPCSheet":
+        if self.Mode == "CreatureDataUtility" or self.Mode == "NPCSheet":
             Prefix = CreatureDataInst.NameEntryVar.get()
-        elif self.Mode is "EncounterManager":
+        elif self.Mode == "EncounterManager":
             Prefix = EncounterHeaderInst.EncounterNameEntryVar.get()
-        elif self.Mode is "CharacterSheet":
+        elif self.Mode == "CharacterSheet":
             Prefix = CharacterSheetInst.CharacterNameEntryVar.get()
-        elif self.Mode is "HoardSheet":
+        elif self.Mode == "HoardSheet":
             Prefix = HoardSheetInst.HoardNameEntryVar.get()
         else:
             Prefix = ""
@@ -8740,7 +8740,7 @@ if __name__ == "__main__":
     ModeSelectInst = ModeSelect()
 
     # Validate Mode
-    if ModeSelectInst.ModeSelected is "":
+    if ModeSelectInst.ModeSelected == "":
         sys.exit()
 
     # Window Titles
@@ -8769,21 +8769,21 @@ if __name__ == "__main__":
     WindowInst = Window(ModeSelectInst.ModeSelected, WindowTitles[ModeSelectInst.ModeSelected])
 
     # Populate Window
-    if WindowInst.Mode is "CoinCalculator":
+    if WindowInst.Mode == "CoinCalculator":
         CoinCalculatorInst = CoinCalculator(WindowInst.WidgetMaster)
-    elif WindowInst.Mode is "CreatureDataUtility":
+    elif WindowInst.Mode == "CreatureDataUtility":
         StatusBarInst = StatusBar(WindowInst)
         SavingAndOpeningInst = SavingAndOpening()
         MenuBarInst = MenuBar(WindowInst)
         CreatureDataInst = CreatureData(WindowInst.WidgetMaster)
         SavingAndOpeningInst.TrackModifiedFields()
-    elif WindowInst.Mode is "DiceRoller":
+    elif WindowInst.Mode == "DiceRoller":
         StatusBarInst = StatusBar(WindowInst)
         SavingAndOpeningInst = SavingAndOpening()
         DiceRollerInst = DiceRoller(WindowInst.WidgetMaster)
         MenuBarInst = MenuBar(WindowInst)
         SavingAndOpeningInst.TrackModifiedFields()
-    elif WindowInst.Mode is "EncounterManager":
+    elif WindowInst.Mode == "EncounterManager":
         StatusBarInst = StatusBar(WindowInst)
         SavingAndOpeningInst = SavingAndOpening()
         EncounterHeaderInst = EncounterHeader(WindowInst.WidgetMaster)
@@ -8791,10 +8791,10 @@ if __name__ == "__main__":
         DiceRollerInst = DiceRoller(WindowInst.WidgetMaster)
         MenuBarInst = MenuBar(WindowInst)
         SavingAndOpeningInst.TrackModifiedFields()
-    elif WindowInst.Mode is "CompactInitiativeOrder":
+    elif WindowInst.Mode == "CompactInitiativeOrder":
         StatusBarInst = StatusBar(WindowInst)
         CompactInitiativeOrderInst = CompactInitiativeOrder(WindowInst.WidgetMaster)
-    elif WindowInst.Mode is "CharacterSheet":
+    elif WindowInst.Mode == "CharacterSheet":
         StatusBarInst = StatusBar(WindowInst)
         SavingAndOpeningInst = SavingAndOpening()
         CharacterSheetInst = CharacterSheet(WindowInst.WidgetMaster)
@@ -8803,7 +8803,7 @@ if __name__ == "__main__":
         SavingAndOpeningInst.TrackModifiedFields()
         GlobalInst.SetupStatModifiers()
         CharacterSheetInst.UpdateStatsAndInventory()
-    elif WindowInst.Mode is "NPCSheet":
+    elif WindowInst.Mode == "NPCSheet":
         StatusBarInst = StatusBar(WindowInst)
         SavingAndOpeningInst = SavingAndOpening()
         CreatureDataInst = CreatureData(WindowInst.WidgetMaster)
@@ -8811,7 +8811,7 @@ if __name__ == "__main__":
         MenuBarInst = MenuBar(WindowInst)
         SavingAndOpeningInst.TrackModifiedFields()
         GlobalInst.SetupStatModifiers()
-    elif WindowInst.Mode is "HoardSheet":
+    elif WindowInst.Mode == "HoardSheet":
         StatusBarInst = StatusBar(WindowInst)
         SavingAndOpeningInst = SavingAndOpening()
         HoardSheetInst = HoardSheet(WindowInst.WidgetMaster)
