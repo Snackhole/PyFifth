@@ -26,7 +26,7 @@ class Global:
 
     def GetStringVarAsNumber(self, Var, Mode="Int"):
         VarText = Var.get()
-        if len(VarText) == 0:
+        if len(VarText) == 0 or VarText == "+" or VarText == "-":
             VarText = 0
         if Mode == "Int":
             return int(VarText)
@@ -166,7 +166,7 @@ class Global:
 
     # Validation Functions
     def ValidateNumberFromString(self, NewText, NotANumberString, Mode="Int", MinValue=None, LessThanMinString="", MaxValue=None, MoreThanMaxString=""):
-        if NewText == "": return True
+        if NewText == "" or NewText == "+" or NewText == "-": return True
         try:
             if Mode == "Int":
                 NewTextNumber = int(NewText)
@@ -1513,7 +1513,8 @@ class CharacterSheet:
                         self.AbilityEntryTotal.grid(row=Row, column=6, sticky=NSEW, padx=2, pady=2)
 
                     def Calculate(self):
-                        if self.AbilityBaseVar.get() == "":
+                        AbilityBaseString = self.AbilityBaseVar.get()
+                        if AbilityBaseString == "" or AbilityBaseString == "+" or AbilityBaseString == "-":
                             self.AbilityTotalVar.set("N/A")
                             self.AbilityEntryTotal.configure(disabledforeground="red")
                             return False
@@ -1694,7 +1695,8 @@ class CharacterSheet:
 
                     def Calculate(self):
                         for Field in self.PointBuyFieldsList:
-                            if Field.ScoreEntryVar.get() == "":
+                            ScoreEntryString = Field.ScoreEntryVar.get()
+                            if ScoreEntryString == "" or ScoreEntryString == "+" or ScoreEntryString == "-":
                                 self.PointBuyEntryVar.set("N/A")
                                 return False
                         PointsRemaining = 27
@@ -2061,7 +2063,8 @@ class CharacterSheet:
             else:
                 return
             CurrentTempHP = GlobalInst.GetStringVarAsNumber(self.TempHPEntryVar)
-            if self.CurrentHPEntryVar.get() == "":
+            CurrentHPString = self.CurrentHPEntryVar.get()
+            if CurrentHPString == "" or CurrentHPString == "+" or CurrentHPString == "-":
                 CurrentHP = GlobalInst.GetStringVarAsNumber(self.MaxHPEntryVar)
             else:
                 CurrentHP = GlobalInst.GetStringVarAsNumber(self.CurrentHPEntryVar)
@@ -5989,7 +5992,8 @@ class CreatureData:
         else:
             return
         CurrentTempHP = GlobalInst.GetStringVarAsNumber(self.TempHPEntryVar)
-        if self.CurrentHPEntryVar.get() == "":
+        CurrentHPString = self.CurrentHPEntryVar.get()
+        if CurrentHPString == "" or CurrentHPString == "+" or CurrentHPString == "-":
             CurrentHP = GlobalInst.GetStringVarAsNumber(self.MaxHPEntryVar)
         else:
             CurrentHP = GlobalInst.GetStringVarAsNumber(self.CurrentHPEntryVar)
@@ -7092,7 +7096,8 @@ class InitiativeOrder:
             else:
                 return
             CurrentTempHP = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryTempHPEntryVar)
-            if self.InitiativeEntryCurrentHPEntryVar.get() == "":
+            InitiativeEntryCurrentHPString = self.InitiativeEntryCurrentHPEntryVar.get()
+            if InitiativeEntryCurrentHPString == "" or InitiativeEntryCurrentHPString == "+" or InitiativeEntryCurrentHPString == "-":
                 CurrentHP = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryMaxHPEntryVar)
             else:
                 CurrentHP = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryCurrentHPEntryVar)
