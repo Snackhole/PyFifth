@@ -1545,10 +1545,7 @@ class CharacterSheet:
 
                     def ValidPointBuyValue(self):
                         Base = GlobalInst.GetStringVarAsNumber(self.AbilityBaseVar)
-                        Valid = True
-                        if Base < 8 or Base > 15:
-                            Valid = False
-                        return Valid
+                        return Base >= 8 and Base <= 15
 
                 class RollForAbilitiesMenu:
                     def __init__(self, master, AbilitiesDataConfigInst):
@@ -1617,7 +1614,7 @@ class CharacterSheet:
                             return False
                         FieldAssignmentsList = []
                         for Field in self.RollAssignFieldsList:
-                            if Field.RollDropdownVar.get() == "":
+                            if Field.RollDropdownVar.get() is "":
                                 messagebox.showerror("Invalid Entry", "All scores must be assigned to an ability.")
                                 return False
                             FieldAssignmentsList.append(Field.RollDropdownVar.get())
