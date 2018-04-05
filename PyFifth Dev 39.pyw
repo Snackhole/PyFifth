@@ -248,6 +248,24 @@ class Global:
     def ValidStatModifierManualMod(self, NewText):
         return self.ValidateNumberFromString(NewText, "Manual modifier must be a whole number.")
 
+    def ValidPointBuyScore(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Point buy score must be a whole number.", MinValue=1, LessThanMinString="Point buy score cannot be less than 1.")
+
+    def ValidAbilityEntryBase(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Base score must be a whole number.", MinValue=1, LessThanMinString="Base score cannot be less than 1.")
+
+    def ValidAbilityEntryRacial(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Racial bonus must be a whole number.")
+
+    def ValidAbilityEntryASI(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Ability score increase must be a whole number.")
+
+    def ValidAbilityEntryMisc(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Miscellaneous bonus must be a whole number.")
+
+    def ValidAbilityEntryOverride(self, NewText):
+        return self.ValidateNumberFromString(NewText, "Override must be a whole number.", MinValue=1, LessThanMinString="Override cannot be less than 1.  Leave blank to remove override.")
+
 
 # Saving
 class SavingAndOpening:
@@ -1145,8 +1163,6 @@ class CharacterSheet:
         # Abilities and Saving Throws
         class AbilitiesAndSavingThrowsTable:
             def __init__(self, master):
-                self.PointBuyBoxVar = SavedBooleanVar("PointBuyBoxVar")
-
                 # Abilities and Saving Throws Frame
                 self.AbilitiesAndSavingThrowsFrame = LabelFrame(master, text="Abilities and Saving Throws:")
                 self.AbilitiesAndSavingThrowsFrame.grid_columnconfigure(0, weight=1)
@@ -1206,9 +1222,6 @@ class CharacterSheet:
                         Entry.AbilityEntry.AbilityASIVar.set(Entry.AbilityASIVar.get())
                         Entry.AbilityEntry.AbilityMiscVar.set(Entry.AbilityMiscVar.get())
                         Entry.AbilityEntry.AbilityOverrideVar.set(Entry.AbilityOverrideVar.get())
-
-                    # Store Point Buy
-                    self.PointBuyBoxVar.set(AbilitiesDataConfigInst.PointBuyBoxVar.get())
 
                 # Update Stats
                 CharacterSheetInst.UpdateStatsAndInventory()
@@ -1309,10 +1322,14 @@ class CharacterSheet:
 
             class AbilitiesDataConfig:
                 def __init__(self, master):
+                    # Variables
                     self.DataSubmitted = BooleanVar()
-                    self.PointBuyBoxVar = BooleanVar(value=Inst["AbilitiesAndSavingThrows"].PointBuyBoxVar.get())
-                    self.PointBuyEntryVar = StringVar()
                     self.RollButtonVar = BooleanVar()
+                    self.PointBuyButtonVar = BooleanVar()
+                    self.RollForAbilitiesMenuInst = None
+                    self.PointBuyMenuInst = None
+                    self.RollForAbilitiesWidthOffset = 163
+                    self.PointBuyWidthOffset = 138
 
                     # Create Window
                     self.Window = Toplevel(master)
@@ -1346,27 +1363,39 @@ class CharacterSheet:
                     self.WisdomConfigEntry = self.AbilitiesDataConfigEntry(self.Window, Inst["AbilitiesAndSavingThrows"].WisdomEntry, "WIS", self.EntriesList, 5)
                     self.CharismaConfigEntry = self.AbilitiesDataConfigEntry(self.Window, Inst["AbilitiesAndSavingThrows"].CharismaEntry, "CHA", self.EntriesList, 6)
 
-                    # Point Buy
-                    self.PointBuyBox = Checkbutton(self.Window, text="Using Point Buy", variable=self.PointBuyBoxVar)
-                    self.PointBuyBox.grid(row=4, column=7, padx=2, pady=2, sticky=NSEW)
-                    self.PointBuyLabel = Label(self.Window, text="Points", bd=2, relief=GROOVE)
-                    self.PointBuyLabel.grid(row=5, column=7, padx=2, pady=2, sticky=NSEW)
-                    self.PointBuyEntry = EntryExtended(self.Window, state=DISABLED, width=9, disabledbackground="light gray", disabledforeground="black", cursor="arrow", textvariable=self.PointBuyEntryVar,
-                                                       justify=CENTER)
-                    self.PointBuyEntry.grid(row=6, column=7, padx=2, pady=2, sticky=NSEW)
+                    # Entry Validation and Calculation
+                    for Entry in self.EntriesList:
+                        Entry.AbilityEntryBase.ConfigureValidation(GlobalInst.ValidAbilityEntryBase, "key")
+                        Entry.AbilityEntryRacial.ConfigureValidation(GlobalInst.ValidAbilityEntryRacial, "key")
+                        Entry.AbilityEntryASI.ConfigureValidation(GlobalInst.ValidAbilityEntryASI, "key")
+                        Entry.AbilityEntryMisc.ConfigureValidation(GlobalInst.ValidAbilityEntryMisc, "key")
+                        Entry.AbilityEntryOverride.ConfigureValidation(GlobalInst.ValidAbilityEntryOverride, "key")
+                        Entry.AbilityBaseVar.trace_add("write", lambda a, b, c: self.Calculate())
+                        Entry.AbilityRacialVar.trace_add("write", lambda a, b, c: self.Calculate())
+                        Entry.AbilityASIVar.trace_add("write", lambda a, b, c: self.Calculate())
+                        Entry.AbilityMiscVar.trace_add("write", lambda a, b, c: self.Calculate())
+                        Entry.AbilityOverrideVar.trace_add("write", lambda a, b, c: self.Calculate())
 
-                    # Buttons
-                    self.CalculateButton = Button(self.Window, text="Calculate", command=self.Calculate, bg=GlobalInst.ButtonColor)
-                    self.CalculateButton.grid(row=0, column=7, rowspan=2, padx=2, pady=2, sticky=NSEW)
-                    self.RollButton = Checkbutton(self.Window, text="Roll", variable=self.RollButtonVar, command=self.CreateRollForAbilitiesMenu, bg=GlobalInst.ButtonColor, indicatoron=False, selectcolor=GlobalInst.ButtonColor)
-                    self.RollButton.grid(row=2, column=7, rowspan=2, padx=2, pady=2, sticky=NSEW)
-                    self.ButtonsFrame = Frame(self.Window)
-                    self.ButtonsFrame.grid_columnconfigure(0, weight=1)
-                    self.ButtonsFrame.grid_columnconfigure(1, weight=1)
-                    self.ButtonsFrame.grid(row=7, column=0, columnspan=8, sticky=NSEW)
-                    self.SubmitButton = Button(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                    # Side Buttons
+                    self.SideButtonsFrame = Frame(self.Window)
+                    self.SideButtonsFrame.grid_rowconfigure(0, weight=1)
+                    self.SideButtonsFrame.grid_rowconfigure(1, weight=1)
+                    self.SideButtonsFrame.grid(row=0, column=7, rowspan=7, sticky=NSEW)
+                    self.RollButton = Checkbutton(self.SideButtonsFrame, text="Roll", variable=self.RollButtonVar, command=lambda: self.CreateRollForAbilitiesMenu(True), bg=GlobalInst.ButtonColor, indicatoron=False,
+                                                  selectcolor=GlobalInst.ButtonColor)
+                    self.RollButton.grid(row=0, column=7, padx=2, pady=2, sticky=NSEW)
+                    self.PointBuyButton = Checkbutton(self.SideButtonsFrame, text="Point Buy", variable=self.PointBuyButtonVar, command=lambda: self.CreatePointBuyMenu(True), bg=GlobalInst.ButtonColor, indicatoron=False,
+                                                      selectcolor=GlobalInst.ButtonColor)
+                    self.PointBuyButton.grid(row=1, column=7, padx=2, pady=2, sticky=NSEW)
+
+                    # Bottom Buttons
+                    self.BottomButtonsFrame = Frame(self.Window)
+                    self.BottomButtonsFrame.grid_columnconfigure(0, weight=1)
+                    self.BottomButtonsFrame.grid_columnconfigure(1, weight=1)
+                    self.BottomButtonsFrame.grid(row=7, column=0, columnspan=8, sticky=NSEW)
+                    self.SubmitButton = Button(self.BottomButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
                     self.SubmitButton.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-                    self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                    self.CancelButton = Button(self.BottomButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
                     self.CancelButton.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
 
                     # Prevent Main Window Input
@@ -1376,60 +1405,17 @@ class CharacterSheet:
                     GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst)
                     self.Window.focus_force()
 
-                    # Calculate Point Buy Values
-                    self.CalculatePointBuyValues()
-
                     # Focus on Strength Entry
                     self.StrengthConfigEntry.AbilityEntryBase.focus_set()
 
                 def Calculate(self):
-                    if self.ValidStatsEntries():
-                        pass
-                    else:
-                        return False
-                    ValidValues = True
-                    for AbilityEntry in self.EntriesList:
-                        AbilityEntry.Calculate()
-                        if GlobalInst.GetStringVarAsNumber(AbilityEntry.AbilityTotalVar) < 1:
-                            ValidValues = False
-                    if self.CalculatePointBuyValues():
-                        if (self.PointBuyBoxVar.get() and GlobalInst.GetStringVarAsNumber(self.PointBuyEntryVar) >= 0) or not self.PointBuyBoxVar.get():
+                    EntriesCalculated = True
+                    for Entry in self.EntriesList:
+                        if Entry.Calculate():
                             pass
                         else:
-                            messagebox.showerror("Invalid Entry", "Not enough points for these ability scores.")
-                            return False
-                    else:
-                        return False
-                    if not ValidValues:
-                        messagebox.showerror("Invalid Entry", "Total ability score values must be greater than 0.")
-                        return False
-                    return True
-
-                def CalculatePointBuyValues(self):
-                    if self.PointBuyBoxVar.get():
-                        if self.StrengthConfigEntry.ValidPointBuyValue() and self.DexterityConfigEntry.ValidPointBuyValue() and self.ConstitutionConfigEntry.ValidPointBuyValue() and self.IntelligenceConfigEntry.ValidPointBuyValue() and self.WisdomConfigEntry.ValidPointBuyValue() and self.CharismaConfigEntry.ValidPointBuyValue():
-                            PointsRemaining = 27 - self.StrengthConfigEntry.PointBuyValue() - self.DexterityConfigEntry.PointBuyValue() - self.ConstitutionConfigEntry.PointBuyValue() - self.IntelligenceConfigEntry.PointBuyValue() - self.WisdomConfigEntry.PointBuyValue() - self.CharismaConfigEntry.PointBuyValue()
-                            self.PointBuyEntryVar.set(str(PointsRemaining))
-                            return True
-                        else:
-                            messagebox.showerror("Invalid Entry", "Base ability scores must be between 8 and 15 when using point buy.")
-                            return False
-                    else:
-                        self.PointBuyEntryVar.set("N/A")
-                        return True
-
-                def ValidStatsEntries(self):
-                    if not self.StrengthConfigEntry.ValidStatsEntries():
-                        return False
-                    if not self.DexterityConfigEntry.ValidStatsEntries():
-                        return False
-                    if not self.ConstitutionConfigEntry.ValidStatsEntries():
-                        return False
-                    if not self.IntelligenceConfigEntry.ValidStatsEntries():
-                        return False
-                    if not self.WisdomConfigEntry.ValidStatsEntries():
-                        return False
-                    if not self.CharismaConfigEntry.ValidStatsEntries():
+                            EntriesCalculated = False
+                    if not EntriesCalculated:
                         return False
                     return True
 
@@ -1437,6 +1423,7 @@ class CharacterSheet:
                     if self.Calculate():
                         pass
                     else:
+                        messagebox.showerror("Invalid Entry", "Not valid ability scores!")
                         return
                     self.DataSubmitted.set(True)
                     self.Window.destroy()
@@ -1445,19 +1432,41 @@ class CharacterSheet:
                     self.DataSubmitted.set(False)
                     self.Window.destroy()
 
-                def CreateRollForAbilitiesMenu(self):
+                def CreateRollForAbilitiesMenu(self, Pressed):
+                    if self.PointBuyButtonVar.get() and Pressed:
+                        self.PointBuyButtonVar.set(False)
+                        self.CreatePointBuyMenu(not Pressed)
                     if self.RollButtonVar.get():
                         # Create Menu
                         self.RollForAbilitiesMenuInst = self.RollForAbilitiesMenu(self.Window, self)
 
                         # Adjust Geometry
-                        GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst, WidthOffset=163)
+                        GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst, WidthOffset=self.RollForAbilitiesWidthOffset)
                     else:
                         # Destroy Menu
-                        self.RollForAbilitiesMenuInst.RollForAbilitiesFrame.destroy()
+                        if self.RollForAbilitiesMenuInst is not None:
+                            self.RollForAbilitiesMenuInst.RollForAbilitiesFrame.destroy()
 
                         # Adjust Geometry
-                        GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst, WidthOffset=-163)
+                        GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst, WidthOffset=-self.RollForAbilitiesWidthOffset)
+
+                def CreatePointBuyMenu(self, Pressed):
+                    if self.RollButtonVar.get() and Pressed:
+                        self.RollButtonVar.set(False)
+                        self.CreateRollForAbilitiesMenu(not Pressed)
+                    if self.PointBuyButtonVar.get():
+                        # Create Menu
+                        self.PointBuyMenuInst = self.PointBuyMenu(self.Window, self)
+
+                        # Adjust Geometry
+                        GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst, WidthOffset=self.PointBuyWidthOffset)
+                    else:
+                        # Destroy Menu
+                        if self.PointBuyMenuInst is not None:
+                            self.PointBuyMenuInst.PointBuyFrame.destroy()
+
+                        # Adjust Geometry
+                        GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst, WidthOffset=-self.PointBuyWidthOffset)
 
                 class AbilitiesDataConfigEntry:
                     def __init__(self, master, AbilityEntry, AbilityNameShort, List, Row):
@@ -1504,6 +1513,10 @@ class CharacterSheet:
                         self.AbilityEntryTotal.grid(row=Row, column=6, sticky=NSEW, padx=2, pady=2)
 
                     def Calculate(self):
+                        if self.AbilityBaseVar.get() is "":
+                            self.AbilityTotalVar.set("N/A")
+                            self.AbilityEntryTotal.configure(disabledforeground="red")
+                            return False
                         Base = GlobalInst.GetStringVarAsNumber(self.AbilityBaseVar)
                         Racial = GlobalInst.GetStringVarAsNumber(self.AbilityRacialVar)
                         ASI = GlobalInst.GetStringVarAsNumber(self.AbilityASIVar)
@@ -1514,45 +1527,23 @@ class CharacterSheet:
                         else:
                             Total = Base + Racial + ASI + Misc
                         self.AbilityTotalVar.set(Total)
-
-                    def PointBuyValue(self):
-                        Base = GlobalInst.GetStringVarAsNumber(self.AbilityBaseVar)
-                        Value = Base - 8
-                        if Base >= 14:
-                            Value += 1
-                        if Base >= 15:
-                            Value += 1
-                        return Value
-
-                    def ValidStatsEntries(self):
-                        try:
-                            Base = GlobalInst.GetStringVarAsNumber(self.AbilityBaseVar)
-                            Racial = GlobalInst.GetStringVarAsNumber(self.AbilityRacialVar)
-                            ASI = GlobalInst.GetStringVarAsNumber(self.AbilityASIVar)
-                            Misc = GlobalInst.GetStringVarAsNumber(self.AbilityMiscVar)
-                            Override = GlobalInst.GetStringVarAsNumber(self.AbilityOverrideVar)
-                        except:
-                            messagebox.showerror("Invalid Entry", "Ability score data must be whole numbers.")
+                        if Total < 1:
+                            self.AbilityEntryTotal.configure(disabledforeground="red")
                             return False
-                        if Base <= 0:
-                            messagebox.showerror("Invalid Entry", "Base ability scores must be greater than 0.")
-                            return False
-                        OverrideBlank = (self.AbilityOverrideVar.get() == "")
-                        if Override <= 0 and not OverrideBlank:
-                            messagebox.showerror("Invalid Entry", "Overrides must be greater than 0.")
-                            return False
+                        else:
+                            self.AbilityEntryTotal.configure(disabledforeground="black")
                         return True
-
-                    def ValidPointBuyValue(self):
-                        Base = GlobalInst.GetStringVarAsNumber(self.AbilityBaseVar)
-                        return Base >= 8 and Base <= 15
 
                 class RollForAbilitiesMenu:
                     def __init__(self, master, AbilitiesDataConfigInst):
+                        # Store Parameters
                         self.master = master
+                        self.AbilitiesDataConfigInst = AbilitiesDataConfigInst
+
+                        # Variables
                         self.DataSubmitted = BooleanVar()
                         self.Rolled = False
-                        self.AbilitiesDataConfigInst = AbilitiesDataConfigInst
+                        self.RollForAbilitiesWidthOffset = self.AbilitiesDataConfigInst.RollForAbilitiesWidthOffset
 
                         # Frame
                         self.RollForAbilitiesFrame = Frame(master)
@@ -1574,7 +1565,7 @@ class CharacterSheet:
                         self.RollScoresButton = Button(self.RollForAbilitiesFrame, text="Roll\nScores", command=self.RollScores, bg=GlobalInst.ButtonColor)
                         self.RollScoresButton.grid(row=0, column=2, rowspan=3, padx=2, pady=2, sticky=NSEW)
                         self.AcceptButton = Button(self.RollForAbilitiesFrame, text="Accept", command=self.Accept, bg=GlobalInst.ButtonColor)
-                        self.AcceptButton.grid(row=3, column=0, columnspan=4, padx=2, pady=2, sticky=NSEW)
+                        self.AcceptButton.grid(row=3, column=0, columnspan=3, padx=2, pady=2, sticky=NSEW)
 
                     def Accept(self):
                         if self.ValidEntry():
@@ -1584,12 +1575,12 @@ class CharacterSheet:
                         self.AbilitiesDataConfigInst.RollButtonVar.set(False)
                         for Assignment in self.RollAssignFieldsList:
                             for Entry in self.AbilitiesDataConfigInst.EntriesList:
-                                RollLabelVar = Assignment.RollLabelVar.get()
-                                RollDropdownVar = Assignment.RollDropdownVar.get()
-                                if Entry.AbilityNameShort == RollDropdownVar:
-                                    Entry.AbilityBaseVar.set(RollLabelVar)
+                                RollLabelString = Assignment.RollLabelVar.get()
+                                RollDropdownString = Assignment.RollDropdownVar.get()
+                                if Entry.AbilityNameShort == RollDropdownString:
+                                    Entry.AbilityBaseVar.set(RollLabelString)
                         self.RollForAbilitiesFrame.destroy()
-                        GlobalInst.WindowGeometry(self.master, IsDialog=True, DialogMaster=WindowInst, WidthOffset=-163)
+                        GlobalInst.WindowGeometry(self.master, IsDialog=True, DialogMaster=WindowInst, WidthOffset=-self.RollForAbilitiesWidthOffset)
 
                     def RollScores(self):
                         FinalRolls = []
@@ -1625,10 +1616,13 @@ class CharacterSheet:
 
                     class RollAssignField:
                         def __init__(self, master, List, Row=0, Column=0):
-                            self.RollLabelVar = StringVar(value="-")
-                            self.RollDropdownVar = StringVar()
+                            # Store Parameters
                             self.Row = Row
                             self.Column = Column
+
+                            # Variables
+                            self.RollLabelVar = StringVar(value="-")
+                            self.RollDropdownVar = StringVar()
 
                             # Add to List
                             List.append(self)
@@ -1644,6 +1638,138 @@ class CharacterSheet:
                             # Dropdown
                             self.RollDropdown = ttk.Combobox(self.FieldFrame, textvariable=self.RollDropdownVar, values=("", "STR", "DEX", "CON", "INT", "WIS", "CHA"), width=5, state="readonly", justify=CENTER)
                             self.RollDropdown.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
+
+                class PointBuyMenu:
+                    def __init__(self, master, AbilitiesDataConfigInst):
+                        # Store Parameters
+                        self.master = master
+                        self.AbilitiesDataConfigInst = AbilitiesDataConfigInst
+
+                        # Variables
+                        self.DataSubmitted = BooleanVar()
+                        self.PointBuyEntryVar = StringVar()
+                        self.PointBuyWidthOffset = self.AbilitiesDataConfigInst.PointBuyWidthOffset
+
+                        # Frame
+                        self.PointBuyFrame = Frame(master)
+                        self.PointBuyFrame.grid_rowconfigure(3, weight=1)
+                        self.PointBuyFrame.grid(row=0, column=8, rowspan=8, sticky=NSEW)
+
+                        # Point Buy Fields List
+                        self.PointBuyFieldsList = []
+
+                        # Point Buy Fields
+                        self.PointBuyField1Inst = self.PointBuyField(self.PointBuyFrame, "STR", self.PointBuyFieldsList, Row=0, Column=0)
+                        self.PointBuyField2Inst = self.PointBuyField(self.PointBuyFrame, "DEX", self.PointBuyFieldsList, Row=0, Column=1)
+                        self.PointBuyField3Inst = self.PointBuyField(self.PointBuyFrame, "CON", self.PointBuyFieldsList, Row=1, Column=0)
+                        self.PointBuyField4Inst = self.PointBuyField(self.PointBuyFrame, "INT", self.PointBuyFieldsList, Row=1, Column=1)
+                        self.PointBuyField5Inst = self.PointBuyField(self.PointBuyFrame, "WIS", self.PointBuyFieldsList, Row=2, Column=0)
+                        self.PointBuyField6Inst = self.PointBuyField(self.PointBuyFrame, "CHA", self.PointBuyFieldsList, Row=2, Column=1)
+                        for Field in self.PointBuyFieldsList:
+                            Field.ScoreEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+
+                        # Point Buy Values and Rules
+                        self.PointBuyValuesAndRulesFrame = Frame(self.PointBuyFrame)
+                        self.PointBuyValuesAndRulesFrame.grid_rowconfigure(2, weight=1)
+                        self.PointBuyValuesAndRulesFrame.grid(row=0, column=2, rowspan=3, sticky=NSEW)
+                        self.PointsLabel = Label(self.PointBuyValuesAndRulesFrame, text="Points", bd=2, relief=GROOVE)
+                        self.PointsLabel.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
+                        self.PointBuyEntry = EntryExtended(self.PointBuyValuesAndRulesFrame, state=DISABLED, width=9, disabledbackground="light gray", disabledforeground="black", cursor="arrow", textvariable=self.PointBuyEntryVar,
+                                                           justify=CENTER)
+                        self.PointBuyEntry.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
+                        self.PointBuyRulesFont = font.Font(size=5)
+                        self.PointBuyRulesLabel = Label(self.PointBuyValuesAndRulesFrame, text="Min Score:  8\nMax Score:  15\n\nCosts:\n8:  0\n9:  1\n10:  2\n11:  3\n12:  4\n13:  5\n14:  7\n15:  9", justify=LEFT, bd=2,
+                                                        relief=GROOVE, wraplength=200, font=self.PointBuyRulesFont)
+                        self.PointBuyRulesLabel.grid(row=2, column=0, padx=2, pady=2, sticky=NSEW)
+
+                        # Accept Button
+                        self.AcceptButton = Button(self.PointBuyFrame, text="Accept", command=self.Accept, bg=GlobalInst.ButtonColor)
+                        self.AcceptButton.grid(row=3, column=0, columnspan=3, padx=2, pady=2, sticky=NSEW)
+
+                        # Calculate
+                        self.Calculate()
+
+                        # Focus on Strength Entry
+                        self.PointBuyField1Inst.ScoreEntry.focus_set()
+
+                    def Calculate(self):
+                        for Field in self.PointBuyFieldsList:
+                            if Field.ScoreEntryVar.get() is "":
+                                self.PointBuyEntryVar.set("N/A")
+                                return False
+                        PointsRemaining = 27
+                        ValidScores = True
+                        for Field in self.PointBuyFieldsList:
+                            FieldValue = GlobalInst.GetStringVarAsNumber(Field.ScoreEntryVar)
+                            if FieldValue < 8 or FieldValue > 15:
+                                Field.ScoreEntry.configure(fg="red")
+                                ValidScores = False
+                            else:
+                                Field.ScoreEntry.configure(fg="black")
+                                PointsRemaining -= Field.PointBuyValue()
+                        if ValidScores:
+                            self.PointBuyEntryVar.set(str(PointsRemaining))
+                            if PointsRemaining < 0:
+                                self.PointBuyEntry.configure(disabledforeground="red")
+                                return False
+                            else:
+                                self.PointBuyEntry.configure(disabledforeground="black")
+                        else:
+                            self.PointBuyEntryVar.set("N/A")
+                            self.PointBuyEntry.configure(disabledforeground="black")
+                            return False
+                        return True
+
+                    def Accept(self):
+                        if self.Calculate():
+                            pass
+                        else:
+                            messagebox.showerror("Invalid Entry", "Not a valid point buy array!")
+                            return
+                        self.AbilitiesDataConfigInst.PointBuyButtonVar.set(False)
+                        for Field in self.PointBuyFieldsList:
+                            for Entry in self.AbilitiesDataConfigInst.EntriesList:
+                                FieldShortName = Field.AbilityNameShort
+                                if Entry.AbilityNameShort is FieldShortName:
+                                    Entry.AbilityBaseVar.set(Field.ScoreEntryVar.get())
+                        self.PointBuyFrame.destroy()
+                        GlobalInst.WindowGeometry(self.master, IsDialog=True, DialogMaster=WindowInst, WidthOffset=-self.PointBuyWidthOffset)
+
+                    class PointBuyField:
+                        def __init__(self, master, AbilityNameShort, List, Row=0, Column=0):
+                            # Store Parameters
+                            self.AbilityNameShort = AbilityNameShort
+                            self.Row = Row
+                            self.Column = Column
+
+                            # Variables
+                            self.AbilityLabelVar = StringVar(value=self.AbilityNameShort)
+                            self.ScoreEntryVar = StringVar(value="8")
+
+                            # Add to List
+                            List.append(self)
+
+                            # Frame
+                            self.FieldFrame = Frame(master)
+                            self.FieldFrame.grid(row=self.Row, column=self.Column, sticky=NSEW)
+
+                            # Ability Label
+                            self.AbilityLabel = Label(self.FieldFrame, textvariable=self.AbilityLabelVar, bd=2, relief=GROOVE)
+                            self.AbilityLabel.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
+
+                            # Score Entry
+                            self.ScoreEntry = EntryExtended(self.FieldFrame, textvariable=self.ScoreEntryVar, width=5, justify=CENTER)
+                            self.ScoreEntry.ConfigureValidation(GlobalInst.ValidPointBuyScore, "key")
+                            self.ScoreEntry.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
+
+                        def PointBuyValue(self):
+                            Base = GlobalInst.GetStringVarAsNumber(self.ScoreEntryVar)
+                            Value = Base - 8
+                            if Base >= 14:
+                                Value += 1
+                            if Base >= 15:
+                                Value += 1
+                            return Value
 
         # Skills
         class SkillsTable:
