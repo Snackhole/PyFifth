@@ -6442,7 +6442,7 @@ class DiceRoller:
                     self.PresetRollModifierEntryStatModifierInst = StatModifier(self.PresetRollModifierEntry, "<Button-3>", "Right-click to set a stat modifier.", "Preset Roll", Cursor="xterm", DiceRollerMode=True)
 
                 # Sort Order
-                self.PresetRollSortOrder = ttk.Combobox(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                self.PresetRollSortOrder = DropdownExtended(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesTuple, width=5, justify=CENTER)
                 self.PresetRollSortOrder.bind("<Enter>", self.DisableScrolling)
                 self.PresetRollSortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -8285,6 +8285,50 @@ class StatModifierMinMaxEntry(EntryExtended):
 class DropdownExtended(ttk.Combobox):
     def __init__(self, *args, **kwargs):
         ttk.Combobox.__init__(self, *args, **kwargs)
+        # self["state"] = "readonly"
+
+        # Autocompletion
+        self.Position = 0
+        self.bind("<KeyRelease>", self.HandleKeyRelease)
+
+        # Validation
+        self.ValidationCommand = self.register(lambda NewText: NewText in self["values"])
+        self.configure(validate="key", validatecommand=(self.ValidationCommand, "%P"))
+
+        # Intercept Bindings
+        GlobalInst.InterceptEvents(self)
+
+    # def ValidationFunction(self, NewText):
+    #     return NewText in self["values"]
+        # for Element in sorted(self["values"], key=str.lower):
+        #     if Element.startswith(NewText.lower()):
+        #         return True
+        # return False
+
+    def HandleKeyRelease(self, Event):
+        if Event.keysym == "BackSpace":
+            self.delete(self.index(INSERT), END)
+            self.Position = self.index(END)
+        if Event.keysym == "Left":
+            if self.Position < self.index(END):
+                self.delete(self.Position, END)
+            else:
+                self.Position -= 1
+                self.delete(self.Position, END)
+        if Event.keysym == "Right":
+            self.Position = self.index(END)
+        if len(Event.keysym) == 1:
+            self.Autocomplete()
+
+    def Autocomplete(self):
+        Contents = self.get().lower()
+        self.Position = len(Contents)
+        for Element in sorted(self["values"], key=str.lower):
+            if Element.lower().startswith(Contents):
+                self.delete(0, END)
+                self.insert(0, Element)
+                self.select_range(self.Position, END)
+                break
 
 
 # Prompts
