@@ -35,6 +35,28 @@ class Global:
         elif Mode == "Float":
             return float(VarText)
 
+    def ValidateNumberFromString(self, NewText, NotANumberString, Mode="Int", MinValue=None, LessThanMinString="", MaxValue=None, MoreThanMaxString=""):
+        if NewText == "" or NewText == "+" or NewText == "-": return True
+        try:
+            if Mode == "Int":
+                NewTextNumber = int(NewText)
+            elif Mode == "Float":
+                NewTextNumber = float(NewText)
+            else:
+                return False
+        except:
+            messagebox.showerror("Invalid Entry", NotANumberString)
+            return False
+        if MinValue is not None:
+            if NewTextNumber < MinValue:
+                messagebox.showerror("Invalid Entry", LessThanMinString)
+                return False
+        if MaxValue is not None:
+            if NewTextNumber > MaxValue:
+                messagebox.showerror("Invalid Entry", MoreThanMaxString)
+                return False
+        return True
+
     def WindowGeometry(self, Window, IsDialog=False, DialogMaster=None, WidthOffset=0, HeightOffset=0):
         Window.update_idletasks()
         BaseWidth = Window.winfo_width()
@@ -163,108 +185,6 @@ class Global:
     def PreviousFocus(self, Widget):
         Widget.tk_focusPrev().focus_set()
         return "break"
-
-    # Validation Functions
-    def ValidateNumberFromString(self, NewText, NotANumberString, Mode="Int", MinValue=None, LessThanMinString="", MaxValue=None, MoreThanMaxString=""):
-        if NewText == "" or NewText == "+" or NewText == "-": return True
-        try:
-            if Mode == "Int":
-                NewTextNumber = int(NewText)
-            elif Mode == "Float":
-                NewTextNumber = float(NewText)
-            else:
-                return False
-        except:
-            messagebox.showerror("Invalid Entry", NotANumberString)
-            return False
-        if MinValue is not None:
-            if NewTextNumber < MinValue:
-                messagebox.showerror("Invalid Entry", LessThanMinString)
-                return False
-        if MaxValue is not None:
-            if NewTextNumber > MaxValue:
-                messagebox.showerror("Invalid Entry", MoreThanMaxString)
-                return False
-        return True
-
-    def ValidSpellSlotValue(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Spell slots must be whole numbers.", MinValue=0, LessThanMinString="Spell slots cannot be less than 0.")
-
-    def ValidSpellPointGainOrLossManualAmount(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Manual amount must be a whole number.", MinValue=0, LessThanMinString="Manual amount cannot be less than 0.")
-
-    def ValidCoinsEntry(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Coins must be whole numbers.", MinValue=0, LessThanMinString="Coins cannot be less than 0.")
-
-    def InventoryValidCountEntry(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Inventory item counts must be whole numbers.", MinValue=0, LessThanMinString="Inventory item counts cannot be less than 0.")
-
-    def InventoryValidWeightEntry(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Inventory item unit weights must be numbers.", Mode="Float", MinValue=0, LessThanMinString="Inventory item unit weights cannot be less than 0.")
-
-    def InventoryValidValueEntry(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Inventory item unit values must be numbers.", Mode="Float", MinValue=0, LessThanMinString="Inventory item unit values cannot be less than 0.")
-
-    def ValidConsumptionRate(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Consumption rate must be a number.", Mode="Float", MinValue=0, LessThanMinString="Consumption rate cannot be less than 0.")
-
-    def ValidProficiencyEntry(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Proficiency must be a whole number.")
-
-    def ValidAbilityEntry(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Ability modifiers must be whole numbers.")
-
-    def ValidDiceNumber(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Dice number must be a whole number.", MinValue=1, LessThanMinString="Dice number cannot be less than 1.")
-
-    def ValidDieType(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Die type must be a whole number.", MinValue=1, LessThanMinString="Die type cannot be less than 1.")
-
-    def ValidModifier(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Modifier must be a whole number.")
-
-    def ValidCritMinimum(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Crit minimum must be a whole number.", MinValue=1, LessThanMinString="Crit minimum cannot be less than 1.", MaxValue=20,
-                                             MoreThanMaxString="Crit minimum cannot be more than 20.")
-
-    def ValidRound(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Round must be a whole number.", MinValue=1, LessThanMinString="Round must be greater than 0.")
-
-    def ValidInitiative(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Initiative roll must be a whole number.")
-
-    def ValidMaxHPData(self, NewText):
-        return self.ValidateNumberFromString(NewText, "All max HP data must be in the form of whole numbers.", MinValue=0, LessThanMinString="Max HP data cannot be less than 0.")
-
-    def ValidStatModifierACBase(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Base AC must be a whole number.")
-
-    def ValidStatModifierMultiplier(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Multipliers must be numbers", Mode="Float")
-
-    def ValidStatModifierMinMax(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Minimums and maximums must be whole numbers.")
-
-    def ValidStatModifierManualMod(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Manual modifier must be a whole number.")
-
-    def ValidPointBuyScore(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Point buy score must be a whole number.", MinValue=1, LessThanMinString="Point buy score cannot be less than 1.")
-
-    def ValidAbilityEntryBase(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Base score must be a whole number.", MinValue=1, LessThanMinString="Base score cannot be less than 1.")
-
-    def ValidAbilityEntryRacial(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Racial bonus must be a whole number.")
-
-    def ValidAbilityEntryASI(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Ability score increase must be a whole number.")
-
-    def ValidAbilityEntryMisc(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Miscellaneous bonus must be a whole number.")
-
-    def ValidAbilityEntryOverride(self, NewText):
-        return self.ValidateNumberFromString(NewText, "Override must be a whole number.", MinValue=1, LessThanMinString="Override cannot be less than 1.  Leave blank to remove override.")
 
 
 # Saving
@@ -1365,11 +1285,13 @@ class CharacterSheet:
 
                     # Entry Validation and Calculation
                     for Entry in self.EntriesList:
-                        Entry.AbilityEntryBase.ConfigureValidation(GlobalInst.ValidAbilityEntryBase, "key")
-                        Entry.AbilityEntryRacial.ConfigureValidation(GlobalInst.ValidAbilityEntryRacial, "key")
-                        Entry.AbilityEntryASI.ConfigureValidation(GlobalInst.ValidAbilityEntryASI, "key")
-                        Entry.AbilityEntryMisc.ConfigureValidation(GlobalInst.ValidAbilityEntryMisc, "key")
-                        Entry.AbilityEntryOverride.ConfigureValidation(GlobalInst.ValidAbilityEntryOverride, "key")
+                        Entry.AbilityEntryBase.ConfigureValidation(
+                            lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Base score must be a whole number.", MinValue=1, LessThanMinString="Base score cannot be less than 1."), "key")
+                        Entry.AbilityEntryRacial.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Racial bonus must be a whole number."), "key")
+                        Entry.AbilityEntryASI.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Ability score increase must be a whole number."), "key")
+                        Entry.AbilityEntryMisc.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Miscellaneous bonus must be a whole number."), "key")
+                        Entry.AbilityEntryOverride.ConfigureValidation(
+                            lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Override must be a whole number.", MinValue=1, LessThanMinString="Override cannot be less than 1.  Leave blank to remove override."), "key")
                         Entry.AbilityBaseVar.trace_add("write", lambda a, b, c: self.Calculate())
                         Entry.AbilityRacialVar.trace_add("write", lambda a, b, c: self.Calculate())
                         Entry.AbilityASIVar.trace_add("write", lambda a, b, c: self.Calculate())
@@ -1761,7 +1683,8 @@ class CharacterSheet:
 
                             # Score Entry
                             self.ScoreEntry = EntryExtended(self.FieldFrame, textvariable=self.ScoreEntryVar, width=5, justify=CENTER)
-                            self.ScoreEntry.ConfigureValidation(GlobalInst.ValidPointBuyScore, "key")
+                            self.ScoreEntry.ConfigureValidation(
+                                lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Point buy score must be a whole number.", MinValue=1, LessThanMinString="Point buy score cannot be less than 1."), "key")
                             self.ScoreEntry.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
 
                         def PointBuyValue(self):
@@ -2183,119 +2106,97 @@ class CharacterSheet:
                 self.HPAtEachLevelFrame.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
                 self.HPAtEachLevelFirstLabel = Label(self.HPAtEachLevelFrame, text="1st", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelFirstLabel.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelFirstEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["1"])
-                self.HPAtEachLevelFirstEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelFirstEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["1"])
                 self.HPAtEachLevelFirstEntry.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSecondLabel = Label(self.HPAtEachLevelFrame, text="2nd", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelSecondLabel.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelSecondEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["2"])
-                self.HPAtEachLevelSecondEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelSecondEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["2"])
                 self.HPAtEachLevelSecondEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelThirdLabel = Label(self.HPAtEachLevelFrame, text="3rd", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelThirdLabel.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelThirdEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["3"])
-                self.HPAtEachLevelThirdEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelThirdEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["3"])
                 self.HPAtEachLevelThirdEntry.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFourthLabel = Label(self.HPAtEachLevelFrame, text="4th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelFourthLabel.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelFourthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["4"])
-                self.HPAtEachLevelFourthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelFourthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["4"])
                 self.HPAtEachLevelFourthEntry.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFifthLabel = Label(self.HPAtEachLevelFrame, text="5th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelFifthLabel.grid(row=4, column=0, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelFifthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["5"])
-                self.HPAtEachLevelFifthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelFifthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["5"])
                 self.HPAtEachLevelFifthEntry.grid(row=4, column=1, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSixthLabel = Label(self.HPAtEachLevelFrame, text="6th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelSixthLabel.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelSixthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["6"])
-                self.HPAtEachLevelSixthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelSixthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["6"])
                 self.HPAtEachLevelSixthEntry.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSeventhLabel = Label(self.HPAtEachLevelFrame, text="7th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelSeventhLabel.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelSeventhEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["7"])
-                self.HPAtEachLevelSeventhEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelSeventhEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["7"])
                 self.HPAtEachLevelSeventhEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelEighthLabel = Label(self.HPAtEachLevelFrame, text="8th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelEighthLabel.grid(row=2, column=2, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelEighthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["8"])
-                self.HPAtEachLevelEighthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelEighthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["8"])
                 self.HPAtEachLevelEighthEntry.grid(row=2, column=3, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelNinthLabel = Label(self.HPAtEachLevelFrame, text="9th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelNinthLabel.grid(row=3, column=2, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelNinthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["9"])
-                self.HPAtEachLevelNinthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelNinthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["9"])
                 self.HPAtEachLevelNinthEntry.grid(row=3, column=3, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelTenthLabel = Label(self.HPAtEachLevelFrame, text="10th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelTenthLabel.grid(row=4, column=2, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelTenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["10"])
-                self.HPAtEachLevelTenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelTenthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["10"])
                 self.HPAtEachLevelTenthEntry.grid(row=4, column=3, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelEleventhLabel = Label(self.HPAtEachLevelFrame, text="11th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelEleventhLabel.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelEleventhEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["11"])
-                self.HPAtEachLevelEleventhEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelEleventhEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["11"])
                 self.HPAtEachLevelEleventhEntry.grid(row=0, column=5, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelTwelfthLabel = Label(self.HPAtEachLevelFrame, text="12th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelTwelfthLabel.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelTwelfthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["12"])
-                self.HPAtEachLevelTwelfthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelTwelfthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["12"])
                 self.HPAtEachLevelTwelfthEntry.grid(row=1, column=5, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelThirteenthLabel = Label(self.HPAtEachLevelFrame, text="13th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelThirteenthLabel.grid(row=2, column=4, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelThirteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["13"])
-                self.HPAtEachLevelThirteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelThirteenthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["13"])
                 self.HPAtEachLevelThirteenthEntry.grid(row=2, column=5, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFourteenthLabel = Label(self.HPAtEachLevelFrame, text="14th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelFourteenthLabel.grid(row=3, column=4, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelFourteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["14"])
-                self.HPAtEachLevelFourteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelFourteenthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["14"])
                 self.HPAtEachLevelFourteenthEntry.grid(row=3, column=5, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelFifteenthLabel = Label(self.HPAtEachLevelFrame, text="15th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelFifteenthLabel.grid(row=4, column=4, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelFifteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["15"])
-                self.HPAtEachLevelFifteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelFifteenthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["15"])
                 self.HPAtEachLevelFifteenthEntry.grid(row=4, column=5, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSixteenthLabel = Label(self.HPAtEachLevelFrame, text="16th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelSixteenthLabel.grid(row=0, column=6, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelSixteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["16"])
-                self.HPAtEachLevelSixteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelSixteenthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["16"])
                 self.HPAtEachLevelSixteenthEntry.grid(row=0, column=7, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelSeventeenthLabel = Label(self.HPAtEachLevelFrame, text="17th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelSeventeenthLabel.grid(row=1, column=6, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelSeventeenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["17"])
-                self.HPAtEachLevelSeventeenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelSeventeenthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["17"])
                 self.HPAtEachLevelSeventeenthEntry.grid(row=1, column=7, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelEighteenthLabel = Label(self.HPAtEachLevelFrame, text="18th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelEighteenthLabel.grid(row=2, column=6, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelEighteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["18"])
-                self.HPAtEachLevelEighteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelEighteenthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["18"])
                 self.HPAtEachLevelEighteenthEntry.grid(row=2, column=7, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelNineteenthLabel = Label(self.HPAtEachLevelFrame, text="19th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelNineteenthLabel.grid(row=3, column=6, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelNineteenthEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["19"])
-                self.HPAtEachLevelNineteenthEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelNineteenthEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["19"])
                 self.HPAtEachLevelNineteenthEntry.grid(row=3, column=7, sticky=NSEW, padx=2, pady=2)
                 self.HPAtEachLevelTwentiethLabel = Label(self.HPAtEachLevelFrame, text="20th", bd=2, relief=GROOVE, width=self.TableWidgetsWidth)
                 self.HPAtEachLevelTwentiethLabel.grid(row=4, column=6, sticky=NSEW, padx=2, pady=2)
-                self.HPAtEachLevelTwentiethEntry = EntryExtended(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["20"])
-                self.HPAtEachLevelTwentiethEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPAtEachLevelTwentiethEntry = MaxHPDataEntry(self.HPAtEachLevelFrame, justify=CENTER, width=self.TableWidgetsWidth, textvariable=self.MaxHPData["20"])
                 self.HPAtEachLevelTwentiethEntry.grid(row=4, column=7, sticky=NSEW, padx=2, pady=2)
 
                 # Additional HP Per Level
                 self.AdditionalHPPerLevelFrame = LabelFrame(self.Window, text="Additional Max HP Per Level:")
                 self.AdditionalHPPerLevelFrame.grid_columnconfigure(0, weight=1)
                 self.AdditionalHPPerLevelFrame.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
-                self.AdditionalHPPerLevelEntry = EntryExtended(self.AdditionalHPPerLevelFrame, textvariable=self.MaxHPData["HPPerLevel"], width=5, justify=CENTER)
-                self.AdditionalHPPerLevelEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.AdditionalHPPerLevelEntry = MaxHPDataEntry(self.AdditionalHPPerLevelFrame, textvariable=self.MaxHPData["HPPerLevel"], width=5, justify=CENTER)
                 self.AdditionalHPPerLevelEntry.grid(row=0, column=0, sticky=NSEW)
 
                 # HP Override
                 self.HPOverrideFrame = LabelFrame(self.Window, text="Max HP Override:")
                 self.HPOverrideFrame.grid_columnconfigure(0, weight=1)
                 self.HPOverrideFrame.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
-                self.HPOverrideEntry = EntryExtended(self.HPOverrideFrame, textvariable=self.MaxHPData["HPOverride"], width=5, justify=CENTER)
-                self.HPOverrideEntry.ConfigureValidation(GlobalInst.ValidMaxHPData, "key")
+                self.HPOverrideEntry = MaxHPDataEntry(self.HPOverrideFrame, textvariable=self.MaxHPData["HPOverride"], width=5, justify=CENTER)
                 self.HPOverrideEntry.grid(row=0, column=0, sticky=NSEW)
 
                 # Submit Button
@@ -3165,7 +3066,7 @@ class CharacterSheet:
 
                 # Slots
                 self.SlotsEntry = EntryExtended(master, width=1, justify=CENTER, textvariable=self.SlotsEntryVar)
-                self.SlotsEntry.ConfigureValidation(GlobalInst.ValidSpellSlotValue, "key")
+                self.SlotsEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Spell slots must be whole numbers.", MinValue=0, LessThanMinString="Spell slots cannot be less than 0."), "key")
                 self.SlotsEntry.grid(row=self.Row, column=1, padx=2, pady=2, sticky=NSEW)
 
                 # Used
@@ -3194,7 +3095,8 @@ class CharacterSheet:
                 self.SpellSlotDropdown = ttk.Combobox(self.Window, textvariable=self.SpellSlotDropdownVar, values=("", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"), width=4, state="readonly", justify=CENTER)
                 self.SpellSlotDropdown.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
                 self.ManualAmountEntry = EntryExtended(self.Window, justify=CENTER, width=5, textvariable=self.ManualAmountEntryVar)
-                self.ManualAmountEntry.ConfigureValidation(GlobalInst.ValidSpellPointGainOrLossManualAmount, "key")
+                self.ManualAmountEntry.ConfigureValidation(
+                    lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Manual amount must be a whole number.", MinValue=0, LessThanMinString="Manual amount cannot be less than 0."), "key")
                 self.ManualAmountEntry.grid(row=1, column=1, padx=2, pady=2, sticky=NSEW)
 
                 # Buttons
@@ -3365,28 +3267,23 @@ class CharacterSheet:
             self.CoinsInputHolderFrame.grid(row=1, column=1)
             self.CoinsHeaderCP = Label(self.CoinsInputHolderFrame, text="CP", bd=2, relief=GROOVE)
             self.CoinsHeaderCP.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-            self.CoinsEntryCP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryCPVar)
-            self.CoinsEntryCP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+            self.CoinsEntryCP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryCPVar)
             self.CoinsEntryCP.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
             self.CoinsHeaderSP = Label(self.CoinsInputHolderFrame, text="SP", bd=2, relief=GROOVE)
             self.CoinsHeaderSP.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
-            self.CoinsEntrySP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntrySPVar)
-            self.CoinsEntrySP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+            self.CoinsEntrySP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntrySPVar)
             self.CoinsEntrySP.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
             self.CoinsHeaderEP = Label(self.CoinsInputHolderFrame, text="EP", bd=2, relief=GROOVE)
             self.CoinsHeaderEP.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
-            self.CoinsEntryEP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryEPVar)
-            self.CoinsEntryEP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+            self.CoinsEntryEP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryEPVar)
             self.CoinsEntryEP.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
             self.CoinsHeaderGP = Label(self.CoinsInputHolderFrame, text="GP", bd=2, relief=GROOVE)
             self.CoinsHeaderGP.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
-            self.CoinsEntryGP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryGPVar)
-            self.CoinsEntryGP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+            self.CoinsEntryGP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryGPVar)
             self.CoinsEntryGP.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
             self.CoinsHeaderPP = Label(self.CoinsInputHolderFrame, text="PP", bd=2, relief=GROOVE)
             self.CoinsHeaderPP.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-            self.CoinsEntryPP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryPPVar)
-            self.CoinsEntryPP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+            self.CoinsEntryPP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryPPVar)
             self.CoinsEntryPP.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
 
             # Coin Value and Weight
@@ -3784,16 +3681,13 @@ class CharacterSheet:
                 self.NameTooltip = Tooltip(self.NameEntry, "Right-click on the name field to set an item description.")
 
                 # Count Entry
-                self.CountEntry = EntryExtended(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
-                self.CountEntry.ConfigureValidation(GlobalInst.InventoryValidCountEntry, "key")
+                self.CountEntry = InventoryCountEntry(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
 
                 # Unit Weight Entry
-                self.UnitWeightEntry = EntryExtended(master, width=4, textvariable=self.UnitWeightEntryVar, justify=CENTER)
-                self.UnitWeightEntry.ConfigureValidation(GlobalInst.InventoryValidWeightEntry, "key")
+                self.UnitWeightEntry = InventoryWeightEntry(master, width=4, textvariable=self.UnitWeightEntryVar, justify=CENTER)
 
                 # Unit Value Entry
-                self.UnitValueEntry = EntryExtended(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
-                self.UnitValueEntry.ConfigureValidation(GlobalInst.InventoryValidValueEntry, "key")
+                self.UnitValueEntry = InventoryValueEntry(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
 
                 # Unit Value Denomination
                 self.UnitValueDenomination = ttk.Combobox(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
@@ -4001,7 +3895,8 @@ class CharacterSheet:
                     self.ConsumptionRateHeader = Label(self.TableFrame, text="How many pounds of supplies tagged\n\"" + self.Tag + "\" do you consume daily?", bd=2, relief=GROOVE, justify=LEFT)
                     self.ConsumptionRateHeader.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
                     self.ConsumptionRateEntry = EntryExtended(self.TableFrame, width=20, textvariable=self.ConsumptionRateEntryVar, justify=CENTER)
-                    self.ConsumptionRateEntry.ConfigureValidation(GlobalInst.ValidConsumptionRate, "key")
+                    self.ConsumptionRateEntry.ConfigureValidation(
+                        lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Consumption rate must be a number.", Mode="Float", MinValue=0, LessThanMinString="Consumption rate cannot be less than 0."), "key")
                     self.ConsumptionRateEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
                     self.ConsumptionRateEntry.bind("<Return>", lambda event: self.Submit())
 
@@ -4550,20 +4445,15 @@ class CoinCalculator:
         self.WeightLabel.grid(row=6, column=0, sticky=NSEW)
 
         # Input Entries
-        self.CPEntry = EntryExtended(self.TableFrame, textvariable=self.CPEntryVar, justify=CENTER, width=20)
-        self.CPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.CPEntry = CoinsEntry(self.TableFrame, textvariable=self.CPEntryVar, justify=CENTER, width=20)
         self.CPEntry.grid(row=1, column=1, sticky=NSEW)
-        self.SPEntry = EntryExtended(self.TableFrame, textvariable=self.SPEntryVar, justify=CENTER, width=20)
-        self.SPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.SPEntry = CoinsEntry(self.TableFrame, textvariable=self.SPEntryVar, justify=CENTER, width=20)
         self.SPEntry.grid(row=2, column=1, sticky=NSEW)
-        self.EPEntry = EntryExtended(self.TableFrame, textvariable=self.EPEntryVar, justify=CENTER, width=20)
-        self.EPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.EPEntry = CoinsEntry(self.TableFrame, textvariable=self.EPEntryVar, justify=CENTER, width=20)
         self.EPEntry.grid(row=3, column=1, sticky=NSEW)
-        self.GPEntry = EntryExtended(self.TableFrame, textvariable=self.GPEntryVar, justify=CENTER, width=20)
-        self.GPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.GPEntry = CoinsEntry(self.TableFrame, textvariable=self.GPEntryVar, justify=CENTER, width=20)
         self.GPEntry.grid(row=4, column=1, sticky=NSEW)
-        self.PPEntry = EntryExtended(self.TableFrame, textvariable=self.PPEntryVar, justify=CENTER, width=20)
-        self.PPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.PPEntry = CoinsEntry(self.TableFrame, textvariable=self.PPEntryVar, justify=CENTER, width=20)
         self.PPEntry.grid(row=5, column=1, sticky=NSEW)
 
         # Output Entries
@@ -4687,28 +4577,23 @@ class SpendCoinsMenu:
         self.SpendGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.SpendPPHeader = Label(self.SpendFrame, text="PP", bd=2, relief=GROOVE)
         self.SpendPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-        self.SpendCPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendCPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.SpendCPEntry = CoinsEntry(self.SpendFrame, textvariable=self.SpendCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.SpendCPTooltip = Tooltip(self.SpendCPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendCPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-        self.SpendSPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendSPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.SpendSPEntry = CoinsEntry(self.SpendFrame, textvariable=self.SpendSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.SpendSPTooltip = Tooltip(self.SpendSPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendSPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-        self.SpendEPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendEPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.SpendEPEntry = CoinsEntry(self.SpendFrame, textvariable=self.SpendEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.SpendEPTooltip = Tooltip(self.SpendEPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendEPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-        self.SpendGPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendGPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.SpendGPEntry = CoinsEntry(self.SpendFrame, textvariable=self.SpendGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.SpendGPTooltip = Tooltip(self.SpendGPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendGPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
-        self.SpendPPEntry = EntryExtended(self.SpendFrame, textvariable=self.SpendPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendPPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.SpendPPEntry = CoinsEntry(self.SpendFrame, textvariable=self.SpendPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.SpendPPTooltip = Tooltip(self.SpendPPEntry, "Scroll the mouse wheel or type to change.")
         self.SpendPPEntry.bind("<Return>", lambda event: self.Submit())
         self.SpendPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
@@ -4751,28 +4636,23 @@ class SpendCoinsMenu:
         self.RemainingGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.RemainingPPHeader = Label(self.RemainingFrame, text="PP", bd=2, relief=GROOVE)
         self.RemainingPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-        self.RemainingCPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingCPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.RemainingCPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingCPTooltip = Tooltip(self.RemainingCPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingCPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-        self.RemainingSPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingSPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.RemainingSPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingSPTooltip = Tooltip(self.RemainingSPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingSPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-        self.RemainingEPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingEPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.RemainingEPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingEPTooltip = Tooltip(self.RemainingEPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingEPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-        self.RemainingGPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingGPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.RemainingGPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingGPTooltip = Tooltip(self.RemainingGPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingGPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
-        self.RemainingPPEntry = EntryExtended(self.RemainingFrame, textvariable=self.RemainingPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingPPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.RemainingPPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingPPTooltip = Tooltip(self.RemainingPPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingPPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
@@ -4993,28 +4873,23 @@ class GainCoinsMenu:
         self.GainGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.GainPPHeader = Label(self.GainFrame, text="PP", bd=2, relief=GROOVE)
         self.GainPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-        self.GainCPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainCPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.GainCPEntry = CoinsEntry(self.GainFrame, textvariable=self.GainedCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.GainCPTooltip = Tooltip(self.GainCPEntry, "Scroll the mouse wheel or type to change.")
         self.GainCPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-        self.GainSPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainSPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.GainSPEntry = CoinsEntry(self.GainFrame, textvariable=self.GainedSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.GainSPTooltip = Tooltip(self.GainSPEntry, "Scroll the mouse wheel or type to change.")
         self.GainSPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-        self.GainEPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainEPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.GainEPEntry = CoinsEntry(self.GainFrame, textvariable=self.GainedEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.GainEPTooltip = Tooltip(self.GainEPEntry, "Scroll the mouse wheel or type to change.")
         self.GainEPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-        self.GainGPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainGPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.GainGPEntry = CoinsEntry(self.GainFrame, textvariable=self.GainedGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.GainGPTooltip = Tooltip(self.GainGPEntry, "Scroll the mouse wheel or type to change.")
         self.GainGPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
-        self.GainPPEntry = EntryExtended(self.GainFrame, textvariable=self.GainedPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainPPEntry.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.GainPPEntry = CoinsEntry(self.GainFrame, textvariable=self.GainedPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.GainPPTooltip = Tooltip(self.GainPPEntry, "Scroll the mouse wheel or type to change.")
         self.GainPPEntry.bind("<Return>", lambda event: self.Submit())
         self.GainPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
@@ -5373,7 +5248,7 @@ class StatModifier:
                 self.ACBaseFrame.grid_columnconfigure(0, weight=1)
                 self.ACBaseFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2, columnspan=5)
                 self.ACBaseEntry = EntryExtended(self.ACBaseFrame, justify=CENTER, width=5, textvariable=self.Variables["ACBaseEntryVar"])
-                self.ACBaseEntry.ConfigureValidation(GlobalInst.ValidStatModifierACBase, "key")
+                self.ACBaseEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Base AC must be a whole number."), "key")
                 self.ACBaseEntry.grid(row=0, column=0, sticky=NSEW)
 
             # Headers
@@ -5406,30 +5281,22 @@ class StatModifier:
                 self.LevelLabel.grid(row=9, column=0, sticky=NSEW, padx=2, pady=2)
 
             # Multiplier Entries
-            self.StrengthMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["StrengthMultiplierEntryVar"])
-            self.StrengthMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
+            self.StrengthMultiplierEntry = StatModifierMultiplierEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["StrengthMultiplierEntryVar"])
             self.StrengthMultiplierEntry.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
-            self.DexterityMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["DexterityMultiplierEntryVar"])
-            self.DexterityMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
+            self.DexterityMultiplierEntry = StatModifierMultiplierEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["DexterityMultiplierEntryVar"])
             self.DexterityMultiplierEntry.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
-            self.ConstitutionMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ConstitutionMultiplierEntryVar"])
-            self.ConstitutionMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
+            self.ConstitutionMultiplierEntry = StatModifierMultiplierEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ConstitutionMultiplierEntryVar"])
             self.ConstitutionMultiplierEntry.grid(row=4, column=1, sticky=NSEW, padx=2, pady=2)
-            self.IntelligenceMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["IntelligenceMultiplierEntryVar"])
-            self.IntelligenceMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
+            self.IntelligenceMultiplierEntry = StatModifierMultiplierEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["IntelligenceMultiplierEntryVar"])
             self.IntelligenceMultiplierEntry.grid(row=5, column=1, sticky=NSEW, padx=2, pady=2)
-            self.WisdomMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["WisdomMultiplierEntryVar"])
-            self.WisdomMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
+            self.WisdomMultiplierEntry = StatModifierMultiplierEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["WisdomMultiplierEntryVar"])
             self.WisdomMultiplierEntry.grid(row=6, column=1, sticky=NSEW, padx=2, pady=2)
-            self.CharismaMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["CharismaMultiplierEntryVar"])
-            self.CharismaMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
+            self.CharismaMultiplierEntry = StatModifierMultiplierEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["CharismaMultiplierEntryVar"])
             self.CharismaMultiplierEntry.grid(row=7, column=1, sticky=NSEW, padx=2, pady=2)
-            self.ProficiencyMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMultiplierEntryVar"])
-            self.ProficiencyMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
+            self.ProficiencyMultiplierEntry = StatModifierMultiplierEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMultiplierEntryVar"])
             self.ProficiencyMultiplierEntry.grid(row=8, column=1, sticky=NSEW, padx=2, pady=2)
             if WindowInst.Mode == "CharacterSheet":
-                self.LevelMultiplierEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMultiplierEntryVar"])
-                self.LevelMultiplierEntry.ConfigureValidation(GlobalInst.ValidStatModifierMultiplier, "key")
+                self.LevelMultiplierEntry = StatModifierMultiplierEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMultiplierEntryVar"])
                 self.LevelMultiplierEntry.grid(row=9, column=1, sticky=NSEW, padx=2, pady=2)
 
             # Round Up Boxes
@@ -5452,57 +5319,41 @@ class StatModifier:
                 self.LevelMultiplierRoundUpBox.grid(row=9, column=2, sticky=NSEW, padx=2, pady=2)
 
             # Min Entries
-            self.StrengthMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["StrengthMinEntryVar"])
-            self.StrengthMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.StrengthMinEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["StrengthMinEntryVar"])
             self.StrengthMinEntry.grid(row=2, column=3, sticky=NSEW, padx=2, pady=2)
-            self.DexterityMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["DexterityMinEntryVar"])
-            self.DexterityMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.DexterityMinEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["DexterityMinEntryVar"])
             self.DexterityMinEntry.grid(row=3, column=3, sticky=NSEW, padx=2, pady=2)
-            self.ConstitutionMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ConstitutionMinEntryVar"])
-            self.ConstitutionMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.ConstitutionMinEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ConstitutionMinEntryVar"])
             self.ConstitutionMinEntry.grid(row=4, column=3, sticky=NSEW, padx=2, pady=2)
-            self.IntelligenceMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["IntelligenceMinEntryVar"])
-            self.IntelligenceMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.IntelligenceMinEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["IntelligenceMinEntryVar"])
             self.IntelligenceMinEntry.grid(row=5, column=3, sticky=NSEW, padx=2, pady=2)
-            self.WisdomMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["WisdomMinEntryVar"])
-            self.WisdomMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.WisdomMinEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["WisdomMinEntryVar"])
             self.WisdomMinEntry.grid(row=6, column=3, sticky=NSEW, padx=2, pady=2)
-            self.CharismaMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["CharismaMinEntryVar"])
-            self.CharismaMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.CharismaMinEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["CharismaMinEntryVar"])
             self.CharismaMinEntry.grid(row=7, column=3, sticky=NSEW, padx=2, pady=2)
-            self.ProficiencyMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMinEntryVar"])
-            self.ProficiencyMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.ProficiencyMinEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMinEntryVar"])
             self.ProficiencyMinEntry.grid(row=8, column=3, sticky=NSEW, padx=2, pady=2)
             if WindowInst.Mode == "CharacterSheet":
-                self.LevelMinEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMinEntryVar"])
-                self.LevelMinEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+                self.LevelMinEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMinEntryVar"])
                 self.LevelMinEntry.grid(row=9, column=3, sticky=NSEW, padx=2, pady=2)
 
             # Max Entries
-            self.StrengthMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["StrengthMaxEntryVar"])
-            self.StrengthMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.StrengthMaxEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["StrengthMaxEntryVar"])
             self.StrengthMaxEntry.grid(row=2, column=4, sticky=NSEW, padx=2, pady=2)
-            self.DexterityMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["DexterityMaxEntryVar"])
-            self.DexterityMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.DexterityMaxEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["DexterityMaxEntryVar"])
             self.DexterityMaxEntry.grid(row=3, column=4, sticky=NSEW, padx=2, pady=2)
-            self.ConstitutionMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ConstitutionMaxEntryVar"])
-            self.ConstitutionMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.ConstitutionMaxEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ConstitutionMaxEntryVar"])
             self.ConstitutionMaxEntry.grid(row=4, column=4, sticky=NSEW, padx=2, pady=2)
-            self.IntelligenceMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["IntelligenceMaxEntryVar"])
-            self.IntelligenceMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.IntelligenceMaxEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["IntelligenceMaxEntryVar"])
             self.IntelligenceMaxEntry.grid(row=5, column=4, sticky=NSEW, padx=2, pady=2)
-            self.WisdomMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["WisdomMaxEntryVar"])
-            self.WisdomMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.WisdomMaxEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["WisdomMaxEntryVar"])
             self.WisdomMaxEntry.grid(row=6, column=4, sticky=NSEW, padx=2, pady=2)
-            self.CharismaMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["CharismaMaxEntryVar"])
-            self.CharismaMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.CharismaMaxEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["CharismaMaxEntryVar"])
             self.CharismaMaxEntry.grid(row=7, column=4, sticky=NSEW, padx=2, pady=2)
-            self.ProficiencyMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMaxEntryVar"])
-            self.ProficiencyMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+            self.ProficiencyMaxEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["ProficiencyMaxEntryVar"])
             self.ProficiencyMaxEntry.grid(row=8, column=4, sticky=NSEW, padx=2, pady=2)
             if WindowInst.Mode == "CharacterSheet":
-                self.LevelMaxEntry = EntryExtended(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMaxEntryVar"])
-                self.LevelMaxEntry.ConfigureValidation(GlobalInst.ValidStatModifierMinMax, "key")
+                self.LevelMaxEntry = StatModifierMinMaxEntry(self.TableFrame, justify=CENTER, width=5, textvariable=self.Variables["LevelMaxEntryVar"])
                 self.LevelMaxEntry.grid(row=9, column=4, sticky=NSEW, padx=2, pady=2)
 
             # Manual Modifier
@@ -5510,7 +5361,7 @@ class StatModifier:
             self.ManualModifierFrame.grid_columnconfigure(0, weight=1)
             self.ManualModifierFrame.grid(row=10, column=0, columnspan=5, sticky=NSEW, padx=2, pady=2)
             self.ManualModifierEntry = EntryExtended(self.ManualModifierFrame, justify=CENTER, width=5, textvariable=self.Variables["ManualModifierEntryVar"])
-            self.ManualModifierEntry.ConfigureValidation(GlobalInst.ValidStatModifierManualMod, "key")
+            self.ManualModifierEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Manual modifier must be a whole number."), "key")
             self.ManualModifierEntry.grid(row=0, column=0, sticky=NSEW)
 
             # Buttons
@@ -5841,11 +5692,11 @@ class CreatureData:
             self.ProficiencyEntry.bind("<Button-5>", lambda event: self.MouseWheelEvent(event, self.ProficiencyEntryVar))
 
         # Proficiency Entry Validation
-        self.ProficiencyEntry.ConfigureValidation(GlobalInst.ValidProficiencyEntry, "key")
+        self.ProficiencyEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Proficiency must be a whole number."), "key")
 
         # Ability Entry Validation
         for AbilityEntryWidget in [self.AbilitiesStrengthEntry, self.AbilitiesDexterityEntry, self.AbilitiesConstitutionEntry, self.AbilitiesIntelligenceEntry, self.AbilitiesWisdomEntry, self.AbilitiesCharismaEntry]:
-            AbilityEntryWidget.ConfigureValidation(GlobalInst.ValidAbilityEntry, "key")
+            AbilityEntryWidget.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Ability modifiers must be whole numbers."), "key")
 
         # NPC Sheet Auto Calculation
         if WindowInst.Mode == "NPCSheet":
@@ -6228,7 +6079,7 @@ class DiceRoller:
 
         # Number of Dice
         self.DiceNumberEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.DiceNumberEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
-        self.DiceNumberEntry.ConfigureValidation(GlobalInst.ValidDiceNumber, "key")
+        self.DiceNumberEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Dice number must be a whole number.", MinValue=1, LessThanMinString="Dice number cannot be less than 1."), "key")
         self.DiceNumberEntry.grid(row=0, column=0, rowspan=2, padx=2, pady=2, sticky=NSEW)
         self.DiceNumberTooltip = Tooltip(self.DiceNumberEntry, "Scroll the mouse wheel or type to change the number of dice.")
 
@@ -6236,7 +6087,7 @@ class DiceRoller:
         self.DieTypeLabel = Label(self.DiceEntryAndButtonsFrame, text="d", font=self.DiceEntryFont)
         self.DieTypeLabel.grid(row=0, column=1, rowspan=2, sticky=NSEW)
         self.DieTypeEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.DieTypeEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
-        self.DieTypeEntry.ConfigureValidation(GlobalInst.ValidDieType, "key")
+        self.DieTypeEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Die type must be a whole number.", MinValue=1, LessThanMinString="Die type cannot be less than 1."), "key")
         self.DieTypeEntry.grid(row=0, column=2, rowspan=2, padx=2, pady=2, sticky=NSEW)
         self.DieTypeTooltip = Tooltip(self.DieTypeEntry, "Scroll the mouse wheel or type to change the die type.")
 
@@ -6244,7 +6095,7 @@ class DiceRoller:
         self.ModifierLabel = Label(self.DiceEntryAndButtonsFrame, text="+", font=self.DiceEntryFont)
         self.ModifierLabel.grid(row=0, column=3, rowspan=2, sticky=NSEW)
         self.ModifierEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.ModifierEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
-        self.ModifierEntry.ConfigureValidation(GlobalInst.ValidModifier, "key")
+        self.ModifierEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Modifier must be a whole number."), "key")
         self.ModifierEntry.grid(row=0, column=4, rowspan=2, padx=2, pady=2, sticky=NSEW)
         self.ModifierTooltip = Tooltip(self.ModifierEntry, "Scroll the mouse wheel or type to change the modifier.")
 
@@ -6282,7 +6133,9 @@ class DiceRoller:
         self.CritMinimumFrame.grid_columnconfigure(0, weight=1)
         self.CritMinimumFrame.grid(row=1, column=6, padx=2, pady=2, sticky=NSEW)
         self.CritMinimumEntry = EntryExtended(self.CritMinimumFrame, textvariable=self.CritMinimumEntryVar, justify=CENTER, width=5)
-        self.CritMinimumEntry.ConfigureValidation(GlobalInst.ValidCritMinimum, "key")
+        self.CritMinimumEntry.ConfigureValidation(
+            lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Crit minimum must be a whole number.", MinValue=1, LessThanMinString="Crit minimum cannot be less than 1.", MaxValue=20,
+                                                                MoreThanMaxString="Crit minimum cannot be more than 20."), "key")
         self.CritMinimumEntry.grid(row=0, column=0, sticky=NSEW)
 
         # Results
@@ -6731,8 +6584,7 @@ class InitiativeOrder:
         self.RoundFrame = LabelFrame(self.InitiativeDataFrame, text="Round:")
         self.RoundFrame.grid_columnconfigure(0, weight=1)
         self.RoundFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-        self.RoundEntry = EntryExtended(self.RoundFrame, textvariable=self.RoundEntryVar, font=self.InitiativeDataFont, width=5, justify=CENTER)
-        self.RoundEntry.ConfigureValidation(GlobalInst.ValidRound, "key")
+        self.RoundEntry = RoundEntry(self.RoundFrame, textvariable=self.RoundEntryVar, font=self.InitiativeDataFont, width=5, justify=CENTER)
         self.RoundEntry.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
 
         # New Round Button
@@ -6922,8 +6774,7 @@ class InitiativeOrder:
             self.List.append(self)
 
             # Initiative Entry
-            self.InitiativeEntryResultEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryResultEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-            self.InitiativeEntryResultEntry.ConfigureValidation(GlobalInst.ValidInitiative, "key")
+            self.InitiativeEntryResultEntry = InitiativeEntry(self.master, textvariable=self.InitiativeEntryResultEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
             self.InitiativeEntryResultEntry.bind("<Button-3>", lambda event: self.ToggleTurnDone())
             self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
 
@@ -7281,8 +7132,7 @@ class CompactInitiativeOrder:
         self.RoundFrame = LabelFrame(self.InitiativeDataFrame, text="Round:")
         self.RoundFrame.grid_columnconfigure(0, weight=1)
         self.RoundFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
-        self.RoundEntry = EntryExtended(self.RoundFrame, textvariable=self.RoundEntryVar, font=self.InitiativeDataFont, width=5, justify=CENTER)
-        self.RoundEntry.ConfigureValidation(GlobalInst.ValidRound, "key")
+        self.RoundEntry = RoundEntry(self.RoundFrame, textvariable=self.RoundEntryVar, font=self.InitiativeDataFont, width=5, justify=CENTER)
         self.RoundEntry.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Clear Turns Button
@@ -7407,8 +7257,7 @@ class CompactInitiativeOrder:
             self.List.append(self)
 
             # Initiative Entry
-            self.InitiativeEntryResultEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryResultEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-            self.InitiativeEntryResultEntry.ConfigureValidation(GlobalInst.ValidInitiative, "key")
+            self.InitiativeEntryResultEntry = InitiativeEntry(self.master, textvariable=self.InitiativeEntryResultEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
             self.InitiativeEntryResultEntry.bind("<Button-3>", lambda event: self.ToggleTurnDone())
             self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
 
@@ -7569,28 +7418,23 @@ class HoardSheet:
         self.CoinsInputHolderFrame.grid(row=0, column=0, columnspan=2, sticky=NSEW)
         self.CoinsHeaderCP = Label(self.CoinsInputHolderFrame, text="CP", bd=2, relief=GROOVE)
         self.CoinsHeaderCP.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-        self.CoinsEntryCP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryCPVar)
-        self.CoinsEntryCP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.CoinsEntryCP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryCPVar)
         self.CoinsEntryCP.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.CoinsHeaderSP = Label(self.CoinsInputHolderFrame, text="SP", bd=2, relief=GROOVE)
         self.CoinsHeaderSP.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
-        self.CoinsEntrySP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntrySPVar)
-        self.CoinsEntrySP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.CoinsEntrySP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntrySPVar)
         self.CoinsEntrySP.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.CoinsHeaderEP = Label(self.CoinsInputHolderFrame, text="EP", bd=2, relief=GROOVE)
         self.CoinsHeaderEP.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
-        self.CoinsEntryEP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryEPVar)
-        self.CoinsEntryEP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.CoinsEntryEP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryEPVar)
         self.CoinsEntryEP.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.CoinsHeaderGP = Label(self.CoinsInputHolderFrame, text="GP", bd=2, relief=GROOVE)
         self.CoinsHeaderGP.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
-        self.CoinsEntryGP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryGPVar)
-        self.CoinsEntryGP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.CoinsEntryGP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryGPVar)
         self.CoinsEntryGP.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.CoinsHeaderPP = Label(self.CoinsInputHolderFrame, text="PP", bd=2, relief=GROOVE)
         self.CoinsHeaderPP.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-        self.CoinsEntryPP = EntryExtended(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryPPVar)
-        self.CoinsEntryPP.ConfigureValidation(GlobalInst.ValidCoinsEntry, "key")
+        self.CoinsEntryPP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryPPVar)
         self.CoinsEntryPP.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
         self.GainCoinsButton = Button(self.CoinsFrame, text="Gain", bg=GlobalInst.ButtonColor, command=self.GainCoins)
         self.GainCoinsButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
@@ -7917,16 +7761,13 @@ class HoardSheet:
             self.NameTooltip = Tooltip(self.NameEntry, "Right-click on the name field to set an item description.  Shift+right-click to exchange for coins.")
 
             # Count Entry
-            self.CountEntry = EntryExtended(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
-            self.CountEntry.ConfigureValidation(GlobalInst.InventoryValidCountEntry, "key")
+            self.CountEntry = InventoryCountEntry(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
 
             # Unit Weight Entry
-            self.UnitWeightEntry = EntryExtended(master, width=4, textvariable=self.UnitWeightEntryVar, justify=CENTER)
-            self.UnitWeightEntry.ConfigureValidation(GlobalInst.InventoryValidWeightEntry, "key")
+            self.UnitWeightEntry = InventoryWeightEntry(master, width=4, textvariable=self.UnitWeightEntryVar, justify=CENTER)
 
             # Unit Value Entry
-            self.UnitValueEntry = EntryExtended(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
-            self.UnitValueEntry.ConfigureValidation(GlobalInst.InventoryValidValueEntry, "key")
+            self.UnitValueEntry = InventoryValueEntry(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
 
             # Unit Value Denomination
             self.UnitValueDenomination = ttk.Combobox(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
@@ -8204,6 +8045,7 @@ class StatusBar:
         WindowInst.after(Duration, lambda: self.StatusBarSetText("Status", Unlock=True))
 
 
+# Scrolled Text
 class ScrolledText:
     def __init__(self, master, Width=100, Height=100, Disabled=False, DisabledBackground="light gray", FontSize=None, SavedDataTag=None):
         self.Width = Width
@@ -8315,6 +8157,7 @@ class ScrolledText:
                     SearchStart = MatchIndex + " + 1 char"
 
 
+# Scrolled Canvas
 class ScrolledCanvas:
     def __init__(self, master, Height=100, Width=100, ScrollingDisabledVar=None, TopMode=False):
         self.Height = Height
@@ -8369,6 +8212,7 @@ class ScrolledCanvas:
         WindowInst.unbind("<MouseWheel>")
 
 
+# Extended Entry Widgets
 class EntryExtended(Entry):
     def __init__(self, *args, **kwargs):
         Entry.__init__(self, *args, **kwargs)
@@ -8381,6 +8225,69 @@ class EntryExtended(Entry):
         self.configure(validate=ValidationTrigger, validatecommand=(self.ValidationCommand, "%P"))
 
 
+class CoinsEntry(EntryExtended):
+    def __init__(self, *args, **kwargs):
+        EntryExtended.__init__(self, *args, **kwargs)
+        self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Coins must be whole numbers.", MinValue=0, LessThanMinString="Coins cannot be less than 0."), "key")
+
+
+class InventoryCountEntry(EntryExtended):
+    def __init__(self, *args, **kwargs):
+        EntryExtended.__init__(self, *args, **kwargs)
+        self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Inventory item counts must be whole numbers.", MinValue=0, LessThanMinString="Inventory item counts cannot be less than 0."), "key")
+
+
+class InventoryWeightEntry(EntryExtended):
+    def __init__(self, *args, **kwargs):
+        EntryExtended.__init__(self, *args, **kwargs)
+        self.ConfigureValidation(
+            lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Inventory item unit weights must be numbers.", Mode="Float", MinValue=0, LessThanMinString="Inventory item unit weights cannot be less than 0."), "key")
+
+
+class InventoryValueEntry(EntryExtended):
+    def __init__(self, *args, **kwargs):
+        EntryExtended.__init__(self, *args, **kwargs)
+        self.ConfigureValidation(
+            lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Inventory item unit values must be numbers.", Mode="Float", MinValue=0, LessThanMinString="Inventory item unit values cannot be less than 0."), "key")
+
+
+class RoundEntry(EntryExtended):
+    def __init__(self, *args, **kwargs):
+        EntryExtended.__init__(self, *args, **kwargs)
+        self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Round must be a whole number.", MinValue=1, LessThanMinString="Round must be greater than 0."), "key")
+
+
+class InitiativeEntry(EntryExtended):
+    def __init__(self, *args, **kwargs):
+        EntryExtended.__init__(self, *args, **kwargs)
+        self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Initiative roll must be a whole number."), "key")
+
+
+class MaxHPDataEntry(EntryExtended):
+    def __init__(self, *args, **kwargs):
+        EntryExtended.__init__(self, *args, **kwargs)
+        self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "All max HP data must be in the form of whole numbers.", MinValue=0, LessThanMinString="Max HP data cannot be less than 0."), "key")
+
+
+class StatModifierMultiplierEntry(EntryExtended):
+    def __init__(self, *args, **kwargs):
+        EntryExtended.__init__(self, *args, **kwargs)
+        self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Multipliers must be numbers", Mode="Float"), "key")
+
+
+class StatModifierMinMaxEntry(EntryExtended):
+    def __init__(self, *args, **kwargs):
+        EntryExtended.__init__(self, *args, **kwargs)
+        self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Minimums and maximums must be whole numbers."), "key")
+
+
+# Extended Dropdown Widget
+class DropdownExtended(ttk.Combobox):
+    def __init__(self, *args, **kwargs):
+        ttk.Combobox.__init__(self, *args, **kwargs)
+
+
+# Prompts
 class IntegerPrompt:
     def __init__(self, master, WindowTitle, Header, MinValue=None, MaxValue=None):
         # Store Parameters
@@ -8551,6 +8458,7 @@ class OpenErrorsPrompt:
         self.Window.destroy()
 
 
+# Tooltips
 class Tooltip:
     def __init__(self, Widget, Text):
         # Store Parameters
