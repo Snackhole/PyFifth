@@ -8286,6 +8286,22 @@ class DropdownExtended(ttk.Combobox):
     def __init__(self, *args, **kwargs):
         ttk.Combobox.__init__(self, *args, **kwargs)
 
+        # Autocompletion Variables
+        self.CurrentInput = ""
+        self.MatchList = sorted(self["values"], key=str.lower)
+
+        # Bind KeyRelease
+        self.bind("<KeyRelease>", self.KeyReleased)
+
+    def KeyReleased(self, Event):
+        if Event.keysym == "BackSpace":
+            self.CurrentInput = self.CurrentInput[:-1]
+        elif Event.char != "":
+            self.CurrentInput += Event.char
+        for Element in self.MatchList:
+            if Element.lower().startswith(self.CurrentInput.lower()):
+                self.set(Element)
+
 
 # Prompts
 class IntegerPrompt:
