@@ -8319,7 +8319,6 @@ class DropdownExtended(ttk.Combobox):
 
         # Autocompletion Variables
         self.CurrentInput = ""
-        self.MatchList = sorted(self["values"], key=str.lower)
         self.IDOfScheduledClear = None
         self.WaitTime = 2000
 
@@ -8348,7 +8347,7 @@ class DropdownExtended(ttk.Combobox):
         self.ClearCurrentInput()
 
     def MatchToInput(self):
-        for Element in self.MatchList:
+        for Element in self["values"]:
             if Element.lower().startswith(self.CurrentInput.lower()):
                 self.set(Element)
                 break
