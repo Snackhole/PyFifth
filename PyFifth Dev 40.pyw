@@ -730,7 +730,7 @@ class CharacterSheet:
         self.CharacterLevelDropdownValues = []
         for Index in range(1, 21):
             self.CharacterLevelDropdownValues.append(str(Index))
-        self.CharacterLevelDropdown = ttk.Combobox(self.CharacterSheetHeaderFrame, textvariable=self.CharacterLevelDropdownVar, width=5, justify=CENTER, state="readonly", values=self.CharacterLevelDropdownValues)
+        self.CharacterLevelDropdown = DropdownExtended(self.CharacterSheetHeaderFrame, textvariable=self.CharacterLevelDropdownVar, width=5, justify=CENTER, state="readonly", values=self.CharacterLevelDropdownValues)
         self.CharacterLevelDropdown.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
 
         # Proficiency Bonus
@@ -1559,7 +1559,7 @@ class CharacterSheet:
                             self.RollLabel.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
 
                             # Dropdown
-                            self.RollDropdown = ttk.Combobox(self.FieldFrame, textvariable=self.RollDropdownVar, values=("", "STR", "DEX", "CON", "INT", "WIS", "CHA"), width=5, state="readonly", justify=CENTER)
+                            self.RollDropdown = DropdownExtended(self.FieldFrame, textvariable=self.RollDropdownVar, values=("", "STR", "DEX", "CON", "INT", "WIS", "CHA"), width=5, state="readonly", justify=CENTER)
                             self.RollDropdown.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
 
                 class PointBuyMenu:
@@ -2400,7 +2400,7 @@ class CharacterSheet:
                     self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a feature or creature stats entry to set a feature.  Right-click to set creature stats.")
 
                     # Sort Order
-                    self.SortOrder = ttk.Combobox(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                    self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
                     self.SortOrder.bind("<Enter>", self.DisableScrolling)
                     self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -2911,7 +2911,7 @@ class CharacterSheet:
                     self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a spell list entry to set a name and description.")
 
                     # Sort Order
-                    self.SortOrder = ttk.Combobox(master.WindowFrame, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                    self.SortOrder = DropdownExtended(master.WindowFrame, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
                     self.SortOrder.bind("<Enter>", self.DisableScrolling)
                     self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -3092,7 +3092,7 @@ class CharacterSheet:
                 self.ManualAmountLabel.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
 
                 # Amount Inputs
-                self.SpellSlotDropdown = ttk.Combobox(self.Window, textvariable=self.SpellSlotDropdownVar, values=("", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"), width=4, state="readonly", justify=CENTER)
+                self.SpellSlotDropdown = DropdownExtended(self.Window, textvariable=self.SpellSlotDropdownVar, values=("", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"), width=4, state="readonly", justify=CENTER)
                 self.SpellSlotDropdown.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
                 self.ManualAmountEntry = EntryExtended(self.Window, justify=CENTER, width=5, textvariable=self.ManualAmountEntryVar)
                 self.ManualAmountEntry.ConfigureValidation(
@@ -3690,7 +3690,7 @@ class CharacterSheet:
                 self.UnitValueEntry = InventoryValueEntry(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
 
                 # Unit Value Denomination
-                self.UnitValueDenomination = ttk.Combobox(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
+                self.UnitValueDenomination = DropdownExtended(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
                 self.UnitValueDenomination.bind("<Enter>", self.DisableScrolling)
                 self.UnitValueDenomination.bind("<Leave>", self.EnableScrolling)
 
@@ -3701,12 +3701,12 @@ class CharacterSheet:
                 self.TotalValueEntry = EntryExtended(master, width=4, textvariable=self.TotalValueEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow")
 
                 # Category Tag
-                self.CategoryTag = ttk.Combobox(master, textvariable=self.CategoryTagVar, values=("", "Gear", "Food", "Water", "Treasure", "Misc."), width=8, state="readonly", justify=CENTER)
+                self.CategoryTag = DropdownExtended(master, textvariable=self.CategoryTagVar, values=("", "Gear", "Food", "Water", "Treasure", "Misc."), width=8, state="readonly", justify=CENTER)
                 self.CategoryTag.bind("<Enter>", self.DisableScrolling)
                 self.CategoryTag.bind("<Leave>", self.EnableScrolling)
 
                 # Sort Order
-                self.SortOrder = ttk.Combobox(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
                 self.SortOrder.bind("<Enter>", self.DisableScrolling)
                 self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -4064,7 +4064,7 @@ class CharacterSheet:
                 self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a note entry to set a note.")
 
                 # Sort Order
-                self.SortOrder = ttk.Combobox(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
                 self.SortOrder.bind("<Enter>", self.DisableScrolling)
                 self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -5430,7 +5430,7 @@ class AbilityScoreDerivatives:
         List.append(self)
 
         # Ability Score Selection
-        self.AbilityScoreSelectionDropdown = ttk.Combobox(master, textvariable=self.AbilityScoreSelectionDropdownVar, values=("", "STR", "DEX", "CON", "INT", "WIS", "CHA"), width=5, state="readonly", justify=CENTER)
+        self.AbilityScoreSelectionDropdown = DropdownExtended(master, textvariable=self.AbilityScoreSelectionDropdownVar, values=("", "STR", "DEX", "CON", "INT", "WIS", "CHA"), width=5, state="readonly", justify=CENTER)
         self.AbilityScoreSelectionDropdown.grid(row=0, column=self.Column, padx=2, pady=2, sticky=NSEW)
 
         # Save DC
@@ -6442,7 +6442,6 @@ class DiceRoller:
                     self.PresetRollModifierEntryStatModifierInst = StatModifier(self.PresetRollModifierEntry, "<Button-3>", "Right-click to set a stat modifier.", "Preset Roll", Cursor="xterm", DiceRollerMode=True)
 
                 # Sort Order
-                # self.PresetRollSortOrder = ttk.Combobox(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
                 self.PresetRollSortOrder = DropdownExtended(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
                 self.PresetRollSortOrder.bind("<Enter>", self.DisableScrolling)
                 self.PresetRollSortOrder.bind("<Leave>", self.EnableScrolling)
@@ -6780,7 +6779,7 @@ class InitiativeOrder:
             self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
 
             # Tie Priority Dropdown
-            self.InitiativeEntryTiePriorityDropdown = ttk.Combobox(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
+            self.InitiativeEntryTiePriorityDropdown = DropdownExtended(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
                                                                    values=("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), width=3, state="readonly", justify=CENTER)
             self.InitiativeEntryTiePriorityDropdown.bind("<Enter>", self.DisableScrolling)
             self.InitiativeEntryTiePriorityDropdown.bind("<Leave>", self.EnableScrolling)
@@ -7263,7 +7262,7 @@ class CompactInitiativeOrder:
             self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
 
             # Tie Priority Dropdown
-            self.InitiativeEntryTiePriorityDropdown = ttk.Combobox(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
+            self.InitiativeEntryTiePriorityDropdown = DropdownExtended(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
                                                                    values=("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), width=3, state="readonly", justify=CENTER)
             self.InitiativeEntryTiePriorityDropdown.bind("<Enter>", self.DisableScrolling)
             self.InitiativeEntryTiePriorityDropdown.bind("<Leave>", self.EnableScrolling)
@@ -7771,7 +7770,7 @@ class HoardSheet:
             self.UnitValueEntry = InventoryValueEntry(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
 
             # Unit Value Denomination
-            self.UnitValueDenomination = ttk.Combobox(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
+            self.UnitValueDenomination = DropdownExtended(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
             self.UnitValueDenomination.bind("<Enter>", self.DisableScrolling)
             self.UnitValueDenomination.bind("<Leave>", self.EnableScrolling)
 
@@ -7782,7 +7781,7 @@ class HoardSheet:
             self.TotalValueEntry = EntryExtended(master, width=4, textvariable=self.TotalValueEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow")
 
             # Sort Order
-            self.SortOrder = ttk.Combobox(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+            self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
             self.SortOrder.bind("<Enter>", self.DisableScrolling)
             self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -8295,29 +8294,43 @@ class DropdownExtended(ttk.Combobox):
 
         # Bind KeyRelease
         self.bind("<Key>", self.KeyPressed)
+        self.bind("<FocusIn>", self.GainedOrLostFocus)
+        self.bind("<FocusOut>", self.GainedOrLostFocus)
 
     def KeyPressed(self, Event):
-        if Event.keysym == "BackSpace":
-            print("BackSpace")
+        NewChar = Event.char
+        Backspacing = Event.keysym == "BackSpace"
+        Shifting = Event.keysym == "Shift_L" or Event.keysym == "Shift_R"
+        if Backspacing:
             if len(self.CurrentInput) > 0:
-                print("Removing:  " + self.CurrentInput[-1])
                 self.CurrentInput = self.CurrentInput[:-1]
-        elif Event.char not in ["", "\t", "\r"]:
-            self.CurrentInput += Event.char
-            print("Added:  " + repr(Event.char))
+            self.MatchToInput()
+        if NewChar not in ["\t", "\r"] and not Backspacing and not Shifting:
+            self.CurrentInput += NewChar
+            self.MatchToInput()
+        self.UnscheduleClear()
+        if len(self.CurrentInput) > 0:
+            self.IDOfScheduledClear = self.after(self.WaitTime, self.ClearCurrentInput)
+
+    def GainedOrLostFocus(self, Event):
+        self.UnscheduleClear()
+        self.ClearCurrentInput()
+
+    def MatchToInput(self):
         for Element in self.MatchList:
             if Element.lower().startswith(self.CurrentInput.lower()):
                 self.set(Element)
                 break
+
+    def UnscheduleClear(self):
         if self.IDOfScheduledClear:
             self.after_cancel(self.IDOfScheduledClear)
-        if len(self.CurrentInput) > 0:
-            self.IDOfScheduledClear = self.after(self.WaitTime, self.ClearCurrentInput)
+            self.IDOfScheduledClear = None
 
     def ClearCurrentInput(self):
-        print("Clearing:  " + self.CurrentInput)
         self.CurrentInput = ""
-        self.IDOfScheduledClear = None
+        if self.IDOfScheduledClear:
+            self.IDOfScheduledClear = None
 
 
 # Prompts
