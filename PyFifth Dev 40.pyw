@@ -1483,12 +1483,17 @@ class CharacterSheet:
                         self.RollAssignField4Inst = self.RollAssignField(self.RollForAbilitiesFrame, self.RollAssignFieldsList, Row=1, Column=1)
                         self.RollAssignField5Inst = self.RollAssignField(self.RollForAbilitiesFrame, self.RollAssignFieldsList, Row=2, Column=0)
                         self.RollAssignField6Inst = self.RollAssignField(self.RollForAbilitiesFrame, self.RollAssignFieldsList, Row=2, Column=1)
+                        for Field in self.RollAssignFieldsList:
+                            Field.RollDropdown.bind("<Return>", self.ReturnPressed)
 
                         # Buttons
                         self.RollScoresButton = Button(self.RollForAbilitiesFrame, text="Roll\nScores", command=self.RollScores, bg=GlobalInst.ButtonColor)
                         self.RollScoresButton.grid(row=0, column=2, rowspan=3, padx=2, pady=2, sticky=NSEW)
                         self.AcceptButton = Button(self.RollForAbilitiesFrame, text="Accept", command=self.Accept, bg=GlobalInst.ButtonColor)
                         self.AcceptButton.grid(row=3, column=0, columnspan=3, padx=2, pady=2, sticky=NSEW)
+
+                        # Set Focus
+                        self.RollAssignField1Inst.RollDropdown.focus_set()
 
                     def Accept(self):
                         if self.ValidEntry():
@@ -1519,6 +1524,13 @@ class CharacterSheet:
                         for Index in range(6):
                             self.RollAssignFieldsList[Index].RollLabelVar.set(str(FinalRolls[Index]))
                         self.Rolled = True
+                        self.RollAssignField1Inst.RollDropdown.focus_set()
+
+                    def ReturnPressed(self, Event):
+                        if not self.Rolled:
+                            self.RollScores()
+                        else:
+                            self.Accept()
 
                     def ValidEntry(self):
                         if self.Rolled:
@@ -1590,6 +1602,7 @@ class CharacterSheet:
                         self.PointBuyField6Inst = self.PointBuyField(self.PointBuyFrame, "CHA", self.PointBuyFieldsList, Row=2, Column=1)
                         for Field in self.PointBuyFieldsList:
                             Field.ScoreEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+                            Field.ScoreEntry.bind("<Return>", lambda event: self.Accept())
 
                         # Point Buy Values and Rules
                         self.PointBuyValuesAndRulesFrame = Frame(self.PointBuyFrame)
