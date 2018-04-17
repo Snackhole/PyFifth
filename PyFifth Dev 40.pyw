@@ -1511,8 +1511,7 @@ class CharacterSheet:
                         GlobalInst.WindowGeometry(self.master, IsDialog=True, DialogMaster=WindowInst, WidthOffset=-self.RollForAbilitiesWidthOffset)
 
                     def RollScores(self):
-                        FinalRolls = []
-                        for Index in range(6):
+                        for Field in self.RollAssignFieldsList:
                             Rolls = []
                             Total = 0
                             for Roll in range(4):
@@ -1520,9 +1519,8 @@ class CharacterSheet:
                             Rolls.remove(min(Rolls))
                             for Roll in Rolls:
                                 Total += Roll
-                            FinalRolls.append(Total)
-                        for Index in range(6):
-                            self.RollAssignFieldsList[Index].RollLabelVar.set(str(FinalRolls[Index]))
+                            Field.RollLabelVar.set(str(Total))
+
                         self.Rolled = True
                         self.RollAssignField1Inst.RollDropdown.focus_set()
 
