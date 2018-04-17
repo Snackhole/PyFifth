@@ -1520,7 +1520,6 @@ class CharacterSheet:
                             for Roll in Rolls:
                                 Total += Roll
                             Field.RollLabelVar.set(str(Total))
-
                         self.Rolled = True
                         self.RollAssignField1Inst.RollDropdown.focus_set()
 
@@ -2266,13 +2265,16 @@ class CharacterSheet:
                 # Features Entries List
                 self.FeatureOrCreatureStatsEntriesList = []
 
+                # Features Entries Count
+                self.FeatureOrCreatureStatsEntryCount = 100
+
                 # Sort Order Values
                 self.SortOrderValuesList = [""]
-                for CurrentIndex in range(1, 101):
+                for CurrentIndex in range(1, self.FeatureOrCreatureStatsEntryCount + 1):
                     self.SortOrderValuesList.append(str(CurrentIndex))
 
                 # Features Entries
-                for CurrentIndex in range(1, 101):
+                for CurrentIndex in range(1, self.FeatureOrCreatureStatsEntryCount + 1):
                     CurrentEntry = self.FeatureOrCreatureStatsEntry(self.FeaturesScrolledCanvas.WindowFrame, self.FeatureOrCreatureStatsEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
                     CurrentEntry.Display(CurrentIndex)
 
@@ -2807,13 +2809,16 @@ class CharacterSheet:
                 # Spell List Entries List
                 self.SpellListEntriesList = []
 
+                # Spell List Entries Count
+                self.SpellListEntriesCount = 100
+
                 # Sort Order Values
                 self.SortOrderValuesList = [""]
-                for CurrentIndex in range(1, 101):
+                for CurrentIndex in range(1, self.SpellListEntriesCount + 1):
                     self.SortOrderValuesList.append(str(CurrentIndex))
 
                 # Spell List Entries
-                for CurrentIndex in range(1, 101):
+                for CurrentIndex in range(1, self.SpellListEntriesCount + 1):
                     CurrentEntry = self.SpellListEntry(self.SpellListScrolledCanvas, self.SpellListEntriesList, self.LevelName, self.SortOrderValuesList, self.ScrollingDisabledVar, CurrentIndex)
                     CurrentEntry.Display(CurrentIndex)
 
@@ -3392,13 +3397,16 @@ class CharacterSheet:
             # Inventory Entries List
             self.InventoryEntriesList = []
 
+            # Inventory Entries Count
+            self.InventoryEntriesCount = 100
+
             # Sort Order Values
             self.SortOrderValuesList = [""]
-            for CurrentIndex in range(1, 101):
+            for CurrentIndex in range(1, self.InventoryEntriesCount + 1):
                 self.SortOrderValuesList.append(str(CurrentIndex))
 
             # Inventory Entries
-            for CurrentIndex in range(1, 101):
+            for CurrentIndex in range(1, self.InventoryEntriesCount + 1):
                 CurrentEntry = self.InventoryEntry(self.InventoryListScrolledCanvas.WindowFrame, self.InventoryEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
                 CurrentEntry.Display(CurrentIndex)
 
@@ -3985,13 +3993,16 @@ class CharacterSheet:
             # Additional Notes Entries List
             self.AdditionalNotesEntriesList = []
 
+            # Additional Notes Entries Count
+            self.AdditionalNotesEntriesCount = 100
+
             # Sort Order Values
             self.SortOrderValuesList = [""]
-            for CurrentIndex in range(1, 101):
+            for CurrentIndex in range(1, self.AdditionalNotesEntriesCount + 1):
                 self.SortOrderValuesList.append(str(CurrentIndex))
 
             # Additional Notes Entries
-            for CurrentIndex in range(1, 101):
+            for CurrentIndex in range(1, self.AdditionalNotesEntriesCount + 1):
                 CurrentEntry = self.AdditionalNotesEntry(self.AdditionalNotesScrolledCanvas.WindowFrame, self.AdditionalNotesEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
                 CurrentEntry.Display(CurrentIndex)
 
@@ -6343,6 +6354,9 @@ class DiceRoller:
             # Preset Rolls List
             self.PresetRollsList = []
 
+            # Preset Rolls Count
+            self.PresetRollsCount = 50
+
             # Preset Rolls Fields Dictionary
             self.DiceRollerFields = {}
             self.DiceRollerFields["ResultsField"] = self.ResultsField
@@ -6350,11 +6364,11 @@ class DiceRoller:
 
             # Sort Order Values
             self.SortOrderValuesList = [""]
-            for CurrentIndex in range(1, 51):
+            for CurrentIndex in range(1, self.PresetRollsCount + 1):
                 self.SortOrderValuesList.append(str(CurrentIndex))
 
             # Preset Rolls
-            for CurrentIndex in range(1, 51):
+            for CurrentIndex in range(1, self.PresetRollsCount + 1):
                 CurrentEntry = self.PresetRollEntry(self.PresetRollsScrolledCanvas.WindowFrame, self.PresetRollsList, self.ScrollingDisabledVar, self.SortOrderValuesList, self.DiceRollerFields, CurrentIndex)
                 CurrentEntry.Display(CurrentIndex)
 
@@ -6673,8 +6687,11 @@ class InitiativeOrder:
         # Entries List
         self.InitiativeEntriesList = []
 
+        # Initiative Entries Count
+        self.InitiativeEntriesCount = 100
+
         # Initiative Entries
-        for CurrentIndex in range(1, 101):
+        for CurrentIndex in range(1, self.InitiativeEntriesCount + 1):
             CurrentEntry = self.InitiativeEntry(self.InitiativeOrderScrolledCanvas.WindowFrame, self.InitiativeEntriesList, self.ScrollingDisabledVar, CurrentIndex)
             CurrentEntry.Display(CurrentIndex)
 
@@ -7189,8 +7206,11 @@ class CompactInitiativeOrder:
         # Entries List
         self.InitiativeEntriesList = []
 
+        # Entries Count
+        self.InitiativeEntriesCount = 100
+
         # Initiative Entries
-        for CurrentIndex in range(1, 101):
+        for CurrentIndex in range(1, self.InitiativeEntriesCount + 1):
             CurrentEntry = self.InitiativeEntry(self.InitiativeOrderScrolledCanvas.WindowFrame, self.InitiativeEntriesList, self.ScrollingDisabledVar, CurrentIndex)
             CurrentEntry.Display(CurrentIndex)
 
@@ -7545,13 +7565,16 @@ class HoardSheet:
         # Treasure Item Entries List
         self.TreasureItemEntriesList = []
 
+        # Treasure Item Entries Count
+        self.TreasureItemEntriesCount = 200
+
         # Sort Order Values
         self.SortOrderValuesList = [""]
-        for CurrentIndex in range(1, 201):
+        for CurrentIndex in range(1, self.TreasureItemEntriesCount + 1):
             self.SortOrderValuesList.append(str(CurrentIndex))
 
         # Treasure Item Entries
-        for CurrentIndex in range(1, 201):
+        for CurrentIndex in range(1, self.TreasureItemEntriesCount + 1):
             CurrentEntry = self.TreasureItemEntry(self.TreasureItemsScrolledCanvas.WindowFrame, self.TreasureItemEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
             CurrentEntry.Display(CurrentIndex)
 
