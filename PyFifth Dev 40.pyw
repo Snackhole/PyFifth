@@ -1559,7 +1559,7 @@ class CharacterSheet:
                             self.RollLabel.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
 
                             # Dropdown
-                            self.RollDropdown = DropdownExtended(self.FieldFrame, textvariable=self.RollDropdownVar, values=("", "STR", "DEX", "CON", "INT", "WIS", "CHA"), width=5, state="readonly", justify=CENTER)
+                            self.RollDropdown = DropdownExtended(self.FieldFrame, textvariable=self.RollDropdownVar, values=["", "STR", "DEX", "CON", "INT", "WIS", "CHA"], width=5, state="readonly", justify=CENTER)
                             self.RollDropdown.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
 
                 class PointBuyMenu:
@@ -2256,14 +2256,13 @@ class CharacterSheet:
                 self.FeatureOrCreatureStatsEntriesList = []
 
                 # Sort Order Values
-                self.SortOrderValuesString = "\"\""
+                self.SortOrderValuesList = [""]
                 for CurrentIndex in range(1, 101):
-                    self.SortOrderValuesString += "," + str(CurrentIndex)
-                self.SortOrderValuesTuple = eval(self.SortOrderValuesString)
+                    self.SortOrderValuesList.append(str(CurrentIndex))
 
                 # Features Entries
                 for CurrentIndex in range(1, 101):
-                    CurrentEntry = self.FeatureOrCreatureStatsEntry(self.FeaturesScrolledCanvas.WindowFrame, self.FeatureOrCreatureStatsEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesTuple, CurrentIndex)
+                    CurrentEntry = self.FeatureOrCreatureStatsEntry(self.FeaturesScrolledCanvas.WindowFrame, self.FeatureOrCreatureStatsEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
                     CurrentEntry.Display(CurrentIndex)
 
             def Sort(self, Column, Reverse=False, SearchMode=False):
@@ -2314,11 +2313,11 @@ class CharacterSheet:
                 WindowInst.UpdateWindowTitle()
 
             class FeatureOrCreatureStatsEntry:
-                def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesTuple, Row):
+                def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesList, Row):
                     # Store Parameters
                     self.master = master
                     self.ScrollingDisabledVar = ScrollingDisabledVar
-                    self.SortOrderValuesTuple = SortOrderValuesTuple
+                    self.SortOrderValuesList = SortOrderValuesList
                     self.Row = Row
 
                     # Variables
@@ -2400,7 +2399,7 @@ class CharacterSheet:
                     self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a feature or creature stats entry to set a feature.  Right-click to set creature stats.")
 
                     # Sort Order
-                    self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                    self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
                     self.SortOrder.bind("<Enter>", self.DisableScrolling)
                     self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -2798,14 +2797,13 @@ class CharacterSheet:
                 self.SpellListEntriesList = []
 
                 # Sort Order Values
-                self.SortOrderValuesString = "\"\""
+                self.SortOrderValuesList = [""]
                 for CurrentIndex in range(1, 101):
-                    self.SortOrderValuesString += "," + str(CurrentIndex)
-                self.SortOrderValuesTuple = eval(self.SortOrderValuesString)
+                    self.SortOrderValuesList.append(str(CurrentIndex))
 
                 # Spell List Entries
                 for CurrentIndex in range(1, 101):
-                    CurrentEntry = self.SpellListEntry(self.SpellListScrolledCanvas, self.SpellListEntriesList, self.LevelName, self.SortOrderValuesTuple, self.ScrollingDisabledVar, CurrentIndex)
+                    CurrentEntry = self.SpellListEntry(self.SpellListScrolledCanvas, self.SpellListEntriesList, self.LevelName, self.SortOrderValuesList, self.ScrollingDisabledVar, CurrentIndex)
                     CurrentEntry.Display(CurrentIndex)
 
             def Sort(self, Column, Reverse=False, SearchMode=False):
@@ -2863,11 +2861,11 @@ class CharacterSheet:
                 WindowInst.UpdateWindowTitle()
 
             class SpellListEntry:
-                def __init__(self, master, List, LevelName, SortOrderValuesTuple, ScrollingDisabledVar, Row):
+                def __init__(self, master, List, LevelName, SortOrderValuesList, ScrollingDisabledVar, Row):
                     # Store Parameters
                     self.master = master
                     self.LevelName = LevelName
-                    self.SortOrderValuesTuple = SortOrderValuesTuple
+                    self.SortOrderValuesList = SortOrderValuesList
                     self.ScrollingDisabledVar = ScrollingDisabledVar
                     self.Row = Row
 
@@ -2911,7 +2909,7 @@ class CharacterSheet:
                     self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a spell list entry to set a name and description.")
 
                     # Sort Order
-                    self.SortOrder = DropdownExtended(master.WindowFrame, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                    self.SortOrder = DropdownExtended(master.WindowFrame, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
                     self.SortOrder.bind("<Enter>", self.DisableScrolling)
                     self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -3092,11 +3090,13 @@ class CharacterSheet:
                 self.ManualAmountLabel.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
 
                 # Amount Inputs
-                self.SpellSlotDropdown = DropdownExtended(self.Window, textvariable=self.SpellSlotDropdownVar, values=("", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"), width=4, state="readonly", justify=CENTER)
+                self.SpellSlotDropdown = DropdownExtended(self.Window, textvariable=self.SpellSlotDropdownVar, values=["", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"], width=4, state="readonly", justify=CENTER)
+                self.SpellSlotDropdown.bind("<Return>", lambda event: self.Submit())
                 self.SpellSlotDropdown.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
                 self.ManualAmountEntry = EntryExtended(self.Window, justify=CENTER, width=5, textvariable=self.ManualAmountEntryVar)
                 self.ManualAmountEntry.ConfigureValidation(
                     lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Manual amount must be a whole number.", MinValue=0, LessThanMinString="Manual amount cannot be less than 0."), "key")
+                self.ManualAmountEntry.bind("<Return>", lambda event: self.Submit())
                 self.ManualAmountEntry.grid(row=1, column=1, padx=2, pady=2, sticky=NSEW)
 
                 # Buttons
@@ -3115,6 +3115,7 @@ class CharacterSheet:
                 # Handle Config Window Geometry and Focus
                 GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst)
                 self.Window.focus_force()
+                self.SpellSlotDropdown.focus_set()
 
             def Submit(self):
                 self.DataSubmitted.set(True)
@@ -3381,14 +3382,13 @@ class CharacterSheet:
             self.InventoryEntriesList = []
 
             # Sort Order Values
-            self.SortOrderValuesString = "\"\""
+            self.SortOrderValuesList = [""]
             for CurrentIndex in range(1, 101):
-                self.SortOrderValuesString += "," + str(CurrentIndex)
-            self.SortOrderValuesTuple = eval(self.SortOrderValuesString)
+                self.SortOrderValuesList.append(str(CurrentIndex))
 
             # Inventory Entries
             for CurrentIndex in range(1, 101):
-                CurrentEntry = self.InventoryEntry(self.InventoryListScrolledCanvas.WindowFrame, self.InventoryEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesTuple, CurrentIndex)
+                CurrentEntry = self.InventoryEntry(self.InventoryListScrolledCanvas.WindowFrame, self.InventoryEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
                 CurrentEntry.Display(CurrentIndex)
 
         def Calculate(self):
@@ -3627,11 +3627,11 @@ class CharacterSheet:
                     self.SpendingCoins[Denomination].set(str(GlobalInst.GetStringVarAsNumber(self.SpendingCoins[Denomination]) + GlobalInst.GetStringVarAsNumber(Gain)))
 
         class InventoryEntry:
-            def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesTuple, Row):
+            def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesList, Row):
                 # Store Parameters
                 self.master = master
                 self.ScrollingDisabledVar = ScrollingDisabledVar
-                self.SortOrderValuesTuple = SortOrderValuesTuple
+                self.SortOrderValuesList = SortOrderValuesList
                 self.Row = Row
 
                 # Variables
@@ -3690,7 +3690,7 @@ class CharacterSheet:
                 self.UnitValueEntry = InventoryValueEntry(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
 
                 # Unit Value Denomination
-                self.UnitValueDenomination = DropdownExtended(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
+                self.UnitValueDenomination = DropdownExtended(master, textvariable=self.UnitValueDenominationVar, values=["", "cp", "sp", "ep", "gp", "pp"], width=2, state="readonly", justify=CENTER)
                 self.UnitValueDenomination.bind("<Enter>", self.DisableScrolling)
                 self.UnitValueDenomination.bind("<Leave>", self.EnableScrolling)
 
@@ -3701,12 +3701,12 @@ class CharacterSheet:
                 self.TotalValueEntry = EntryExtended(master, width=4, textvariable=self.TotalValueEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow")
 
                 # Category Tag
-                self.CategoryTag = DropdownExtended(master, textvariable=self.CategoryTagVar, values=("", "Gear", "Food", "Water", "Treasure", "Misc."), width=8, state="readonly", justify=CENTER)
+                self.CategoryTag = DropdownExtended(master, textvariable=self.CategoryTagVar, values=["", "Gear", "Food", "Water", "Treasure", "Misc."], width=8, state="readonly", justify=CENTER)
                 self.CategoryTag.bind("<Enter>", self.DisableScrolling)
                 self.CategoryTag.bind("<Leave>", self.EnableScrolling)
 
                 # Sort Order
-                self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
                 self.SortOrder.bind("<Enter>", self.DisableScrolling)
                 self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -3975,14 +3975,13 @@ class CharacterSheet:
             self.AdditionalNotesEntriesList = []
 
             # Sort Order Values
-            self.SortOrderValuesString = "\"\""
+            self.SortOrderValuesList = [""]
             for CurrentIndex in range(1, 101):
-                self.SortOrderValuesString += "," + str(CurrentIndex)
-            self.SortOrderValuesTuple = eval(self.SortOrderValuesString)
+                self.SortOrderValuesList.append(str(CurrentIndex))
 
             # Additional Notes Entries
             for CurrentIndex in range(1, 101):
-                CurrentEntry = self.AdditionalNotesEntry(self.AdditionalNotesScrolledCanvas.WindowFrame, self.AdditionalNotesEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesTuple, CurrentIndex)
+                CurrentEntry = self.AdditionalNotesEntry(self.AdditionalNotesScrolledCanvas.WindowFrame, self.AdditionalNotesEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
                 CurrentEntry.Display(CurrentIndex)
 
         def Sort(self, Column, Reverse=False, SearchMode=False):
@@ -4033,11 +4032,11 @@ class CharacterSheet:
             WindowInst.UpdateWindowTitle()
 
         class AdditionalNotesEntry:
-            def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesTuple, Row):
+            def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesList, Row):
                 # Store Parameters
                 self.master = master
                 self.ScrollingDisabledVar = ScrollingDisabledVar
-                self.SortOrderValuesTuple = SortOrderValuesTuple
+                self.SortOrderValuesList = SortOrderValuesList
                 self.Row = Row
 
                 # Variables
@@ -4064,7 +4063,7 @@ class CharacterSheet:
                 self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a note entry to set a note.")
 
                 # Sort Order
-                self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
                 self.SortOrder.bind("<Enter>", self.DisableScrolling)
                 self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -5430,7 +5429,7 @@ class AbilityScoreDerivatives:
         List.append(self)
 
         # Ability Score Selection
-        self.AbilityScoreSelectionDropdown = DropdownExtended(master, textvariable=self.AbilityScoreSelectionDropdownVar, values=("", "STR", "DEX", "CON", "INT", "WIS", "CHA"), width=5, state="readonly", justify=CENTER)
+        self.AbilityScoreSelectionDropdown = DropdownExtended(master, textvariable=self.AbilityScoreSelectionDropdownVar, values=["", "STR", "DEX", "CON", "INT", "WIS", "CHA"], width=5, state="readonly", justify=CENTER)
         self.AbilityScoreSelectionDropdown.grid(row=0, column=self.Column, padx=2, pady=2, sticky=NSEW)
 
         # Save DC
@@ -6339,14 +6338,13 @@ class DiceRoller:
             self.DiceRollerFields["CritMinimumEntryVar"] = self.CritMinimumEntryVar
 
             # Sort Order Values
-            self.SortOrderValuesString = "\"\""
+            self.SortOrderValuesList = [""]
             for CurrentIndex in range(1, 51):
-                self.SortOrderValuesString += "," + str(CurrentIndex)
-            self.SortOrderValuesTuple = eval(self.SortOrderValuesString)
+                self.SortOrderValuesList.append(str(CurrentIndex))
 
             # Preset Rolls
             for CurrentIndex in range(1, 51):
-                CurrentEntry = self.PresetRollEntry(self.PresetRollsScrolledCanvas.WindowFrame, self.PresetRollsList, self.ScrollingDisabledVar, self.SortOrderValuesTuple, self.DiceRollerFields, CurrentIndex)
+                CurrentEntry = self.PresetRollEntry(self.PresetRollsScrolledCanvas.WindowFrame, self.PresetRollsList, self.ScrollingDisabledVar, self.SortOrderValuesList, self.DiceRollerFields, CurrentIndex)
                 CurrentEntry.Display(CurrentIndex)
 
         def Sort(self, Column, Reverse=False, SearchMode=False):
@@ -6397,11 +6395,11 @@ class DiceRoller:
             WindowInst.UpdateWindowTitle()
 
         class PresetRollEntry:
-            def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesTuple, DiceRollerFields, Row):
+            def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesList, DiceRollerFields, Row):
                 # Store Parameters
                 self.master = master
                 self.ScrollingDisabledVar = ScrollingDisabledVar
-                self.SortOrderValuesTuple = SortOrderValuesTuple
+                self.SortOrderValuesList = SortOrderValuesList
                 self.DiceRollerFields = DiceRollerFields
                 self.Row = Row
 
@@ -6442,7 +6440,7 @@ class DiceRoller:
                     self.PresetRollModifierEntryStatModifierInst = StatModifier(self.PresetRollModifierEntry, "<Button-3>", "Right-click to set a stat modifier.", "Preset Roll", Cursor="xterm", DiceRollerMode=True)
 
                 # Sort Order
-                self.PresetRollSortOrder = DropdownExtended(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                self.PresetRollSortOrder = DropdownExtended(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
                 self.PresetRollSortOrder.bind("<Enter>", self.DisableScrolling)
                 self.PresetRollSortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -6780,7 +6778,7 @@ class InitiativeOrder:
 
             # Tie Priority Dropdown
             self.InitiativeEntryTiePriorityDropdown = DropdownExtended(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
-                                                                   values=("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), width=3, state="readonly", justify=CENTER)
+                                                                   values=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"], width=3, state="readonly", justify=CENTER)
             self.InitiativeEntryTiePriorityDropdown.bind("<Enter>", self.DisableScrolling)
             self.InitiativeEntryTiePriorityDropdown.bind("<Leave>", self.EnableScrolling)
 
@@ -7263,7 +7261,7 @@ class CompactInitiativeOrder:
 
             # Tie Priority Dropdown
             self.InitiativeEntryTiePriorityDropdown = DropdownExtended(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
-                                                                   values=("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), width=3, state="readonly", justify=CENTER)
+                                                                   values=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"], width=3, state="readonly", justify=CENTER)
             self.InitiativeEntryTiePriorityDropdown.bind("<Enter>", self.DisableScrolling)
             self.InitiativeEntryTiePriorityDropdown.bind("<Leave>", self.EnableScrolling)
 
@@ -7537,14 +7535,13 @@ class HoardSheet:
         self.TreasureItemEntriesList = []
 
         # Sort Order Values
-        self.SortOrderValuesString = "\"\""
+        self.SortOrderValuesList = [""]
         for CurrentIndex in range(1, 201):
-            self.SortOrderValuesString += "," + str(CurrentIndex)
-        self.SortOrderValuesTuple = eval(self.SortOrderValuesString)
+            self.SortOrderValuesList.append(str(CurrentIndex))
 
         # Treasure Item Entries
         for CurrentIndex in range(1, 201):
-            CurrentEntry = self.TreasureItemEntry(self.TreasureItemsScrolledCanvas.WindowFrame, self.TreasureItemEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesTuple, CurrentIndex)
+            CurrentEntry = self.TreasureItemEntry(self.TreasureItemsScrolledCanvas.WindowFrame, self.TreasureItemEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
             CurrentEntry.Display(CurrentIndex)
 
     def SpendCoins(self):
@@ -7709,11 +7706,11 @@ class HoardSheet:
         WindowInst.wait_window(self.CoinCalculatorInst.Window)
 
     class TreasureItemEntry:
-        def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesTuple, Row):
+        def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesList, Row):
             # Store Parameters
             self.master = master
             self.ScrollingDisabledVar = ScrollingDisabledVar
-            self.SortOrderValuesTuple = SortOrderValuesTuple
+            self.SortOrderValuesList = SortOrderValuesList
             self.Row = Row
 
             # Variables
@@ -7770,7 +7767,7 @@ class HoardSheet:
             self.UnitValueEntry = InventoryValueEntry(master, width=4, textvariable=self.UnitValueEntryVar, justify=CENTER)
 
             # Unit Value Denomination
-            self.UnitValueDenomination = DropdownExtended(master, textvariable=self.UnitValueDenominationVar, values=("", "cp", "sp", "ep", "gp", "pp"), width=2, state="readonly", justify=CENTER)
+            self.UnitValueDenomination = DropdownExtended(master, textvariable=self.UnitValueDenominationVar, values=["", "cp", "sp", "ep", "gp", "pp"], width=2, state="readonly", justify=CENTER)
             self.UnitValueDenomination.bind("<Enter>", self.DisableScrolling)
             self.UnitValueDenomination.bind("<Leave>", self.EnableScrolling)
 
@@ -7781,7 +7778,7 @@ class HoardSheet:
             self.TotalValueEntry = EntryExtended(master, width=4, textvariable=self.TotalValueEntryVar, justify=CENTER, state=DISABLED, disabledforeground="black", disabledbackground="light gray", cursor="arrow")
 
             # Sort Order
-            self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+            self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
             self.SortOrder.bind("<Enter>", self.DisableScrolling)
             self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
