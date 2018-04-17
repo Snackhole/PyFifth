@@ -6442,7 +6442,8 @@ class DiceRoller:
                     self.PresetRollModifierEntryStatModifierInst = StatModifier(self.PresetRollModifierEntry, "<Button-3>", "Right-click to set a stat modifier.", "Preset Roll", Cursor="xterm", DiceRollerMode=True)
 
                 # Sort Order
-                self.PresetRollSortOrder = ttk.Combobox(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                # self.PresetRollSortOrder = ttk.Combobox(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
+                self.PresetRollSortOrder = DropdownExtended(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesTuple, width=5, state="readonly", justify=CENTER)
                 self.PresetRollSortOrder.bind("<Enter>", self.DisableScrolling)
                 self.PresetRollSortOrder.bind("<Leave>", self.EnableScrolling)
 
@@ -8289,18 +8290,34 @@ class DropdownExtended(ttk.Combobox):
         # Autocompletion Variables
         self.CurrentInput = ""
         self.MatchList = sorted(self["values"], key=str.lower)
+        self.IDOfScheduledClear = None
+        self.WaitTime = 2000
 
         # Bind KeyRelease
-        self.bind("<KeyRelease>", self.KeyReleased)
+        self.bind("<Key>", self.KeyPressed)
 
-    def KeyReleased(self, Event):
+    def KeyPressed(self, Event):
         if Event.keysym == "BackSpace":
-            self.CurrentInput = self.CurrentInput[:-1]
-        elif Event.char != "":
+            print("BackSpace")
+            if len(self.CurrentInput) > 0:
+                print("Removing:  " + self.CurrentInput[-1])
+                self.CurrentInput = self.CurrentInput[:-1]
+        elif Event.char not in ["", "\t", "\r"]:
             self.CurrentInput += Event.char
+            print("Added:  " + repr(Event.char))
         for Element in self.MatchList:
             if Element.lower().startswith(self.CurrentInput.lower()):
                 self.set(Element)
+                break
+        if self.IDOfScheduledClear:
+            self.after_cancel(self.IDOfScheduledClear)
+        if len(self.CurrentInput) > 0:
+            self.IDOfScheduledClear = self.after(self.WaitTime, self.ClearCurrentInput)
+
+    def ClearCurrentInput(self):
+        print("Clearing:  " + self.CurrentInput)
+        self.CurrentInput = ""
+        self.IDOfScheduledClear = None
 
 
 # Prompts
@@ -8488,26 +8505,20 @@ class Tooltip:
         self.WrapLength = 200
 
         # Bindings
-        self.Widget.bind("<Enter>", lambda event: self.Hover())
-        self.Widget.bind("<Leave>", lambda event: self.Leave())
-        self.Widget.bind("<ButtonPress>", lambda event: self.Leave())
+        self.Widget.bind("<Enter>", lambda event: self.ScheduleTooltip())
+        self.Widget.bind("<Leave>", lambda event: self.UnscheduleAndHideTooltip())
+        self.Widget.bind("<ButtonPress>", lambda event: self.UnscheduleAndHideTooltip())
 
-    def Hover(self):
-        self.ScheduleTooltip()
-
-    def Leave(self):
-        self.UnscheduleTooltip()
-        self.HideTip()
+    def UnscheduleAndHideTooltip(self):
+        if self.ID:
+            self.Widget.after_cancel(self.ID)
+            self.ID = None
+        if self.TooltipWindow:
+            self.TooltipWindow.destroy()
+            self.TooltipWindow = None
 
     def ScheduleTooltip(self):
-        self.UnscheduleTooltip()
         self.ID = self.Widget.after(self.WaitTime, self.ShowTooltip)
-
-    def UnscheduleTooltip(self):
-        ID = self.ID
-        self.ID = None
-        if ID:
-            self.Widget.after_cancel(ID)
 
     def ShowTooltip(self):
         # Position
@@ -8522,12 +8533,6 @@ class Tooltip:
         # Create Label
         TooltipLabel = Label(self.TooltipWindow, text=self.Text, justify=LEFT, background="white", relief=SOLID, bd=1, wraplength=self.WrapLength)
         TooltipLabel.grid(row=0, column=0, ipadx=1, ipady=1)
-
-    def HideTip(self):
-        TooltipWindow = self.TooltipWindow
-        self.TooltipWindow = None
-        if TooltipWindow:
-            TooltipWindow.destroy()
 
 
 # Mode Select
