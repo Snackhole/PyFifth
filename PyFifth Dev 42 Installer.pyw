@@ -19,7 +19,8 @@ class Window(Tk):
         self.DesktopShortcutBoxVar = BooleanVar()
         self.ButtonColor = "#F1F1D4"
         self.ScriptName = os.path.splitext(os.path.basename(__file__))[0]
-        self.ProgramZip = self.ResourcePath("Executables/PyFifth Dev 41.zip")
+        self.PyFifthScriptName = self.ScriptName[:-10]
+        self.ProgramZip = self.ResourcePath("Executables/Final/" + self.PyFifthScriptName + ".zip")
 
         # Install Location
         self.InstallLocationScrollbar = Scrollbar(self, orient=HORIZONTAL, command=self.ScrollInstallLocationEntry)

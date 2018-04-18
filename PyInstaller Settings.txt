@@ -2,7 +2,7 @@ Executable Parameters:
 	"PyFifth VERSION.pyw" --clean --windowed --name="PyFifth" --icon=PyFifthIcon.ico --add-data="PyFifthIcon.ico;." --workpath=./Executables/Build --distpath=./Executables/Final
 
 Installer Parameters:
-    "PyFifth VERSION Installer.pyw" --clean --windowed --onefile --name="PyFifth VERSION Installer" --icon=PyFifthIcon.ico --add-data="PyFifthIcon.ico;." --add-binary="./Executables/PyFifth VERSION.zip;./Executables" --workpath= ./Installer/Build --distpath=./Installer/Final
+    "PyFifth VERSION Installer.pyw" --clean --windowed --onefile --name="PyFifth VERSION Installer" --icon=PyFifthIcon.ico --add-data="PyFifthIcon.ico;." --add-binary="./Executables/Final/PyFifth VERSION.zip;./Executables/Final" --workpath=./Installer/Build --distpath=./Installer/Final
 
 Interpreter Options:
 	-m PyInstaller
