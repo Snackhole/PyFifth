@@ -5,6 +5,7 @@ import math
 import os
 import platform
 import random
+import string
 from decimal import *
 from time import sleep
 from tkinter import *
@@ -6806,7 +6807,8 @@ class InitiativeOrder:
 
             # Tie Priority Dropdown
             self.InitiativeEntryTiePriorityDropdown = DropdownExtended(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
-                                                                   values=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"], width=3, state="readonly", justify=CENTER)
+                                                                       values=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"], width=3, state="readonly",
+                                                                       justify=CENTER)
             self.InitiativeEntryTiePriorityDropdown.bind("<Enter>", self.DisableScrolling)
             self.InitiativeEntryTiePriorityDropdown.bind("<Leave>", self.EnableScrolling)
 
@@ -7292,7 +7294,8 @@ class CompactInitiativeOrder:
 
             # Tie Priority Dropdown
             self.InitiativeEntryTiePriorityDropdown = DropdownExtended(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
-                                                                   values=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"], width=3, state="readonly", justify=CENTER)
+                                                                       values=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"], width=3, state="readonly",
+                                                                       justify=CENTER)
             self.InitiativeEntryTiePriorityDropdown.bind("<Enter>", self.DisableScrolling)
             self.InitiativeEntryTiePriorityDropdown.bind("<Leave>", self.EnableScrolling)
 
@@ -8321,6 +8324,10 @@ class DropdownExtended(ttk.Combobox):
         self.CurrentInput = ""
         self.IDOfScheduledClear = None
         self.WaitTime = 2000
+        self.InvalidKeySyms = ["Alt_L", "Alt_R", "Cancel", "Caps_Lock", "Control_L", "Control_R", "Delete", "Down", "End", "Escape", "Execute", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "Home",
+                               "Insert", "Left", "Linefeed", "KP_Add", "KP_Begin", "KP_Decimal", "KP_Delete", "KP_Divide", "KP_Down", "KP_End", "KP_Enter", "KP_Home", "KP_Insert", "KP_Left", "KP_Multiply", "KP_Next", "KP_Prior",
+                               "KP_Right", "KP_Subtract", "KP_Up", "Next", "Num_Lock", "Pause", "Print", "Prior", "Return", "Right", "Scroll_Lock", "Shift_L", "Shift_R", "Tab", "Up"]
+        self.ValidChars = string.ascii_letters + string.digits + string.punctuation + " "
 
         # Bind KeyRelease
         self.bind("<Key>", self.KeyPressed)
@@ -8328,14 +8335,15 @@ class DropdownExtended(ttk.Combobox):
         self.bind("<FocusOut>", self.GainedOrLostFocus)
 
     def KeyPressed(self, Event):
+        KeySym = Event.keysym
         NewChar = Event.char
-        Backspacing = Event.keysym == "BackSpace"
-        Shifting = Event.keysym == "Shift_L" or Event.keysym == "Shift_R"
-        if Backspacing:
+        if KeySym in self.InvalidKeySyms:
+            return
+        if KeySym == "BackSpace":
             if len(self.CurrentInput) > 0:
                 self.CurrentInput = self.CurrentInput[:-1]
             self.MatchToInput()
-        if NewChar not in ["\t", "\r"] and not Backspacing and not Shifting:
+        elif NewChar in self.ValidChars:
             self.CurrentInput += NewChar
             self.MatchToInput()
         self.UnscheduleClear()
