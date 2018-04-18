@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/Executables" />
+      <excludeFolder url="file://$MODULE_DIR$/Installer" />
       <excludeFolder url="file://$MODULE_DIR$/Versions" />
       <excludeFolder url="file://$MODULE_DIR$/Wiki Images" />
     </content>

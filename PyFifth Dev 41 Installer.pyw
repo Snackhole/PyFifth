@@ -1,11 +1,13 @@
 import os
+import shutil
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
 from zipfile import ZipFile
-import shutil
+
 import winshell
 from win32com.client import Dispatch
+
 
 class Window(Tk):
     def __init__(self):
@@ -17,7 +19,7 @@ class Window(Tk):
         self.DesktopShortcutBoxVar = BooleanVar()
         self.ButtonColor = "#F1F1D4"
         self.ScriptName = os.path.splitext(os.path.basename(__file__))[0]
-        self.ProgramZip = "Executables/PyFifth Dev 41.zip"
+        self.ProgramZip = self.ResourcePath("Executables/PyFifth Dev 41.zip")
 
         # Install Location
         self.InstallLocationScrollbar = Scrollbar(self, orient=HORIZONTAL, command=self.ScrollInstallLocationEntry)
@@ -81,13 +83,17 @@ class Window(Tk):
                 Shortcut.WorkingDirectory = InstallLocation
                 Shortcut.IconLocation = ShortcutTarget
                 Shortcut.save()
-        except:
-            messagebox.showerror("Installation Error", "An error occurred during installation, possibly due to a file permission error.  Please try again.")
+        except Exception as Error:
+            messagebox.showerror("Installation Error", "An error occurred during installation.\n\n" + str(Error))
             return
 
         # Installation Complete
         messagebox.showinfo("Installation Complete", "PyFifth has been installed to the chosen location.")
         self.destroy()
+
+    def ResourcePath(self, RelativePath):
+        BasePath = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        return os.path.join(BasePath, RelativePath)
 
     def ScrollInstallLocationEntry(self, *args):
         Operation = args[0]
@@ -113,9 +119,10 @@ class Window(Tk):
 
     def WindowIcon(self):
         try:
-            self.iconbitmap("PyFifthIcon.ico")
+            self.iconbitmap(self.ResourcePath("PyFifthIcon.ico"))
         except TclError:
             pass
+
 
 if __name__ == "__main__":
     WindowInst = Window()
