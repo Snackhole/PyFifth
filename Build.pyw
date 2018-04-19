@@ -8,8 +8,10 @@ import os
 # TODO:  Clean up build files
 
 def Build():
-    # Build Variables
+    # Version String
     Version = "Dev 42"
+
+    # Build Variables
     ExecutableScript = "PyFifth " + Version + ".pyw"
     ExecutableZip = "Executables/Final/" + ExecutableScript[:-4] + ".zip"
     InstallerScript = "PyFifth " + Version + " Installer.pyw"
