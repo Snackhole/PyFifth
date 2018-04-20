@@ -2794,22 +2794,22 @@ class CharacterSheet:
                 self.SpellListFrame.grid(row=0, column=0)
 
                 # Spell List Scrolled Canvas
-                self.SpellListScrolledCanvas = ScrolledCanvas(self.SpellListFrame, Width=342, Height=447, ScrollingDisabledVar=self.ScrollingDisabledVar)
+                self.SpellListScrolledCanvas = ScrolledCanvas(self.SpellListFrame, Width=342, Height=411, NumberOfColumns=3, ScrollingDisabledVar=self.ScrollingDisabledVar)
                 self.SpellListScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
                 # Headers
-                self.PreparedHeader = Label(self.SpellListScrolledCanvas.WindowFrame, text="Prep.", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+                self.PreparedHeader = Label(self.SpellListScrolledCanvas.HeaderFrame, text="Prep.", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
                 self.PreparedHeader.grid(row=0, column=0, sticky=NSEW)
                 self.PreparedHeader.bind("<Button-1>", lambda event: self.Sort("Prepared"))
                 self.PreparedHeader.bind("<Button-3>", lambda event: self.Sort("Prepared", Reverse=True))
                 self.PreparedTooltip = Tooltip(self.PreparedHeader, GlobalInst.SortTooltipString[:-29])
-                self.NameHeader = Label(self.SpellListScrolledCanvas.WindowFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+                self.NameHeader = Label(self.SpellListScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
                 self.NameHeader.grid(row=0, column=1, sticky=NSEW)
                 self.NameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
                 self.NameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
                 self.NameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
                 self.NameTooltip = Tooltip(self.NameHeader, GlobalInst.SortTooltipString)
-                self.SortOrderHeader = Label(self.SpellListScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+                self.SortOrderHeader = Label(self.SpellListScrolledCanvas.HeaderFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
                 self.SortOrderHeader.grid(row=0, column=2, sticky=NSEW)
                 self.SortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
                 self.SortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
@@ -3350,59 +3350,59 @@ class CharacterSheet:
             self.InventoryListFrame.grid(row=2, column=1, padx=2, pady=2)
 
             # Inventory List Scrolled Canvas
-            self.InventoryListScrolledCanvas = ScrolledCanvas(self.InventoryListFrame, Height=345, Width=693, ScrollingDisabledVar=self.ScrollingDisabledVar)
+            self.InventoryListScrolledCanvas = ScrolledCanvas(self.InventoryListFrame, Height=309, Width=693, NumberOfColumns=9, ScrollingDisabledVar=self.ScrollingDisabledVar)
             self.InventoryListScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
             # Inventory List Headers
-            self.InventoryListNameHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListNameHeader = Label(self.InventoryListScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListNameHeader.grid(row=0, column=0, sticky=NSEW)
             self.InventoryListNameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
             self.InventoryListNameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
             self.InventoryListNameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
             self.InventoryListNameTooltip = Tooltip(self.InventoryListNameHeader, GlobalInst.SortTooltipString)
-            self.InventoryListCountHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Count", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListCountHeader = Label(self.InventoryListScrolledCanvas.HeaderFrame, text="Count", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListCountHeader.grid(row=0, column=1, sticky=NSEW)
             self.InventoryListCountHeader.bind("<Button-1>", lambda event: self.Sort("Count"))
             self.InventoryListCountHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Count", SearchMode=True))
             self.InventoryListCountHeader.bind("<Button-3>", lambda event: self.Sort("Count", Reverse=True))
             self.InventoryListCountTooltip = Tooltip(self.InventoryListCountHeader, GlobalInst.SortTooltipString)
-            self.InventoryListUnitWeightHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Unit Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListUnitWeightHeader = Label(self.InventoryListScrolledCanvas.HeaderFrame, text="Unit Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListUnitWeightHeader.grid(row=0, column=2, sticky=NSEW)
             self.InventoryListUnitWeightHeader.bind("<Button-1>", lambda event: self.Sort("Unit Weight"))
             self.InventoryListUnitWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Weight", SearchMode=True))
             self.InventoryListUnitWeightHeader.bind("<Button-3>", lambda event: self.Sort("Unit Weight", Reverse=True))
             self.InventoryListUnitWeightTooltip = Tooltip(self.InventoryListUnitWeightHeader, GlobalInst.SortTooltipString)
-            self.InventoryListUnitValueHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Unit Value", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListUnitValueHeader = Label(self.InventoryListScrolledCanvas.HeaderFrame, text="Unit Value", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListUnitValueHeader.grid(row=0, column=3, sticky=NSEW)
             self.InventoryListUnitValueHeader.bind("<Button-1>", lambda event: self.Sort("Unit Value"))
             self.InventoryListUnitValueHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Value", SearchMode=True))
             self.InventoryListUnitValueHeader.bind("<Button-3>", lambda event: self.Sort("Unit Value", Reverse=True))
             self.InventoryListUnitValueTooltip = Tooltip(self.InventoryListUnitValueHeader, GlobalInst.SortTooltipString)
-            self.InventoryListUnitValueDenominationHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Value\nDenom.", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListUnitValueDenominationHeader = Label(self.InventoryListScrolledCanvas.HeaderFrame, text="Value\nDenom.", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListUnitValueDenominationHeader.grid(row=0, column=4, sticky=NSEW)
             self.InventoryListUnitValueDenominationHeader.bind("<Button-1>", lambda event: self.Sort("Value Denomination"))
             self.InventoryListUnitValueDenominationHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Value Denomination", SearchMode=True))
             self.InventoryListUnitValueDenominationHeader.bind("<Button-3>", lambda event: self.Sort("Value Denomination", Reverse=True))
             self.InventoryListUnitValueDenominationTooltip = Tooltip(self.InventoryListUnitValueDenominationHeader, GlobalInst.SortTooltipString)
-            self.InventoryListTotalWeightHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Total Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListTotalWeightHeader = Label(self.InventoryListScrolledCanvas.HeaderFrame, text="Total Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListTotalWeightHeader.grid(row=0, column=5, sticky=NSEW)
             self.InventoryListTotalWeightHeader.bind("<Button-1>", lambda event: self.Sort("Total Weight"))
             self.InventoryListTotalWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Weight", SearchMode=True))
             self.InventoryListTotalWeightHeader.bind("<Button-3>", lambda event: self.Sort("Total Weight", Reverse=True))
             self.InventoryListTotalWeightTooltip = Tooltip(self.InventoryListTotalWeightHeader, GlobalInst.SortTooltipString)
-            self.InventoryListTotalValueHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Total Value\n(gp)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListTotalValueHeader = Label(self.InventoryListScrolledCanvas.HeaderFrame, text="Total Value\n(gp)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListTotalValueHeader.grid(row=0, column=6, sticky=NSEW)
             self.InventoryListTotalValueHeader.bind("<Button-1>", lambda event: self.Sort("Total Value"))
             self.InventoryListTotalValueHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Value", SearchMode=True))
             self.InventoryListTotalValueHeader.bind("<Button-3>", lambda event: self.Sort("Total Value", Reverse=True))
             self.InventoryListTotalValueTooltip = Tooltip(self.InventoryListTotalValueHeader, GlobalInst.SortTooltipString)
-            self.InventoryListTagHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Tag", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListTagHeader = Label(self.InventoryListScrolledCanvas.HeaderFrame, text="Tag", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListTagHeader.grid(row=0, column=7, sticky=NSEW)
             self.InventoryListTagHeader.bind("<Button-1>", lambda event: self.Sort("Tag"))
             self.InventoryListTagHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Tag", SearchMode=True))
             self.InventoryListTagHeader.bind("<Button-3>", lambda event: self.Sort("Tag", Reverse=True))
             self.InventoryListTagTooltip = Tooltip(self.InventoryListTagHeader, GlobalInst.SortTooltipString)
-            self.InventoryListSortOrderHeader = Label(self.InventoryListScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.InventoryListSortOrderHeader = Label(self.InventoryListScrolledCanvas.HeaderFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.InventoryListSortOrderHeader.grid(row=0, column=8, sticky=NSEW)
             self.InventoryListSortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
             self.InventoryListSortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
@@ -3999,17 +3999,17 @@ class CharacterSheet:
             self.AdditionalNotesFrame.grid(row=0, column=5, padx=2, pady=2)
 
             # Additional Notes Scrolled Canvas
-            self.AdditionalNotesScrolledCanvas = ScrolledCanvas(self.AdditionalNotesFrame, ScrollingDisabledVar=self.ScrollingDisabledVar, Height=475, Width=225)
+            self.AdditionalNotesScrolledCanvas = ScrolledCanvas(self.AdditionalNotesFrame, ScrollingDisabledVar=self.ScrollingDisabledVar, Height=439, Width=225, NumberOfColumns=2)
             self.AdditionalNotesScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
             # Additional Notes Headers
-            self.NameHeader = Label(self.AdditionalNotesScrolledCanvas.WindowFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.NameHeader = Label(self.AdditionalNotesScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.NameHeader.grid(row=0, column=0, sticky=NSEW)
             self.NameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
             self.NameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
             self.NameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
             self.NameTooltip = Tooltip(self.NameHeader, GlobalInst.SortTooltipString)
-            self.SortOrderHeader = Label(self.AdditionalNotesScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.SortOrderHeader = Label(self.AdditionalNotesScrolledCanvas.HeaderFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.SortOrderHeader.grid(row=0, column=1, sticky=NSEW)
             self.SortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
             self.SortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
@@ -6065,7 +6065,7 @@ class DiceRoller:
             self.ResultsFieldWidth = 200
             self.ResultsFieldHeight = 258
             self.PresetRollsFrameRow = 2
-            self.PresetRollsScrolledCanvasHeight = 262
+            self.PresetRollsScrolledCanvasHeight = 226
             self.PresetRollsScrolledCanvasWidth = 418
         elif WindowInst.Mode == "EncounterManager":
             self.Row = 0
@@ -6076,7 +6076,7 @@ class DiceRoller:
             self.ResultsFieldWidth = 431
             self.ResultsFieldHeight = 154
             self.PresetRollsFrameRow = 3
-            self.PresetRollsScrolledCanvasHeight = 405
+            self.PresetRollsScrolledCanvasHeight = 369
             self.PresetRollsScrolledCanvasWidth = 418
         elif WindowInst.Mode == "CharacterSheet":
             self.Row = 0
@@ -6087,7 +6087,7 @@ class DiceRoller:
             self.ResultsFieldWidth = 436
             self.ResultsFieldHeight = 148
             self.PresetRollsFrameRow = 3
-            self.PresetRollsScrolledCanvasHeight = 288
+            self.PresetRollsScrolledCanvasHeight = 252
             self.PresetRollsScrolledCanvasWidth = 423
         elif WindowInst.Mode == "NPCSheet":
             self.Row = 0
@@ -6098,7 +6098,7 @@ class DiceRoller:
             self.ResultsFieldWidth = 436
             self.ResultsFieldHeight = 148
             self.PresetRollsFrameRow = 3
-            self.PresetRollsScrolledCanvasHeight = 402
+            self.PresetRollsScrolledCanvasHeight = 366
             self.PresetRollsScrolledCanvasWidth = 423
 
         # Variables
@@ -6362,19 +6362,19 @@ class DiceRoller:
             self.PresetRollsFrame.grid(row=self.PresetRollsFrameRow, column=0, padx=2, pady=2)
 
             # Scrolled Canvas
-            self.PresetRollsScrolledCanvas = ScrolledCanvas(self.PresetRollsFrame, Height=self.PresetRollsScrolledCanvasHeight, Width=self.PresetRollsScrolledCanvasWidth, ScrollingDisabledVar=self.ScrollingDisabledVar)
+            self.PresetRollsScrolledCanvas = ScrolledCanvas(self.PresetRollsFrame, Height=self.PresetRollsScrolledCanvasHeight, Width=self.PresetRollsScrolledCanvasWidth, NumberOfColumns=8, ScrollingDisabledVar=self.ScrollingDisabledVar)
             self.PresetRollsScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
             # Scrolled Canvas Headers
-            self.PresetRollsScrolledCanvasNameHeader = Label(self.PresetRollsScrolledCanvas.WindowFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.PresetRollsScrolledCanvasNameHeader = Label(self.PresetRollsScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.PresetRollsScrolledCanvasNameHeader.grid(row=0, column=0, sticky=NSEW)
             self.PresetRollsScrolledCanvasNameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
             self.PresetRollsScrolledCanvasNameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
             self.PresetRollsScrolledCanvasNameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
             self.PresetRollsScrolledCanvasNameTooltip = Tooltip(self.PresetRollsScrolledCanvasNameHeader, GlobalInst.SortTooltipString)
-            self.PresetRollsScrolledCanvasRollHeader = Label(self.PresetRollsScrolledCanvas.WindowFrame, text="Roll", bd=2, relief=GROOVE)
+            self.PresetRollsScrolledCanvasRollHeader = Label(self.PresetRollsScrolledCanvas.HeaderFrame, text="Roll", bd=2, relief=GROOVE)
             self.PresetRollsScrolledCanvasRollHeader.grid(row=0, column=1, sticky=NSEW, columnspan=6)
-            self.PresetRollsScrolledCanvasSortOrderHeader = Label(self.PresetRollsScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.PresetRollsScrolledCanvasSortOrderHeader = Label(self.PresetRollsScrolledCanvas.HeaderFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
             self.PresetRollsScrolledCanvasSortOrderHeader.grid(row=0, column=7, sticky=NSEW)
             self.PresetRollsScrolledCanvasSortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
             self.PresetRollsScrolledCanvasSortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
@@ -6677,51 +6677,51 @@ class InitiativeOrder:
         # Initiative Order Scrolled Canvas
         self.InitiativeOrderScrolledCanvasFrame = Frame(self.InitiativeOrderFrame)
         self.InitiativeOrderScrolledCanvasFrame.grid(row=1, column=0, sticky=NSEW)
-        self.InitiativeOrderScrolledCanvas = ScrolledCanvas(self.InitiativeOrderScrolledCanvasFrame, Height=470, Width=839, ScrollingDisabledVar=self.ScrollingDisabledVar)
+        self.InitiativeOrderScrolledCanvas = ScrolledCanvas(self.InitiativeOrderScrolledCanvasFrame, Height=434, Width=839, NumberOfColumns=11, ScrollingDisabledVar=self.ScrollingDisabledVar)
         self.InitiativeOrderScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
         # Initiative Header
-        self.InitiativeHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Initiative", bd=2, relief=GROOVE)
+        self.InitiativeHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Initiative", bd=2, relief=GROOVE)
         self.InitiativeHeader.grid(row=0, column=0, sticky=NSEW)
 
         # Tie Priority Header
-        self.TiePriorityHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Tie\nPriority", bd=2, relief=GROOVE)
+        self.TiePriorityHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Tie\nPriority", bd=2, relief=GROOVE)
         self.TiePriorityHeader.grid(row=0, column=1, sticky=NSEW)
 
         # Name Header
-        self.NameHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Name", bd=2, relief=GROOVE)
+        self.NameHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE)
         self.NameHeader.grid(row=0, column=2, sticky=NSEW)
 
         # AC Header
-        self.ACHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="AC", bd=2, relief=GROOVE)
+        self.ACHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="AC", bd=2, relief=GROOVE)
         self.ACHeader.grid(row=0, column=3, sticky=NSEW)
 
         # Temp HP Header
-        self.TempHPHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Temp\nHP", bd=2, relief=GROOVE)
+        self.TempHPHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Temp\nHP", bd=2, relief=GROOVE)
         self.TempHPHeader.grid(row=0, column=4, sticky=NSEW)
 
         # Current HP Header
-        self.CurrentHPHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Current\nHP", bd=2, relief=GROOVE)
+        self.CurrentHPHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Current\nHP", bd=2, relief=GROOVE)
         self.CurrentHPHeader.grid(row=0, column=5, sticky=NSEW)
 
         # Max HP Header
-        self.MaxHPHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Max\nHP", bd=2, relief=GROOVE)
+        self.MaxHPHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Max\nHP", bd=2, relief=GROOVE)
         self.MaxHPHeader.grid(row=0, column=6, sticky=NSEW)
 
         # Concentration Header
-        self.ConcentrationHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Conc.", bd=2, relief=GROOVE)
+        self.ConcentrationHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Conc.", bd=2, relief=GROOVE)
         self.ConcentrationHeader.grid(row=0, column=7, sticky=NSEW)
 
         # Conditions Header
-        self.ConditionsHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Conditions", bd=2, relief=GROOVE)
+        self.ConditionsHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Conditions", bd=2, relief=GROOVE)
         self.ConditionsHeader.grid(row=0, column=8, sticky=NSEW)
 
         # Location Header
-        self.LocationHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Location", bd=2, relief=GROOVE)
+        self.LocationHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Location", bd=2, relief=GROOVE)
         self.LocationHeader.grid(row=0, column=9, sticky=NSEW)
 
         # Notes Header
-        self.NotesHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Notes", bd=2, relief=GROOVE)
+        self.NotesHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Notes", bd=2, relief=GROOVE)
         self.NotesHeader.grid(row=0, column=10, sticky=NSEW)
 
         # Entries List
@@ -7242,19 +7242,19 @@ class CompactInitiativeOrder:
         # Initiative Order Scrolled Canvas
         self.InitiativeOrderScrolledCanvasFrame = Frame(master)
         self.InitiativeOrderScrolledCanvasFrame.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-        self.InitiativeOrderScrolledCanvas = ScrolledCanvas(self.InitiativeOrderScrolledCanvasFrame, Height=400, Width=310, ScrollingDisabledVar=self.ScrollingDisabledVar)
+        self.InitiativeOrderScrolledCanvas = ScrolledCanvas(self.InitiativeOrderScrolledCanvasFrame, Height=364, Width=310, NumberOfColumns=3, ScrollingDisabledVar=self.ScrollingDisabledVar)
         self.InitiativeOrderScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
         # Initiative Header
-        self.InitiativeHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Initiative", bd=2, relief=GROOVE)
+        self.InitiativeHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Initiative", bd=2, relief=GROOVE)
         self.InitiativeHeader.grid(row=0, column=0, sticky=NSEW)
 
         # Tie Priority Header
-        self.TiePriorityHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Tie\nPriority", bd=2, relief=GROOVE)
+        self.TiePriorityHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Tie\nPriority", bd=2, relief=GROOVE)
         self.TiePriorityHeader.grid(row=0, column=1, sticky=NSEW)
 
         # Name Header
-        self.NameHeader = Label(self.InitiativeOrderScrolledCanvas.WindowFrame, text="Name", bd=2, relief=GROOVE)
+        self.NameHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE)
         self.NameHeader.grid(row=0, column=2, sticky=NSEW)
 
         # Entries List
@@ -7569,53 +7569,53 @@ class HoardSheet:
         self.TreasureItemsFrame.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2, rowspan=3)
 
         # Treasure Items Scrolled Canvas
-        self.TreasureItemsScrolledCanvas = ScrolledCanvas(self.TreasureItemsFrame, Height=324, Width=622, ScrollingDisabledVar=self.ScrollingDisabledVar)
+        self.TreasureItemsScrolledCanvas = ScrolledCanvas(self.TreasureItemsFrame, Height=288, Width=622, NumberOfColumns=8, ScrollingDisabledVar=self.ScrollingDisabledVar)
         self.TreasureItemsScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
         # Treasure Items Headers
-        self.TreasureItemsListNameHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListNameHeader = Label(self.TreasureItemsScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListNameHeader.grid(row=0, column=0, sticky=NSEW)
         self.TreasureItemsListNameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
         self.TreasureItemsListNameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
         self.TreasureItemsListNameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
         self.TreasureItemsListNameTooltip = Tooltip(self.TreasureItemsListNameHeader, GlobalInst.SortTooltipString)
-        self.TreasureItemsListCountHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Count", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListCountHeader = Label(self.TreasureItemsScrolledCanvas.HeaderFrame, text="Count", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListCountHeader.grid(row=0, column=1, sticky=NSEW)
         self.TreasureItemsListCountHeader.bind("<Button-1>", lambda event: self.Sort("Count"))
         self.TreasureItemsListCountHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Count", SearchMode=True))
         self.TreasureItemsListCountHeader.bind("<Button-3>", lambda event: self.Sort("Count", Reverse=True))
         self.TreasureItemsListCountTooltip = Tooltip(self.TreasureItemsListCountHeader, GlobalInst.SortTooltipString)
-        self.TreasureItemsListUnitWeightHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Unit Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListUnitWeightHeader = Label(self.TreasureItemsScrolledCanvas.HeaderFrame, text="Unit Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListUnitWeightHeader.grid(row=0, column=2, sticky=NSEW)
         self.TreasureItemsListUnitWeightHeader.bind("<Button-1>", lambda event: self.Sort("Unit Weight"))
         self.TreasureItemsListUnitWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Weight", SearchMode=True))
         self.TreasureItemsListUnitWeightHeader.bind("<Button-3>", lambda event: self.Sort("Unit Weight", Reverse=True))
         self.TreasureItemsListUnitWeightTooltip = Tooltip(self.TreasureItemsListUnitWeightHeader, GlobalInst.SortTooltipString)
-        self.TreasureItemsListUnitValueHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Unit Value", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListUnitValueHeader = Label(self.TreasureItemsScrolledCanvas.HeaderFrame, text="Unit Value", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListUnitValueHeader.grid(row=0, column=3, sticky=NSEW)
         self.TreasureItemsListUnitValueHeader.bind("<Button-1>", lambda event: self.Sort("Unit Value"))
         self.TreasureItemsListUnitValueHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Unit Value", SearchMode=True))
         self.TreasureItemsListUnitValueHeader.bind("<Button-3>", lambda event: self.Sort("Unit Value", Reverse=True))
         self.TreasureItemsListUnitValueTooltip = Tooltip(self.TreasureItemsListUnitValueHeader, GlobalInst.SortTooltipString)
-        self.TreasureItemsListUnitValueDenominationHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Value\nDenom.", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListUnitValueDenominationHeader = Label(self.TreasureItemsScrolledCanvas.HeaderFrame, text="Value\nDenom.", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListUnitValueDenominationHeader.grid(row=0, column=4, sticky=NSEW)
         self.TreasureItemsListUnitValueDenominationHeader.bind("<Button-1>", lambda event: self.Sort("Value Denomination"))
         self.TreasureItemsListUnitValueDenominationHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Value Denomination", SearchMode=True))
         self.TreasureItemsListUnitValueDenominationHeader.bind("<Button-3>", lambda event: self.Sort("Value Denomination", Reverse=True))
         self.TreasureItemsListUnitValueDenominationTooltip = Tooltip(self.TreasureItemsListUnitValueDenominationHeader, GlobalInst.SortTooltipString)
-        self.TreasureItemsListTotalWeightHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Total Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListTotalWeightHeader = Label(self.TreasureItemsScrolledCanvas.HeaderFrame, text="Total Weight\n(lbs.)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListTotalWeightHeader.grid(row=0, column=5, sticky=NSEW)
         self.TreasureItemsListTotalWeightHeader.bind("<Button-1>", lambda event: self.Sort("Total Weight"))
         self.TreasureItemsListTotalWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Weight", SearchMode=True))
         self.TreasureItemsListTotalWeightHeader.bind("<Button-3>", lambda event: self.Sort("Total Weight", Reverse=True))
         self.TreasureItemsListTotalWeightTooltip = Tooltip(self.TreasureItemsListTotalWeightHeader, GlobalInst.SortTooltipString)
-        self.TreasureItemsListTotalValueHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Total Value\n(gp)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListTotalValueHeader = Label(self.TreasureItemsScrolledCanvas.HeaderFrame, text="Total Value\n(gp)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListTotalValueHeader.grid(row=0, column=6, sticky=NSEW)
         self.TreasureItemsListTotalValueHeader.bind("<Button-1>", lambda event: self.Sort("Total Value"))
         self.TreasureItemsListTotalValueHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Total Value", SearchMode=True))
         self.TreasureItemsListTotalValueHeader.bind("<Button-3>", lambda event: self.Sort("Total Value", Reverse=True))
         self.TreasureItemsListTotalValueTooltip = Tooltip(self.TreasureItemsListTotalValueHeader, GlobalInst.SortTooltipString)
-        self.TreasureItemsListSortOrderHeader = Label(self.TreasureItemsScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+        self.TreasureItemsListSortOrderHeader = Label(self.TreasureItemsScrolledCanvas.HeaderFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
         self.TreasureItemsListSortOrderHeader.grid(row=0, column=7, sticky=NSEW)
         self.TreasureItemsListSortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
         self.TreasureItemsListSortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
