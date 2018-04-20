@@ -32,14 +32,13 @@ def Build():
     # Delete Build Files
     for Folder in ["Executables/", "Installer/"]:
         shutil.rmtree(Folder, True)
-    # for File in ["PyFifth.spec", InstallerScript[:-4] + ".spec"]:
-    #     try:
-    #         os.unlink(File)
-    #     except FileNotFoundError:
-    #         pass
     for File in os.listdir("."):
         if File.endswith(".spec"):
             os.unlink(File)
+
+    # Mark Source Files as Built
+    os.rename(ExecutableScript, "BUILT " + ExecutableScript)
+    os.rename(InstallerScript, "BUILT " + InstallerScript)
 
 
 if __name__ == "__main__":
