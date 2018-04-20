@@ -24,6 +24,7 @@ class Global:
         self.OS = platform.system()
         self.ButtonColor = "#F1F1D4"
         self.SortTooltipString = "Left-click/right-click to sort in ascending/descending order.  Shift+left-click to search."
+        self.SyncColumnWidthsList = []
 
     def GetStringVarAsNumber(self, Var, Mode="Int"):
         VarText = Var.get()
@@ -100,6 +101,10 @@ class Global:
             self.StatModifierEntries["Wisdom"] = CreatureDataInst.AbilitiesWisdomEntryVar
             self.StatModifierEntries["Charisma"] = CreatureDataInst.AbilitiesCharismaEntryVar
             self.StatModifierEntries["Proficiency"] = CreatureDataInst.ProficiencyEntryVar
+
+    def SyncColumnWidths(self):
+        for Table in self.SyncColumnWidthsList:
+            Table.SyncColumnWidths()
 
     # Interception of Conflicting Bindings
     def InterceptEvents(self, Widget):
@@ -2246,17 +2251,17 @@ class CharacterSheet:
                 self.FeaturesFrame.grid(row=1, column=5, rowspan=5, sticky=NSEW)
 
                 # Features Scrolled Canvas
-                self.FeaturesScrolledCanvas = ScrolledCanvas(self.FeaturesFrame, Height=480, Width=327, ScrollingDisabledVar=self.ScrollingDisabledVar)
+                self.FeaturesScrolledCanvas = ScrolledCanvas(self.FeaturesFrame, Height=444, Width=327, NumberOfColumns=2, ScrollingDisabledVar=self.ScrollingDisabledVar)
                 self.FeaturesScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
                 # Headers
-                self.NameHeader = Label(self.FeaturesScrolledCanvas.WindowFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+                self.NameHeader = Label(self.FeaturesScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
                 self.NameHeader.grid(row=0, column=0, sticky=NSEW)
                 self.NameHeader.bind("<Button-1>", lambda event: self.Sort("Name"))
                 self.NameHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Name", SearchMode=True))
                 self.NameHeader.bind("<Button-3>", lambda event: self.Sort("Name", Reverse=True))
                 self.NameTooltip = Tooltip(self.NameHeader, GlobalInst.SortTooltipString)
-                self.SortOrderHeader = Label(self.FeaturesScrolledCanvas.WindowFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+                self.SortOrderHeader = Label(self.FeaturesScrolledCanvas.HeaderFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
                 self.SortOrderHeader.grid(row=0, column=1, sticky=NSEW)
                 self.SortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
                 self.SortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
@@ -8258,26 +8263,49 @@ class ScrolledText:
 
 # Scrolled Canvas
 class ScrolledCanvas:
-    def __init__(self, master, Height=100, Width=100, ScrollingDisabledVar=None, TopMode=False):
+    def __init__(self, master, Height=100, Width=100, NumberOfColumns=0, ScrollingDisabledVar=None, TopMode=False):
         self.Height = Height
         self.Width = Width
         self.ScrollingDisabledVar = ScrollingDisabledVar
+        self.NumberOfColumns = NumberOfColumns
+
+        # Header Frame
+        self.HeaderFrame = Frame(master)
+        self.HeaderFrame.grid(row=0, column=0, sticky=NSEW)
 
         # Canvas
         self.Canvas = Canvas(master, highlightthickness=0, height=self.Height, width=self.Width)
-        self.Canvas.grid(row=0, column=0, sticky=NSEW)
+        self.Canvas.grid(row=1, column=0, sticky=NSEW)
+
+        # Vertical Scrollbar
         self.VerticalScrollbar = Scrollbar(master, orient=VERTICAL, command=self.Canvas.yview)
-        self.VerticalScrollbar.grid(row=0, column=1, sticky=NSEW)
+        self.VerticalScrollbar.grid(row=0, column=1, rowspan=2, sticky=NSEW)
+
+        # Window Frame
         self.WindowFrame = Frame(self.Canvas)
         self.Canvas.create_window((0, 0), window=self.WindowFrame, anchor=NW)
+
+        # Configure Scrolling
         self.Canvas.config(yscrollcommand=self.VerticalScrollbar.set)
         self.Canvas.bind("<Configure>", lambda event: self.ConfigureScrolledCanvas())
 
+        # Configure Syncing
+        if self.NumberOfColumns > 0:
+            GlobalInst.SyncColumnWidthsList.append(self)
+
         # Top Mode
         if TopMode:
+            # Horizontal Scrollbar
             self.HorizontalScrollbar = Scrollbar(master, orient=HORIZONTAL, command=self.Canvas.xview)
-            self.HorizontalScrollbar.grid(row=1, column=0, sticky=NSEW)
+            self.HorizontalScrollbar.grid(row=2, column=0, sticky=NSEW)
+
+            # Configure Scrolling
             self.Canvas.config(xscrollcommand=self.HorizontalScrollbar.set)
+
+    def SyncColumnWidths(self):
+        for Column in range(self.NumberOfColumns):
+            self.HeaderFrame.columnconfigure(Column, minsize=self.WindowFrame.grid_bbox(Column, 0)[2])
+            self.WindowFrame.columnconfigure(Column, minsize=self.HeaderFrame.grid_bbox(Column, 0)[2])
 
     def ConfigureScrolledCanvas(self):
         self.Canvas.configure(scrollregion=self.Canvas.bbox("all"))
@@ -8874,6 +8902,9 @@ if __name__ == "__main__":
     if WindowInst.LowResolution:
         WindowInst.WidgetCanvas.ConfigureScrolledCanvas()
     WindowInst.focus_force()
+
+    # Sync Column Widths
+    GlobalInst.SyncColumnWidths()
 
     # Main Loop
     WindowInst.mainloop()
