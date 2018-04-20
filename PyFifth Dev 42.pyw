@@ -2453,6 +2453,10 @@ class CharacterSheet:
                     self.NameEntry.grid(row=self.Row, column=0, sticky=NSEW)
                     self.SortOrder.grid(row=self.Row, column=1, sticky=NSEW)
 
+                    # Update Tab Order
+                    self.NameEntry.lift()
+                    self.SortOrder.lift()
+
                     # Update Tags
                     self.NameEntryVar.UpdateTag("FeatureOrCreatureStatsNameEntryVar" + str(self.Row))
                     self.SortOrderVar.UpdateTag("FeatureOrCreatureStatsSortOrderVar" + str(self.Row))
@@ -2950,6 +2954,11 @@ class CharacterSheet:
                     self.PreparedBox.grid(row=self.Row, column=0, sticky=NSEW)
                     self.NameEntry.grid(row=self.Row, column=1, sticky=NSEW)
                     self.SortOrder.grid(row=self.Row, column=2, sticky=NSEW)
+
+                    # Update Tab Order
+                    self.PreparedBox.lift()
+                    self.NameEntry.lift()
+                    self.SortOrder.lift()
 
                     # Update Tags
                     self.PreparedBoxVar.UpdateTag("SpellEntryPrepared" + self.LevelName + str(self.Row))
@@ -3763,6 +3772,17 @@ class CharacterSheet:
                 self.CategoryTag.grid(row=self.Row, column=7, sticky=NSEW)
                 self.SortOrder.grid(row=self.Row, column=8, sticky=NSEW)
 
+                # Update Tab Order
+                self.NameEntry.lift()
+                self.CountEntry.lift()
+                self.UnitWeightEntry.lift()
+                self.UnitValueEntry.lift()
+                self.UnitValueDenomination.lift()
+                self.TotalWeightEntry.lift()
+                self.TotalValueEntry.lift()
+                self.CategoryTag.lift()
+                self.SortOrder.lift()
+
                 # Update Tags
                 self.NameEntryVar.UpdateTag("InventoryListNameEntryVar" + str(self.Row))
                 self.CountEntryVar.UpdateTag("InventoryListCountEntryVar" + str(self.Row))
@@ -4115,6 +4135,10 @@ class CharacterSheet:
                 # Place in Grid
                 self.NameEntry.grid(row=self.Row, column=0, sticky=NSEW)
                 self.SortOrder.grid(row=self.Row, column=1, sticky=NSEW)
+
+                # Update Tab Order
+                self.NameEntry.lift()
+                self.SortOrder.lift()
 
                 # Update Tags
                 self.NameEntryVar.UpdateTag("AdditionalNotesNameEntryVar" + str(self.Row))
@@ -6492,6 +6516,16 @@ class DiceRoller:
                 self.PresetRollModifierEntry.grid(row=self.Row, column=6, sticky=NSEW)
                 self.PresetRollSortOrder.grid(row=self.Row, column=7, sticky=NSEW)
 
+                # Update Tab Order
+                self.PresetRollNameEntry.lift()
+                self.PresetRollButton.lift()
+                self.PresetRollDiceNumberEntry.lift()
+                self.PresetRollDieTypeLabel.lift()
+                self.PresetRollDieTypeEntry.lift()
+                self.PresetRollModifierButton.lift()
+                self.PresetRollModifierEntry.lift()
+                self.PresetRollSortOrder.lift()
+
                 # Update Tags
                 self.PresetRollNameEntryVar.UpdateTag("PresetRollNameEntryVar" + str(self.Row))
                 self.PresetRollDiceNumberEntryVar.UpdateTag("PresetRollDiceNumberEntryVar" + str(self.Row))
@@ -6898,6 +6932,19 @@ class InitiativeOrder:
             self.InitiativeEntryConditionsField.grid(row=self.Row, column=8, sticky=NSEW)
             self.InitiativeEntryLocationField.grid(row=self.Row, column=9, sticky=NSEW)
             self.InitiativeEntryNotesField.grid(row=self.Row, column=10, sticky=NSEW)
+
+            # Update Tab Order
+            self.InitiativeEntryResultEntry.lift()
+            self.InitiativeEntryTiePriorityDropdown.lift()
+            self.InitiativeEntryNameEntry.lift()
+            self.InitiativeEntryACEntry.lift()
+            self.InitiativeEntryTempHPEntry.lift()
+            self.InitiativeEntryCurrentHPEntry.lift()
+            self.InitiativeEntryMaxHPEntry.lift()
+            self.InitiativeEntryConcentrationBox.lift()
+            self.InitiativeEntryConditionsField.lift()
+            self.InitiativeEntryLocationField.lift()
+            self.InitiativeEntryNotesField.lift()
 
             # Update Tags
             self.InitiativeEntryResultEntryVar.UpdateTag("InitiativeEntryInitiativeEntryVar" + str(self.Row))
@@ -7312,6 +7359,11 @@ class CompactInitiativeOrder:
             self.InitiativeEntryResultEntry.grid(row=self.Row, column=0, sticky=NSEW)
             self.InitiativeEntryTiePriorityDropdown.grid(row=self.Row, column=1, sticky=NSEW)
             self.InitiativeEntryNameEntry.grid(row=self.Row, column=2, sticky=NSEW)
+
+            # Update Tab Order
+            self.InitiativeEntryResultEntry.lift()
+            self.InitiativeEntryTiePriorityDropdown.lift()
+            self.InitiativeEntryNameEntry.lift()
 
         def ToggleTurnDone(self):
             if self.InitiativeEntryTurnDoneVar.get():
@@ -7881,6 +7933,16 @@ class HoardSheet:
             self.TotalValueEntry.grid(row=self.Row, column=6, sticky=NSEW)
             self.SortOrder.grid(row=self.Row, column=7, sticky=NSEW)
 
+            # Update Tab Order
+            self.NameEntry.lift()
+            self.CountEntry.lift()
+            self.UnitWeightEntry.lift()
+            self.UnitValueEntry.lift()
+            self.UnitValueDenomination.lift()
+            self.TotalWeightEntry.lift()
+            self.TotalValueEntry.lift()
+            self.SortOrder.lift()
+
             # Update Tags
             self.NameEntryVar.UpdateTag("TreasureItemListNameEntryVar" + str(self.Row))
             self.CountEntryVar.UpdateTag("TreasureItemListCountEntryVar" + str(self.Row))
@@ -8129,6 +8191,9 @@ class ScrolledText:
 
     def pack(self, *args, **kwargs):
         self.ScrolledTextFrame.pack(*args, **kwargs)
+
+    def lift(self, *args, **kwargs):
+        self.ScrolledTextFrame.lift(*args, **kwargs)
 
     def UpdateTag(self, Tag):
         self.SavedDataTag = Tag
