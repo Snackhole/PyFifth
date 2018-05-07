@@ -2282,6 +2282,8 @@ class CharacterSheet:
                 # Features Entries
                 for CurrentIndex in range(1, self.FeatureOrCreatureStatsEntryCount + 1):
                     CurrentEntry = self.FeatureOrCreatureStatsEntry(self.FeaturesScrolledCanvas.WindowFrame, self.FeatureOrCreatureStatsEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
+                    for WidgetToBind in CurrentEntry.WidgetsList:
+                        WidgetToBind.bind("<FocusIn>", self.FeaturesScrolledCanvas.MakeFocusVisible)
                     CurrentEntry.Display(CurrentIndex)
 
             def Sort(self, Column, Reverse=False, SearchMode=False):
@@ -2421,6 +2423,9 @@ class CharacterSheet:
                     self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
                     self.SortOrder.bind("<Enter>", self.DisableScrolling)
                     self.SortOrder.bind("<Leave>", self.EnableScrolling)
+
+                    # List of Widgets
+                    self.WidgetsList = [self.NameEntry, self.SortOrder]
 
                 def SetFeature(self, event):
                     # Create Config Window and Wait
@@ -8337,6 +8342,27 @@ class ScrolledCanvas:
 
     def UnbindMouseWheel(self, event):
         WindowInst.unbind("<MouseWheel>")
+
+    def MakeFocusVisible(self, event):
+        # Widget Bounds
+        FocusedWidget = event.widget
+        WidgetTop = FocusedWidget.winfo_y()
+        WidgetBottom = WidgetTop + FocusedWidget.winfo_height()
+
+        # Canvas Bounds
+        CanvasTop = self.Canvas.canvasy(0)
+        CanvasBottom = CanvasTop + self.Canvas.winfo_height()
+
+        # Scroll
+        OldYScrollIncrement = self.Canvas["yscrollincrement"]
+        self.Canvas.configure(yscrollincrement=1)
+        if WidgetBottom > CanvasBottom:
+            Delta = int(CanvasBottom - WidgetBottom)
+            self.Canvas.yview_scroll(-Delta, "units")
+        elif WidgetTop < CanvasTop:
+            Delta = int(WidgetTop - CanvasTop)
+            self.Canvas.yview_scroll(Delta, "units")
+        self.Canvas.configure(yscrollincrement=OldYScrollIncrement)
 
 
 # Extended Entry Widgets
