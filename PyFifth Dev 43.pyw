@@ -2835,6 +2835,8 @@ class CharacterSheet:
                 # Spell List Entries
                 for CurrentIndex in range(1, self.SpellListEntriesCount + 1):
                     CurrentEntry = self.SpellListEntry(self.SpellListScrolledCanvas, self.SpellListEntriesList, self.LevelName, self.SortOrderValuesList, self.ScrollingDisabledVar, CurrentIndex)
+                    for WidgetToBind in CurrentEntry.WidgetsList:
+                        WidgetToBind.bind("<FocusIn>", self.SpellListScrolledCanvas.MakeFocusVisible)
                     CurrentEntry.Display(CurrentIndex)
 
             def Sort(self, Column, Reverse=False, SearchMode=False):
@@ -2943,6 +2945,9 @@ class CharacterSheet:
                     self.SortOrder = DropdownExtended(master.WindowFrame, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
                     self.SortOrder.bind("<Enter>", self.DisableScrolling)
                     self.SortOrder.bind("<Leave>", self.EnableScrolling)
+
+                    # List of Widgets
+                    self.WidgetsList = [self.PreparedBox, self.NameEntry, self.SortOrder]
 
                 def Set(self, event):
                     # Create Config Window and Wait
@@ -3428,6 +3433,8 @@ class CharacterSheet:
             # Inventory Entries
             for CurrentIndex in range(1, self.InventoryEntriesCount + 1):
                 CurrentEntry = self.InventoryEntry(self.InventoryListScrolledCanvas.WindowFrame, self.InventoryEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
+                for WidgetToBind in CurrentEntry.WidgetsList:
+                    WidgetToBind.bind("<FocusIn>", self.InventoryListScrolledCanvas.MakeFocusVisible)
                 CurrentEntry.Display(CurrentIndex)
 
         def Calculate(self):
@@ -3749,6 +3756,9 @@ class CharacterSheet:
                 self.SortOrder.bind("<Enter>", self.DisableScrolling)
                 self.SortOrder.bind("<Leave>", self.EnableScrolling)
 
+                # List of Widgets
+                self.WidgetsList = [self.NameEntry, self.CountEntry, self.UnitWeightEntry, self.UnitValueEntry, self.UnitValueDenomination, self.TotalWeightEntry, self.TotalValueEntry, self.CategoryTag, self.SortOrder]
+
             def DisableScrolling(self, event):
                 self.ScrollingDisabledVar.set(True)
 
@@ -4035,6 +4045,8 @@ class CharacterSheet:
             # Additional Notes Entries
             for CurrentIndex in range(1, self.AdditionalNotesEntriesCount + 1):
                 CurrentEntry = self.AdditionalNotesEntry(self.AdditionalNotesScrolledCanvas.WindowFrame, self.AdditionalNotesEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
+                for WidgetToBind in CurrentEntry.WidgetsList:
+                    WidgetToBind.bind("<FocusIn>", self.AdditionalNotesScrolledCanvas.MakeFocusVisible)
                 CurrentEntry.Display(CurrentIndex)
 
         def Sort(self, Column, Reverse=False, SearchMode=False):
@@ -4119,6 +4131,9 @@ class CharacterSheet:
                 self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
                 self.SortOrder.bind("<Enter>", self.DisableScrolling)
                 self.SortOrder.bind("<Leave>", self.EnableScrolling)
+
+                # List of Widgets
+                self.WidgetsList = [self.NameEntry, self.SortOrder]
 
             def SetNote(self, event):
                 # Create Config Window and Wait
@@ -6405,6 +6420,8 @@ class DiceRoller:
             # Preset Rolls
             for CurrentIndex in range(1, self.PresetRollsCount + 1):
                 CurrentEntry = self.PresetRollEntry(self.PresetRollsScrolledCanvas.WindowFrame, self.PresetRollsList, self.ScrollingDisabledVar, self.SortOrderValuesList, self.DiceRollerFields, CurrentIndex)
+                for WidgetToBind in CurrentEntry.WidgetsList:
+                    WidgetToBind.bind("<FocusIn>", self.PresetRollsScrolledCanvas.MakeFocusVisible)
                 CurrentEntry.Display(CurrentIndex)
 
         def Sort(self, Column, Reverse=False, SearchMode=False):
@@ -6503,6 +6520,9 @@ class DiceRoller:
                 self.PresetRollSortOrder = DropdownExtended(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
                 self.PresetRollSortOrder.bind("<Enter>", self.DisableScrolling)
                 self.PresetRollSortOrder.bind("<Leave>", self.EnableScrolling)
+
+                # List of Widgets
+                self.WidgetsList = [self.PresetRollNameEntry, self.PresetRollButton, self.PresetRollDiceNumberEntry, self.PresetRollDieTypeLabel, self.PresetRollDieTypeEntry, self.PresetRollModifierButton, self.PresetRollModifierEntry]
 
             def RollPreset(self):
                 DiceRollerInst.DiceNumberEntryVar.set(self.PresetRollDiceNumberEntryVar.get())
@@ -6738,6 +6758,8 @@ class InitiativeOrder:
         # Initiative Entries
         for CurrentIndex in range(1, self.InitiativeEntriesCount + 1):
             CurrentEntry = self.InitiativeEntry(self.InitiativeOrderScrolledCanvas.WindowFrame, self.InitiativeEntriesList, self.ScrollingDisabledVar, CurrentIndex)
+            for WidgetToBind in CurrentEntry.WidgetsList:
+                WidgetToBind.bind("<FocusIn>", self.InitiativeOrderScrolledCanvas.MakeFocusVisible)
             CurrentEntry.Display(CurrentIndex)
 
     def NewRound(self):
@@ -6926,6 +6948,11 @@ class InitiativeOrder:
             self.CreatureStats["InventoryFieldVar"] = self.InitiativeEntryInventoryFieldVar
             self.CreatureStats["LegendaryActionsAndLairActionsFieldVar"] = self.InitiativeEntryLegendaryActionsAndLairActionsFieldVar
             self.CreatureStats["NotesFieldVar"] = self.InitiativeEntryNotesFieldVar
+
+            # List of Widgets
+            self.WidgetsList = [self.InitiativeEntryResultEntry, self.InitiativeEntryTiePriorityDropdown, self.InitiativeEntryNameEntry, self.InitiativeEntryACEntry, self.InitiativeEntryTempHPEntry,
+                                self.InitiativeEntryCurrentHPEntry, self.InitiativeEntryMaxHPEntry, self.InitiativeEntryConcentrationBox, self.InitiativeEntryConditionsField.ScrolledTextFrame,
+                                self.InitiativeEntryLocationField.ScrolledTextFrame, self.InitiativeEntryNotesField.ScrolledTextFrame]
 
         def Display(self, Row):
             self.Row = Row
@@ -7271,6 +7298,8 @@ class CompactInitiativeOrder:
         # Initiative Entries
         for CurrentIndex in range(1, self.InitiativeEntriesCount + 1):
             CurrentEntry = self.InitiativeEntry(self.InitiativeOrderScrolledCanvas.WindowFrame, self.InitiativeEntriesList, self.ScrollingDisabledVar, CurrentIndex)
+            for WidgetToBind in CurrentEntry.WidgetsList:
+                WidgetToBind.bind("<FocusIn>", self.InitiativeOrderScrolledCanvas.MakeFocusVisible)
             CurrentEntry.Display(CurrentIndex)
 
     def NewRound(self):
@@ -7361,6 +7390,9 @@ class CompactInitiativeOrder:
             self.InitiativeEntryNameEntry.bind("<Button-3>", self.Duplicate)
             self.InitiativeEntryNameEntry.bind("<Shift-Button-3>", self.Clear)
             self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click to duplicate.  Shift+right-click to clear.")
+
+            # List of Widgets
+            self.WidgetsList = [self.InitiativeEntryResultEntry, self.InitiativeEntryTiePriorityDropdown, self.InitiativeEntryNameEntry]
 
         def Display(self, Row):
             self.Row = Row
@@ -7641,6 +7673,8 @@ class HoardSheet:
         # Treasure Item Entries
         for CurrentIndex in range(1, self.TreasureItemEntriesCount + 1):
             CurrentEntry = self.TreasureItemEntry(self.TreasureItemsScrolledCanvas.WindowFrame, self.TreasureItemEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
+            for WidgetToBind in CurrentEntry.WidgetsList:
+                WidgetToBind.bind("<FocusIn>", self.TreasureItemsScrolledCanvas.MakeFocusVisible)
             CurrentEntry.Display(CurrentIndex)
 
     def SpendCoins(self):
@@ -7880,6 +7914,9 @@ class HoardSheet:
             self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
             self.SortOrder.bind("<Enter>", self.DisableScrolling)
             self.SortOrder.bind("<Leave>", self.EnableScrolling)
+
+            # List of Widgets
+            self.WidgetsList = [self.NameEntry, self.CountEntry, self.UnitWeightEntry, self.UnitValueEntry, self.UnitValueDenomination, self.TotalWeightEntry, self.TotalValueEntry, self.SortOrder]
 
         def DisableScrolling(self, event):
             self.ScrollingDisabledVar.set(True)
