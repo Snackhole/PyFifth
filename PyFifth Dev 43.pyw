@@ -288,7 +288,7 @@ class SavingAndOpening:
             return False
 
     def SaveData(self, File):
-        for Tag, Field in SavingAndOpeningInst.SavedData.items():
+        for Tag, Field in self.SavedData.items():
             File.write(json.dumps({Tag: Field.get()}) + "\n")
 
     def ExportDiceRoller(self):
@@ -402,7 +402,7 @@ class SavingAndOpening:
                 LoadedLine = json.loads(Line)
                 for Tag, Field in LoadedLine.items():
                     try:
-                        SavingAndOpeningInst.SavedData[Tag].set(Field)
+                        self.SavedData[Tag].set(Field)
                     except KeyError:
                         self.OpenErrors = True
                         self.OpenErrorsString += Line
@@ -423,19 +423,19 @@ class SavingAndOpening:
 
     def NewButton(self):
         # Check for Save Prompt
-        if SavingAndOpeningInst.SavePrompt:
+        if self.SavePrompt:
             SaveConfirm = messagebox.askyesnocancel("New", "Save unsaved work before starting a new file?")
             if SaveConfirm == None:
                 return
             elif SaveConfirm == True:
-                if not SavingAndOpeningInst.SaveButton():
+                if not self.SaveButton():
                     return
 
         # Flag Opening
         self.Opening = True
 
         # Reset Saved Fields to Default Values
-        for Field in SavingAndOpeningInst.SavedData.values():
+        for Field in self.SavedData.values():
             if WindowInst.Mode in ["DiceRoller", "EncounterManager", "CharacterSheet", "NPCSheet"]:
                 if Field == DiceRollerInst.CritMinimumEntryVar:
                     Field.set("20")
@@ -556,7 +556,7 @@ class SavingAndOpening:
         self.CurrentOpenFilePath.set("")
 
         # No Save Prompt
-        SavingAndOpeningInst.SavePrompt = False
+        self.SavePrompt = False
 
         # Update Window Title
         WindowInst.UpdateWindowTitle()
@@ -6244,7 +6244,6 @@ class DiceRoller:
             pass
         else:
             return
-        CurrentRoll = 1
         Result = 0
         CritSuccess = False
         CritFailure = False
@@ -6252,14 +6251,13 @@ class DiceRoller:
         DiceNumber = GlobalInst.GetStringVarAsNumber(self.DiceNumberEntryVar)
         DieType = GlobalInst.GetStringVarAsNumber(self.DieTypeEntryVar)
         Modifier = GlobalInst.GetStringVarAsNumber(self.ModifierEntryVar)
-        while CurrentRoll <= DiceNumber:
+        for Roll in range(1, DiceNumber + 1):
             CurrentRollResult = random.randint(1, DieType)
-            if CurrentRoll < DiceNumber:
+            if Roll < DiceNumber:
                 IndividualRolls += str(CurrentRollResult) + "+"
-            elif CurrentRoll == DiceNumber:
+            elif Roll == DiceNumber:
                 IndividualRolls += str(CurrentRollResult)
             Result += CurrentRollResult
-            CurrentRoll += 1
         if DiceNumber == 1 and DieType == 20:
             if Result == 1:
                 CritFailure = True
@@ -6282,11 +6280,9 @@ class DiceRoller:
 
     def IntRoll(self, DiceNumber, DieType, Modifier):
         Result = 0
-        CurrentRoll = 1
-        while CurrentRoll <= DiceNumber:
+        for CurrentRoll in range(DiceNumber):
             CurrentRollResult = random.randint(1, DieType)
             Result += CurrentRollResult
-            CurrentRoll += 1
         Result += Modifier
         return int(Result)
 
@@ -6295,15 +6291,13 @@ class DiceRoller:
             pass
         else:
             return
-        CurrentRoll = 1
         TestRolls = 100000
         Result = 0
         DiceNumber = GlobalInst.GetStringVarAsNumber(self.DiceNumberEntryVar)
         DieType = GlobalInst.GetStringVarAsNumber(self.DieTypeEntryVar)
         Modifier = GlobalInst.GetStringVarAsNumber(self.ModifierEntryVar)
-        while CurrentRoll <= TestRolls:
+        for Roll in range(TestRolls):
             Result += self.IntRoll(DiceNumber, DieType, Modifier)
-            CurrentRoll += 1
         sleep(0.5)
         Result /= TestRolls
         ResultText = "Average of " + str(DiceNumber) + "d" + str(DieType) + "+" + str(Modifier) + " over 100,000 rolls:\n" + str(Result)
