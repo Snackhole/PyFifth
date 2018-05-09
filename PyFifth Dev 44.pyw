@@ -1123,7 +1123,7 @@ class CharacterSheet:
                 self.CharismaEntry = self.AbilitiesAndSavingThrowsEntry(self.TableFrame, "Charisma", self.AbilityEntriesList, 6)
 
                 # Abilities Data Config
-                self.AbilitiesDataConfigButton = Button(self.AbilitiesAndSavingThrowsFrame, text="Abilities Data", command=self.ConfigureAbilitiesData, bg=GlobalInst.ButtonColor)
+                self.AbilitiesDataConfigButton = ButtonExtended(self.AbilitiesAndSavingThrowsFrame, text="Abilities Data", command=self.ConfigureAbilitiesData, bg=GlobalInst.ButtonColor)
                 self.AbilitiesDataConfigButton.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
 
                 # Abilities Notes
@@ -1321,9 +1321,9 @@ class CharacterSheet:
                     self.BottomButtonsFrame.grid_columnconfigure(0, weight=1)
                     self.BottomButtonsFrame.grid_columnconfigure(1, weight=1)
                     self.BottomButtonsFrame.grid(row=7, column=0, columnspan=8, sticky=NSEW)
-                    self.SubmitButton = Button(self.BottomButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                    self.SubmitButton = ButtonExtended(self.BottomButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
                     self.SubmitButton.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-                    self.CancelButton = Button(self.BottomButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                    self.CancelButton = ButtonExtended(self.BottomButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
                     self.CancelButton.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
 
                     # Prevent Main Window Input
@@ -1493,9 +1493,9 @@ class CharacterSheet:
                             Field.RollDropdown.bind("<Return>", self.ReturnPressed)
 
                         # Buttons
-                        self.RollScoresButton = Button(self.RollForAbilitiesFrame, text="Roll\nScores", command=self.RollScores, bg=GlobalInst.ButtonColor)
+                        self.RollScoresButton = ButtonExtended(self.RollForAbilitiesFrame, text="Roll\nScores", command=self.RollScores, bg=GlobalInst.ButtonColor)
                         self.RollScoresButton.grid(row=0, column=2, rowspan=3, padx=2, pady=2, sticky=NSEW)
-                        self.AcceptButton = Button(self.RollForAbilitiesFrame, text="Accept", command=self.Accept, bg=GlobalInst.ButtonColor)
+                        self.AcceptButton = ButtonExtended(self.RollForAbilitiesFrame, text="Accept", command=self.Accept, bg=GlobalInst.ButtonColor)
                         self.AcceptButton.grid(row=3, column=0, columnspan=3, padx=2, pady=2, sticky=NSEW)
 
                         # Set Focus
@@ -1622,7 +1622,7 @@ class CharacterSheet:
                         self.PointBuyRulesLabel.grid(row=2, column=0, padx=2, pady=2, sticky=NSEW)
 
                         # Accept Button
-                        self.AcceptButton = Button(self.PointBuyFrame, text="Accept", command=self.Accept, bg=GlobalInst.ButtonColor)
+                        self.AcceptButton = ButtonExtended(self.PointBuyFrame, text="Accept", command=self.Accept, bg=GlobalInst.ButtonColor)
                         self.AcceptButton.grid(row=3, column=0, columnspan=3, padx=2, pady=2, sticky=NSEW)
 
                         # Calculate
@@ -2216,11 +2216,11 @@ class CharacterSheet:
                 self.HPOverrideEntry.grid(row=0, column=0, sticky=NSEW)
 
                 # Submit Button
-                self.SubmitButton = Button(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                self.SubmitButton = ButtonExtended(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
                 self.SubmitButton.grid(row=4, column=0, sticky=NSEW, padx=2, pady=2)
 
                 # Cancel Button
-                self.CancelButton = Button(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                self.CancelButton = ButtonExtended(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
                 self.CancelButton.grid(row=4, column=1, sticky=NSEW, padx=2, pady=2)
 
                 # Prevent Main Window Input
@@ -2524,11 +2524,11 @@ class CharacterSheet:
                         self.DescriptionField.Text.insert(1.0, self.Vars["FeatureDescriptionVar"].get())
 
                         # Submit Button
-                        self.SubmitButton = Button(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                        self.SubmitButton = ButtonExtended(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
                         self.SubmitButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
 
                         # Cancel Button
-                        self.CancelButton = Button(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                        self.CancelButton = ButtonExtended(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
                         self.CancelButton.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
 
                         # Prevent Main Window Input
@@ -3059,9 +3059,9 @@ class CharacterSheet:
                         self.DescriptionField.Text.insert(1.0, self.Vars["DescriptionVar"].get())
 
                         # Buttons
-                        self.SubmitButton = Button(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                        self.SubmitButton = ButtonExtended(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
                         self.SubmitButton.grid(row=5, column=0, sticky=NSEW, padx=2, pady=2)
-                        self.CancelButton = Button(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                        self.CancelButton = ButtonExtended(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
                         self.CancelButton.grid(row=5, column=1, sticky=NSEW, padx=2, pady=2)
 
                         # Prevent Main Window Input
@@ -3145,9 +3145,9 @@ class CharacterSheet:
                 self.ButtonsFrame.grid_columnconfigure(0, weight=1)
                 self.ButtonsFrame.grid_columnconfigure(1, weight=1)
                 self.ButtonsFrame.grid(row=2, column=0, columnspan=2, sticky=NSEW)
-                self.SubmitButton = Button(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                self.SubmitButton = ButtonExtended(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
                 self.SubmitButton.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-                self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                self.CancelButton = ButtonExtended(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
                 self.CancelButton.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
 
                 # Prevent Main Window Input
@@ -3862,9 +3862,9 @@ class CharacterSheet:
                     self.ButtonFrame.grid_columnconfigure(0, weight=1)
                     self.ButtonFrame.grid_columnconfigure(1, weight=1)
                     self.ButtonFrame.grid(row=3, column=0, columnspan=2, sticky=NSEW)
-                    self.SubmitButton = Button(self.ButtonFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                    self.SubmitButton = ButtonExtended(self.ButtonFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
                     self.SubmitButton.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-                    self.CancelButton = Button(self.ButtonFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                    self.CancelButton = ButtonExtended(self.ButtonFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
                     self.CancelButton.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
 
                     # Prevent Main Window Input
@@ -3961,11 +3961,11 @@ class CharacterSheet:
                     self.ConsumptionRateEntry.bind("<Return>", lambda event: self.Submit())
 
                     # Submit Button
-                    self.SubmitButton = Button(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                    self.SubmitButton = ButtonExtended(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
                     self.SubmitButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
 
                     # Cancel Button
-                    self.CancelButton = Button(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                    self.CancelButton = ButtonExtended(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
                     self.CancelButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
 
                     # Prevent Main Window Input
@@ -4197,11 +4197,11 @@ class CharacterSheet:
                     self.NoteField.Text.insert(1.0, self.Vars["NoteVar"].get())
 
                     # Submit Button
-                    self.SubmitButton = Button(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                    self.SubmitButton = ButtonExtended(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
                     self.SubmitButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
 
                     # Cancel Button
-                    self.CancelButton = Button(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                    self.CancelButton = ButtonExtended(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
                     self.CancelButton.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
 
                     # Prevent Main Window Input
@@ -4340,11 +4340,11 @@ class CharacterSheet:
             self.PortraitCanvas.grid(row=0, column=0, columnspan=3, sticky=NSEW)
 
             # Portrait Buttons
-            self.ImportButton = Button(self.PortraitHolderFrame, text="Import", command=self.Import, bg=GlobalInst.ButtonColor)
+            self.ImportButton = ButtonExtended(self.PortraitHolderFrame, text="Import", command=self.Import, bg=GlobalInst.ButtonColor)
             self.ImportButton.grid(row=1, column=0, sticky=NSEW)
-            self.ExportButton = Button(self.PortraitHolderFrame, text="Export", command=self.Export, bg=GlobalInst.ButtonColor)
+            self.ExportButton = ButtonExtended(self.PortraitHolderFrame, text="Export", command=self.Export, bg=GlobalInst.ButtonColor)
             self.ExportButton.grid(row=1, column=1, sticky=NSEW)
-            self.ClearButton = Button(self.PortraitHolderFrame, text="Clear", command=self.Clear, bg=GlobalInst.ButtonColor)
+            self.ClearButton = ButtonExtended(self.PortraitHolderFrame, text="Clear", command=self.Clear, bg=GlobalInst.ButtonColor)
             self.ClearButton.grid(row=1, column=2, sticky=NSEW)
 
             # Portrait Instructions
@@ -4436,9 +4436,9 @@ class CharacterSheet:
             self.ButtonsFrame.grid_columnconfigure(0, weight=1)
             self.ButtonsFrame.grid_columnconfigure(1, weight=1)
             self.ButtonsFrame.grid(row=8, column=0, sticky=NSEW)
-            self.SubmitButton = Button(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+            self.SubmitButton = ButtonExtended(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
             self.SubmitButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-            self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+            self.CancelButton = ButtonExtended(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
             self.CancelButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
 
             # Prevent Main Window Input
@@ -4545,7 +4545,7 @@ class CoinCalculator:
         # Additional Dialog Setup
         if DialogMode:
             # Close Button
-            self.CloseButton = Button(self.WidgetMaster, text="Close", command=self.Close, bg=GlobalInst.ButtonColor)
+            self.CloseButton = ButtonExtended(self.WidgetMaster, text="Close", command=self.Close, bg=GlobalInst.ButtonColor)
             self.CloseButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
 
             # Prevent Main Window Input
@@ -4753,11 +4753,11 @@ class SpendCoinsMenu:
         self.ButtonsFrame.grid(row=3, column=0, sticky=NSEW)
 
         # Submit Button
-        self.SubmitButton = Button(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+        self.SubmitButton = ButtonExtended(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
         self.SubmitButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Cancel Button
-        self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+        self.CancelButton = ButtonExtended(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
         self.CancelButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Mouse Wheel Bindings
@@ -4972,11 +4972,11 @@ class GainCoinsMenu:
         self.ButtonsFrame.grid(row=1, column=0, sticky=NSEW)
 
         # Submit Button
-        self.SubmitButton = Button(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+        self.SubmitButton = ButtonExtended(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
         self.SubmitButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Cancel Button
-        self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+        self.CancelButton = ButtonExtended(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
         self.CancelButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Mouse Wheel Bindings
@@ -5441,14 +5441,14 @@ class StatModifier:
             self.ButtonsFrame.grid_columnconfigure(1, weight=1)
             self.ButtonsFrame.grid(row=1, column=0, sticky=NSEW)
             self.ClearButtonOffset = 0
-            self.SubmitButton = Button(self.ButtonsFrame, text="Submit", bg=GlobalInst.ButtonColor, command=self.Submit)
+            self.SubmitButton = ButtonExtended(self.ButtonsFrame, text="Submit", bg=GlobalInst.ButtonColor, command=self.Submit)
             self.SubmitButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
             if self.DiceRollerMode:
-                self.ClearButton = Button(self.ButtonsFrame, text="Clear", bg=GlobalInst.ButtonColor, command=self.Clear)
+                self.ClearButton = ButtonExtended(self.ButtonsFrame, text="Clear", bg=GlobalInst.ButtonColor, command=self.Clear)
                 self.ClearButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
                 self.ButtonsFrame.grid_columnconfigure(2, weight=1)
                 self.ClearButtonOffset = 1
-            self.CancelButton = Button(self.ButtonsFrame, text="Cancel", bg=GlobalInst.ButtonColor, command=self.Cancel)
+            self.CancelButton = ButtonExtended(self.ButtonsFrame, text="Cancel", bg=GlobalInst.ButtonColor, command=self.Cancel)
             self.CancelButton.grid(row=0, column=1 + self.ClearButtonOffset, sticky=NSEW, padx=2, pady=2)
 
             # Prevent Main Window Input
@@ -5872,19 +5872,19 @@ class CreatureData:
             self.ButtonsFrame.grid(row=7, column=0, columnspan=3, sticky=NSEW)
 
             # Submit Button
-            self.SubmitButton = Button(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+            self.SubmitButton = ButtonExtended(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
             self.SubmitButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
 
             # Import Button
-            self.ImportButton = Button(self.ButtonsFrame, text="Import", command=self.Import, bg=GlobalInst.ButtonColor)
+            self.ImportButton = ButtonExtended(self.ButtonsFrame, text="Import", command=self.Import, bg=GlobalInst.ButtonColor)
             self.ImportButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
 
             # Export Button
-            self.ExportButton = Button(self.ButtonsFrame, text="Export", command=self.Export, bg=GlobalInst.ButtonColor)
+            self.ExportButton = ButtonExtended(self.ButtonsFrame, text="Export", command=self.Export, bg=GlobalInst.ButtonColor)
             self.ExportButton.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
 
             # Cancel Button
-            self.CancelButton = Button(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+            self.CancelButton = ButtonExtended(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
             self.CancelButton.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
 
             # Set Text Field Data
@@ -6192,11 +6192,11 @@ class DiceRoller:
 
         # Roll Button
         self.RollButtonFont = font.Font(size=16)
-        self.RollButton = Button(self.DiceEntryAndButtonsFrame, text="Roll", command=self.Roll, width=7, bg=GlobalInst.ButtonColor, font=self.RollButtonFont)
+        self.RollButton = ButtonExtended(self.DiceEntryAndButtonsFrame, text="Roll", command=self.Roll, width=7, bg=GlobalInst.ButtonColor, font=self.RollButtonFont)
         self.RollButton.grid(row=0, column=5, padx=2, pady=2, sticky=NSEW, rowspan=2)
 
         # Average Roll Button
-        self.AverageRollButton = Button(self.DiceEntryAndButtonsFrame, text="Avg. Roll", command=self.AverageRoll, width=7, bg=GlobalInst.ButtonColor)
+        self.AverageRollButton = ButtonExtended(self.DiceEntryAndButtonsFrame, text="Avg. Roll", command=self.AverageRoll, width=7, bg=GlobalInst.ButtonColor)
         self.AverageRollButton.grid(row=0, column=6, padx=2, pady=2, sticky=NSEW)
 
         # Crit Minimum
@@ -6493,7 +6493,7 @@ class DiceRoller:
                 self.PresetRollNameEntry = EntryExtended(master, justify=CENTER, width=33, textvariable=self.PresetRollNameEntryVar)
 
                 # Roll Button
-                self.PresetRollButton = Button(master, text="Roll:", command=self.RollPreset, bg=GlobalInst.ButtonColor)
+                self.PresetRollButton = ButtonExtended(master, text="Roll:", command=self.RollPreset, bg=GlobalInst.ButtonColor)
 
                 # Dice Number
                 self.PresetRollDiceNumberEntry = EntryExtended(master, justify=CENTER, width=5, textvariable=self.PresetRollDiceNumberEntryVar)
@@ -6670,25 +6670,25 @@ class InitiativeOrder:
         self.RoundEntry.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
 
         # New Round Button
-        self.NewRoundButton = Button(self.InitiativeDataFrame, text="New Round", command=self.NewRound, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
+        self.NewRoundButton = ButtonExtended(self.InitiativeDataFrame, text="New Round", command=self.NewRound, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.NewRoundButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-r>", lambda event: self.NewRound())
         self.NewRoundTooltip = Tooltip(self.NewRoundButton, "Keyboard Shortcut:  Ctrl+R")
 
         # Next Turn Button
-        self.NextTurnButton = Button(self.InitiativeDataFrame, text="Next Turn", command=self.NextTurn, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
+        self.NextTurnButton = ButtonExtended(self.InitiativeDataFrame, text="Next Turn", command=self.NextTurn, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.NextTurnButton.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-t>", lambda event: self.NextTurn())
         self.NextTurnTooltip = Tooltip(self.NextTurnButton, "Keyboard Shortcut:  Ctrl+T")
 
         # Clear Turns Button
-        self.ClearTurnsButton = Button(self.InitiativeDataFrame, text="Clear Turns", command=self.ClearTurns, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
+        self.ClearTurnsButton = ButtonExtended(self.InitiativeDataFrame, text="Clear Turns", command=self.ClearTurns, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.ClearTurnsButton.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-T>", lambda event: self.ClearTurns())
         self.ClearTurnsTooltip = Tooltip(self.ClearTurnsButton, "Keyboard Shortcut:  Ctrl+Shift+T")
 
         # Sort Initiative Order Button
-        self.SortInitiativeOrderButton = Button(self.InitiativeDataFrame, text="Sort Initiative Order", command=self.SortInitiativeOrder, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
+        self.SortInitiativeOrderButton = ButtonExtended(self.InitiativeDataFrame, text="Sort Initiative Order", command=self.SortInitiativeOrder, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.SortInitiativeOrderButton.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-i>", lambda event: self.SortInitiativeOrder())
         self.SortInitiativeOrderTooltip = Tooltip(self.SortInitiativeOrderButton, "Keyboard Shortcut:  Ctrl+I")
@@ -7242,25 +7242,25 @@ class CompactInitiativeOrder:
         self.RoundEntry.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Clear Turns Button
-        self.ClearTurnsButton = Button(self.InitiativeDataFrame, text="Clear Turns", command=self.ClearTurns, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
+        self.ClearTurnsButton = ButtonExtended(self.InitiativeDataFrame, text="Clear Turns", command=self.ClearTurns, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.ClearTurnsButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-T>", lambda event: self.ClearTurns())
         self.ClearTurnsTooltip = Tooltip(self.ClearTurnsButton, "Keyboard Shortcut:  Ctrl+Shift+T")
 
         # Sort Initiative Order Button
-        self.SortInitiativeOrderButton = Button(self.InitiativeDataFrame, text="Sort Initiative Order", command=self.SortInitiativeOrder, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
+        self.SortInitiativeOrderButton = ButtonExtended(self.InitiativeDataFrame, text="Sort Initiative Order", command=self.SortInitiativeOrder, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.SortInitiativeOrderButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-i>", lambda event: self.SortInitiativeOrder())
         self.SortInitiativeOrderTooltip = Tooltip(self.SortInitiativeOrderButton, "Keyboard Shortcut:  Ctrl+I")
 
         # Next Turn Button
-        self.NextTurnButton = Button(self.InitiativeDataFrame, text="Next Turn", command=self.NextTurn, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
+        self.NextTurnButton = ButtonExtended(self.InitiativeDataFrame, text="Next Turn", command=self.NextTurn, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.NextTurnButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-t>", lambda event: self.NextTurn())
         self.NextTurnTooltip = Tooltip(self.NextTurnButton, "Keyboard Shortcut:  Ctrl+T")
 
         # New Round Button
-        self.NewRoundButton = Button(self.InitiativeDataFrame, text="New Round", command=self.NewRound, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
+        self.NewRoundButton = ButtonExtended(self.InitiativeDataFrame, text="New Round", command=self.NewRound, bg=GlobalInst.ButtonColor, font=self.InitiativeDataFont)
         self.NewRoundButton.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
         WindowInst.bind("<Control-r>", lambda event: self.NewRound())
         self.NewRoundTooltip = Tooltip(self.NewRoundButton, "Keyboard Shortcut:  Ctrl+R")
@@ -7556,9 +7556,9 @@ class HoardSheet:
         self.CoinsHeaderPP.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
         self.CoinsEntryPP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryPPVar)
         self.CoinsEntryPP.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
-        self.GainCoinsButton = Button(self.CoinsFrame, text="Gain", bg=GlobalInst.ButtonColor, command=self.GainCoins)
+        self.GainCoinsButton = ButtonExtended(self.CoinsFrame, text="Gain", bg=GlobalInst.ButtonColor, command=self.GainCoins)
         self.GainCoinsButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-        self.SpendCoinsButton = Button(self.CoinsFrame, text="Spend", bg=GlobalInst.ButtonColor, command=self.SpendCoins)
+        self.SpendCoinsButton = ButtonExtended(self.CoinsFrame, text="Spend", bg=GlobalInst.ButtonColor, command=self.SpendCoins)
         self.SpendCoinsButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Stats
@@ -7881,8 +7881,10 @@ class HoardSheet:
             # Name Entry
             self.NameEntry = EntryExtended(master, width=35, textvariable=self.NameEntryVar, justify=CENTER, bg=GlobalInst.ButtonColor)
             self.NameEntry.bind("<Button-3>", self.ConfigureItemDescription)
+            self.NameEntry.bind("<Return>", self.ConfigureItemDescription)
             self.NameEntry.bind("<Shift-Button-3>", self.ExchangeForCoins)
-            self.NameTooltip = Tooltip(self.NameEntry, "Right-click on the name field to set an item description.  Shift+right-click to exchange for coins.")
+            self.NameEntry.bind("<Shift-Return>", self.ExchangeForCoins)
+            self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter to set an item description.  Shift+right-click or shift+enter to exchange for coins.")
 
             # Count Entry
             self.CountEntry = InventoryCountEntry(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
@@ -8042,9 +8044,9 @@ class HoardSheet:
                 self.ButtonFrame.grid_columnconfigure(0, weight=1)
                 self.ButtonFrame.grid_columnconfigure(1, weight=1)
                 self.ButtonFrame.grid(row=3, column=0, columnspan=2, sticky=NSEW)
-                self.SubmitButton = Button(self.ButtonFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+                self.SubmitButton = ButtonExtended(self.ButtonFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
                 self.SubmitButton.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-                self.CancelButton = Button(self.ButtonFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                self.CancelButton = ButtonExtended(self.ButtonFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
                 self.CancelButton.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
 
                 # Prevent Main Window Input
@@ -8521,6 +8523,15 @@ class DropdownExtended(ttk.Combobox):
             self.IDOfScheduledClear = None
 
 
+# Extended Button Widget
+class ButtonExtended(Button):
+    def __init__(self, *args, **kwargs):
+        Button.__init__(self, *args, **kwargs)
+
+        # Bind Return
+        self.bind("<Return>", lambda event: self.invoke())
+
+
 # Prompts
 class IntegerPrompt:
     def __init__(self, master, WindowTitle, Header, MinValue=None, MaxValue=None):
@@ -8552,11 +8563,11 @@ class IntegerPrompt:
         self.IntegerEntry.bind("<Return>", lambda event: self.Submit())
 
         # Submit Button
-        self.SubmitButton = Button(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+        self.SubmitButton = ButtonExtended(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
         self.SubmitButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Cancel Button
-        self.CancelButton = Button(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+        self.CancelButton = ButtonExtended(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
         self.CancelButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Prevent Main Window Input
@@ -8614,11 +8625,11 @@ class StringPrompt:
         self.StringEntry.bind("<Return>", lambda event: self.Submit())
 
         # Submit Button
-        self.SubmitButton = Button(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+        self.SubmitButton = ButtonExtended(self.Window, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
         self.SubmitButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Cancel Button
-        self.CancelButton = Button(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+        self.CancelButton = ButtonExtended(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
         self.CancelButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Prevent Main Window Input
@@ -8671,9 +8682,9 @@ class OpenErrorsPrompt:
         self.ButtonsFrame.grid_columnconfigure(0, weight=1)
         self.ButtonsFrame.grid_columnconfigure(1, weight=1)
         self.ButtonsFrame.grid(row=2, column=0, sticky=NSEW)
-        self.OKButton = Button(self.ButtonsFrame, text="OK", command=self.OK, bg=GlobalInst.ButtonColor)
+        self.OKButton = ButtonExtended(self.ButtonsFrame, text="OK", command=self.OK, bg=GlobalInst.ButtonColor)
         self.OKButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-        self.CopyToClipboardButton = Button(self.ButtonsFrame, text="Copy", command=self.CopyToClipboard, bg=GlobalInst.ButtonColor)
+        self.CopyToClipboardButton = ButtonExtended(self.ButtonsFrame, text="Copy", command=self.CopyToClipboard, bg=GlobalInst.ButtonColor)
         self.CopyToClipboardButton.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Prevent Main Window Input
@@ -8756,35 +8767,35 @@ class ModeSelect(Tk):
         self.ButtonsFont = font.Font(size=18)
 
         # Character Sheet Button
-        self.CharacterSheetModeButton = Button(self, text="Character Sheet", command=lambda: self.SelectMode("CharacterSheet"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
+        self.CharacterSheetModeButton = ButtonExtended(self, text="Character Sheet", command=lambda: self.SelectMode("CharacterSheet"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
         self.CharacterSheetModeButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
 
         # Hoard Sheet Button
-        self.HoardSheetButton = Button(self, text="Hoard Sheet", command=lambda: self.SelectMode("HoardSheet"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
+        self.HoardSheetButton = ButtonExtended(self, text="Hoard Sheet", command=lambda: self.SelectMode("HoardSheet"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
         self.HoardSheetButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
 
         # Dice Roller Button
-        self.DiceRollerModeButton = Button(self, text="Dice Roller", command=lambda: self.SelectMode("DiceRoller"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
+        self.DiceRollerModeButton = ButtonExtended(self, text="Dice Roller", command=lambda: self.SelectMode("DiceRoller"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
         self.DiceRollerModeButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Encounter Manager Button
-        self.EncounterManagerModeButton = Button(self, text="Encounter Manager", command=lambda: self.SelectMode("EncounterManager"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
+        self.EncounterManagerModeButton = ButtonExtended(self, text="Encounter Manager", command=lambda: self.SelectMode("EncounterManager"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
         self.EncounterManagerModeButton.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Compact Initiative
-        self.CompactInitiativeModeButton = Button(self, text="Compact Initiative Order", command=lambda: self.SelectMode("CompactInitiativeOrder"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
+        self.CompactInitiativeModeButton = ButtonExtended(self, text="Compact Initiative Order", command=lambda: self.SelectMode("CompactInitiativeOrder"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
         self.CompactInitiativeModeButton.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
 
         # NPC Sheet Button
-        self.NPCSheetModeButton = Button(self, text="NPC Sheet", command=lambda: self.SelectMode("NPCSheet"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
+        self.NPCSheetModeButton = ButtonExtended(self, text="NPC Sheet", command=lambda: self.SelectMode("NPCSheet"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
         self.NPCSheetModeButton.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Creature Data Utility Button
-        self.CreatureDataUtilityModeButton = Button(self, text="Creature Data Utility", command=lambda: self.SelectMode("CreatureDataUtility"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
+        self.CreatureDataUtilityModeButton = ButtonExtended(self, text="Creature Data Utility", command=lambda: self.SelectMode("CreatureDataUtility"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
         self.CreatureDataUtilityModeButton.grid(row=4, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Coin Calculator Button
-        self.CoinCalculatorModeButton = Button(self, text="Coin Calculator", command=lambda: self.SelectMode("CoinCalculator"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
+        self.CoinCalculatorModeButton = ButtonExtended(self, text="Coin Calculator", command=lambda: self.SelectMode("CoinCalculator"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
         self.CoinCalculatorModeButton.grid(row=4, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Initial Window Behavior
