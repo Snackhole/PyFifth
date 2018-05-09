@@ -2414,10 +2414,12 @@ class CharacterSheet:
                     List.append(self)
 
                     # Name Entry
-                    self.NameEntry = EntryExtended(master, width=45, justify=CENTER, state=DISABLED, disabledbackground=GlobalInst.ButtonColor, disabledforeground="black", textvariable=self.NameEntryVar, cursor="arrow")
-                    self.NameEntry.bind("<Button-1>", self.SetFeature)
-                    self.NameEntry.bind("<Button-3>", self.SetCreatureStats)
-                    self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a feature or creature stats entry to set a feature.  Right-click to set creature stats.")
+                    self.NameEntry = EntryExtended(master, width=45, justify=CENTER, bg=GlobalInst.ButtonColor, textvariable=self.NameEntryVar)
+                    self.NameEntry.bind("<Button-3>", self.SetFeature)
+                    self.NameEntry.bind("<Return>", self.SetFeature)
+                    self.NameEntry.bind("<Shift-Button-3>", self.SetCreatureStats)
+                    self.NameEntry.bind("<Shift-Return>", self.SetCreatureStats)
+                    self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a feature or creature stats entry to set a feature.  Shift+right-click or shift+enter to set creature stats.")
 
                     # Sort Order
                     self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
@@ -2936,10 +2938,10 @@ class CharacterSheet:
                     self.PreparedBox = Checkbutton(master.WindowFrame, variable=self.PreparedBoxVar)
 
                     # Name Entry
-                    self.NameEntry = EntryExtended(master.WindowFrame, width=42, justify=CENTER, state=DISABLED, disabledbackground=GlobalInst.ButtonColor, disabledforeground="black", textvariable=self.NameEntryVar,
-                                                   cursor="arrow")
-                    self.NameEntry.bind("<Button-1>", self.Set)
-                    self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a spell list entry to set a name and description.")
+                    self.NameEntry = EntryExtended(master.WindowFrame, width=42, justify=CENTER, bg=GlobalInst.ButtonColor, textvariable=self.NameEntryVar)
+                    self.NameEntry.bind("<Button-3>", self.Set)
+                    self.NameEntry.bind("<Return>", self.Set)
+                    self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a spell list entry to set a name and description.")
 
                     # Sort Order
                     self.SortOrder = DropdownExtended(master.WindowFrame, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
@@ -3724,7 +3726,8 @@ class CharacterSheet:
                 # Name Entry
                 self.NameEntry = EntryExtended(master, width=35, textvariable=self.NameEntryVar, justify=CENTER, bg=GlobalInst.ButtonColor)
                 self.NameEntry.bind("<Button-3>", self.ConfigureItemDescription)
-                self.NameTooltip = Tooltip(self.NameEntry, "Right-click on the name field to set an item description.")
+                self.NameEntry.bind("<Return>", self.ConfigureItemDescription)
+                self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on the name field to set an item description.")
 
                 # Count Entry
                 self.CountEntry = InventoryCountEntry(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
@@ -4123,9 +4126,10 @@ class CharacterSheet:
                 List.append(self)
 
                 # Name Entry
-                self.NameEntry = EntryExtended(master, width=28, justify=CENTER, state=DISABLED, disabledbackground=GlobalInst.ButtonColor, disabledforeground="black", textvariable=self.NameEntryVar, cursor="arrow")
-                self.NameEntry.bind("<Button-1>", self.SetNote)
-                self.NameTooltip = Tooltip(self.NameEntry, "Left-click on a note entry to set a note.")
+                self.NameEntry = EntryExtended(master, width=28, justify=CENTER, bg=GlobalInst.ButtonColor, textvariable=self.NameEntryVar)
+                self.NameEntry.bind("<Button-3>", self.SetNote)
+                self.NameEntry.bind("<Return>", self.SetNote)
+                self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a note entry to set a note.")
 
                 # Sort Order
                 self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
@@ -5088,6 +5092,8 @@ class StatModifier:
         # Configure Master (Should Be Entry Widget)
         master.configure(state=DISABLED if not self.DiceRollerMode else NORMAL, bg=GlobalInst.ButtonColor, fg="black", disabledbackground=GlobalInst.ButtonColor, disabledforeground="black", cursor=Cursor)
         master.bind(self.EventString, lambda event: self.SetModifier(ACMode=self.ACMode, DiceRollerMode=self.DiceRollerMode))
+        if self.DiceRollerMode:
+            master.bind("<Return>", lambda event: self.SetModifier(ACMode=self.ACMode, DiceRollerMode=self.DiceRollerMode))
         self.Tooltip = Tooltip(master, self.TooltipText)
 
     def GetModifier(self):
@@ -6508,7 +6514,7 @@ class DiceRoller:
 
                 # Character Sheet Modifier Config
                 if WindowInst.Mode in ["CharacterSheet", "NPCSheet"]:
-                    self.PresetRollModifierEntryStatModifierInst = StatModifier(self.PresetRollModifierEntry, "<Button-3>", "Right-click to set a stat modifier.", "Preset Roll", Cursor="xterm", DiceRollerMode=True)
+                    self.PresetRollModifierEntryStatModifierInst = StatModifier(self.PresetRollModifierEntry, "<Button-3>", "Right-click or enter to set a stat modifier.", "Preset Roll", Cursor="xterm", DiceRollerMode=True)
 
                 # Sort Order
                 self.PresetRollSortOrder = DropdownExtended(master, textvariable=self.PresetRollSortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
@@ -6863,7 +6869,8 @@ class InitiativeOrder:
             # Initiative Entry
             self.InitiativeEntryResultEntry = InitiativeEntry(self.master, textvariable=self.InitiativeEntryResultEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
             self.InitiativeEntryResultEntry.bind("<Button-3>", lambda event: self.ToggleTurnDone())
-            self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
+            self.InitiativeEntryResultEntry.bind("<Return>", lambda event: self.ToggleTurnDone())
+            self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click or enter to toggle turn taken.")
 
             # Tie Priority Dropdown
             self.InitiativeEntryTiePriorityDropdown = DropdownExtended(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
@@ -6875,9 +6882,12 @@ class InitiativeOrder:
             # Name Entry
             self.InitiativeEntryNameEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryNameEntryVar, justify=CENTER, width=35, bg=GlobalInst.ButtonColor)
             self.InitiativeEntryNameEntry.bind("<Button-3>", self.SetCreatureStats)
+            self.InitiativeEntryNameEntry.bind("<Return>", self.SetCreatureStats)
             self.InitiativeEntryNameEntry.bind("<Shift-Button-3>", self.Duplicate)
+            self.InitiativeEntryNameEntry.bind("<Shift-Return>", self.Duplicate)
             self.InitiativeEntryNameEntry.bind("<Control-Button-3>", self.Clear)
-            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click to set additional creature info.  Shift+right-click to duplicate.  Ctrl+right-click to clear.")
+            self.InitiativeEntryNameEntry.bind("<Control-Return>", self.Clear)
+            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click or enter to set additional creature info.  Shift+right-click or shift+enter to duplicate.  Ctrl+right-click or ctrl+enter to clear.")
 
             # AC Entry
             self.InitiativeEntryACEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryACEntryVar, justify=CENTER, width=5)
@@ -6888,9 +6898,12 @@ class InitiativeOrder:
             # Current HP Entry
             self.InitiativeEntryCurrentHPEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryCurrentHPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
             self.InitiativeEntryCurrentHPEntry.bind("<Button-3>", lambda event: self.Damage())
+            self.InitiativeEntryCurrentHPEntry.bind("<Return>", lambda event: self.Damage())
             self.InitiativeEntryCurrentHPEntry.bind("<Shift-Button-3>", lambda event: self.Heal())
+            self.InitiativeEntryCurrentHPEntry.bind("<Shift-Return>", lambda event: self.Heal())
             self.InitiativeEntryCurrentHPEntry.bind("<Control-Button-3>", lambda event: self.ToggleDead())
-            self.InitiativeEntryCurrentHPTooltip = Tooltip(self.InitiativeEntryCurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.  Control+right-click to toggle dead.")
+            self.InitiativeEntryCurrentHPEntry.bind("<Control-Return>", lambda event: self.ToggleDead())
+            self.InitiativeEntryCurrentHPTooltip = Tooltip(self.InitiativeEntryCurrentHPEntry, "Right-click or enter to damage.  Shift+right-click or shift+enter to heal.  Ctrl+right-click or ctrl+enter to toggle dead.")
 
             # Max HP Entry
             self.InitiativeEntryMaxHPEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryMaxHPEntryVar, justify=CENTER, width=5)
@@ -7370,7 +7383,8 @@ class CompactInitiativeOrder:
             # Initiative Entry
             self.InitiativeEntryResultEntry = InitiativeEntry(self.master, textvariable=self.InitiativeEntryResultEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
             self.InitiativeEntryResultEntry.bind("<Button-3>", lambda event: self.ToggleTurnDone())
-            self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click to toggle turn taken.")
+            self.InitiativeEntryResultEntry.bind("<Return>", lambda event: self.ToggleTurnDone())
+            self.InitiativeEntryResultTooltip = Tooltip(self.InitiativeEntryResultEntry, "Right-click or enter to toggle turn taken.")
 
             # Tie Priority Dropdown
             self.InitiativeEntryTiePriorityDropdown = DropdownExtended(self.master, textvariable=self.InitiativeEntryTiePriorityDropdownVar,
@@ -7382,8 +7396,10 @@ class CompactInitiativeOrder:
             # Name Entry
             self.InitiativeEntryNameEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryNameEntryVar, justify=CENTER, width=35, bg=GlobalInst.ButtonColor)
             self.InitiativeEntryNameEntry.bind("<Button-3>", self.Duplicate)
+            self.InitiativeEntryNameEntry.bind("<Return>", self.Duplicate)
             self.InitiativeEntryNameEntry.bind("<Shift-Button-3>", self.Clear)
-            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click to duplicate.  Shift+right-click to clear.")
+            self.InitiativeEntryNameEntry.bind("<Shift-Return>", self.Clear)
+            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click or enter to duplicate.  Shift+right-click or shift+enter to clear.")
 
             # List of Widgets
             self.WidgetsList = [self.InitiativeEntryResultEntry, self.InitiativeEntryTiePriorityDropdown, self.InitiativeEntryNameEntry]
