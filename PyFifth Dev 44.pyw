@@ -23,7 +23,7 @@ class Global:
         self.ScriptName = os.path.splitext(os.path.basename(__file__))[0]
         self.OS = platform.system()
         self.ButtonColor = "#F1F1D4"
-        self.SortTooltipString = "Left-click/right-click to sort in ascending/descending order.  Shift+left-click to search."
+        self.SortTooltipString = "Left-click/right-click to sort in ascending/descending order.\n\nShift+left-click to search."
         self.SyncColumnWidthsList = []
 
     def GetStringVarAsNumber(self, Var, Mode="Int"):
@@ -1186,7 +1186,7 @@ class CharacterSheet:
                     self.AbilityEntryTotal.grid(row=self.Row, column=1, sticky=NSEW)
 
                     # Ability And Saving Throw Tooltip String
-                    self.AbilityAndSavingThrowTooltipString = "Left-click on an ability or saving throw modifier to roll 1d20 with it.  Right-click to set a stat modifier."
+                    self.AbilityAndSavingThrowTooltipString = "Left-click on an ability or saving throw modifier to roll 1d20 with it.\n\nRight-click to set a stat modifier."
 
                     # Modifier Entry
                     self.AbilityEntryModifier = EntryExtended(master, width=3, justify=CENTER, textvariable=self.AbilityEntryModifierVar, cursor="dotbox")
@@ -1781,7 +1781,7 @@ class CharacterSheet:
                     # Modifier
                     self.ModifierEntry = EntryExtended(master, textvariable=self.TotalModifierVar, width=3, justify=CENTER, cursor="dotbox")
                     self.ModifierEntry.grid(row=Row, column=2, sticky=NSEW)
-                    self.ModifierEntryStatModifierInst = StatModifier(self.ModifierEntry, "<Button-3>", "Left-click on a skill modifier to roll 1d20 with it.  Right-click to set a bonus.", self.SkillName, Cursor="dotbox",
+                    self.ModifierEntryStatModifierInst = StatModifier(self.ModifierEntry, "<Button-3>", "Left-click on a skill modifier to roll 1d20 with it.\n\nRight-click to set a bonus.", self.SkillName, Cursor="dotbox",
                                                                       Prefix=self.SkillName + "ModifierEntry")
                     self.ModifierEntry.bind("<Button-1>", self.RollSkill)
 
@@ -1882,7 +1882,7 @@ class CharacterSheet:
             self.CurrentHPEntry.grid(row=0, column=0, sticky=NSEW)
             self.CurrentHPEntry.bind("<Button-3>", lambda event: self.Damage())
             self.CurrentHPEntry.bind("<Shift-Button-3>", lambda event: self.Heal())
-            self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.")
+            self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click to damage.\n\nShift+right-click to heal.")
 
             # Max HP
             self.MaxHPFrame = LabelFrame(self.HPFrame, text="Max HP:")
@@ -1945,7 +1945,6 @@ class CharacterSheet:
             self.ACEntry = EntryExtended(self.ACFrame, width=9, justify=CENTER, textvariable=self.ACEntryVar, font=self.ACInitiativeSpeedFontSize)
             self.ACEntry.grid(row=0, column=0, sticky=NSEW)
             self.ACEntryStatModifierInst = StatModifier(self.ACEntry, "<Button-1>", "Left-click to set AC data.", "", ACMode=True, Prefix="ACEntry")
-            self.ACTooltip = Tooltip(self.ACEntry, "Left-click on AC to set data.")
 
             # Initiative
             self.InitiativeFrame = LabelFrame(self.ACInitiativeSpeedFrame, text="Initiative:")
@@ -1954,7 +1953,7 @@ class CharacterSheet:
             self.InitiativeEntry = EntryExtended(self.InitiativeFrame, width=9, justify=CENTER, textvariable=self.InitiativeEntryVar, cursor="dotbox", font=self.ACInitiativeSpeedFontSize)
             self.InitiativeEntry.grid(row=0, column=0, sticky=NSEW)
             self.InitiativeEntry.bind("<Button-1>", self.RollInitiative)
-            self.InitiativeEntryStatModifierInst = StatModifier(self.InitiativeEntry, "<Button-3>", "Left-click on the initiative modifier to roll 1d20 with it.  Right-click to set a stat modifier.", "Initiative", Cursor="dotbox",
+            self.InitiativeEntryStatModifierInst = StatModifier(self.InitiativeEntry, "<Button-3>", "Left-click on the initiative modifier to roll 1d20 with it.\n\nRight-click to set a stat modifier.", "Initiative", Cursor="dotbox",
                                                                 Prefix="InitiativeEntry")
 
             # Speed
@@ -2419,7 +2418,7 @@ class CharacterSheet:
                     self.NameEntry.bind("<Return>", self.SetFeature)
                     self.NameEntry.bind("<Shift-Button-3>", self.SetCreatureStats)
                     self.NameEntry.bind("<Shift-Return>", self.SetCreatureStats)
-                    self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a feature or creature stats entry to set a feature.  Shift+right-click or shift+enter to set creature stats.")
+                    self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a feature or creature stats entry to set a feature.\n\nShift+right-click or shift+enter to set creature stats.")
 
                     # Sort Order
                     self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
@@ -2652,7 +2651,7 @@ class CharacterSheet:
             self.SpellPointsRemainingEntry.grid(row=2, column=1, padx=2, pady=2, sticky=NSEW)
             self.SpellPointsRemainingEntry.bind("<Button-1>", self.ExpendSpellPoints)
             self.SpellPointsRemainingEntry.bind("<Button-3>", self.RestoreSpellPoints)
-            self.SpellPointsRemainingTooltip = Tooltip(self.SpellPointsRemainingEntry, "Left-click on the spell points remaining to expend points.  Right-click to restore.")
+            self.SpellPointsRemainingTooltip = Tooltip(self.SpellPointsRemainingEntry, "Left-click on the spell points remaining to expend points.\n\nRight-click to restore.")
 
             # Spell Entries Frame
             self.SpellEntriesFrame = LabelFrame(master, text="Spells:")
@@ -3339,7 +3338,7 @@ class CharacterSheet:
             self.CoinValueHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
             self.CoinValueHeader.bind("<Button-1>", self.GainCoins)
             self.CoinValueHeader.bind("<Button-3>", self.SpendCoins)
-            self.CoinValueTooltip = Tooltip(self.CoinValueHeader, "Left-click to gain coins.  Right-click to spend.")
+            self.CoinValueTooltip = Tooltip(self.CoinValueHeader, "Left-click to gain coins.\n\nRight-click to spend.")
             self.CoinValueEntry = EntryExtended(self.CoinValueAndWeightHolderFrame, width=13, justify=CENTER, textvariable=self.CoinValueEntryVar, state=DISABLED, disabledforeground="black",
                                                 disabledbackground="light gray",
                                                 cursor="arrow")
@@ -5518,7 +5517,7 @@ class AbilityScoreDerivatives:
         # Attack Modifier
         self.AttackModifierEntry = EntryExtended(master, justify=CENTER, width=2, textvariable=self.AttackModifierEntryVar, cursor="dotbox")
         self.AttackModifierEntry.grid(row=2, column=self.Column, padx=2, pady=2, sticky=NSEW)
-        self.AttackModifierEntryStatModifierInst = StatModifier(self.AttackModifierEntry, "<Button-3>", "Left-click on an attack modifier to roll 1d20 with it.  Right-click to set a stat modifier.", "Attack Modifier",
+        self.AttackModifierEntryStatModifierInst = StatModifier(self.AttackModifierEntry, "<Button-3>", "Left-click on an attack modifier to roll 1d20 with it.\n\nRight-click to set a stat modifier.", "Attack Modifier",
                                                                 Cursor="dotbox", Prefix=self.SaveTagPrefix + "AttackModifier", Suffix=str(self.Column))
         self.AttackModifierEntry.bind("<Button-1>", self.RollAttack)
 
@@ -5676,7 +5675,7 @@ class CreatureData:
         self.CurrentHPEntry.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
         self.CurrentHPEntry.bind("<Button-3>", lambda event: self.Damage())
         self.CurrentHPEntry.bind("<Shift-Button-3>", lambda event: self.Heal())
-        self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click to damage.  Shift+right-click to heal.")
+        self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click to damage.\n\nShift+right-click to heal.")
 
         # Max HP Entry
         self.MaxHPFrame = LabelFrame(self.HPACSpeedCRExperienceEntriesFrame, text="Max HP:")
@@ -6222,7 +6221,7 @@ class DiceRoller:
         self.ResultsField.grid(row=0, column=0, padx=2, pady=2)
         self.ResultsField.Text.bind("<Button-1>", self.CopyResults)
         self.ResultsField.Text.bind("<Button-3>", self.ClearResults)
-        self.ResultsFieldTooltip = Tooltip(self.ResultsField.ScrolledTextFrame, "Left-click to copy results to the clipboard.  Right-click to clear.")
+        self.ResultsFieldTooltip = Tooltip(self.ResultsField.ScrolledTextFrame, "Left-click to copy results to the clipboard.\n\nRight-click to clear.")
 
         # Preset Rolls
         self.PresetRollsInst = self.PresetRolls(self.DiceRollerFrame, self.ResultsField, self.CritMinimumEntryVar, self.PresetRollsFrameRow, self.PresetRollsScrolledCanvasHeight, self.PresetRollsScrolledCanvasWidth)
@@ -6887,7 +6886,7 @@ class InitiativeOrder:
             self.InitiativeEntryNameEntry.bind("<Shift-Return>", self.Duplicate)
             self.InitiativeEntryNameEntry.bind("<Control-Button-3>", self.Clear)
             self.InitiativeEntryNameEntry.bind("<Control-Return>", self.Clear)
-            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click or enter to set additional creature info.  Shift+right-click or shift+enter to duplicate.  Ctrl+right-click or ctrl+enter to clear.")
+            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click or enter to set additional creature info.\n\nShift+right-click or shift+enter to duplicate.\n\nCtrl+right-click or ctrl+enter to clear.")
 
             # AC Entry
             self.InitiativeEntryACEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryACEntryVar, justify=CENTER, width=5)
@@ -6903,7 +6902,7 @@ class InitiativeOrder:
             self.InitiativeEntryCurrentHPEntry.bind("<Shift-Return>", lambda event: self.Heal())
             self.InitiativeEntryCurrentHPEntry.bind("<Control-Button-3>", lambda event: self.ToggleDead())
             self.InitiativeEntryCurrentHPEntry.bind("<Control-Return>", lambda event: self.ToggleDead())
-            self.InitiativeEntryCurrentHPTooltip = Tooltip(self.InitiativeEntryCurrentHPEntry, "Right-click or enter to damage.  Shift+right-click or shift+enter to heal.  Ctrl+right-click or ctrl+enter to toggle dead.")
+            self.InitiativeEntryCurrentHPTooltip = Tooltip(self.InitiativeEntryCurrentHPEntry, "Right-click or enter to damage.\n\nShift+right-click or shift+enter to heal.\n\nCtrl+right-click or ctrl+enter to toggle dead.")
 
             # Max HP Entry
             self.InitiativeEntryMaxHPEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryMaxHPEntryVar, justify=CENTER, width=5)
@@ -7399,7 +7398,7 @@ class CompactInitiativeOrder:
             self.InitiativeEntryNameEntry.bind("<Return>", self.Duplicate)
             self.InitiativeEntryNameEntry.bind("<Shift-Button-3>", self.Clear)
             self.InitiativeEntryNameEntry.bind("<Shift-Return>", self.Clear)
-            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click or enter to duplicate.  Shift+right-click or shift+enter to clear.")
+            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click or enter to duplicate.\n\nShift+right-click or shift+enter to clear.")
 
             # List of Widgets
             self.WidgetsList = [self.InitiativeEntryResultEntry, self.InitiativeEntryTiePriorityDropdown, self.InitiativeEntryNameEntry]
@@ -7900,7 +7899,7 @@ class HoardSheet:
             self.NameEntry.bind("<Return>", self.ConfigureItemDescription)
             self.NameEntry.bind("<Shift-Button-3>", self.ExchangeForCoins)
             self.NameEntry.bind("<Shift-Return>", self.ExchangeForCoins)
-            self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter to set an item description.  Shift+right-click or shift+enter to exchange for coins.")
+            self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter to set an item description.\n\nShift+right-click or shift+enter to exchange for coins.")
 
             # Count Entry
             self.CountEntry = InventoryCountEntry(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
