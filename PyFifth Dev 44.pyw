@@ -1881,8 +1881,10 @@ class CharacterSheet:
             self.CurrentHPEntry = EntryExtended(self.CurrentHPFrame, width=5, justify=CENTER, textvariable=self.CurrentHPEntryVar, bg=GlobalInst.ButtonColor, font=self.VitalityFontSize)
             self.CurrentHPEntry.grid(row=0, column=0, sticky=NSEW)
             self.CurrentHPEntry.bind("<Button-3>", lambda event: self.Damage())
+            self.CurrentHPEntry.bind("<Return>", lambda event: self.Damage())
             self.CurrentHPEntry.bind("<Shift-Button-3>", lambda event: self.Heal())
-            self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click to damage.\n\nShift+right-click to heal.")
+            self.CurrentHPEntry.bind("<Shift-Return>", lambda event: self.Heal())
+            self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click or enter to damage.\n\nShift+right-click or shift+enter to heal.")
 
             # Max HP
             self.MaxHPFrame = LabelFrame(self.HPFrame, text="Max HP:")
@@ -5674,8 +5676,10 @@ class CreatureData:
         self.CurrentHPEntry = EntryExtended(self.CurrentHPFrame, justify=CENTER, width=3, textvariable=self.CurrentHPEntryVar, bg=GlobalInst.ButtonColor)
         self.CurrentHPEntry.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
         self.CurrentHPEntry.bind("<Button-3>", lambda event: self.Damage())
+        self.CurrentHPEntry.bind("<Return>", lambda event: self.Damage())
         self.CurrentHPEntry.bind("<Shift-Button-3>", lambda event: self.Heal())
-        self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click to damage.\n\nShift+right-click to heal.")
+        self.CurrentHPEntry.bind("<Shift-Return>", lambda event: self.Heal())
+        self.CurrentHPTooltip = Tooltip(self.CurrentHPEntry, "Right-click or enter to damage.\n\nShift+right-click or shift+enter to heal.")
 
         # Max HP Entry
         self.MaxHPFrame = LabelFrame(self.HPACSpeedCRExperienceEntriesFrame, text="Max HP:")
