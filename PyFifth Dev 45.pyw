@@ -707,6 +707,29 @@ class CharacterSheet:
         self.SettingsMenuVars["ObservantBoxVar"] = self.ObservantBoxVar
         self.SettingsMenuVars["LuckyHalflingBoxVar"] = self.LuckyHalflingBoxVar
 
+        # Level-Derived Values (Experience Needed for Next Level and Proficieny Modifier)
+        self.LevelDerivedValues = {}
+        self.LevelDerivedValues["1"] = (2, 300)
+        self.LevelDerivedValues["2"] = (2, 900)
+        self.LevelDerivedValues["3"] = (2, 2700)
+        self.LevelDerivedValues["4"] = (2, 6500)
+        self.LevelDerivedValues["5"] = (3, 14000)
+        self.LevelDerivedValues["6"] = (3, 23000)
+        self.LevelDerivedValues["7"] = (3, 34000)
+        self.LevelDerivedValues["8"] = (3, 48000)
+        self.LevelDerivedValues["9"] = (4, 64000)
+        self.LevelDerivedValues["10"] = (4, 85000)
+        self.LevelDerivedValues["11"] = (4, 100000)
+        self.LevelDerivedValues["12"] = (4, 120000)
+        self.LevelDerivedValues["13"] = (5, 140000)
+        self.LevelDerivedValues["14"] = (5, 165000)
+        self.LevelDerivedValues["15"] = (5, 195000)
+        self.LevelDerivedValues["16"] = (5, 225000)
+        self.LevelDerivedValues["17"] = (6, 265000)
+        self.LevelDerivedValues["18"] = (6, 305000)
+        self.LevelDerivedValues["19"] = (6, 355000)
+        self.LevelDerivedValues["20"] = (6, "N/A")
+
         # Character Sheet Frame
         self.CharacterSheetFrame = Frame(master)
         self.CharacterSheetFrame.grid(row=0, column=0, sticky=NSEW)
@@ -821,56 +844,11 @@ class CharacterSheet:
         # Store Level
         CharacterLevelValue = GlobalInst.GetStringVarAsNumber(self.CharacterLevelDropdownVar)
 
-        # Calculate Experience Needed and Proficiency Modifier
-        TotalExperienceNeeded = 0
-        ProficiencyModifier = 0
-        if CharacterLevelValue >= 1:
-            TotalExperienceNeeded += 300
-            ProficiencyModifier += 2
-        if CharacterLevelValue >= 2:
-            TotalExperienceNeeded += 600
-        if CharacterLevelValue >= 3:
-            TotalExperienceNeeded += 1800
-        if CharacterLevelValue >= 4:
-            TotalExperienceNeeded += 3800
-        if CharacterLevelValue >= 5:
-            TotalExperienceNeeded += 7500
-            ProficiencyModifier += 1
-        if CharacterLevelValue >= 6:
-            TotalExperienceNeeded += 9000
-        if CharacterLevelValue >= 7:
-            TotalExperienceNeeded += 11000
-        if CharacterLevelValue >= 8:
-            TotalExperienceNeeded += 14000
-        if CharacterLevelValue >= 9:
-            TotalExperienceNeeded += 16000
-            ProficiencyModifier += 1
-        if CharacterLevelValue >= 10:
-            TotalExperienceNeeded += 21000
-        if CharacterLevelValue >= 11:
-            TotalExperienceNeeded += 15000
-        if CharacterLevelValue >= 12:
-            TotalExperienceNeeded += 20000
-        if CharacterLevelValue >= 13:
-            TotalExperienceNeeded += 20000
-            ProficiencyModifier += 1
-        if CharacterLevelValue >= 14:
-            TotalExperienceNeeded += 25000
-        if CharacterLevelValue >= 15:
-            TotalExperienceNeeded += 30000
-        if CharacterLevelValue >= 16:
-            TotalExperienceNeeded += 30000
-        if CharacterLevelValue >= 17:
-            TotalExperienceNeeded += 40000
-            ProficiencyModifier += 1
-        if CharacterLevelValue >= 18:
-            TotalExperienceNeeded += 40000
-        if CharacterLevelValue >= 19:
-            TotalExperienceNeeded += 50000
-        if CharacterLevelValue >= 20:
-            TotalExperienceNeeded = "N/A"
-        self.CharacterExperienceNeededEntryVar.set(TotalExperienceNeeded)
+        # Get and Set Proficiency Modifier and Total Experience Needed
+        ProficiencyModifier = self.LevelDerivedValues[str(CharacterLevelValue)][0]
+        TotalExperienceNeeded = self.LevelDerivedValues[str(CharacterLevelValue)][1]
         self.ProficiencyBonusEntryVar.set("+" + str(ProficiencyModifier))
+        self.CharacterExperienceNeededEntryVar.set(TotalExperienceNeeded)
 
         # Calculate Ability and Saving Throw Modifiers
         for Entry in Inst["AbilitiesAndSavingThrows"].AbilityEntriesList:

@@ -4,7 +4,7 @@ import os
 
 def Build():
     # Version String
-    Version = "Dev 44"
+    Version = "Dev 45"
 
     # Build Variables
     ExecutableScript = "PyFifth " + Version + ".pyw"
