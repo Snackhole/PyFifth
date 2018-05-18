@@ -2593,10 +2593,8 @@ class CharacterSheet:
             self.SpellSlotsFrame.grid(row=3, column=3, padx=2, pady=2, rowspan=3)
 
             # Spell Slots Headers
-            self.SpellSlotsLevelHeader = Label(self.SpellSlotsFrame, text="Level", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
-            self.SpellSlotsLevelHeader.bind("<Button-1>", self.ConfigureMulticlassSpellSlots)
+            self.SpellSlotsLevelHeader = Label(self.SpellSlotsFrame, text="Level", bd=2, relief=GROOVE)
             self.SpellSlotsLevelHeader.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-            self.SpellSlotsLevelHeaderTooltip = Tooltip(self.SpellSlotsLevelHeader, "Left-click to calculate multiclass spellcaster level and slots.")
             self.SpellSlotsSlotsHeader = Label(self.SpellSlotsFrame, text="Slots", bd=2, relief=GROOVE)
             self.SpellSlotsSlotsHeader.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
             self.SpellSlotsUsedHeader = Label(self.SpellSlotsFrame, text="Used", bd=2, relief=GROOVE)
@@ -2765,15 +2763,6 @@ class CharacterSheet:
                 ManualAmount = GlobalInst.GetStringVarAsNumber(ExpendSpellPointsMenuInst.ManualAmountEntryVar)
                 NewRemainingPoints = min(MaxPoints, (CurrentRemainingPoints + SpellSlotAmount + ManualAmount))
                 self.SpellPointsRemainingEntryVar.set(str(NewRemainingPoints))
-
-        def ConfigureMulticlassSpellSlots(self, event):
-            # Create Window and Wait
-            MulticlassSpellSlotsMenuInst = self.MulticlassSpellSlotsMenu(WindowInst)
-            WindowInst.wait_window(MulticlassSpellSlotsMenuInst.Window)
-
-            # Handle Variables
-            if MulticlassSpellSlotsMenuInst.DataSubmitted.get():
-                pass
 
         class SpellList:
             def __init__(self, master, List, LevelName):
@@ -3157,89 +3146,6 @@ class CharacterSheet:
             def Cancel(self):
                 self.DataSubmitted.set(False)
                 self.Window.destroy()
-
-        class MulticlassSpellSlotsMenu:
-            def __init__(self, master):
-                self.DataSubmitted = BooleanVar()
-                self.FullDropdownVar = StringVar(value="0")
-                self.HalfDropdownVar = StringVar(value="0")
-                self.ThirdDropdownVar = StringVar(value="0")
-
-                # Multiclass Spell Levels
-                self.MulticlassSpellLevels = {}
-                self.MulticlassSpellLevels["0"] = ("", "", "", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["1"] = ("2", "", "", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["2"] = ("3", "", "", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["3"] = ("4", "2", "", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["4"] = ("4", "3", "", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["5"] = ("4", "3", "2", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["6"] = ("4", "3", "3", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["7"] = ("4", "3", "3", "1", "", "", "", "", "")
-                self.MulticlassSpellLevels["8"] = ("4", "3", "3", "2", "", "", "", "", "")
-                self.MulticlassSpellLevels["9"] = ("4", "3", "3", "3", "1", "", "", "", "")
-                self.MulticlassSpellLevels["10"] = ("4", "3", "3", "3", "2", "", "", "", "")
-                self.MulticlassSpellLevels["11"] = ("4", "3", "3", "3", "2", "1", "", "", "")
-                self.MulticlassSpellLevels["12"] = ("4", "3", "3", "3", "2", "1", "", "", "")
-                self.MulticlassSpellLevels["13"] = ("4", "3", "3", "3", "2", "1", "1", "", "")
-                self.MulticlassSpellLevels["14"] = ("4", "3", "3", "3", "2", "1", "1", "", "")
-                self.MulticlassSpellLevels["15"] = ("4", "3", "3", "3", "2", "1", "1", "1", "")
-                self.MulticlassSpellLevels["16"] = ("4", "3", "3", "3", "2", "1", "1", "1", "")
-                self.MulticlassSpellLevels["17"] = ("4", "3", "3", "3", "2", "1", "1", "1", "1")
-                self.MulticlassSpellLevels["18"] = ("4", "3", "3", "3", "3", "1", "1", "1", "1")
-                self.MulticlassSpellLevels["19"] = ("4", "3", "3", "3", "3", "2", "1", "1", "1")
-                self.MulticlassSpellLevels["20"] = ("4", "3", "3", "3", "3", "2", "2", "1", "1")
-
-                # Create Window
-                self.Window = Toplevel(master)
-                self.Window.wm_attributes("-toolwindow", 1)
-                self.Window.wm_title("Multiclass Spell Slots")
-
-                # Spellcaster Levels
-                self.LevelsList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"]
-                self.SpellcasterLevelsFrame = LabelFrame(self.Window, text="Spellcaster Levels:")
-                self.SpellcasterLevelsFrame.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-                self.FullHeader = Label(self.SpellcasterLevelsFrame, text="Full", bd=2, relief=GROOVE)
-                self.FullHeader.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-                self.HalfHeader = Label(self.SpellcasterLevelsFrame, text="1/2", bd=2, relief=GROOVE)
-                self.HalfHeader.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
-                self.ThirdHeader = Label(self.SpellcasterLevelsFrame, text="1/3", bd=2, relief=GROOVE)
-                self.ThirdHeader.grid(row=2, column=0, padx=2, pady=2, sticky=NSEW)
-                self.FullDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.FullDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
-                self.FullDropdown.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
-                self.HalfDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.HalfDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
-                self.HalfDropdown.grid(row=1, column=1, padx=2, pady=2, sticky=NSEW)
-                self.ThirdDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.ThirdDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
-                self.ThirdDropdown.grid(row=2, column=1, padx=2, pady=2, sticky=NSEW)
-
-                # Spell Slots
-
-                # Buttons
-                self.ButtonsFrame = Frame(self.Window)
-                self.ButtonsFrame.grid(row=2, column=0, sticky=NSEW)
-                self.AcceptButton = ButtonExtended(self.ButtonsFrame, text="Accept", command=self.Accept, bg=GlobalInst.ButtonColor)
-                self.AcceptButton.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-                self.CancelButton = ButtonExtended(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
-                self.CancelButton.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
-
-                # Prevent Main Window Input
-                self.Window.grab_set()
-
-                # Handle Config Window Geometry and Focus
-                GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst)
-                self.Window.focus_force()
-                self.FullDropdown.focus_set()
-
-            def Accept(self):
-                if self.Calculate(Warn=True):
-                    self.DataSubmitted.set(True)
-                    self.Window.destroy()
-
-            def Cancel(self):
-                self.DataSubmitted.set(False)
-                self.Window.destroy()
-
-            def Calculate(self, Warn=False):
-                return True
 
     # Inventory
     class Inventory:
