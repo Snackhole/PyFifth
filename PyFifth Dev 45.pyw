@@ -542,6 +542,9 @@ class SavingAndOpening:
             # Spell Points to Default
             Inst["Spellcasting"].SpellPointsMaxEntryVar.set("")
             Inst["Spellcasting"].SpellPointsMaxEntryStatModifierInst.DefaultValues()
+            Inst["Spellcasting"].SpellcasterLevelsFullDropdownVar.set("0")
+            Inst["Spellcasting"].SpellcasterLevelsHalfDropdownVar.set("0")
+            Inst["Spellcasting"].SpellcasterLevelsThirdDropdownVar.set("0")
 
         # NPC Sheet Defaults
         if WindowInst.Mode == "NPCSheet":
@@ -3181,8 +3184,11 @@ class CharacterSheet:
             def __init__(self, master, SpellSlotsData):
                 self.DataSubmitted = BooleanVar()
                 self.SpellcasterLevelsFullDropdownVar = StringVar(value=SpellSlotsData["SpellcasterLevelsFullDropdownVar"].get())
+                self.SpellcasterLevelsFullDropdownVar.trace_add("write", lambda a, b, c: self.Calculate())
                 self.SpellcasterLevelsHalfDropdownVar = StringVar(value=SpellSlotsData["SpellcasterLevelsHalfDropdownVar"].get())
+                self.SpellcasterLevelsHalfDropdownVar.trace_add("write", lambda a, b, c: self.Calculate())
                 self.SpellcasterLevelsThirdDropdownVar = StringVar(value=SpellSlotsData["SpellcasterLevelsThirdDropdownVar"].get())
+                self.SpellcasterLevelsThirdDropdownVar.trace_add("write", lambda a, b, c: self.Calculate())
                 self.SpellSlotsFirstEntryVar = StringVar()
                 self.SpellSlotsSecondEntryVar = StringVar()
                 self.SpellSlotsThirdEntryVar = StringVar()
@@ -3235,7 +3241,7 @@ class CharacterSheet:
                 # Create Window
                 self.Window = Toplevel(master)
                 self.Window.wm_attributes("-toolwindow", 1)
-                self.Window.wm_title("Multiclass Spell Slots")
+                self.Window.wm_title("Calculate Spell Slots")
 
                 # Spellcaster Levels
                 self.LevelsList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"]
@@ -3243,12 +3249,12 @@ class CharacterSheet:
                 self.SpellcasterLevelsFrame.grid_columnconfigure(0, weight=1)
                 self.SpellcasterLevelsFrame.grid_columnconfigure(1, weight=1)
                 self.SpellcasterLevelsFrame.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-                self.FullHeader = Label(self.SpellcasterLevelsFrame, text="Full", bd=2, relief=GROOVE)
-                self.FullHeader.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-                self.HalfHeader = Label(self.SpellcasterLevelsFrame, text="1/2", bd=2, relief=GROOVE)
-                self.HalfHeader.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
-                self.ThirdHeader = Label(self.SpellcasterLevelsFrame, text="1/3", bd=2, relief=GROOVE)
-                self.ThirdHeader.grid(row=2, column=0, padx=2, pady=2, sticky=NSEW)
+                self.SpellcasterLevelsFullHeader = Label(self.SpellcasterLevelsFrame, text="Full", bd=2, relief=GROOVE)
+                self.SpellcasterLevelsFullHeader.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
+                self.SpellcasterLevelsHalfHeader = Label(self.SpellcasterLevelsFrame, text="1/2", bd=2, relief=GROOVE)
+                self.SpellcasterLevelsHalfHeader.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
+                self.SpellcasterLevelsThirdHeader = Label(self.SpellcasterLevelsFrame, text="1/3", bd=2, relief=GROOVE)
+                self.SpellcasterLevelsThirdHeader.grid(row=2, column=0, padx=2, pady=2, sticky=NSEW)
                 self.SpellcasterLevelsFullDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.SpellcasterLevelsFullDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
                 self.SpellcasterLevelsFullDropdown.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
                 self.SpellcasterLevelsHalfDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.SpellcasterLevelsHalfDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
@@ -3331,6 +3337,43 @@ class CharacterSheet:
                 self.Window.destroy()
 
             def Calculate(self, Warn=False):
+                # Spellcaster Levels
+                FullSpellcasterLevels = GlobalInst.GetStringVarAsNumber(self.SpellcasterLevelsFullDropdownVar)
+                HalfSpellcasterLevels = GlobalInst.GetStringVarAsNumber(self.SpellcasterLevelsHalfDropdownVar)
+                ThirdSpellcasterLevels = GlobalInst.GetStringVarAsNumber(self.SpellcasterLevelsThirdDropdownVar)
+                TotalSpellcasterLevels = FullSpellcasterLevels + HalfSpellcasterLevels + ThirdSpellcasterLevels
+                AdjustedTotalSpellcasterLevels = FullSpellcasterLevels + math.floor(HalfSpellcasterLevels / 2) + math.floor(ThirdSpellcasterLevels / 3)
+
+                # Check Total Levels
+                if TotalSpellcasterLevels > 20:
+                    self.SpellSlotsFirstEntryVar.set("N/A")
+                    self.SpellSlotsSecondEntryVar.set("N/A")
+                    self.SpellSlotsThirdEntryVar.set("N/A")
+                    self.SpellSlotsFourthEntryVar.set("N/A")
+                    self.SpellSlotsFifthEntryVar.set("N/A")
+                    self.SpellSlotsSixthEntryVar.set("N/A")
+                    self.SpellSlotsSeventhEntryVar.set("N/A")
+                    self.SpellSlotsEighthEntryVar.set("N/A")
+                    self.SpellSlotsNinthEntryVar.set("N/A")
+                    if Warn:
+                        messagebox.showerror("Invalid Entry", "Total spellcaster levels cannot be higher than 20.")
+                    return False
+
+                # Get Spell Levels Tuple
+                SpellLevelsTuple = self.SpellLevels[str(AdjustedTotalSpellcasterLevels)]
+
+                # Set Spell Slot Vars
+                self.SpellSlotsFirstEntryVar.set(SpellLevelsTuple[0])
+                self.SpellSlotsSecondEntryVar.set(SpellLevelsTuple[1])
+                self.SpellSlotsThirdEntryVar.set(SpellLevelsTuple[2])
+                self.SpellSlotsFourthEntryVar.set(SpellLevelsTuple[3])
+                self.SpellSlotsFifthEntryVar.set(SpellLevelsTuple[4])
+                self.SpellSlotsSixthEntryVar.set(SpellLevelsTuple[5])
+                self.SpellSlotsSeventhEntryVar.set(SpellLevelsTuple[6])
+                self.SpellSlotsEighthEntryVar.set(SpellLevelsTuple[7])
+                self.SpellSlotsNinthEntryVar.set(SpellLevelsTuple[8])
+
+                # Return Success
                 return True
 
     # Inventory
