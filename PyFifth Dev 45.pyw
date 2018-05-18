@@ -2540,6 +2540,9 @@ class CharacterSheet:
             self.SpellUsingSpellPointsBoxVar = SavedBooleanVar("SpellUsingSpellPointsBoxVar")
             self.SpellUsingSpellPointsBoxVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
             self.ConcentrationBoxVar = SavedBooleanVar("ConcentrationBoxVar")
+            self.SpellcasterLevelsFullDropdownVar = SavedStringVar("SpellcasterLevelsFullDropdownVar", "0")
+            self.SpellcasterLevelsHalfDropdownVar = SavedStringVar("SpellcasterLevelsHalfDropdownVar", "0")
+            self.SpellcasterLevelsThirdDropdownVar = SavedStringVar("SpellcasterLevelsThirdDropdownVar", "0")
 
             # Center Rows and Columns
             master.grid_rowconfigure(0, weight=1)
@@ -2594,9 +2597,9 @@ class CharacterSheet:
 
             # Spell Slots Headers
             self.SpellSlotsLevelHeader = Label(self.SpellSlotsFrame, text="Level", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
-            self.SpellSlotsLevelHeader.bind("<Button-1>", self.ConfigureMulticlassSpellSlots)
+            self.SpellSlotsLevelHeader.bind("<Button-1>", self.ConfigureSpellSlots)
             self.SpellSlotsLevelHeader.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
-            self.SpellSlotsLevelHeaderTooltip = Tooltip(self.SpellSlotsLevelHeader, "Left-click to calculate multiclass spellcaster level and slots.")
+            self.SpellSlotsLevelHeaderTooltip = Tooltip(self.SpellSlotsLevelHeader, "Left-click to calculate spell slots from spellcaster levels.")
             self.SpellSlotsSlotsHeader = Label(self.SpellSlotsFrame, text="Slots", bd=2, relief=GROOVE)
             self.SpellSlotsSlotsHeader.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
             self.SpellSlotsUsedHeader = Label(self.SpellSlotsFrame, text="Used", bd=2, relief=GROOVE)
@@ -2615,6 +2618,21 @@ class CharacterSheet:
             self.SpellSlotsSeventhLevel = self.SpellSlotsLevel(self.SpellSlotsFrame, self.SpellSlotsList, "7th", 10, 7)
             self.SpellSlotsEighthLevel = self.SpellSlotsLevel(self.SpellSlotsFrame, self.SpellSlotsList, "8th", 11, 8)
             self.SpellSlotsNinthLevel = self.SpellSlotsLevel(self.SpellSlotsFrame, self.SpellSlotsList, "9th", 13, 9)
+
+            # Spell Slots Data
+            self.SpellSlotsData = {}
+            self.SpellSlotsData["1st"] = self.SpellSlotsFirstLevel.SlotsEntryVar
+            self.SpellSlotsData["2nd"] = self.SpellSlotsSecondLevel.SlotsEntryVar
+            self.SpellSlotsData["3rd"] = self.SpellSlotsThirdLevel.SlotsEntryVar
+            self.SpellSlotsData["4th"] = self.SpellSlotsFourthLevel.SlotsEntryVar
+            self.SpellSlotsData["5th"] = self.SpellSlotsFifthLevel.SlotsEntryVar
+            self.SpellSlotsData["6th"] = self.SpellSlotsSixthLevel.SlotsEntryVar
+            self.SpellSlotsData["7th"] = self.SpellSlotsSeventhLevel.SlotsEntryVar
+            self.SpellSlotsData["8th"] = self.SpellSlotsEighthLevel.SlotsEntryVar
+            self.SpellSlotsData["9th"] = self.SpellSlotsNinthLevel.SlotsEntryVar
+            self.SpellSlotsData["SpellcasterLevelsFullDropdownVar"] = self.SpellcasterLevelsFullDropdownVar
+            self.SpellSlotsData["SpellcasterLevelsHalfDropdownVar"] = self.SpellcasterLevelsHalfDropdownVar
+            self.SpellSlotsData["SpellcasterLevelsThirdDropdownVar"] = self.SpellcasterLevelsThirdDropdownVar
 
             # Spell Points Frame
             self.SpellPointsFrame = LabelFrame(master, text="Spell Points:")
@@ -2766,14 +2784,15 @@ class CharacterSheet:
                 NewRemainingPoints = min(MaxPoints, (CurrentRemainingPoints + SpellSlotAmount + ManualAmount))
                 self.SpellPointsRemainingEntryVar.set(str(NewRemainingPoints))
 
-        def ConfigureMulticlassSpellSlots(self, event):
+        def ConfigureSpellSlots(self, event):
             # Create Window and Wait
-            MulticlassSpellSlotsMenuInst = self.MulticlassSpellSlotsMenu(WindowInst)
-            WindowInst.wait_window(MulticlassSpellSlotsMenuInst.Window)
+            CalculateSpellSlotsMenuInst = self.CalculateSpellSlotsMenu(WindowInst, self.SpellSlotsData)
+            WindowInst.wait_window(CalculateSpellSlotsMenuInst.Window)
 
             # Handle Variables
-            if MulticlassSpellSlotsMenuInst.DataSubmitted.get():
-                pass
+            if CalculateSpellSlotsMenuInst.DataSubmitted.get():
+                for Tag, Var in CalculateSpellSlotsMenuInst.SpellSlotsData.items():
+                    self.SpellSlotsData[Tag].set(Var.get())
 
         class SpellList:
             def __init__(self, master, List, LevelName):
@@ -3158,36 +3177,60 @@ class CharacterSheet:
                 self.DataSubmitted.set(False)
                 self.Window.destroy()
 
-        class MulticlassSpellSlotsMenu:
-            def __init__(self, master):
+        class CalculateSpellSlotsMenu:
+            def __init__(self, master, SpellSlotsData):
                 self.DataSubmitted = BooleanVar()
-                self.FullDropdownVar = StringVar(value="0")
-                self.HalfDropdownVar = StringVar(value="0")
-                self.ThirdDropdownVar = StringVar(value="0")
+                self.SpellcasterLevelsFullDropdownVar = StringVar(value=SpellSlotsData["SpellcasterLevelsFullDropdownVar"].get())
+                self.SpellcasterLevelsHalfDropdownVar = StringVar(value=SpellSlotsData["SpellcasterLevelsHalfDropdownVar"].get())
+                self.SpellcasterLevelsThirdDropdownVar = StringVar(value=SpellSlotsData["SpellcasterLevelsThirdDropdownVar"].get())
+                self.SpellSlotsFirstEntryVar = StringVar()
+                self.SpellSlotsSecondEntryVar = StringVar()
+                self.SpellSlotsThirdEntryVar = StringVar()
+                self.SpellSlotsFourthEntryVar = StringVar()
+                self.SpellSlotsFifthEntryVar = StringVar()
+                self.SpellSlotsSixthEntryVar = StringVar()
+                self.SpellSlotsSeventhEntryVar = StringVar()
+                self.SpellSlotsEighthEntryVar = StringVar()
+                self.SpellSlotsNinthEntryVar = StringVar()
 
-                # Multiclass Spell Levels
-                self.MulticlassSpellLevels = {}
-                self.MulticlassSpellLevels["0"] = ("", "", "", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["1"] = ("2", "", "", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["2"] = ("3", "", "", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["3"] = ("4", "2", "", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["4"] = ("4", "3", "", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["5"] = ("4", "3", "2", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["6"] = ("4", "3", "3", "", "", "", "", "", "")
-                self.MulticlassSpellLevels["7"] = ("4", "3", "3", "1", "", "", "", "", "")
-                self.MulticlassSpellLevels["8"] = ("4", "3", "3", "2", "", "", "", "", "")
-                self.MulticlassSpellLevels["9"] = ("4", "3", "3", "3", "1", "", "", "", "")
-                self.MulticlassSpellLevels["10"] = ("4", "3", "3", "3", "2", "", "", "", "")
-                self.MulticlassSpellLevels["11"] = ("4", "3", "3", "3", "2", "1", "", "", "")
-                self.MulticlassSpellLevels["12"] = ("4", "3", "3", "3", "2", "1", "", "", "")
-                self.MulticlassSpellLevels["13"] = ("4", "3", "3", "3", "2", "1", "1", "", "")
-                self.MulticlassSpellLevels["14"] = ("4", "3", "3", "3", "2", "1", "1", "", "")
-                self.MulticlassSpellLevels["15"] = ("4", "3", "3", "3", "2", "1", "1", "1", "")
-                self.MulticlassSpellLevels["16"] = ("4", "3", "3", "3", "2", "1", "1", "1", "")
-                self.MulticlassSpellLevels["17"] = ("4", "3", "3", "3", "2", "1", "1", "1", "1")
-                self.MulticlassSpellLevels["18"] = ("4", "3", "3", "3", "3", "1", "1", "1", "1")
-                self.MulticlassSpellLevels["19"] = ("4", "3", "3", "3", "3", "2", "1", "1", "1")
-                self.MulticlassSpellLevels["20"] = ("4", "3", "3", "3", "3", "2", "2", "1", "1")
+                # Spell Slots Data
+                self.SpellSlotsData = {}
+                self.SpellSlotsData["1st"] = self.SpellSlotsFirstEntryVar
+                self.SpellSlotsData["2nd"] = self.SpellSlotsSecondEntryVar
+                self.SpellSlotsData["3rd"] = self.SpellSlotsThirdEntryVar
+                self.SpellSlotsData["4th"] = self.SpellSlotsFourthEntryVar
+                self.SpellSlotsData["5th"] = self.SpellSlotsFifthEntryVar
+                self.SpellSlotsData["6th"] = self.SpellSlotsSixthEntryVar
+                self.SpellSlotsData["7th"] = self.SpellSlotsSeventhEntryVar
+                self.SpellSlotsData["8th"] = self.SpellSlotsEighthEntryVar
+                self.SpellSlotsData["9th"] = self.SpellSlotsNinthEntryVar
+                self.SpellSlotsData["SpellcasterLevelsFullDropdownVar"] = self.SpellcasterLevelsFullDropdownVar
+                self.SpellSlotsData["SpellcasterLevelsHalfDropdownVar"] = self.SpellcasterLevelsHalfDropdownVar
+                self.SpellSlotsData["SpellcasterLevelsThirdDropdownVar"] = self.SpellcasterLevelsThirdDropdownVar
+
+                # Spell Levels
+                self.SpellLevels = {}
+                self.SpellLevels["0"] = ("", "", "", "", "", "", "", "", "")
+                self.SpellLevels["1"] = ("2", "", "", "", "", "", "", "", "")
+                self.SpellLevels["2"] = ("3", "", "", "", "", "", "", "", "")
+                self.SpellLevels["3"] = ("4", "2", "", "", "", "", "", "", "")
+                self.SpellLevels["4"] = ("4", "3", "", "", "", "", "", "", "")
+                self.SpellLevels["5"] = ("4", "3", "2", "", "", "", "", "", "")
+                self.SpellLevels["6"] = ("4", "3", "3", "", "", "", "", "", "")
+                self.SpellLevels["7"] = ("4", "3", "3", "1", "", "", "", "", "")
+                self.SpellLevels["8"] = ("4", "3", "3", "2", "", "", "", "", "")
+                self.SpellLevels["9"] = ("4", "3", "3", "3", "1", "", "", "", "")
+                self.SpellLevels["10"] = ("4", "3", "3", "3", "2", "", "", "", "")
+                self.SpellLevels["11"] = ("4", "3", "3", "3", "2", "1", "", "", "")
+                self.SpellLevels["12"] = ("4", "3", "3", "3", "2", "1", "", "", "")
+                self.SpellLevels["13"] = ("4", "3", "3", "3", "2", "1", "1", "", "")
+                self.SpellLevels["14"] = ("4", "3", "3", "3", "2", "1", "1", "", "")
+                self.SpellLevels["15"] = ("4", "3", "3", "3", "2", "1", "1", "1", "")
+                self.SpellLevels["16"] = ("4", "3", "3", "3", "2", "1", "1", "1", "")
+                self.SpellLevels["17"] = ("4", "3", "3", "3", "2", "1", "1", "1", "1")
+                self.SpellLevels["18"] = ("4", "3", "3", "3", "3", "1", "1", "1", "1")
+                self.SpellLevels["19"] = ("4", "3", "3", "3", "3", "2", "1", "1", "1")
+                self.SpellLevels["20"] = ("4", "3", "3", "3", "3", "2", "2", "1", "1")
 
                 # Create Window
                 self.Window = Toplevel(master)
@@ -3197,6 +3240,8 @@ class CharacterSheet:
                 # Spellcaster Levels
                 self.LevelsList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"]
                 self.SpellcasterLevelsFrame = LabelFrame(self.Window, text="Spellcaster Levels:")
+                self.SpellcasterLevelsFrame.grid_columnconfigure(0, weight=1)
+                self.SpellcasterLevelsFrame.grid_columnconfigure(1, weight=1)
                 self.SpellcasterLevelsFrame.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
                 self.FullHeader = Label(self.SpellcasterLevelsFrame, text="Full", bd=2, relief=GROOVE)
                 self.FullHeader.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
@@ -3204,17 +3249,59 @@ class CharacterSheet:
                 self.HalfHeader.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
                 self.ThirdHeader = Label(self.SpellcasterLevelsFrame, text="1/3", bd=2, relief=GROOVE)
                 self.ThirdHeader.grid(row=2, column=0, padx=2, pady=2, sticky=NSEW)
-                self.FullDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.FullDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
-                self.FullDropdown.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
-                self.HalfDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.HalfDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
-                self.HalfDropdown.grid(row=1, column=1, padx=2, pady=2, sticky=NSEW)
-                self.ThirdDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.ThirdDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
-                self.ThirdDropdown.grid(row=2, column=1, padx=2, pady=2, sticky=NSEW)
+                self.SpellcasterLevelsFullDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.SpellcasterLevelsFullDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
+                self.SpellcasterLevelsFullDropdown.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
+                self.SpellcasterLevelsHalfDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.SpellcasterLevelsHalfDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
+                self.SpellcasterLevelsHalfDropdown.grid(row=1, column=1, padx=2, pady=2, sticky=NSEW)
+                self.SpellcasterLevelsThirdDropdown = DropdownExtended(self.SpellcasterLevelsFrame, textvariable=self.SpellcasterLevelsThirdDropdownVar, values=self.LevelsList, width=4, state="readonly", justify=CENTER)
+                self.SpellcasterLevelsThirdDropdown.grid(row=2, column=1, padx=2, pady=2, sticky=NSEW)
 
                 # Spell Slots
+                self.SpellSlotsFrame = LabelFrame(self.Window, text="Spell Slots:")
+                self.SpellSlotsFrame.grid_columnconfigure(0, weight=1)
+                self.SpellSlotsFrame.grid_columnconfigure(1, weight=1)
+                self.SpellSlotsFrame.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
+                self.SpellSlotsFirstHeader = Label(self.SpellSlotsFrame, text="1st", bd=2, relief=GROOVE)
+                self.SpellSlotsFirstHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsFirstEntry = EntryExtended(self.SpellSlotsFrame, textvariable=self.SpellSlotsFirstEntryVar, state=DISABLED, disabledbackground="light gray", disabledforeground="black", width=4, justify=CENTER)
+                self.SpellSlotsFirstEntry.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsSecondHeader = Label(self.SpellSlotsFrame, text="2nd", bd=2, relief=GROOVE)
+                self.SpellSlotsSecondHeader.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsSecondEntry = EntryExtended(self.SpellSlotsFrame, textvariable=self.SpellSlotsSecondEntryVar, state=DISABLED, disabledbackground="light gray", disabledforeground="black", width=4, justify=CENTER)
+                self.SpellSlotsSecondEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsThirdHeader = Label(self.SpellSlotsFrame, text="3rd", bd=2, relief=GROOVE)
+                self.SpellSlotsThirdHeader.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsThirdEntry = EntryExtended(self.SpellSlotsFrame, textvariable=self.SpellSlotsThirdEntryVar, state=DISABLED, disabledbackground="light gray", disabledforeground="black", width=4, justify=CENTER)
+                self.SpellSlotsThirdEntry.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsFourthHeader = Label(self.SpellSlotsFrame, text="4th", bd=2, relief=GROOVE)
+                self.SpellSlotsFourthHeader.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsFourthEntry = EntryExtended(self.SpellSlotsFrame, textvariable=self.SpellSlotsFourthEntryVar, state=DISABLED, disabledbackground="light gray", disabledforeground="black", width=4, justify=CENTER)
+                self.SpellSlotsFourthEntry.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsFifthHeader = Label(self.SpellSlotsFrame, text="5th", bd=2, relief=GROOVE)
+                self.SpellSlotsFifthHeader.grid(row=4, column=0, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsFifthEntry = EntryExtended(self.SpellSlotsFrame, textvariable=self.SpellSlotsFifthEntryVar, state=DISABLED, disabledbackground="light gray", disabledforeground="black", width=4, justify=CENTER)
+                self.SpellSlotsFifthEntry.grid(row=4, column=1, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsSixthHeader = Label(self.SpellSlotsFrame, text="6th", bd=2, relief=GROOVE)
+                self.SpellSlotsSixthHeader.grid(row=5, column=0, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsSixthEntry = EntryExtended(self.SpellSlotsFrame, textvariable=self.SpellSlotsSixthEntryVar, state=DISABLED, disabledbackground="light gray", disabledforeground="black", width=4, justify=CENTER)
+                self.SpellSlotsSixthEntry.grid(row=5, column=1, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsSeventhHeader = Label(self.SpellSlotsFrame, text="7th", bd=2, relief=GROOVE)
+                self.SpellSlotsSeventhHeader.grid(row=6, column=0, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsSeventhEntry = EntryExtended(self.SpellSlotsFrame, textvariable=self.SpellSlotsSeventhEntryVar, state=DISABLED, disabledbackground="light gray", disabledforeground="black", width=4, justify=CENTER)
+                self.SpellSlotsSeventhEntry.grid(row=6, column=1, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsEighthHeader = Label(self.SpellSlotsFrame, text="8th", bd=2, relief=GROOVE)
+                self.SpellSlotsEighthHeader.grid(row=7, column=0, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsEighthEntry = EntryExtended(self.SpellSlotsFrame, textvariable=self.SpellSlotsEighthEntryVar, state=DISABLED, disabledbackground="light gray", disabledforeground="black", width=4, justify=CENTER)
+                self.SpellSlotsEighthEntry.grid(row=7, column=1, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsNinthHeader = Label(self.SpellSlotsFrame, text="9th", bd=2, relief=GROOVE)
+                self.SpellSlotsNinthHeader.grid(row=8, column=0, sticky=NSEW, padx=2, pady=2)
+                self.SpellSlotsNinthEntry = EntryExtended(self.SpellSlotsFrame, textvariable=self.SpellSlotsNinthEntryVar, state=DISABLED, disabledbackground="light gray", disabledforeground="black", width=4, justify=CENTER)
+                self.SpellSlotsNinthEntry.grid(row=8, column=1, sticky=NSEW, padx=2, pady=2)
 
                 # Buttons
                 self.ButtonsFrame = Frame(self.Window)
+                self.ButtonsFrame.grid_columnconfigure(0, weight=1)
+                self.ButtonsFrame.grid_columnconfigure(1, weight=1)
                 self.ButtonsFrame.grid(row=2, column=0, sticky=NSEW)
                 self.AcceptButton = ButtonExtended(self.ButtonsFrame, text="Accept", command=self.Accept, bg=GlobalInst.ButtonColor)
                 self.AcceptButton.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
@@ -3227,7 +3314,12 @@ class CharacterSheet:
                 # Handle Config Window Geometry and Focus
                 GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst)
                 self.Window.focus_force()
-                self.FullDropdown.focus_set()
+
+                # Initial Calculation
+                self.Calculate()
+
+                # Focus on First Dropdown
+                self.SpellcasterLevelsFullDropdown.focus_set()
 
             def Accept(self):
                 if self.Calculate(Warn=True):
