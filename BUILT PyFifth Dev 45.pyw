@@ -773,7 +773,12 @@ class CharacterSheet:
         # Experience
         self.CharacterExperienceLabel = Label(self.CharacterSheetHeaderFrame, text="Exp.:")
         self.CharacterExperienceLabel.grid(row=0, column=6, sticky=E)
-        self.CharacterExperienceEntry = EntryExtended(self.CharacterSheetHeaderFrame, textvariable=self.CharacterExperienceEntryVar, width=10, justify=CENTER)
+        self.CharacterExperienceEntry = EntryExtended(self.CharacterSheetHeaderFrame, textvariable=self.CharacterExperienceEntryVar, width=10, justify=CENTER, bg=GlobalInst.ButtonColor)
+        self.CharacterExperienceEntry.ConfigureValidation(
+            lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Character experience must be a whole number.", MinValue=0, LessThanMinString="Character experience cannot be negative."), "key")
+        self.CharacterExperienceEntry.bind("<Return>", self.GainExperience)
+        self.CharacterExperienceEntry.bind("<Button-3>", self.GainExperience)
+        self.CharacterExperienceEntryTooltip = Tooltip(self.CharacterExperienceEntry, "Right-click or enter to gain experience.")
         self.CharacterExperienceEntry.grid(row=0, column=7, sticky=NSEW, padx=2, pady=2)
 
         # Needed Experience
@@ -980,6 +985,16 @@ class CharacterSheet:
             self.CharacterStatsNotebook.add(self.PortraitPage)
         if not Portrait:
             self.CharacterStatsNotebook.hide(6)
+
+    def GainExperience(self, event):
+        # Create Window and Wait
+        GainExperienceMenuInst = self.GainExperienceMenu(WindowInst)
+        WindowInst.wait_window(GainExperienceMenuInst.Window)
+
+        # Handle Variables
+        if GainExperienceMenuInst.DataSubmitted.get():
+            NewExperienceValue = GlobalInst.GetStringVarAsNumber(self.CharacterExperienceEntryVar) + GlobalInst.GetStringVarAsNumber(GainExperienceMenuInst.TotalExperienceGainedEntryVar)
+            self.CharacterExperienceEntryVar.set(str(NewExperienceValue))
 
     # Abilities and Skills
     class AbilitiesAndSkills:
@@ -1933,7 +1948,8 @@ class CharacterSheet:
             self.InitiativeEntry = EntryExtended(self.InitiativeFrame, width=9, justify=CENTER, textvariable=self.InitiativeEntryVar, cursor="dotbox", font=self.ACInitiativeSpeedFontSize)
             self.InitiativeEntry.grid(row=0, column=0, sticky=NSEW)
             self.InitiativeEntry.bind("<Button-1>", self.RollInitiative)
-            self.InitiativeEntryStatModifierInst = StatModifier(self.InitiativeEntry, "<Button-3>", "Left-click on the initiative modifier to roll 1d20 with it.\n\nRight-click to set a stat modifier.", "Initiative", Cursor="dotbox",
+            self.InitiativeEntryStatModifierInst = StatModifier(self.InitiativeEntry, "<Button-3>", "Left-click on the initiative modifier to roll 1d20 with it.\n\nRight-click to set a stat modifier.", "Initiative",
+                                                                Cursor="dotbox",
                                                                 Prefix="InitiativeEntry")
 
             # Speed
@@ -4439,6 +4455,100 @@ class CharacterSheet:
             self.DataSubmitted.set(False)
             self.Window.destroy()
 
+    # Gain Experience Menu
+    class GainExperienceMenu:
+        def __init__(self, master):
+            # Variables
+            self.DataSubmitted = BooleanVar()
+            self.DivideByDropdownVar = StringVar(value="1")
+            self.DivideByDropdownVar.trace_add("write", lambda a, b, c: self.Calculate())
+            self.TotalExperienceGainedEntryVar = StringVar(value="0")
+
+            # Create Window
+            self.Window = Toplevel(master)
+            self.Window.wm_attributes("-toolwindow", 1)
+            self.Window.wm_title("Gain Experience")
+
+            # Experience Gained
+            self.ExperienceGainedFrame = LabelFrame(self.Window, text="Exp. Gained:")
+            self.ExperienceGainedFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2, rowspan=3)
+            self.ExperienceGainedScrolledCanvas = ScrolledCanvas(self.ExperienceGainedFrame, Width=64, Height=120)
+            self.ExperienceGainedScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
+            self.ExperienceGainedEntriesList = []
+            for Row in range(50):
+                NewEntry = self.ExperienceGainedEntry(self.ExperienceGainedScrolledCanvas.WindowFrame, self.ExperienceGainedEntriesList, Row)
+                NewEntry.ExperienceGainedEntryVar.trace_add("write", lambda a, b, c: self.Calculate())
+                NewEntry.ExperienceGainedEntry.bind("<FocusIn>", self.ExperienceGainedScrolledCanvas.MakeFocusVisible)
+
+            # Divide By
+            self.DivideByFrame = LabelFrame(self.Window, text="Divide By:")
+            self.DivideByFrame.grid_columnconfigure(0, weight=1)
+            self.DivideByFrame.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+            self.DivisorList = []
+            for Divisor in range(1, 101):
+                self.DivisorList.append(str(Divisor))
+            self.DivideByDropdown = DropdownExtended(self.DivideByFrame, textvariable=self.DivideByDropdownVar, values=self.DivisorList, width=5, state="readonly", justify=CENTER)
+            self.DivideByDropdown.grid(row=0, column=0, sticky=NSEW)
+
+            # Total Experience Gained
+            self.TotalExperienceGainedFrame = LabelFrame(self.Window, text="Total Exp. Gained:")
+            self.TotalExperienceGainedFrame.grid_columnconfigure(0, weight=1)
+            self.TotalExperienceGainedFrame.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+            self.TotalExperienceGainedEntry = EntryExtended(self.TotalExperienceGainedFrame, textvariable=self.TotalExperienceGainedEntryVar, justify=CENTER, width=10, state=DISABLED, disabledforeground="black",
+                                                            disabledbackground="light gray")
+            self.TotalExperienceGainedEntry.grid(row=0, column=0, sticky=NSEW)
+
+            # Buttons
+            self.ButtonsFrame = Frame(self.Window)
+            self.ButtonsFrame.grid_columnconfigure(0, weight=1)
+            self.ButtonsFrame.grid(row=2, column=1, sticky=NSEW)
+            self.SubmitButton = ButtonExtended(self.ButtonsFrame, text="Submit", command=self.Submit, bg=GlobalInst.ButtonColor)
+            self.SubmitButton.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+            self.CancelButton = ButtonExtended(self.ButtonsFrame, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+            self.CancelButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+
+            # Prevent Main Window Input
+            self.Window.grab_set()
+
+            # Handle Config Window Geometry and Focus
+            GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst)
+            self.Window.focus_force()
+
+            # Focus on First Entry
+            self.ExperienceGainedEntriesList[0].ExperienceGainedEntry.focus_set()
+
+        def Calculate(self):
+            TotalExperienceGained = 0
+            for ExperienceGained in self.ExperienceGainedEntriesList:
+                TotalExperienceGained += GlobalInst.GetStringVarAsNumber(ExperienceGained.ExperienceGainedEntryVar)
+            TotalExperienceGained = math.floor(TotalExperienceGained / GlobalInst.GetStringVarAsNumber(self.DivideByDropdownVar))
+            self.TotalExperienceGainedEntryVar.set(str(TotalExperienceGained))
+
+        def Submit(self):
+            self.DataSubmitted.set(True)
+            self.Window.destroy()
+
+        def Cancel(self):
+            self.DataSubmitted.set(False)
+            self.Window.destroy()
+
+        class ExperienceGainedEntry:
+            def __init__(self, master, List, Row):
+                # Store Parameters
+                self.Row = Row
+
+                # Variables
+                self.ExperienceGainedEntryVar = StringVar()
+
+                # Add to List
+                List.append(self)
+
+                # Entry
+                self.ExperienceGainedEntry = EntryExtended(master, justify=CENTER, width=10, textvariable=self.ExperienceGainedEntryVar)
+                self.ExperienceGainedEntry.ConfigureValidation(
+                    lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Experience gained must be a whole number.", MinValue=0, LessThanMinString="Experience gained cannot be less than 0."), "key")
+                self.ExperienceGainedEntry.grid(row=self.Row, column=0, sticky=NSEW)
+
 
 class CoinCalculator:
     def __init__(self, master, DialogMode=False):
@@ -6363,7 +6473,8 @@ class DiceRoller:
             self.PresetRollsFrame.grid(row=self.PresetRollsFrameRow, column=0, padx=2, pady=2)
 
             # Scrolled Canvas
-            self.PresetRollsScrolledCanvas = ScrolledCanvas(self.PresetRollsFrame, Height=self.PresetRollsScrolledCanvasHeight, Width=self.PresetRollsScrolledCanvasWidth, NumberOfColumns=8, ScrollingDisabledVar=self.ScrollingDisabledVar)
+            self.PresetRollsScrolledCanvas = ScrolledCanvas(self.PresetRollsFrame, Height=self.PresetRollsScrolledCanvasHeight, Width=self.PresetRollsScrolledCanvasWidth, NumberOfColumns=8,
+                                                            ScrollingDisabledVar=self.ScrollingDisabledVar)
             self.PresetRollsScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
             # Scrolled Canvas Headers
@@ -6503,7 +6614,8 @@ class DiceRoller:
                 self.PresetRollSortOrder.bind("<Leave>", self.EnableScrolling)
 
                 # List of Widgets
-                self.WidgetsList = [self.PresetRollNameEntry, self.PresetRollButton, self.PresetRollDiceNumberEntry, self.PresetRollDieTypeLabel, self.PresetRollDieTypeEntry, self.PresetRollModifierButton, self.PresetRollModifierEntry]
+                self.WidgetsList = [self.PresetRollNameEntry, self.PresetRollButton, self.PresetRollDiceNumberEntry, self.PresetRollDieTypeLabel, self.PresetRollDieTypeEntry, self.PresetRollModifierButton,
+                                    self.PresetRollModifierEntry]
 
             def RollPreset(self):
                 DiceRollerInst.DiceNumberEntryVar.set(self.PresetRollDiceNumberEntryVar.get())
@@ -6868,7 +6980,8 @@ class InitiativeOrder:
             self.InitiativeEntryNameEntry.bind("<Shift-Return>", self.Duplicate)
             self.InitiativeEntryNameEntry.bind("<Control-Button-3>", self.Clear)
             self.InitiativeEntryNameEntry.bind("<Control-Return>", self.Clear)
-            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry, "Right-click or enter to set additional creature info.\n\nShift+right-click or shift+enter to duplicate.\n\nCtrl+right-click or ctrl+enter to clear.")
+            self.InitiativeEntryNameTooltip = Tooltip(self.InitiativeEntryNameEntry,
+                                                      "Right-click or enter to set additional creature info.\n\nShift+right-click or shift+enter to duplicate.\n\nCtrl+right-click or ctrl+enter to clear.")
 
             # AC Entry
             self.InitiativeEntryACEntry = EntryExtended(self.master, textvariable=self.InitiativeEntryACEntryVar, justify=CENTER, width=5)
@@ -8365,13 +8478,13 @@ class ScrolledCanvas:
 
     def BindMouseWheel(self, event):
         if GlobalInst.OS == "Windows" or GlobalInst.OS == "Darwin":
-            WindowInst.bind("<MouseWheel>", self.MouseWheelEvent)
+            self.Canvas.winfo_toplevel().bind("<MouseWheel>", self.MouseWheelEvent)
         elif GlobalInst.OS == "Linux":
-            WindowInst.bind("<Button-4>", self.MouseWheelEvent)
-            WindowInst.bind("<Button-5>", self.MouseWheelEvent)
+            self.Canvas.winfo_toplevel().bind("<Button-4>", self.MouseWheelEvent)
+            self.Canvas.winfo_toplevel().bind("<Button-5>", self.MouseWheelEvent)
 
     def UnbindMouseWheel(self, event):
-        WindowInst.unbind("<MouseWheel>")
+        self.Canvas.winfo_toplevel().unbind("<MouseWheel>")
 
     def MakeFocusVisible(self, event):
         # Widget Bounds
