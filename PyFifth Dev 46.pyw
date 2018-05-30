@@ -6316,24 +6316,30 @@ class DiceRoller:
         # Number of Dice
         self.DiceNumberEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.DiceNumberEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
         self.DiceNumberEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Dice number must be a whole number.", MinValue=1, LessThanMinString="Dice number cannot be less than 1."), "key")
+        self.DiceNumberEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.DiceNumberEntryVar, MinValue=1))
+        self.DiceNumberEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.DiceNumberEntryVar, MinValue=1))
         self.DiceNumberEntry.grid(row=0, column=0, rowspan=2, padx=2, pady=2, sticky=NSEW)
-        self.DiceNumberTooltip = Tooltip(self.DiceNumberEntry, "Scroll the mouse wheel or type to change the number of dice.")
+        self.DiceNumberTooltip = Tooltip(self.DiceNumberEntry, "Scroll the mouse wheel, press the up and down keys, or type to change the number of dice.")
 
         # Die Type
         self.DieTypeLabel = Label(self.DiceEntryAndButtonsFrame, text="d", font=self.DiceEntryFont)
         self.DieTypeLabel.grid(row=0, column=1, rowspan=2, sticky=NSEW)
         self.DieTypeEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.DieTypeEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
         self.DieTypeEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Die type must be a whole number.", MinValue=1, LessThanMinString="Die type cannot be less than 1."), "key")
+        self.DieTypeEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.DieTypeEntryVar, MinValue=1, DieStep=True))
+        self.DieTypeEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.DieTypeEntryVar, MinValue=1, DieStep=True))
         self.DieTypeEntry.grid(row=0, column=2, rowspan=2, padx=2, pady=2, sticky=NSEW)
-        self.DieTypeTooltip = Tooltip(self.DieTypeEntry, "Scroll the mouse wheel or type to change the die type.")
+        self.DieTypeTooltip = Tooltip(self.DieTypeEntry, "Scroll the mouse wheel, press the up and down keys, or type to change the die type.")
 
         # Modifier
         self.ModifierLabel = Label(self.DiceEntryAndButtonsFrame, text="+", font=self.DiceEntryFont)
         self.ModifierLabel.grid(row=0, column=3, rowspan=2, sticky=NSEW)
         self.ModifierEntry = EntryExtended(self.DiceEntryAndButtonsFrame, textvariable=self.ModifierEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor, font=self.DiceEntryFont)
         self.ModifierEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Modifier must be a whole number."), "key")
+        self.ModifierEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.ModifierEntryVar))
+        self.ModifierEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.ModifierEntryVar))
         self.ModifierEntry.grid(row=0, column=4, rowspan=2, padx=2, pady=2, sticky=NSEW)
-        self.ModifierTooltip = Tooltip(self.ModifierEntry, "Scroll the mouse wheel or type to change the modifier.")
+        self.ModifierTooltip = Tooltip(self.ModifierEntry, "Scroll the mouse wheel, press the up and down keys, or type to change the modifier.")
 
         # Die Steps
         self.DieStep = {}
@@ -6498,6 +6504,35 @@ class DiceRoller:
             NewValue = min(MaxValue, NewValue)
         if DieStep:
             ValueDelta = NewValue - OldValue
+            if ValueDelta < 0:
+                NextDieIndex = 0
+            elif ValueDelta > 0:
+                NextDieIndex = 1
+            else:
+                return
+            try:
+                NewValue = self.DieStep[str(OldValue)][NextDieIndex]
+            except KeyError:
+                NewValue = 20
+        EntryVar.set(str(NewValue))
+
+    def ArrowKeyEvent(self, Direction, EntryVar, MinValue=None, MaxValue=None, DieStep=False):
+        try:
+            OldValue = GlobalInst.GetStringVarAsNumber(EntryVar)
+        except ValueError:
+            OldValue = 0
+        if Direction == "Up":
+            ValueDelta = 1
+        elif Direction == "Down":
+            ValueDelta = -1
+        else:
+            ValueDelta = 0
+        NewValue = OldValue + ValueDelta
+        if MinValue != None:
+            NewValue = max(MinValue, NewValue)
+        if MaxValue != None:
+            NewValue = min(MaxValue, NewValue)
+        if DieStep:
             if ValueDelta < 0:
                 NextDieIndex = 0
             elif ValueDelta > 0:
