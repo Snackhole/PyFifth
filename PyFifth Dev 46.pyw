@@ -5807,6 +5807,8 @@ class CreatureData:
         self.ProficiencyFrame.grid_columnconfigure(0, weight=1)
         self.ProficiencyFrame.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.ProficiencyEntry = EntryExtended(self.ProficiencyFrame, justify=CENTER, width=5, textvariable=self.ProficiencyEntryVar, bg=GlobalInst.ButtonColor)
+        self.ProficiencyEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.ProficiencyEntryVar))
+        self.ProficiencyEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.ProficiencyEntryVar))
         self.ProficiencyEntry.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
 
         # HP, AC, Speed, CR, and Experience Entries Frame
@@ -5876,32 +5878,44 @@ class CreatureData:
         self.AbilitiesStrengthHeader = Label(self.AbilitiesFrame, text="STR", bd=2, relief=GROOVE)
         self.AbilitiesStrengthHeader.grid(row=0, column=0, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesStrengthEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesStrengthEntryVar, bg=GlobalInst.ButtonColor)
+        self.AbilitiesStrengthEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.AbilitiesStrengthEntryVar))
+        self.AbilitiesStrengthEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.AbilitiesStrengthEntryVar))
         self.AbilitiesStrengthEntry.grid(row=1, column=0, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesDexterityHeader = Label(self.AbilitiesFrame, text="DEX", bd=2, relief=GROOVE)
         self.AbilitiesDexterityHeader.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesDexterityEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesDexterityEntryVar, bg=GlobalInst.ButtonColor)
+        self.AbilitiesDexterityEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.AbilitiesDexterityEntryVar))
+        self.AbilitiesDexterityEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.AbilitiesDexterityEntryVar))
         self.AbilitiesDexterityEntry.grid(row=1, column=1, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesConstitutionHeader = Label(self.AbilitiesFrame, text="CON", bd=2, relief=GROOVE)
         self.AbilitiesConstitutionHeader.grid(row=0, column=2, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesConstitutionEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesConstitutionEntryVar, bg=GlobalInst.ButtonColor)
+        self.AbilitiesConstitutionEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.AbilitiesConstitutionEntryVar))
+        self.AbilitiesConstitutionEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.AbilitiesConstitutionEntryVar))
         self.AbilitiesConstitutionEntry.grid(row=1, column=2, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesIntelligenceHeader = Label(self.AbilitiesFrame, text="INT", bd=2, relief=GROOVE)
         self.AbilitiesIntelligenceHeader.grid(row=2, column=0, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesIntelligenceEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesIntelligenceEntryVar, bg=GlobalInst.ButtonColor)
+        self.AbilitiesIntelligenceEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.AbilitiesIntelligenceEntryVar))
+        self.AbilitiesIntelligenceEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.AbilitiesIntelligenceEntryVar))
         self.AbilitiesIntelligenceEntry.grid(row=3, column=0, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesWisdomHeader = Label(self.AbilitiesFrame, text="WIS", bd=2, relief=GROOVE)
         self.AbilitiesWisdomHeader.grid(row=2, column=1, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesWisdomEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesWisdomEntryVar, bg=GlobalInst.ButtonColor)
+        self.AbilitiesWisdomEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.AbilitiesWisdomEntryVar))
+        self.AbilitiesWisdomEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.AbilitiesWisdomEntryVar))
         self.AbilitiesWisdomEntry.grid(row=3, column=1, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesCharismaHeader = Label(self.AbilitiesFrame, text="CHA", bd=2, relief=GROOVE)
         self.AbilitiesCharismaHeader.grid(row=2, column=2, padx=2, pady=2, sticky=NSEW)
         self.AbilitiesCharismaEntry = EntryExtended(self.AbilitiesFrame, justify=CENTER, width=5, textvariable=self.AbilitiesCharismaEntryVar, bg=GlobalInst.ButtonColor)
+        self.AbilitiesCharismaEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.AbilitiesCharismaEntryVar))
+        self.AbilitiesCharismaEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.AbilitiesCharismaEntryVar))
         self.AbilitiesCharismaEntry.grid(row=3, column=2, padx=2, pady=2, sticky=NSEW)
 
         # Mouse Wheel Configuration
         for EntryWidget in [self.AbilitiesStrengthEntry, self.AbilitiesDexterityEntry, self.AbilitiesConstitutionEntry, self.AbilitiesIntelligenceEntry, self.AbilitiesWisdomEntry, self.AbilitiesCharismaEntry,
                             self.ProficiencyEntry]:
-            self.EntryTooltip = Tooltip(EntryWidget, "Scroll the mouse wheel or type to change the modifier.")
+            self.EntryTooltip = Tooltip(EntryWidget, "Scroll the mouse wheel, press the up and down keys, or type to change the modifier.")
 
         if GlobalInst.OS == "Windows" or GlobalInst.OS == "Darwin":
             self.AbilitiesStrengthEntry.bind("<MouseWheel>", lambda event: self.MouseWheelEvent(event, self.AbilitiesStrengthEntryVar))
@@ -6152,6 +6166,28 @@ class CreatureData:
         else:
             ScrollDistance = 0
         NewValue = OldValue + ScrollDistance
+        if MinValue != None:
+            NewValue = max(MinValue, NewValue)
+        if MaxValue != None:
+            NewValue = min(MaxValue, NewValue)
+        if NewValue > 0:
+            PositivePrefix = "+"
+        else:
+            PositivePrefix = ""
+        EntryVar.set(PositivePrefix + str(NewValue))
+
+    def ArrowKeyEvent(self, Direction, EntryVar, MinValue=None, MaxValue=None):
+        try:
+            OldValue = GlobalInst.GetStringVarAsNumber(EntryVar)
+        except ValueError:
+            OldValue = 0
+        if Direction == "Up":
+            ValueDelta = 1
+        elif Direction == "Down":
+            ValueDelta = -1
+        else:
+            ValueDelta = 0
+        NewValue = OldValue + ValueDelta
         if MinValue != None:
             NewValue = max(MinValue, NewValue)
         if MaxValue != None:
