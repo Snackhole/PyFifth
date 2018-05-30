@@ -4741,25 +4741,36 @@ class SpendCoinsMenu:
         self.SpendGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.SpendPPHeader = Label(self.SpendFrame, text="PP", bd=2, relief=GROOVE)
         self.SpendPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
+        self.SpendEntryTooltipString = "Scroll the mouse wheel, press the up and down keys, or type to change."
         self.SpendCPEntry = CoinsEntry(self.SpendFrame, textvariable=self.SpendCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendCPTooltip = Tooltip(self.SpendCPEntry, "Scroll the mouse wheel or type to change.")
+        self.SpendCPTooltip = Tooltip(self.SpendCPEntry, self.SpendEntryTooltipString)
         self.SpendCPEntry.bind("<Return>", lambda event: self.Submit())
+        self.SpendCPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.SpendCPEntryVar, MinValue=0))
+        self.SpendCPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.SpendCPEntryVar, MinValue=0))
         self.SpendCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.SpendSPEntry = CoinsEntry(self.SpendFrame, textvariable=self.SpendSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendSPTooltip = Tooltip(self.SpendSPEntry, "Scroll the mouse wheel or type to change.")
+        self.SpendSPTooltip = Tooltip(self.SpendSPEntry, self.SpendEntryTooltipString)
         self.SpendSPEntry.bind("<Return>", lambda event: self.Submit())
+        self.SpendSPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.SpendSPEntryVar, MinValue=0))
+        self.SpendSPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.SpendSPEntryVar, MinValue=0))
         self.SpendSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.SpendEPEntry = CoinsEntry(self.SpendFrame, textvariable=self.SpendEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendEPTooltip = Tooltip(self.SpendEPEntry, "Scroll the mouse wheel or type to change.")
+        self.SpendEPTooltip = Tooltip(self.SpendEPEntry, self.SpendEntryTooltipString)
         self.SpendEPEntry.bind("<Return>", lambda event: self.Submit())
+        self.SpendEPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.SpendEPEntryVar, MinValue=0))
+        self.SpendEPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.SpendEPEntryVar, MinValue=0))
         self.SpendEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.SpendGPEntry = CoinsEntry(self.SpendFrame, textvariable=self.SpendGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendGPTooltip = Tooltip(self.SpendGPEntry, "Scroll the mouse wheel or type to change.")
+        self.SpendGPTooltip = Tooltip(self.SpendGPEntry, self.SpendEntryTooltipString)
         self.SpendGPEntry.bind("<Return>", lambda event: self.Submit())
+        self.SpendGPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.SpendGPEntryVar, MinValue=0))
+        self.SpendGPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.SpendGPEntryVar, MinValue=0))
         self.SpendGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.SpendPPEntry = CoinsEntry(self.SpendFrame, textvariable=self.SpendPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.SpendPPTooltip = Tooltip(self.SpendPPEntry, "Scroll the mouse wheel or type to change.")
+        self.SpendPPTooltip = Tooltip(self.SpendPPEntry, self.SpendEntryTooltipString)
         self.SpendPPEntry.bind("<Return>", lambda event: self.Submit())
+        self.SpendPPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.SpendPPEntryVar, MinValue=0))
+        self.SpendPPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.SpendPPEntryVar, MinValue=0))
         self.SpendPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
 
         # Match Values
@@ -4803,22 +4814,32 @@ class SpendCoinsMenu:
         self.RemainingCPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingCPTooltip = Tooltip(self.RemainingCPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingCPEntry.bind("<Return>", lambda event: self.Submit())
+        self.RemainingCPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.RemainingCPEntryVar, MinValue=0))
+        self.RemainingCPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.RemainingCPEntryVar, MinValue=0))
         self.RemainingCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.RemainingSPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingSPTooltip = Tooltip(self.RemainingSPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingSPEntry.bind("<Return>", lambda event: self.Submit())
+        self.RemainingSPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.RemainingSPEntryVar, MinValue=0))
+        self.RemainingSPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.RemainingSPEntryVar, MinValue=0))
         self.RemainingSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.RemainingEPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingEPTooltip = Tooltip(self.RemainingEPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingEPEntry.bind("<Return>", lambda event: self.Submit())
+        self.RemainingEPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.RemainingEPEntryVar, MinValue=0))
+        self.RemainingEPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.RemainingEPEntryVar, MinValue=0))
         self.RemainingEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.RemainingGPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingGPTooltip = Tooltip(self.RemainingGPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingGPEntry.bind("<Return>", lambda event: self.Submit())
+        self.RemainingGPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.RemainingGPEntryVar, MinValue=0))
+        self.RemainingGPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.RemainingGPEntryVar, MinValue=0))
         self.RemainingGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.RemainingPPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
         self.RemainingPPTooltip = Tooltip(self.RemainingPPEntry, "Scroll the mouse wheel or type to change.")
         self.RemainingPPEntry.bind("<Return>", lambda event: self.Submit())
+        self.RemainingPPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.RemainingPPEntryVar, MinValue=0))
+        self.RemainingPPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.RemainingPPEntryVar, MinValue=0))
         self.RemainingPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
 
         # Values Key
@@ -4912,6 +4933,24 @@ class SpendCoinsMenu:
         else:
             ScrollDistance = 0
         NewValue = OldValue + ScrollDistance
+        if MinValue != None:
+            NewValue = max(MinValue, NewValue)
+        if MaxValue != None:
+            NewValue = min(MaxValue, NewValue)
+        EntryVar.set(str(NewValue))
+
+    def ArrowKeyEvent(self, Direction, EntryVar, MinValue=None, MaxValue=None):
+        try:
+            OldValue = GlobalInst.GetStringVarAsNumber(EntryVar)
+        except ValueError:
+            OldValue = 0
+        if Direction == "Up":
+            ValueDelta = 1
+        elif Direction == "Down":
+            ValueDelta = -1
+        else:
+            ValueDelta = 0
+        NewValue = OldValue + ValueDelta
         if MinValue != None:
             NewValue = max(MinValue, NewValue)
         if MaxValue != None:
