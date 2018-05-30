@@ -4812,31 +4812,31 @@ class SpendCoinsMenu:
         self.RemainingPPHeader = Label(self.RemainingFrame, text="PP", bd=2, relief=GROOVE)
         self.RemainingPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
         self.RemainingCPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingCPTooltip = Tooltip(self.RemainingCPEntry, "Scroll the mouse wheel or type to change.")
+        self.RemainingCPTooltip = Tooltip(self.RemainingCPEntry, self.SpendEntryTooltipString)
         self.RemainingCPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingCPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.RemainingCPEntryVar, MinValue=0))
         self.RemainingCPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.RemainingCPEntryVar, MinValue=0))
         self.RemainingCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.RemainingSPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingSPTooltip = Tooltip(self.RemainingSPEntry, "Scroll the mouse wheel or type to change.")
+        self.RemainingSPTooltip = Tooltip(self.RemainingSPEntry, self.SpendEntryTooltipString)
         self.RemainingSPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingSPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.RemainingSPEntryVar, MinValue=0))
         self.RemainingSPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.RemainingSPEntryVar, MinValue=0))
         self.RemainingSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.RemainingEPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingEPTooltip = Tooltip(self.RemainingEPEntry, "Scroll the mouse wheel or type to change.")
+        self.RemainingEPTooltip = Tooltip(self.RemainingEPEntry, self.SpendEntryTooltipString)
         self.RemainingEPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingEPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.RemainingEPEntryVar, MinValue=0))
         self.RemainingEPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.RemainingEPEntryVar, MinValue=0))
         self.RemainingEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.RemainingGPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingGPTooltip = Tooltip(self.RemainingGPEntry, "Scroll the mouse wheel or type to change.")
+        self.RemainingGPTooltip = Tooltip(self.RemainingGPEntry, self.SpendEntryTooltipString)
         self.RemainingGPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingGPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.RemainingGPEntryVar, MinValue=0))
         self.RemainingGPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.RemainingGPEntryVar, MinValue=0))
         self.RemainingGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.RemainingPPEntry = CoinsEntry(self.RemainingFrame, textvariable=self.RemainingPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.RemainingPPTooltip = Tooltip(self.RemainingPPEntry, "Scroll the mouse wheel or type to change.")
+        self.RemainingPPTooltip = Tooltip(self.RemainingPPEntry, self.SpendEntryTooltipString)
         self.RemainingPPEntry.bind("<Return>", lambda event: self.Submit())
         self.RemainingPPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.RemainingPPEntryVar, MinValue=0))
         self.RemainingPPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.RemainingPPEntryVar, MinValue=0))
@@ -5076,25 +5076,36 @@ class GainCoinsMenu:
         self.GainGPHeader.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
         self.GainPPHeader = Label(self.GainFrame, text="PP", bd=2, relief=GROOVE)
         self.GainPPHeader.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
+        self.GainEntryTooltipString = "Scroll the mouse wheel, press the up and down keys, or type to change."
         self.GainCPEntry = CoinsEntry(self.GainFrame, textvariable=self.GainedCPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainCPTooltip = Tooltip(self.GainCPEntry, "Scroll the mouse wheel or type to change.")
+        self.GainCPTooltip = Tooltip(self.GainCPEntry, self.GainEntryTooltipString)
         self.GainCPEntry.bind("<Return>", lambda event: self.Submit())
+        self.GainCPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.GainedCPEntryVar, MinValue=0))
+        self.GainCPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.GainedCPEntryVar, MinValue=0))
         self.GainCPEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.GainSPEntry = CoinsEntry(self.GainFrame, textvariable=self.GainedSPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainSPTooltip = Tooltip(self.GainSPEntry, "Scroll the mouse wheel or type to change.")
+        self.GainSPTooltip = Tooltip(self.GainSPEntry, self.GainEntryTooltipString)
         self.GainSPEntry.bind("<Return>", lambda event: self.Submit())
+        self.GainSPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.GainedSPEntryVar, MinValue=0))
+        self.GainSPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.GainedSPEntryVar, MinValue=0))
         self.GainSPEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
         self.GainEPEntry = CoinsEntry(self.GainFrame, textvariable=self.GainedEPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainEPTooltip = Tooltip(self.GainEPEntry, "Scroll the mouse wheel or type to change.")
+        self.GainEPTooltip = Tooltip(self.GainEPEntry, self.GainEntryTooltipString)
         self.GainEPEntry.bind("<Return>", lambda event: self.Submit())
+        self.GainEPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.GainedEPEntryVar, MinValue=0))
+        self.GainEPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.GainedEPEntryVar, MinValue=0))
         self.GainEPEntry.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
         self.GainGPEntry = CoinsEntry(self.GainFrame, textvariable=self.GainedGPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainGPTooltip = Tooltip(self.GainGPEntry, "Scroll the mouse wheel or type to change.")
+        self.GainGPTooltip = Tooltip(self.GainGPEntry, self.GainEntryTooltipString)
         self.GainGPEntry.bind("<Return>", lambda event: self.Submit())
+        self.GainGPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.GainedGPEntryVar, MinValue=0))
+        self.GainGPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.GainedGPEntryVar, MinValue=0))
         self.GainGPEntry.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
         self.GainPPEntry = CoinsEntry(self.GainFrame, textvariable=self.GainedPPEntryVar, justify=CENTER, width=5, bg=GlobalInst.ButtonColor)
-        self.GainPPTooltip = Tooltip(self.GainPPEntry, "Scroll the mouse wheel or type to change.")
+        self.GainPPTooltip = Tooltip(self.GainPPEntry, self.GainEntryTooltipString)
         self.GainPPEntry.bind("<Return>", lambda event: self.Submit())
+        self.GainPPEntry.bind("<Up>", lambda event: self.ArrowKeyEvent("Up", self.GainedPPEntryVar, MinValue=0))
+        self.GainPPEntry.bind("<Down>", lambda event: self.ArrowKeyEvent("Down", self.GainedPPEntryVar, MinValue=0))
         self.GainPPEntry.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
 
         # ButtonsFrame
@@ -5152,6 +5163,24 @@ class GainCoinsMenu:
         else:
             ScrollDistance = 0
         NewValue = OldValue + ScrollDistance
+        if MinValue != None:
+            NewValue = max(MinValue, NewValue)
+        if MaxValue != None:
+            NewValue = min(MaxValue, NewValue)
+        EntryVar.set(str(NewValue))
+
+    def ArrowKeyEvent(self, Direction, EntryVar, MinValue=None, MaxValue=None):
+        try:
+            OldValue = GlobalInst.GetStringVarAsNumber(EntryVar)
+        except ValueError:
+            OldValue = 0
+        if Direction == "Up":
+            ValueDelta = 1
+        elif Direction == "Down":
+            ValueDelta = -1
+        else:
+            ValueDelta = 0
+        NewValue = OldValue + ValueDelta
         if MinValue != None:
             NewValue = max(MinValue, NewValue)
         if MaxValue != None:
