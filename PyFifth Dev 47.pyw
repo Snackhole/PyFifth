@@ -8420,7 +8420,7 @@ class StatusBar:
         self.StatusBarTextVar.set(Text)
 
     def FlashStatus(self, Text, Duration=2000):
-        StatusBarInst.StatusBarSetText(Text, Lock=True)
+        self.StatusBarSetText(Text, Lock=True)
         WindowInst.after(Duration, lambda: self.StatusBarSetText("Status", Unlock=True))
 
 
