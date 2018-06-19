@@ -8335,7 +8335,7 @@ class MenuBar:
             self.FileMenu.add_command(label="Import Dice Roller Data", command=SavingAndOpeningInst.ImportDiceRoller)
             self.FileMenu.add_command(label="Export Dice Roller Data", command=SavingAndOpeningInst.ExportDiceRoller)
         self.FileMenu.add_separator()
-        self.FileMenu.add_command(label="Exit", command=lambda: WindowInst.CloseWindow(CheckForSave=True))
+        self.FileMenu.add_command(label="Exit", command=lambda: SavingAndOpeningInst.CloseWindow())
         self.MenuBar.add_cascade(label="File", menu=self.FileMenu)
 
         if WindowInst.Mode == "CharacterSheet":
