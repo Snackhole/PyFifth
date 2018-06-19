@@ -2247,7 +2247,6 @@ class CharacterSheet:
 
                 # Features Scrolled Canvas
                 self.FeaturesScrolledCanvas = ScrolledCanvas(self.FeaturesFrame, Height=444, Width=327, NumberOfColumns=2, ScrollingDisabledVar=self.ScrollingDisabledVar)
-                self.FeaturesScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
                 # Headers
                 self.NameHeader = Label(self.FeaturesScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
@@ -2797,7 +2796,6 @@ class CharacterSheet:
 
                 # Spell List Scrolled Canvas
                 self.SpellListScrolledCanvas = ScrolledCanvas(self.SpellListFrame, Width=342, Height=411, NumberOfColumns=3, ScrollingDisabledVar=self.ScrollingDisabledVar)
-                self.SpellListScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
                 # Headers
                 self.PreparedHeader = Label(self.SpellListScrolledCanvas.HeaderFrame, text="Prep.", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
@@ -3358,7 +3356,6 @@ class CharacterSheet:
 
             # Inventory List Scrolled Canvas
             self.InventoryListScrolledCanvas = ScrolledCanvas(self.InventoryListFrame, Height=309, Width=693, NumberOfColumns=9, ScrollingDisabledVar=self.ScrollingDisabledVar)
-            self.InventoryListScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
             # Inventory List Headers
             self.InventoryListNameHeader = Label(self.InventoryListScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
@@ -4013,7 +4010,6 @@ class CharacterSheet:
 
             # Additional Notes Scrolled Canvas
             self.AdditionalNotesScrolledCanvas = ScrolledCanvas(self.AdditionalNotesFrame, ScrollingDisabledVar=self.ScrollingDisabledVar, Height=439, Width=225, NumberOfColumns=2)
-            self.AdditionalNotesScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
             # Additional Notes Headers
             self.NameHeader = Label(self.AdditionalNotesScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
@@ -4473,7 +4469,6 @@ class CharacterSheet:
             self.ExperienceGainedFrame = LabelFrame(self.Window, text="Exp. Gained:")
             self.ExperienceGainedFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2, rowspan=3)
             self.ExperienceGainedScrolledCanvas = ScrolledCanvas(self.ExperienceGainedFrame, Width=64, Height=120)
-            self.ExperienceGainedScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
             self.ExperienceGainedEntriesList = []
             for Row in range(50):
                 NewEntry = self.ExperienceGainedEntry(self.ExperienceGainedScrolledCanvas.WindowFrame, self.ExperienceGainedEntriesList, Row)
@@ -6614,7 +6609,6 @@ class DiceRoller:
             # Scrolled Canvas
             self.PresetRollsScrolledCanvas = ScrolledCanvas(self.PresetRollsFrame, Height=self.PresetRollsScrolledCanvasHeight, Width=self.PresetRollsScrolledCanvasWidth, NumberOfColumns=8,
                                                             ScrollingDisabledVar=self.ScrollingDisabledVar)
-            self.PresetRollsScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
             # Scrolled Canvas Headers
             self.PresetRollsScrolledCanvasNameHeader = Label(self.PresetRollsScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
@@ -6935,7 +6929,6 @@ class InitiativeOrder:
         self.InitiativeOrderScrolledCanvasFrame = Frame(self.InitiativeOrderFrame)
         self.InitiativeOrderScrolledCanvasFrame.grid(row=1, column=0, sticky=NSEW)
         self.InitiativeOrderScrolledCanvas = ScrolledCanvas(self.InitiativeOrderScrolledCanvasFrame, Height=434, Width=839, NumberOfColumns=11, ScrollingDisabledVar=self.ScrollingDisabledVar)
-        self.InitiativeOrderScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
         # Initiative Header
         self.InitiativeHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Initiative", bd=2, relief=GROOVE)
@@ -7515,7 +7508,6 @@ class CompactInitiativeOrder:
         self.InitiativeOrderScrolledCanvasFrame = Frame(master)
         self.InitiativeOrderScrolledCanvasFrame.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
         self.InitiativeOrderScrolledCanvas = ScrolledCanvas(self.InitiativeOrderScrolledCanvasFrame, Height=364, Width=310, NumberOfColumns=3, ScrollingDisabledVar=self.ScrollingDisabledVar)
-        self.InitiativeOrderScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
         # Initiative Header
         self.InitiativeHeader = Label(self.InitiativeOrderScrolledCanvas.HeaderFrame, text="Initiative", bd=2, relief=GROOVE)
@@ -7850,7 +7842,6 @@ class HoardSheet:
 
         # Treasure Items Scrolled Canvas
         self.TreasureItemsScrolledCanvas = ScrolledCanvas(self.TreasureItemsFrame, Height=288, Width=622, NumberOfColumns=8, ScrollingDisabledVar=self.ScrollingDisabledVar)
-        self.TreasureItemsScrolledCanvas.BindEnterAndLeaveToBindMouseWheel()
 
         # Treasure Items Headers
         self.TreasureItemsListNameHeader = Label(self.TreasureItemsScrolledCanvas.HeaderFrame, text="Name", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
@@ -8575,6 +8566,8 @@ class ScrolledCanvas:
         # Configure Scrolling
         self.Canvas.config(yscrollcommand=self.VerticalScrollbar.set)
         self.Canvas.bind("<Configure>", lambda event: self.ConfigureScrolledCanvas())
+        self.WindowFrame.bind("<Enter>", self.BindMouseWheel)
+        self.WindowFrame.bind("<Leave>", self.UnbindMouseWheel)
 
         # Configure Syncing
         if self.NumberOfColumns > 0:
@@ -8596,10 +8589,6 @@ class ScrolledCanvas:
 
     def ConfigureScrolledCanvas(self):
         self.Canvas.configure(scrollregion=self.Canvas.bbox("all"))
-
-    def BindEnterAndLeaveToBindMouseWheel(self):
-        self.WindowFrame.bind("<Enter>", self.BindMouseWheel)
-        self.WindowFrame.bind("<Leave>", self.UnbindMouseWheel)
 
     def MouseWheelEvent(self, event):
         if self.ScrollingDisabledVar != None:
