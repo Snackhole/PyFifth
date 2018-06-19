@@ -650,7 +650,7 @@ class SavedStringVar(StringVar):
         self.Tag = Tag
 
         # Init
-        StringVar.__init__(self, value=DefaultValue)
+        super().__init__(value=DefaultValue)
 
         # Add to Saved Data Dictionary
         if self.Tag is not None:
@@ -667,7 +667,7 @@ class SavedBooleanVar(BooleanVar):
         self.Tag = Tag
 
         # Init
-        BooleanVar.__init__(self, value=DefaultValue)
+        super().__init__(value=DefaultValue)
 
         # Add to Saved Data Dictionary
         if self.Tag is not None:
@@ -8485,7 +8485,7 @@ class ScrolledText:
     class TrackableText(Text):
         def __init__(self, *args, **kwargs):
             # Init Text
-            Text.__init__(self, *args, **kwargs)
+            super().__init__(*args, **kwargs)
 
             # Create Proxy
             self._orig = self._w + "_orig"
@@ -8645,7 +8645,7 @@ class ScrolledCanvas:
 # Extended Entry Widgets
 class EntryExtended(Entry):
     def __init__(self, *args, **kwargs):
-        Entry.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Intercept Bindings
         GlobalInst.InterceptEvents(self)
@@ -8657,64 +8657,64 @@ class EntryExtended(Entry):
 
 class CoinsEntry(EntryExtended):
     def __init__(self, *args, **kwargs):
-        EntryExtended.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Coins must be whole numbers.", MinValue=0, LessThanMinString="Coins cannot be less than 0."), "key")
 
 
 class InventoryCountEntry(EntryExtended):
     def __init__(self, *args, **kwargs):
-        EntryExtended.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Inventory item counts must be whole numbers.", MinValue=0, LessThanMinString="Inventory item counts cannot be less than 0."), "key")
 
 
 class InventoryWeightEntry(EntryExtended):
     def __init__(self, *args, **kwargs):
-        EntryExtended.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ConfigureValidation(
             lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Inventory item unit weights must be numbers.", Mode="Float", MinValue=0, LessThanMinString="Inventory item unit weights cannot be less than 0."), "key")
 
 
 class InventoryValueEntry(EntryExtended):
     def __init__(self, *args, **kwargs):
-        EntryExtended.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ConfigureValidation(
             lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Inventory item unit values must be numbers.", Mode="Float", MinValue=0, LessThanMinString="Inventory item unit values cannot be less than 0."), "key")
 
 
 class RoundEntry(EntryExtended):
     def __init__(self, *args, **kwargs):
-        EntryExtended.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Round must be a whole number.", MinValue=1, LessThanMinString="Round must be greater than 0."), "key")
 
 
 class InitiativeEntry(EntryExtended):
     def __init__(self, *args, **kwargs):
-        EntryExtended.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Initiative roll must be a whole number."), "key")
 
 
 class MaxHPDataEntry(EntryExtended):
     def __init__(self, *args, **kwargs):
-        EntryExtended.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "All max HP data must be in the form of whole numbers.", MinValue=0, LessThanMinString="Max HP data cannot be less than 0."), "key")
 
 
 class StatModifierMultiplierEntry(EntryExtended):
     def __init__(self, *args, **kwargs):
-        EntryExtended.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Multipliers must be numbers", Mode="Float"), "key")
 
 
 class StatModifierMinMaxEntry(EntryExtended):
     def __init__(self, *args, **kwargs):
-        EntryExtended.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Minimums and maximums must be whole numbers."), "key")
 
 
 # Extended Dropdown Widget
 class DropdownExtended(ttk.Combobox):
     def __init__(self, *args, **kwargs):
-        ttk.Combobox.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Autocompletion Variables
         self.CurrentInput = ""
@@ -8770,7 +8770,7 @@ class DropdownExtended(ttk.Combobox):
 # Extended Button Widget
 class ButtonExtended(Button):
     def __init__(self, *args, **kwargs):
-        Button.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Bind Return
         self.bind("<Return>", lambda event: self.invoke())
@@ -8995,7 +8995,7 @@ class Tooltip:
 class ModeSelect(Tk):
     def __init__(self):
         # Create Window
-        Tk.__init__(self)
+        super().__init__()
 
         # Configure Window
         self.wm_title("Select Mode - " + GlobalInst.ScriptName)
@@ -9064,7 +9064,7 @@ class Window(Tk):
         self.Mode = Mode
 
         # Create Window
-        Tk.__init__(self)
+        super().__init__()
 
         # Determine Screen Resolution and Offset
         self.ScreenWidth = self.winfo_screenwidth()
