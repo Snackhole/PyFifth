@@ -8614,11 +8614,10 @@ class ScrolledCanvas:
     def UnbindMouseWheel(self, event):
         self.Canvas.winfo_toplevel().unbind("<MouseWheel>")
 
-    def MakeFocusVisible(self, event):
+    def MakeWidgetVisible(self, Widget):
         # Widget Bounds
-        FocusedWidget = event.widget
-        WidgetTop = FocusedWidget.winfo_y()
-        WidgetBottom = WidgetTop + FocusedWidget.winfo_height()
+        WidgetTop = Widget.winfo_y()
+        WidgetBottom = WidgetTop + Widget.winfo_height()
 
         # Canvas Bounds
         CanvasTop = self.Canvas.canvasy(0)
@@ -8634,6 +8633,9 @@ class ScrolledCanvas:
             Delta = int(WidgetTop - CanvasTop)
             self.Canvas.yview_scroll(Delta, "units")
         self.Canvas.configure(yscrollincrement=OldYScrollIncrement)
+
+    def MakeFocusVisible(self, event):
+        self.MakeWidgetVisible(event.widget)
 
 
 # Extended Entry Widgets
