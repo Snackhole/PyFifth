@@ -8612,7 +8612,11 @@ class ScrolledCanvas:
             self.Canvas.winfo_toplevel().bind("<Button-5>", self.MouseWheelEvent)
 
     def UnbindMouseWheel(self, event):
-        self.Canvas.winfo_toplevel().unbind("<MouseWheel>")
+        if GlobalInst.OS == "Windows" or GlobalInst.OS == "Darwin":
+            self.Canvas.winfo_toplevel().unbind("<MouseWheel>")
+        elif GlobalInst.OS == "Linux":
+            self.Canvas.winfo_toplevel().unbind("<Button-4>")
+            self.Canvas.winfo_toplevel().unbind("<Button-5>")
 
     def MakeWidgetVisible(self, Widget):
         # Widget Bounds
