@@ -9114,6 +9114,17 @@ class Window(Tk):
         # Set Window Title
         self.wm_title(Prefix + WindowTitles[ModeSelectInst.ModeSelected] + CurrentOpenFile + SavePromptString)
 
+    def CloseWindow(self, CheckForSave=False):
+        if CheckForSave:
+            if SavingAndOpeningInst.SavePrompt:
+                SaveConfirm = messagebox.askyesnocancel("Save", "Save unsaved work before closing?")
+                if SaveConfirm == None:
+                    return
+                elif SaveConfirm == True:
+                    if not SavingAndOpeningInst.SaveButton():
+                        return
+        self.destroy()
+
 
 if __name__ == "__main__":
     # Inst Dictionary
