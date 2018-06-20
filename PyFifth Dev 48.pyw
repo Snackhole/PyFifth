@@ -3020,9 +3020,7 @@ class CharacterSheet:
                     self.SortOrder.grid(row=self.Row, column=2, sticky=NSEW)
 
                     # Update Tab Order
-                    self.PreparedBox.lift()
-                    self.NameEntry.lift()
-                    self.SortOrder.lift()
+                    self.LiftWidgets()
 
                     # Update Tags
                     self.PreparedBoxVar.UpdateTag("SpellEntryPrepared" + self.LevelName + str(self.Row))
@@ -3064,11 +3062,20 @@ class CharacterSheet:
                     WindowInst.update_idletasks()
                     self.Canvas.MakeWidgetVisible(self.NameEntry)
 
+                    # Update Tab Order
+                    for CurrentEntry in self.List:
+                        CurrentEntry.LiftWidgets()
+
                     # Flag Save Prompt
                     SavingAndOpeningInst.SavePrompt = True
 
                     # Update Window Title
                     WindowInst.UpdateWindowTitle()
+
+                def LiftWidgets(self):
+                    self.PreparedBox.lift()
+                    self.NameEntry.lift()
+                    self.SortOrder.lift()
 
                 class SpellConfig:
                     def __init__(self, master, SpellVars):
