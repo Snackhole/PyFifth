@@ -7428,17 +7428,7 @@ class InitiativeOrder:
             self.InitiativeEntryNotesField.grid(row=self.Row, column=10, sticky=NSEW)
 
             # Update Tab Order
-            self.InitiativeEntryResultEntry.lift()
-            self.InitiativeEntryTiePriorityDropdown.lift()
-            self.InitiativeEntryNameEntry.lift()
-            self.InitiativeEntryACEntry.lift()
-            self.InitiativeEntryTempHPEntry.lift()
-            self.InitiativeEntryCurrentHPEntry.lift()
-            self.InitiativeEntryMaxHPEntry.lift()
-            self.InitiativeEntryConcentrationBox.lift()
-            self.InitiativeEntryConditionsField.lift()
-            self.InitiativeEntryLocationField.lift()
-            self.InitiativeEntryNotesField.lift()
+            self.LiftWidgets()
 
             # Update Tags
             self.InitiativeEntryResultEntryVar.UpdateTag("InitiativeEntryInitiativeEntryVar" + str(self.Row))
@@ -7681,6 +7671,18 @@ class InitiativeOrder:
             messagebox.showerror("Duplicate Error", "No target entries found.  Designate target entries to overwrite by setting their names to \"DUPLICATE TARGET\".")
             return False
 
+        def LiftWidgets(self):
+            self.InitiativeEntryResultEntry.lift()
+            self.InitiativeEntryTiePriorityDropdown.lift()
+            self.InitiativeEntryNameEntry.lift()
+            self.InitiativeEntryACEntry.lift()
+            self.InitiativeEntryTempHPEntry.lift()
+            self.InitiativeEntryCurrentHPEntry.lift()
+            self.InitiativeEntryMaxHPEntry.lift()
+            self.InitiativeEntryConcentrationBox.lift()
+            self.InitiativeEntryConditionsField.lift()
+            self.InitiativeEntryLocationField.lift()
+            self.InitiativeEntryNotesField.lift()
 
 class CompactInitiativeOrder:
     def __init__(self, master):
@@ -7862,9 +7864,7 @@ class CompactInitiativeOrder:
             self.InitiativeEntryNameEntry.grid(row=self.Row, column=2, sticky=NSEW)
 
             # Update Tab Order
-            self.InitiativeEntryResultEntry.lift()
-            self.InitiativeEntryTiePriorityDropdown.lift()
-            self.InitiativeEntryNameEntry.lift()
+            self.LiftWidgets()
 
         def ToggleTurnDone(self):
             if self.InitiativeEntryTurnDoneVar.get():
@@ -7918,6 +7918,10 @@ class CompactInitiativeOrder:
             messagebox.showerror("Duplicate Error", "No target entries found.  Designate target entries to overwrite by setting their names to \"DUPLICATE TARGET\".")
             return False
 
+        def LiftWidgets(self):
+            self.InitiativeEntryResultEntry.lift()
+            self.InitiativeEntryTiePriorityDropdown.lift()
+            self.InitiativeEntryNameEntry.lift()
 
 class HoardSheet:
     def __init__(self, master):
