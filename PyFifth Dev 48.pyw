@@ -2275,7 +2275,7 @@ class CharacterSheet:
 
                 # Features Entries
                 for CurrentIndex in range(1, self.FeatureOrCreatureStatsEntryCount + 1):
-                    CurrentEntry = self.FeatureOrCreatureStatsEntry(self.FeaturesScrolledCanvas.WindowFrame, self.FeatureOrCreatureStatsEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
+                    CurrentEntry = self.FeatureOrCreatureStatsEntry(self.FeaturesScrolledCanvas.WindowFrame, self.FeaturesScrolledCanvas, self.FeatureOrCreatureStatsEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
                     for WidgetToBind in CurrentEntry.WidgetsList:
                         WidgetToBind.bind("<FocusIn>", self.FeaturesScrolledCanvas.MakeFocusVisible)
                     CurrentEntry.Display(CurrentIndex)
@@ -2318,8 +2318,12 @@ class CharacterSheet:
                         return
 
                 # Adjust Entries to New Order
+                UpdatedList = []
                 for CurrentIndex in range(len(SortedList)):
                     SortedList[CurrentIndex][0].Display(CurrentIndex + 1)
+                    UpdatedList.append(SortedList[CurrentIndex][0])
+                    SortedList[CurrentIndex][0].List = UpdatedList
+                self.FeatureOrCreatureStatsEntriesList = UpdatedList
 
                 # Flag Save Prompt
                 SavingAndOpeningInst.SavePrompt = True
@@ -2328,12 +2332,14 @@ class CharacterSheet:
                 WindowInst.UpdateWindowTitle()
 
             class FeatureOrCreatureStatsEntry:
-                def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesList, Row):
+                def __init__(self, master, Canvas, List, ScrollingDisabledVar, SortOrderValuesList, Row):
                     # Store Parameters
                     self.master = master
                     self.ScrollingDisabledVar = ScrollingDisabledVar
                     self.SortOrderValuesList = SortOrderValuesList
                     self.Row = Row
+                    self.Canvas = Canvas
+                    self.List = List
 
                     # Variables
                     self.NameEntryVar = SavedStringVar()
@@ -2405,7 +2411,7 @@ class CharacterSheet:
                     self.SortFields["Sort Order"] = self.SortOrderVar
 
                     # Add to List
-                    List.append(self)
+                    self.List.append(self)
 
                     # Name Entry
                     self.NameEntry = EntryExtended(master, width=45, justify=CENTER, bg=GlobalInst.ButtonColor, textvariable=self.NameEntryVar)
@@ -2413,7 +2419,9 @@ class CharacterSheet:
                     self.NameEntry.bind("<Return>", self.SetFeature)
                     self.NameEntry.bind("<Shift-Button-3>", self.SetCreatureStats)
                     self.NameEntry.bind("<Shift-Return>", self.SetCreatureStats)
-                    self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a feature or creature stats entry to set a feature.\n\nShift+right-click or shift+enter to set creature stats.")
+                    self.NameEntry.bind("<Control-Up>", lambda event: self.MoveInList(-1))
+                    self.NameEntry.bind("<Control-Down>", lambda event: self.MoveInList(1))
+                    self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a feature or creature stats entry to set a feature.\n\nShift+right-click or shift+enter to set creature stats.\n\nCtrl+up or ctrl+down to change position in list.")
 
                     # Sort Order
                     self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
@@ -2492,6 +2500,36 @@ class CharacterSheet:
                     self.InventoryFieldVar.UpdateTag("FeatureOrCreatureStatsInventoryFieldVar" + str(self.Row))
                     self.LegendaryActionsAndLairActionsFieldVar.UpdateTag("FeatureOrCreatureStatsLegendaryActionsAndLairActionsFieldVar" + str(self.Row))
                     self.NotesFieldVar.UpdateTag("FeatureOrCreatureStatsNotesFieldVar" + str(self.Row))
+
+                def MoveInList(self, Delta=0):
+                    # Row Variables
+                    LastValidRow = len(self.List)
+                    CurrentRow = self.Row
+                    SwapRow = max(1, min(CurrentRow + Delta, LastValidRow))
+
+                    # Handle Invalid Swap
+                    if CurrentRow == SwapRow or Delta == 0:
+                        return
+
+                    # Swap Rows
+                    CurrentEntryIndex = CurrentRow - 1
+                    SwapEntryIndex = SwapRow - 1
+                    SwapEntry = self.List[SwapEntryIndex]
+                    SwapEntry.Display(CurrentRow)
+                    self.Display(SwapRow)
+                    self.List[SwapEntryIndex] = self
+                    self.List[CurrentEntryIndex] = SwapEntry
+
+                    # Handle Visibility
+                    WindowInst.update_idletasks()
+                    self.Canvas.MakeWidgetVisible(self.NameEntry)
+
+                    # Flag Save Prompt
+                    SavingAndOpeningInst.SavePrompt = True
+
+                    # Update Window Title
+                    WindowInst.UpdateWindowTitle()
+
 
                 class FeatureConfig:
                     def __init__(self, master, FeatureVars):
