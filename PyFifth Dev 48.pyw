@@ -3516,7 +3516,7 @@ class CharacterSheet:
 
             # Inventory Entries
             for CurrentIndex in range(1, self.InventoryEntriesCount + 1):
-                CurrentEntry = self.InventoryEntry(self.InventoryListScrolledCanvas.WindowFrame, self.InventoryEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
+                CurrentEntry = self.InventoryEntry(self.InventoryListScrolledCanvas.WindowFrame, self.InventoryListScrolledCanvas, self.InventoryEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
                 for WidgetToBind in CurrentEntry.WidgetsList:
                     WidgetToBind.bind("<FocusIn>", self.InventoryListScrolledCanvas.MakeFocusVisible)
                 CurrentEntry.Display(CurrentIndex)
@@ -3689,8 +3689,12 @@ class CharacterSheet:
                     return
 
             # Adjust Entries to New Order
+            UpdatedList = []
             for CurrentIndex in range(len(SortedList)):
                 SortedList[CurrentIndex][0].Display(CurrentIndex + 1)
+                UpdatedList.append(SortedList[CurrentIndex][0])
+                SortedList[CurrentIndex][0].List = UpdatedList
+            self.InventoryEntriesList = UpdatedList
 
             # Flag Save Prompt
             SavingAndOpeningInst.SavePrompt = True
@@ -3757,12 +3761,14 @@ class CharacterSheet:
                     self.SpendingCoins[Denomination].set(str(GlobalInst.GetStringVarAsNumber(self.SpendingCoins[Denomination]) + GlobalInst.GetStringVarAsNumber(Gain)))
 
         class InventoryEntry:
-            def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesList, Row):
+            def __init__(self, master, Canvas, List, ScrollingDisabledVar, SortOrderValuesList, Row):
                 # Store Parameters
                 self.master = master
                 self.ScrollingDisabledVar = ScrollingDisabledVar
                 self.SortOrderValuesList = SortOrderValuesList
                 self.Row = Row
+                self.List = List
+                self.Canvas = Canvas
 
                 # Variables
                 self.NameEntryVar = SavedStringVar()
@@ -3803,13 +3809,15 @@ class CharacterSheet:
                 self.SortFields["Sort Order"] = self.SortOrderVar
 
                 # Add to List
-                List.append(self)
+                self.List.append(self)
 
                 # Name Entry
                 self.NameEntry = EntryExtended(master, width=35, textvariable=self.NameEntryVar, justify=CENTER, bg=GlobalInst.ButtonColor)
                 self.NameEntry.bind("<Button-3>", self.ConfigureItemDescription)
                 self.NameEntry.bind("<Return>", self.ConfigureItemDescription)
-                self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on the name field to set an item description.")
+                self.NameEntry.bind("<Control-Up>", lambda event: self.MoveInList(-1))
+                self.NameEntry.bind("<Control-Down>", lambda event: self.MoveInList(1))
+                self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on the name field to set an item description.\n\nCtrl+up or ctrl+down to change position in list.")
 
                 # Count Entry
                 self.CountEntry = InventoryCountEntry(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
@@ -3878,15 +3886,7 @@ class CharacterSheet:
                 self.SortOrder.grid(row=self.Row, column=8, sticky=NSEW)
 
                 # Update Tab Order
-                self.NameEntry.lift()
-                self.CountEntry.lift()
-                self.UnitWeightEntry.lift()
-                self.UnitValueEntry.lift()
-                self.UnitValueDenomination.lift()
-                self.TotalWeightEntry.lift()
-                self.TotalValueEntry.lift()
-                self.CategoryTag.lift()
-                self.SortOrder.lift()
+                self.LiftWidgets()
 
                 # Update Tags
                 self.NameEntryVar.UpdateTag("InventoryListNameEntryVar" + str(self.Row))
@@ -3899,6 +3899,50 @@ class CharacterSheet:
                 self.RarityEntryVar.UpdateTag("InventoryListMagicItemRarityEntryVar" + str(self.Row))
                 self.DescriptionVar.UpdateTag("InventoryListMagicItemDescriptionVar" + str(self.Row))
                 self.SortOrderVar.UpdateTag("InventoryListSortOrderVar" + str(self.Row))
+
+            def MoveInList(self, Delta=0):
+                # Row Variables
+                LastValidRow = len(self.List)
+                CurrentRow = self.Row
+                SwapRow = max(1, min(CurrentRow + Delta, LastValidRow))
+
+                # Handle Invalid Swap
+                if CurrentRow == SwapRow or Delta == 0:
+                    return
+
+                # Swap Rows
+                CurrentEntryIndex = CurrentRow - 1
+                SwapEntryIndex = SwapRow - 1
+                SwapEntry = self.List[SwapEntryIndex]
+                SwapEntry.Display(CurrentRow)
+                self.Display(SwapRow)
+                self.List[SwapEntryIndex] = self
+                self.List[CurrentEntryIndex] = SwapEntry
+
+                # Handle Visibility
+                WindowInst.update_idletasks()
+                self.Canvas.MakeWidgetVisible(self.NameEntry)
+
+                # Update Tab Order
+                for CurrentEntry in self.List:
+                    CurrentEntry.LiftWidgets()
+
+                # Flag Save Prompt
+                SavingAndOpeningInst.SavePrompt = True
+
+                # Update Window Title
+                WindowInst.UpdateWindowTitle()
+
+            def LiftWidgets(self):
+                self.NameEntry.lift()
+                self.CountEntry.lift()
+                self.UnitWeightEntry.lift()
+                self.UnitValueEntry.lift()
+                self.UnitValueDenomination.lift()
+                self.TotalWeightEntry.lift()
+                self.TotalValueEntry.lift()
+                self.CategoryTag.lift()
+                self.SortOrder.lift()
 
             class ItemDescriptionMenu:
                 def __init__(self, master, ItemDescriptionVars):
