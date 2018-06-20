@@ -4172,7 +4172,7 @@ class CharacterSheet:
 
             # Additional Notes Entries
             for CurrentIndex in range(1, self.AdditionalNotesEntriesCount + 1):
-                CurrentEntry = self.AdditionalNotesEntry(self.AdditionalNotesScrolledCanvas.WindowFrame, self.AdditionalNotesEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
+                CurrentEntry = self.AdditionalNotesEntry(self.AdditionalNotesScrolledCanvas.WindowFrame, self.AdditionalNotesScrolledCanvas, self.AdditionalNotesEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
                 for WidgetToBind in CurrentEntry.WidgetsList:
                     WidgetToBind.bind("<FocusIn>", self.AdditionalNotesScrolledCanvas.MakeFocusVisible)
                 CurrentEntry.Display(CurrentIndex)
@@ -4215,8 +4215,12 @@ class CharacterSheet:
                     return
 
             # Adjust Entries to New Order
+            UpdatedList = []
             for CurrentIndex in range(len(SortedList)):
                 SortedList[CurrentIndex][0].Display(CurrentIndex + 1)
+                UpdatedList.append(SortedList[CurrentIndex][0])
+                SortedList[CurrentIndex][0].List = UpdatedList
+            self.AdditionalNotesEntriesList = UpdatedList
 
             # Flag Save Prompt
             SavingAndOpeningInst.SavePrompt = True
@@ -4225,12 +4229,14 @@ class CharacterSheet:
             WindowInst.UpdateWindowTitle()
 
         class AdditionalNotesEntry:
-            def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesList, Row):
+            def __init__(self, master, Canvas, List, ScrollingDisabledVar, SortOrderValuesList, Row):
                 # Store Parameters
                 self.master = master
                 self.ScrollingDisabledVar = ScrollingDisabledVar
                 self.SortOrderValuesList = SortOrderValuesList
                 self.Row = Row
+                self.List = List
+                self.Canvas = Canvas
 
                 # Variables
                 self.NameEntryVar = SavedStringVar()
@@ -4248,13 +4254,15 @@ class CharacterSheet:
                 self.SortFields["Sort Order"] = self.SortOrderVar
 
                 # Add to List
-                List.append(self)
+                self.List.append(self)
 
                 # Name Entry
                 self.NameEntry = EntryExtended(master, width=28, justify=CENTER, bg=GlobalInst.ButtonColor, textvariable=self.NameEntryVar)
                 self.NameEntry.bind("<Button-3>", self.SetNote)
                 self.NameEntry.bind("<Return>", self.SetNote)
-                self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a note entry to set a note.")
+                self.NameEntry.bind("<Control-Up>", lambda event: self.MoveInList(-1))
+                self.NameEntry.bind("<Control-Down>", lambda event: self.MoveInList(1))
+                self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a note entry to set a note.\n\nCtrl+up or ctrl+down to change position in list.")
 
                 # Sort Order
                 self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
@@ -4291,13 +4299,49 @@ class CharacterSheet:
                 self.SortOrder.grid(row=self.Row, column=1, sticky=NSEW)
 
                 # Update Tab Order
-                self.NameEntry.lift()
-                self.SortOrder.lift()
+                self.LiftWidgets()
 
                 # Update Tags
                 self.NameEntryVar.UpdateTag("AdditionalNotesNameEntryVar" + str(self.Row))
                 self.SortOrderVar.UpdateTag("AdditionalNotesSortOrderVar" + str(self.Row))
                 self.NoteVar.UpdateTag("AdditionalNotesNoteVar" + str(self.Row))
+
+            def MoveInList(self, Delta=0):
+                # Row Variables
+                LastValidRow = len(self.List)
+                CurrentRow = self.Row
+                SwapRow = max(1, min(CurrentRow + Delta, LastValidRow))
+
+                # Handle Invalid Swap
+                if CurrentRow == SwapRow or Delta == 0:
+                    return
+
+                # Swap Rows
+                CurrentEntryIndex = CurrentRow - 1
+                SwapEntryIndex = SwapRow - 1
+                SwapEntry = self.List[SwapEntryIndex]
+                SwapEntry.Display(CurrentRow)
+                self.Display(SwapRow)
+                self.List[SwapEntryIndex] = self
+                self.List[CurrentEntryIndex] = SwapEntry
+
+                # Handle Visibility
+                WindowInst.update_idletasks()
+                self.Canvas.MakeWidgetVisible(self.NameEntry)
+
+                # Update Tab Order
+                for CurrentEntry in self.List:
+                    CurrentEntry.LiftWidgets()
+
+                # Flag Save Prompt
+                SavingAndOpeningInst.SavePrompt = True
+
+                # Update Window Title
+                WindowInst.UpdateWindowTitle()
+
+            def LiftWidgets(self):
+                self.NameEntry.lift()
+                self.SortOrder.lift()
 
             class NoteConfig:
                 def __init__(self, master, NoteConfigVars):
