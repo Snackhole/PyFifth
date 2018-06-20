@@ -8130,7 +8130,7 @@ class HoardSheet:
 
         # Treasure Item Entries
         for CurrentIndex in range(1, self.TreasureItemEntriesCount + 1):
-            CurrentEntry = self.TreasureItemEntry(self.TreasureItemsScrolledCanvas.WindowFrame, self.TreasureItemEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
+            CurrentEntry = self.TreasureItemEntry(self.TreasureItemsScrolledCanvas.WindowFrame, self.TreasureItemsScrolledCanvas, self.TreasureItemEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
             for WidgetToBind in CurrentEntry.WidgetsList:
                 WidgetToBind.bind("<FocusIn>", self.TreasureItemsScrolledCanvas.MakeFocusVisible)
             CurrentEntry.Display(CurrentIndex)
@@ -8282,8 +8282,12 @@ class HoardSheet:
                 return
 
         # Adjust Entries to New Order
+        UpdatedList = []
         for CurrentIndex in range(len(SortedList)):
             SortedList[CurrentIndex][0].Display(CurrentIndex + 1)
+            UpdatedList.append(SortedList[CurrentIndex][0])
+            SortedList[CurrentIndex][0].List = UpdatedList
+        self.TreasureItemEntriesList = UpdatedList
 
         # Flag Save Prompt
         SavingAndOpeningInst.SavePrompt = True
@@ -8297,12 +8301,14 @@ class HoardSheet:
         WindowInst.wait_window(self.CoinCalculatorInst.Window)
 
     class TreasureItemEntry:
-        def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesList, Row):
+        def __init__(self, master, Canvas, List, ScrollingDisabledVar, SortOrderValuesList, Row):
             # Store Parameters
             self.master = master
             self.ScrollingDisabledVar = ScrollingDisabledVar
             self.SortOrderValuesList = SortOrderValuesList
             self.Row = Row
+            self.List = List
+            self.Canvas = Canvas
 
             # Variables
             self.NameEntryVar = SavedStringVar()
@@ -8340,7 +8346,7 @@ class HoardSheet:
             self.SortFields["Sort Order"] = self.SortOrderVar
 
             # Add to List
-            List.append(self)
+            self.List.append(self)
 
             # Name Entry
             self.NameEntry = EntryExtended(master, width=35, textvariable=self.NameEntryVar, justify=CENTER, bg=GlobalInst.ButtonColor)
@@ -8348,7 +8354,9 @@ class HoardSheet:
             self.NameEntry.bind("<Return>", self.ConfigureItemDescription)
             self.NameEntry.bind("<Shift-Button-3>", self.ExchangeForCoins)
             self.NameEntry.bind("<Shift-Return>", self.ExchangeForCoins)
-            self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter to set an item description.\n\nShift+right-click or shift+enter to exchange for coins.")
+            self.NameEntry.bind("<Control-Up>", lambda event: self.MoveInList(-1))
+            self.NameEntry.bind("<Control-Down>", lambda event: self.MoveInList(1))
+            self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter to set an item description.\n\nShift+right-click or shift+enter to exchange for coins.\n\nCtrl+up or ctrl+down to change position in list.")
 
             # Count Entry
             self.CountEntry = InventoryCountEntry(master, width=4, textvariable=self.CountEntryVar, justify=CENTER)
@@ -8441,14 +8449,7 @@ class HoardSheet:
             self.SortOrder.grid(row=self.Row, column=7, sticky=NSEW)
 
             # Update Tab Order
-            self.NameEntry.lift()
-            self.CountEntry.lift()
-            self.UnitWeightEntry.lift()
-            self.UnitValueEntry.lift()
-            self.UnitValueDenomination.lift()
-            self.TotalWeightEntry.lift()
-            self.TotalValueEntry.lift()
-            self.SortOrder.lift()
+            self.LiftWidgets()
 
             # Update Tags
             self.NameEntryVar.UpdateTag("TreasureItemListNameEntryVar" + str(self.Row))
@@ -8460,6 +8461,49 @@ class HoardSheet:
             self.RarityEntryVar.UpdateTag("TreasureItemListMagicItemRarityEntryVar" + str(self.Row))
             self.DescriptionVar.UpdateTag("TreasureItemListMagicItemDescriptionVar" + str(self.Row))
             self.SortOrderVar.UpdateTag("TreasureItemListSortOrderVar" + str(self.Row))
+
+        def MoveInList(self, Delta=0):
+            # Row Variables
+            LastValidRow = len(self.List)
+            CurrentRow = self.Row
+            SwapRow = max(1, min(CurrentRow + Delta, LastValidRow))
+
+            # Handle Invalid Swap
+            if CurrentRow == SwapRow or Delta == 0:
+                return
+
+            # Swap Rows
+            CurrentEntryIndex = CurrentRow - 1
+            SwapEntryIndex = SwapRow - 1
+            SwapEntry = self.List[SwapEntryIndex]
+            SwapEntry.Display(CurrentRow)
+            self.Display(SwapRow)
+            self.List[SwapEntryIndex] = self
+            self.List[CurrentEntryIndex] = SwapEntry
+
+            # Handle Visibility
+            WindowInst.update_idletasks()
+            self.Canvas.MakeWidgetVisible(self.NameEntry)
+
+            # Update Tab Order
+            for CurrentEntry in self.List:
+                CurrentEntry.LiftWidgets()
+
+            # Flag Save Prompt
+            SavingAndOpeningInst.SavePrompt = True
+
+            # Update Window Title
+            WindowInst.UpdateWindowTitle()
+
+        def LiftWidgets(self):
+            self.NameEntry.lift()
+            self.CountEntry.lift()
+            self.UnitWeightEntry.lift()
+            self.UnitValueEntry.lift()
+            self.UnitValueDenomination.lift()
+            self.TotalWeightEntry.lift()
+            self.TotalValueEntry.lift()
+            self.SortOrder.lift()
 
         class ItemDescriptionMenu:
             def __init__(self, master, ItemDescriptionVars):
