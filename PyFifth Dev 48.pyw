@@ -6866,14 +6866,7 @@ class DiceRoller:
                 self.PresetRollSortOrder.grid(row=self.Row, column=7, sticky=NSEW)
 
                 # Update Tab Order
-                self.PresetRollNameEntry.lift()
-                self.PresetRollButton.lift()
-                self.PresetRollDiceNumberEntry.lift()
-                self.PresetRollDieTypeLabel.lift()
-                self.PresetRollDieTypeEntry.lift()
-                self.PresetRollModifierButton.lift()
-                self.PresetRollModifierEntry.lift()
-                self.PresetRollSortOrder.lift()
+                self.LiftWidgets()
 
                 # Update Tags
                 self.PresetRollNameEntryVar.UpdateTag("PresetRollNameEntryVar" + str(self.Row))
@@ -6929,11 +6922,25 @@ class DiceRoller:
                 WindowInst.update_idletasks()
                 self.Canvas.MakeWidgetVisible(self.PresetRollNameEntry)
 
+                # Update Tab Order
+                for CurrentEntry in self.List:
+                    CurrentEntry.LiftWidgets()
+
                 # Flag Save Prompt
                 SavingAndOpeningInst.SavePrompt = True
 
                 # Update Window Title
                 WindowInst.UpdateWindowTitle()
+
+            def LiftWidgets(self):
+                self.PresetRollNameEntry.lift()
+                self.PresetRollButton.lift()
+                self.PresetRollDiceNumberEntry.lift()
+                self.PresetRollDieTypeLabel.lift()
+                self.PresetRollDieTypeEntry.lift()
+                self.PresetRollModifierButton.lift()
+                self.PresetRollModifierEntry.lift()
+                self.PresetRollSortOrder.lift()
 
 
 class EncounterHeader:
