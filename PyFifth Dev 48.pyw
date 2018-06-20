@@ -6682,7 +6682,7 @@ class DiceRoller:
 
             # Preset Rolls
             for CurrentIndex in range(1, self.PresetRollsCount + 1):
-                CurrentEntry = self.PresetRollEntry(self.PresetRollsScrolledCanvas.WindowFrame, self.PresetRollsList, self.ScrollingDisabledVar, self.SortOrderValuesList, self.DiceRollerFields, CurrentIndex)
+                CurrentEntry = self.PresetRollEntry(self.PresetRollsScrolledCanvas.WindowFrame, self.PresetRollsScrolledCanvas, self.PresetRollsList, self.ScrollingDisabledVar, self.SortOrderValuesList, self.DiceRollerFields, CurrentIndex)
                 for WidgetToBind in CurrentEntry.WidgetsList:
                     WidgetToBind.bind("<FocusIn>", self.PresetRollsScrolledCanvas.MakeFocusVisible)
                 CurrentEntry.Display(CurrentIndex)
@@ -6725,8 +6725,12 @@ class DiceRoller:
                     return
 
             # Adjust Entries to New Order
+            UpdatedList = []
             for CurrentIndex in range(len(SortedList)):
                 SortedList[CurrentIndex][0].Display(CurrentIndex + 1)
+                UpdatedList.append(SortedList[CurrentIndex][0])
+                SortedList[CurrentIndex][0].List = UpdatedList
+            self.PresetRollsList = UpdatedList
 
             # Flag Save Prompt
             SavingAndOpeningInst.SavePrompt = True
@@ -6735,13 +6739,15 @@ class DiceRoller:
             WindowInst.UpdateWindowTitle()
 
         class PresetRollEntry:
-            def __init__(self, master, List, ScrollingDisabledVar, SortOrderValuesList, DiceRollerFields, Row):
+            def __init__(self, master, Canvas, List, ScrollingDisabledVar, SortOrderValuesList, DiceRollerFields, Row):
                 # Store Parameters
                 self.master = master
                 self.ScrollingDisabledVar = ScrollingDisabledVar
                 self.SortOrderValuesList = SortOrderValuesList
                 self.DiceRollerFields = DiceRollerFields
                 self.Row = Row
+                self.List = List
+                self.Canvas = Canvas
 
                 # Variables
                 self.PresetRollNameEntryVar = SavedStringVar()
@@ -6756,10 +6762,13 @@ class DiceRoller:
                 self.SortFields["Sort Order"] = self.PresetRollSortOrderVar
 
                 # Add to List
-                List.append(self)
+                self.List.append(self)
 
                 # Name
-                self.PresetRollNameEntry = EntryExtended(master, justify=CENTER, width=33, textvariable=self.PresetRollNameEntryVar)
+                self.PresetRollNameEntry = EntryExtended(master, justify=CENTER, width=33, textvariable=self.PresetRollNameEntryVar, bg=GlobalInst.ButtonColor)
+                self.PresetRollNameEntry.bind("<Control-Up>", lambda event: self.MoveInList(-1))
+                self.PresetRollNameEntry.bind("<Control-Down>", lambda event: self.MoveInList(1))
+                self.PresetRollNameEntryTooltip = Tooltip(self.PresetRollNameEntry, "Ctrl+up or ctrl+down to change position in list.")
 
                 # Roll Button
                 self.PresetRollButton = ButtonExtended(master, text="Roll:", command=self.RollPreset, bg=GlobalInst.ButtonColor)
@@ -6851,6 +6860,34 @@ class DiceRoller:
             def EnableScrolling(self, event):
                 self.ScrollingDisabledVar.set(False)
 
+            def MoveInList(self, Delta=0):
+                # Row Variables
+                LastValidRow = len(self.List)
+                CurrentRow = self.Row
+                SwapRow = max(1, min(CurrentRow + Delta, LastValidRow))
+
+                # Handle Invalid Swap
+                if CurrentRow == SwapRow or Delta == 0:
+                    return
+
+                # Swap Rows
+                CurrentEntryIndex = CurrentRow - 1
+                SwapEntryIndex = SwapRow - 1
+                SwapEntry = self.List[SwapEntryIndex]
+                SwapEntry.Display(CurrentRow)
+                self.Display(SwapRow)
+                self.List[SwapEntryIndex] = self
+                self.List[CurrentEntryIndex] = SwapEntry
+
+                # Handle Visibility
+                WindowInst.update_idletasks()
+                self.Canvas.MakeWidgetVisible(self.PresetRollNameEntry)
+
+                # Flag Save Prompt
+                SavingAndOpeningInst.SavePrompt = True
+
+                # Update Window Title
+                WindowInst.UpdateWindowTitle()
 
 class EncounterHeader:
     def __init__(self, master):
