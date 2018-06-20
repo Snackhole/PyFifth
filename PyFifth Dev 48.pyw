@@ -2275,7 +2275,8 @@ class CharacterSheet:
 
                 # Features Entries
                 for CurrentIndex in range(1, self.FeatureOrCreatureStatsEntryCount + 1):
-                    CurrentEntry = self.FeatureOrCreatureStatsEntry(self.FeaturesScrolledCanvas.WindowFrame, self.FeaturesScrolledCanvas, self.FeatureOrCreatureStatsEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
+                    CurrentEntry = self.FeatureOrCreatureStatsEntry(self.FeaturesScrolledCanvas.WindowFrame, self.FeaturesScrolledCanvas, self.FeatureOrCreatureStatsEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList,
+                                                                    CurrentIndex)
                     for WidgetToBind in CurrentEntry.WidgetsList:
                         WidgetToBind.bind("<FocusIn>", self.FeaturesScrolledCanvas.MakeFocusVisible)
                     CurrentEntry.Display(CurrentIndex)
@@ -2421,7 +2422,8 @@ class CharacterSheet:
                     self.NameEntry.bind("<Shift-Return>", self.SetCreatureStats)
                     self.NameEntry.bind("<Control-Up>", lambda event: self.MoveInList(-1))
                     self.NameEntry.bind("<Control-Down>", lambda event: self.MoveInList(1))
-                    self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a feature or creature stats entry to set a feature.\n\nShift+right-click or shift+enter to set creature stats.\n\nCtrl+up or ctrl+down to change position in list.")
+                    self.NameTooltip = Tooltip(self.NameEntry,
+                                               "Right-click or enter on a feature or creature stats entry to set a feature.\n\nShift+right-click or shift+enter to set creature stats.\n\nCtrl+up or ctrl+down to change position in list.")
 
                     # Sort Order
                     self.SortOrder = DropdownExtended(master, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
@@ -2529,7 +2531,6 @@ class CharacterSheet:
 
                     # Update Window Title
                     WindowInst.UpdateWindowTitle()
-
 
                 class FeatureConfig:
                     def __init__(self, master, FeatureVars):
@@ -2867,7 +2868,7 @@ class CharacterSheet:
 
                 # Spell List Entries
                 for CurrentIndex in range(1, self.SpellListEntriesCount + 1):
-                    CurrentEntry = self.SpellListEntry(self.SpellListScrolledCanvas, self.SpellListEntriesList, self.LevelName, self.SortOrderValuesList, self.ScrollingDisabledVar, CurrentIndex)
+                    CurrentEntry = self.SpellListEntry(self.SpellListScrolledCanvas, self.SpellListScrolledCanvas, self.SpellListEntriesList, self.LevelName, self.SortOrderValuesList, self.ScrollingDisabledVar, CurrentIndex)
                     for WidgetToBind in CurrentEntry.WidgetsList:
                         WidgetToBind.bind("<FocusIn>", self.SpellListScrolledCanvas.MakeFocusVisible)
                     CurrentEntry.Display(CurrentIndex)
@@ -2917,8 +2918,12 @@ class CharacterSheet:
                         return
 
                 # Adjust Entries to New Order
+                UpdatedList = []
                 for CurrentIndex in range(len(SortedList)):
                     SortedList[CurrentIndex][0].Display(CurrentIndex + 1)
+                    UpdatedList.append(SortedList[CurrentIndex][0])
+                    SortedList[CurrentIndex][0].List = UpdatedList
+                self.SpellListEntriesList = UpdatedList
 
                 # Flag Save Prompt
                 SavingAndOpeningInst.SavePrompt = True
@@ -2927,13 +2932,15 @@ class CharacterSheet:
                 WindowInst.UpdateWindowTitle()
 
             class SpellListEntry:
-                def __init__(self, master, List, LevelName, SortOrderValuesList, ScrollingDisabledVar, Row):
+                def __init__(self, master, Canvas, List, LevelName, SortOrderValuesList, ScrollingDisabledVar, Row):
                     # Store Parameters
                     self.master = master
                     self.LevelName = LevelName
                     self.SortOrderValuesList = SortOrderValuesList
                     self.ScrollingDisabledVar = ScrollingDisabledVar
                     self.Row = Row
+                    self.List = List
+                    self.Canvas = Canvas
 
                     # Variables
                     self.PreparedBoxVar = SavedBooleanVar()
@@ -2963,7 +2970,7 @@ class CharacterSheet:
                     self.SortFields["Sort Order"] = self.SortOrderVar
 
                     # Add to List
-                    List.append(self)
+                    self.List.append(self)
 
                     # Prepared Box
                     self.PreparedBox = Checkbutton(master.WindowFrame, variable=self.PreparedBoxVar)
@@ -2972,7 +2979,9 @@ class CharacterSheet:
                     self.NameEntry = EntryExtended(master.WindowFrame, width=42, justify=CENTER, bg=GlobalInst.ButtonColor, textvariable=self.NameEntryVar)
                     self.NameEntry.bind("<Button-3>", self.Set)
                     self.NameEntry.bind("<Return>", self.Set)
-                    self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a spell list entry to set a name and description.")
+                    self.NameEntry.bind("<Control-Up>", lambda event: self.MoveInList(-1))
+                    self.NameEntry.bind("<Control-Down>", lambda event: self.MoveInList(1))
+                    self.NameTooltip = Tooltip(self.NameEntry, "Right-click or enter on a spell list entry to set a name and description.\n\nCtrl+up or ctrl+down to change position in list.")
 
                     # Sort Order
                     self.SortOrder = DropdownExtended(master.WindowFrame, textvariable=self.SortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
@@ -3024,6 +3033,35 @@ class CharacterSheet:
 
                 def EnableScrolling(self, event):
                     self.ScrollingDisabledVar.set(False)
+
+                def MoveInList(self, Delta=0):
+                    # Row Variables
+                    LastValidRow = len(self.List)
+                    CurrentRow = self.Row
+                    SwapRow = max(1, min(CurrentRow + Delta, LastValidRow))
+
+                    # Handle Invalid Swap
+                    if CurrentRow == SwapRow or Delta == 0:
+                        return
+
+                    # Swap Rows
+                    CurrentEntryIndex = CurrentRow - 1
+                    SwapEntryIndex = SwapRow - 1
+                    SwapEntry = self.List[SwapEntryIndex]
+                    SwapEntry.Display(CurrentRow)
+                    self.Display(SwapRow)
+                    self.List[SwapEntryIndex] = self
+                    self.List[CurrentEntryIndex] = SwapEntry
+
+                    # Handle Visibility
+                    WindowInst.update_idletasks()
+                    self.Canvas.MakeWidgetVisible(self.NameEntry)
+
+                    # Flag Save Prompt
+                    SavingAndOpeningInst.SavePrompt = True
+
+                    # Update Window Title
+                    WindowInst.UpdateWindowTitle()
 
                 class SpellConfig:
                     def __init__(self, master, SpellVars):
@@ -6682,7 +6720,8 @@ class DiceRoller:
 
             # Preset Rolls
             for CurrentIndex in range(1, self.PresetRollsCount + 1):
-                CurrentEntry = self.PresetRollEntry(self.PresetRollsScrolledCanvas.WindowFrame, self.PresetRollsScrolledCanvas, self.PresetRollsList, self.ScrollingDisabledVar, self.SortOrderValuesList, self.DiceRollerFields, CurrentIndex)
+                CurrentEntry = self.PresetRollEntry(self.PresetRollsScrolledCanvas.WindowFrame, self.PresetRollsScrolledCanvas, self.PresetRollsList, self.ScrollingDisabledVar, self.SortOrderValuesList, self.DiceRollerFields,
+                                                    CurrentIndex)
                 for WidgetToBind in CurrentEntry.WidgetsList:
                     WidgetToBind.bind("<FocusIn>", self.PresetRollsScrolledCanvas.MakeFocusVisible)
                 CurrentEntry.Display(CurrentIndex)
@@ -6888,6 +6927,7 @@ class DiceRoller:
 
                 # Update Window Title
                 WindowInst.UpdateWindowTitle()
+
 
 class EncounterHeader:
     def __init__(self, master):
