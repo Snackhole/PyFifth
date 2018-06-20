@@ -2470,8 +2470,7 @@ class CharacterSheet:
                     self.SortOrder.grid(row=self.Row, column=1, sticky=NSEW)
 
                     # Update Tab Order
-                    self.NameEntry.lift()
-                    self.SortOrder.lift()
+                    self.LiftWidgets()
 
                     # Update Tags
                     self.NameEntryVar.UpdateTag("FeatureOrCreatureStatsNameEntryVar" + str(self.Row))
@@ -2526,11 +2525,19 @@ class CharacterSheet:
                     WindowInst.update_idletasks()
                     self.Canvas.MakeWidgetVisible(self.NameEntry)
 
+                    # Update Tab Order
+                    for CurrentEntry in self.List:
+                        CurrentEntry.LiftWidgets()
+
                     # Flag Save Prompt
                     SavingAndOpeningInst.SavePrompt = True
 
                     # Update Window Title
                     WindowInst.UpdateWindowTitle()
+
+                def LiftWidgets(self):
+                    self.NameEntry.lift()
+                    self.SortOrder.lift()
 
                 class FeatureConfig:
                     def __init__(self, master, FeatureVars):
