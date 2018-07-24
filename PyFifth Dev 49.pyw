@@ -891,7 +891,9 @@ class CharacterSheet:
                 Entry.PresetRollModifierEntryVar.set(CalculatedModifierString)
 
         # Calculate AC
-        self.CombatAndFeaturesInst.ACEntryVar.set(str(self.CombatAndFeaturesInst.ACEntryStatModifierInst.GetModifier()))
+        self.CombatAndFeaturesInst.ACEntryOneVar.set(str(self.CombatAndFeaturesInst.ACEntryOneStatModifierInst.GetModifier()))
+        self.CombatAndFeaturesInst.ACEntryTwoVar.set(str(self.CombatAndFeaturesInst.ACEntryTwoStatModifierInst.GetModifier()))
+        self.CombatAndFeaturesInst.ACEntryThreeVar.set(str(self.CombatAndFeaturesInst.ACEntryThreeStatModifierInst.GetModifier()))
 
         # Calculate Max HP
         self.CombatAndFeaturesInst.CalculateMaxHP(ConstitutionModifier, CharacterLevelValue)
@@ -1825,7 +1827,9 @@ class CharacterSheet:
             self.DeathSavingThrowsBoxFailure1Var = SavedBooleanVar("DeathSavingThrowsBoxFailure1Var")
             self.DeathSavingThrowsBoxFailure2Var = SavedBooleanVar("DeathSavingThrowsBoxFailure2Var")
             self.DeathSavingThrowsBoxFailure3Var = SavedBooleanVar("DeathSavingThrowsBoxFailure3Var")
-            self.ACEntryVar = StringVar()
+            self.ACEntryOneVar = StringVar()
+            self.ACEntryTwoVar = StringVar()
+            self.ACEntryThreeVar = StringVar()
             self.InitiativeEntryVar = StringVar()
             self.SpeedEntryVar = SavedStringVar("SpeedEntryVar")
             self.MaxHPVars = {}
@@ -1934,16 +1938,22 @@ class CharacterSheet:
             self.ACInitiativeSpeedFrame.grid(row=1, column=3, sticky=NS + E)
 
             # AC
-            self.ACFrame = LabelFrame(self.ACInitiativeSpeedFrame, text="AC:")
-            self.ACFrame.grid_rowconfigure(0, weight=1)
-            self.ACFrame.grid(row=0, column=0, sticky=NSEW)
-            self.ACEntry = EntryExtended(self.ACFrame, width=9, justify=CENTER, textvariable=self.ACEntryVar, font=self.ACInitiativeSpeedFontSize)
-            self.ACEntry.grid(row=0, column=0, sticky=NSEW)
-            self.ACEntryStatModifierInst = StatModifier(self.ACEntry, "<Button-1>", "Left-click to set AC data.", "", ACMode=True, Prefix="ACEntry")
+            self.ACNotebook = ttk.Notebook(self.ACInitiativeSpeedFrame)
+            self.ACNotebook.grid(row=0, column=0, sticky=NSEW, pady=2)
+            self.ACEntryOne = EntryExtended(self.ACNotebook, width=9, justify=CENTER, textvariable=self.ACEntryOneVar, font=self.ACInitiativeSpeedFontSize)
+            self.ACEntryOneStatModifierInst = StatModifier(self.ACEntryOne, "<Button-1>", "Left-click to set AC data.", "", ACMode=True, Prefix="ACEntryOne")
+            self.ACNotebook.add(self.ACEntryOne, text="AC 1")
+            self.ACEntryTwo = EntryExtended(self.ACNotebook, width=9, justify=CENTER, textvariable=self.ACEntryTwoVar, font=self.ACInitiativeSpeedFontSize)
+            self.ACEntryTwoStatModifierInst = StatModifier(self.ACEntryTwo, "<Button-1>", "Left-click to set AC data.", "", ACMode=True, Prefix="ACEntryTwo")
+            self.ACNotebook.add(self.ACEntryTwo, text="AC 2")
+            self.ACEntryThree = EntryExtended(self.ACNotebook, width=9, justify=CENTER, textvariable=self.ACEntryThreeVar, font=self.ACInitiativeSpeedFontSize)
+            self.ACEntryThreeStatModifierInst = StatModifier(self.ACEntryThree, "<Button-1>", "Left-click to set AC data.", "", ACMode=True, Prefix="ACEntryThree")
+            self.ACNotebook.add(self.ACEntryThree, text="AC 3")
 
             # Initiative
             self.InitiativeFrame = LabelFrame(self.ACInitiativeSpeedFrame, text="Initiative:")
             self.InitiativeFrame.grid_rowconfigure(0, weight=1)
+            self.InitiativeFrame.grid_columnconfigure(0, weight=1)
             self.InitiativeFrame.grid(row=1, column=0, sticky=NSEW)
             self.InitiativeEntry = EntryExtended(self.InitiativeFrame, width=9, justify=CENTER, textvariable=self.InitiativeEntryVar, cursor="dotbox", font=self.ACInitiativeSpeedFontSize)
             self.InitiativeEntry.grid(row=0, column=0, sticky=NSEW)
@@ -1955,6 +1965,7 @@ class CharacterSheet:
             # Speed
             self.SpeedFrame = LabelFrame(self.ACInitiativeSpeedFrame, text="Speed:")
             self.SpeedFrame.grid_rowconfigure(0, weight=1)
+            self.SpeedFrame.grid_columnconfigure(0, weight=1)
             self.SpeedFrame.grid(row=2, column=0, sticky=NSEW)
             self.SpeedEntry = EntryExtended(self.SpeedFrame, width=9, justify=CENTER, textvariable=self.SpeedEntryVar, font=self.ACInitiativeSpeedFontSize)
             self.SpeedEntry.grid(row=0, column=0, sticky=NSEW)
