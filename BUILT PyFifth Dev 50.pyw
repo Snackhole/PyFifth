@@ -4187,7 +4187,8 @@ class CharacterSheet:
 
             # Additional Notes Entries
             for CurrentIndex in range(1, self.AdditionalNotesEntriesCount + 1):
-                CurrentEntry = self.AdditionalNotesEntry(self.AdditionalNotesScrolledCanvas.WindowFrame, self.AdditionalNotesScrolledCanvas, self.AdditionalNotesEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList, CurrentIndex)
+                CurrentEntry = self.AdditionalNotesEntry(self.AdditionalNotesScrolledCanvas.WindowFrame, self.AdditionalNotesScrolledCanvas, self.AdditionalNotesEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList,
+                                                         CurrentIndex)
                 for WidgetToBind in CurrentEntry.WidgetsList:
                     WidgetToBind.bind("<FocusIn>", self.AdditionalNotesScrolledCanvas.MakeFocusVisible)
                 CurrentEntry.Display(CurrentIndex)
@@ -7699,6 +7700,7 @@ class InitiativeOrder:
             self.InitiativeEntryLocationField.lift()
             self.InitiativeEntryNotesField.lift()
 
+
 class CompactInitiativeOrder:
     def __init__(self, master):
         # Variables
@@ -7937,6 +7939,7 @@ class CompactInitiativeOrder:
             self.InitiativeEntryResultEntry.lift()
             self.InitiativeEntryTiePriorityDropdown.lift()
             self.InitiativeEntryNameEntry.lift()
+
 
 class HoardSheet:
     def __init__(self, master):

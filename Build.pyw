@@ -1,6 +1,8 @@
-from PyInstaller import __main__ as PyInstall
-import shutil
 import os
+import shutil
+
+from PyInstaller import __main__ as PyInstall
+
 
 def Build():
     # Version String
