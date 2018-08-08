@@ -239,17 +239,22 @@ class SavingAndOpening:
             # Try to Create File
             try:
                 with ZipFile(SaveFileName, mode="w") as SaveFile:
-                    with open(TextFileName, mode="w") as TextFile:
-                        self.SaveData(TextFile)
-                    SaveFile.write(TextFileName)
-
                     # Character Portrait
                     if WindowMode == "CharacterSheet":
                         if self.SavedData["PortraitSelectedVar"].get():
                             PortraitFileName = "Portrait.gif"
-                            Inst["Portrait"].PortraitImage.write(PortraitFileName)
-                            SaveFile.write(PortraitFileName)
-                            self.DeleteFile(PortraitFileName)
+                            try:
+                                Inst["Portrait"].PortraitImage.write(PortraitFileName)
+                                SaveFile.write(PortraitFileName)
+                                self.DeleteFile(PortraitFileName)
+                            except TclError as Error:
+                                messagebox.showerror("Portrait Error", "The selected portrait could not be saved due to the following error:\n\n" + str(Error) + "\n\nTry choosing a new image or recreating the original one.")
+                                Inst["Portrait"].Clear(Force=True)
+
+                    # Text Data
+                    with open(TextFileName, mode="w") as TextFile:
+                        self.SaveData(TextFile)
+                    SaveFile.write(TextFileName)
 
             # Handle Permission Error
             except PermissionError:
@@ -349,9 +354,13 @@ class SavingAndOpening:
                 if WindowMode == "CharacterSheet":
                     if self.SavedData["PortraitSelectedVar"].get():
                         PortraitFileName = "Portrait.gif"
-                        OpenFile.extract(PortraitFileName)
-                        Inst["Portrait"].SetPortrait(PortraitFileName)
-                        self.DeleteFile(PortraitFileName)
+                        try:
+                            OpenFile.extract(PortraitFileName)
+                            Inst["Portrait"].SetPortrait(PortraitFileName)
+                            self.DeleteFile(PortraitFileName)
+                        except KeyError:
+                            self.SavedData["PortraitSelectedVar"].set(False)
+                            messagebox.showerror("Portrait Error", "The save file should have contained a portrait image, but did not.  This could be due to a problem with the image file.  Try choosing a new image or recreating the original one.")
 
             # Delete Text File
             self.DeleteFile(TextFileName)
@@ -4565,8 +4574,8 @@ class CharacterSheet:
             if ExportFileName != "":
                 self.PortraitImage.write(ExportFileName)
 
-        def Clear(self):
-            if self.PortraitSelectedVar.get():
+        def Clear(self, Force=False):
+            if self.PortraitSelectedVar.get() and not Force:
                 ClearConfirm = messagebox.askyesno("Clear Portrait", "Are you sure you want to clear the portrait?  This cannot be undone.")
                 if not ClearConfirm:
                     return
