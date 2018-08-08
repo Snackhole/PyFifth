@@ -246,10 +246,11 @@ class SavingAndOpening:
                             try:
                                 Inst["Portrait"].PortraitImage.write(PortraitFileName)
                                 SaveFile.write(PortraitFileName)
-                                self.DeleteFile(PortraitFileName)
                             except TclError as Error:
                                 messagebox.showerror("Portrait Error", "The selected portrait could not be saved due to the following error:\n\n" + str(Error) + "\n\nTry choosing a new image or recreating the original one.")
                                 Inst["Portrait"].Clear(Force=True)
+                            finally:
+                                self.DeleteFile(PortraitFileName)
 
                     # Text Data
                     with open(TextFileName, mode="w") as TextFile:
@@ -647,6 +648,8 @@ class SavingAndOpening:
             os.remove(File)
         except PermissionError:
             messagebox.showerror("Temporary File Permission Error", "Could not delete the following temporary file due to a permission error:\n\n" + File + "\n\nTry again or delete the file manually.")
+        except FileNotFoundError:
+            messagebox.showerror("File Not Found Error", "Could not delete the following temporary file due to the file not existing:\n\n" + File)
 
     class FileType:
         def __init__(self, Descriptor, Extension, SavePromptTitle, OpenPromptTitle, TextFileName):
