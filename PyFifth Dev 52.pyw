@@ -202,6 +202,7 @@ class SavingAndOpening:
         self.OpenErrorsString = ""
         self.SavedData = {}
         self.SavePrompt = False
+        self.ClearableFields = []
 
         # File Types
         self.FileTypes = {}
@@ -361,7 +362,8 @@ class SavingAndOpening:
                             self.DeleteFile(PortraitFileName)
                         except KeyError:
                             self.SavedData["PortraitSelectedVar"].set(False)
-                            messagebox.showerror("Portrait Error", "The save file should have contained a portrait image, but did not.  This could be due to a problem with the image file.  Try choosing a new image or recreating the original one.")
+                            messagebox.showerror("Portrait Error",
+                                                 "The save file should have contained a portrait image, but did not.  This could be due to a problem with the image file.  Try choosing a new image or recreating the original one.")
 
             # Delete Text File
             self.DeleteFile(TextFileName)
@@ -445,35 +447,8 @@ class SavingAndOpening:
         self.Opening = True
 
         # Reset Saved Fields to Default Values
-        for Field in self.SavedData.values():
-            if WindowInst.Mode in ["DiceRoller", "EncounterManager", "CharacterSheet", "NPCSheet"]:
-                if Field == DiceRollerInst.CritMinimumEntryVar:
-                    Field.set("20")
-                    continue
-            if WindowInst.Mode == "CharacterSheet":
-                if Field in [CharacterSheetInst.SpellcasterBoxVar, CharacterSheetInst.ConcentrationCheckPromptBoxVar, CharacterSheetInst.PortraitBoxVar]:
-                    Field.set(True)
-                    continue
-                if Field is CharacterSheetInst.CharacterLevelDropdownVar:
-                    Field.set("1")
-                    continue
-                if Field in [Inst["AbilitiesAndSavingThrows"].StrengthEntry.AbilityBaseVar, Inst["AbilitiesAndSavingThrows"].StrengthEntry.AbilityEntryTotalVar, Inst["AbilitiesAndSavingThrows"].DexterityEntry.AbilityBaseVar,
-                             Inst["AbilitiesAndSavingThrows"].DexterityEntry.AbilityEntryTotalVar, Inst["AbilitiesAndSavingThrows"].ConstitutionEntry.AbilityBaseVar,
-                             Inst["AbilitiesAndSavingThrows"].ConstitutionEntry.AbilityEntryTotalVar, Inst["AbilitiesAndSavingThrows"].IntelligenceEntry.AbilityBaseVar,
-                             Inst["AbilitiesAndSavingThrows"].IntelligenceEntry.AbilityEntryTotalVar, Inst["AbilitiesAndSavingThrows"].WisdomEntry.AbilityBaseVar, Inst["AbilitiesAndSavingThrows"].WisdomEntry.AbilityEntryTotalVar,
-                             Inst["AbilitiesAndSavingThrows"].CharismaEntry.AbilityBaseVar, Inst["AbilitiesAndSavingThrows"].CharismaEntry.AbilityEntryTotalVar]:
-                    Field.set("8")
-                    continue
-            if type(Field) in [BooleanVar, SavedBooleanVar]:
-                Field.set(False)
-            else:
-                Field.set("")
-
-        # Dice Roller Defaults
-        if WindowInst.Mode in ["DiceRoller", "EncounterManager", "CharacterSheet"]:
-            DiceRollerInst.DiceNumberEntryVar.set("1")
-            DiceRollerInst.DieTypeEntryVar.set("20")
-            DiceRollerInst.ModifierEntryVar.set("0")
+        for Field in self.ClearableFields:
+            Field.SetToDefault()
 
         # Encounter Manager Defaults
         if WindowInst.Mode == "EncounterManager":
@@ -490,71 +465,33 @@ class SavingAndOpening:
             for Entry in Inst["PresetRolls"].PresetRollsList:
                 Entry.PresetRollModifierEntryStatModifierInst.DefaultValues()
 
-            # Experience Needed and Proficiency Bonus to Default
-            CharacterSheetInst.CharacterExperienceNeededEntryVar.set("")
-            CharacterSheetInst.ProficiencyBonusEntryVar.set("")
-
             # All Ability and Skill Modifiers to Default
             for Entry in Inst["AbilitiesAndSavingThrows"].AbilityEntriesList:
-                Entry.AbilityEntryModifierVar.set("")
                 Entry.AbilityEntryModifierStatModifierInst.DefaultValues()
-                Entry.AbilitySavingThrowModifierVar.set("")
                 Entry.AbilitySavingThrowModifierStatModifierInst.DefaultValues()
             for Entry in Inst["Skills"].SkillsEntriesList:
-                Entry.TotalModifierVar.set("")
                 Entry.ModifierEntryStatModifierInst.DefaultValues()
 
             # Inventory Values to Default
-            Inst["Inventory"].CarryingCapacityVar.set("")
             Inst["Inventory"].CarryingCapacityEntryStatModifierInst.DefaultValues()
-            Inst["Inventory"].CoinValueEntryVar.set("")
-            Inst["Inventory"].CoinWeightEntryVar.set("")
-            Inst["Inventory"].TotalLoadEntryVar.set("")
-            Inst["Inventory"].GearLoadEntryVar.set("")
-            Inst["Inventory"].TreasureLoadEntryVar.set("")
-            Inst["Inventory"].MiscLoadEntryVar.set("")
-            Inst["Inventory"].TotalValueEntryVar.set("")
-            Inst["Inventory"].GearValueEntryVar.set("")
-            Inst["Inventory"].TreasureValueEntryVar.set("")
-            Inst["Inventory"].MiscValueEntryVar.set("")
-            Inst["Inventory"].TotalLoadEntry.configure(disabledbackground="light gray", disabledforeground="black")
-            Inst["Inventory"].FoodDisplay.LoadEntryVar.set("")
-            Inst["Inventory"].FoodDisplay.DaysEntryVar.set("")
-            Inst["Inventory"].FoodDisplay.ConsumptionRateVar.set("1")
-            Inst["Inventory"].WaterDisplay.LoadEntryVar.set("")
-            Inst["Inventory"].WaterDisplay.DaysEntryVar.set("")
-            Inst["Inventory"].WaterDisplay.ConsumptionRateVar.set("8")
-            for Entry in Inst["Inventory"].InventoryEntriesList:
-                Entry.TotalWeightEntryVar.set("")
-                Entry.TotalValueEntryVar.set("")
 
             # Max HP, AC, and Initiative to Default
-            Inst["CombatAndFeatures"].MaxHPEntryVar.set("")
-            Inst["CombatAndFeatures"].ACEntryOneVar.set("")
-            Inst["CombatAndFeatures"].ACEntryTwoVar.set("")
-            Inst["CombatAndFeatures"].ACEntryThreeVar.set("")
             Inst["CombatAndFeatures"].ACEntryOneStatModifierInst.DefaultValues()
             Inst["CombatAndFeatures"].ACEntryTwoStatModifierInst.DefaultValues()
             Inst["CombatAndFeatures"].ACEntryThreeStatModifierInst.DefaultValues()
-            Inst["CombatAndFeatures"].InitiativeEntryVar.set("")
             Inst["CombatAndFeatures"].InitiativeEntryStatModifierInst.DefaultValues()
 
             # Ability Score Derivatives to Defaults
             AllAbilityScoreDerivativesList = Inst["CombatAndFeatures"].AbilityScoreDerivativesList + Inst["Spellcasting"].SpellcastingAbilitiesList
             for Ability in AllAbilityScoreDerivativesList:
-                Ability.AttackModifierEntryVar.set("")
                 Ability.AttackModifierEntryStatModifierInst.DefaultValues()
-                Ability.SaveDCEntryVar.set("")
                 Ability.SaveDCEntryStatModifierInst.DefaultValues()
 
             # Passive Perception and Investigation to Default
-            Inst["AbilitiesAndSkills"].PassivePerceptionEntryVar.set("")
             Inst["AbilitiesAndSkills"].PassivePerceptionStatModifierInst.DefaultValues()
-            Inst["AbilitiesAndSkills"].PassiveInvestigationEntryVar.set("")
             Inst["AbilitiesAndSkills"].PassiveInvestigationStatModifierInst.DefaultValues()
 
             # Spell Points to Default
-            Inst["Spellcasting"].SpellPointsMaxEntryVar.set("")
             Inst["Spellcasting"].SpellPointsMaxEntryStatModifierInst.DefaultValues()
 
         # NPC Sheet Defaults
@@ -622,7 +559,7 @@ class SavingAndOpening:
     def TrackModifiedFields(self):
         for Field in self.SavedData.values():
             FieldType = type(Field)
-            if FieldType in [StringVar, SavedStringVar, BooleanVar, SavedBooleanVar]:
+            if FieldType in [StringVar, StringVarExtended, BooleanVar, BooleanVarExtended]:
                 Field.trace_add("write", lambda a, b, c: self.SavedDataModified())
             elif FieldType == ScrolledText:
                 Field.Text.bind("<<TextModified>>", lambda event: self.SavedDataModified())
@@ -660,10 +597,38 @@ class SavingAndOpening:
             self.TextFileName = TextFileName
 
 
-class SavedStringVar(StringVar):
-    def __init__(self, Tag=None, DefaultValue=""):
+class StringVarExtended(StringVar):
+    def __init__(self, SaveTag=None, DefaultValue="", ClearOnNew=False):
         # Store Parameters
-        self.Tag = Tag
+        self.SaveTag = SaveTag
+        self.DefaultValue = DefaultValue
+        self.ClearOnNew = ClearOnNew
+
+        # Init
+        super().__init__(value=DefaultValue)
+
+        # Add to Saved Data Dictionary
+        if self.SaveTag is not None:
+            SavingAndOpeningInst.SavedData[self.SaveTag] = self
+
+        # Add to Clearable Fields List
+        if self.ClearOnNew:
+            SavingAndOpeningInst.ClearableFields.append(self)
+
+    def UpdateTag(self, Tag):
+        self.SaveTag = Tag
+        SavingAndOpeningInst.SavedData[self.SaveTag] = self
+
+    def SetToDefault(self):
+        self.set(self.DefaultValue)
+
+
+class BooleanVarExtended(BooleanVar):
+    def __init__(self, SaveTag=None, DefaultValue=False, ClearOnNew=False):
+        # Store Parameters
+        self.Tag = SaveTag
+        self.DefaultValue = DefaultValue
+        self.ClearOnNew = ClearOnNew
 
         # Init
         super().__init__(value=DefaultValue)
@@ -672,46 +637,36 @@ class SavedStringVar(StringVar):
         if self.Tag is not None:
             SavingAndOpeningInst.SavedData[self.Tag] = self
 
-    def UpdateTag(self, Tag):
-        self.Tag = Tag
-        SavingAndOpeningInst.SavedData[self.Tag] = self
-
-
-class SavedBooleanVar(BooleanVar):
-    def __init__(self, Tag=None, DefaultValue=False):
-        # Store Parameters
-        self.Tag = Tag
-
-        # Init
-        super().__init__(value=DefaultValue)
-
-        # Add to Saved Data Dictionary
-        if self.Tag is not None:
-            SavingAndOpeningInst.SavedData[self.Tag] = self
+        # Add to Clearable Fields List
+        if self.ClearOnNew:
+            SavingAndOpeningInst.ClearableFields.append(self)
 
     def UpdateTag(self, Tag):
         self.Tag = Tag
         SavingAndOpeningInst.SavedData[self.Tag] = self
+
+    def SetToDefault(self):
+        self.set(self.DefaultValue)
 
 
 # Window Elements
 class CharacterSheet:
     def __init__(self, master):
         # Variables
-        self.CharacterNameEntryVar = SavedStringVar("CharacterNameEntryVar")
-        self.CharacterLevelDropdownVar = SavedStringVar("CharacterLevelEntryVar", DefaultValue="1")
+        self.CharacterNameEntryVar = StringVarExtended("CharacterNameEntryVar", ClearOnNew=True)
+        self.CharacterLevelDropdownVar = StringVarExtended("CharacterLevelEntryVar", DefaultValue="1", ClearOnNew=True)
         self.CharacterLevelDropdownVar.trace_add("write", lambda a, b, c: self.UpdateStatsAndInventory())
-        self.CharacterClassEntryVar = SavedStringVar("CharacterClassEntryVar")
-        self.CharacterExperienceEntryVar = SavedStringVar("CharacterExperienceEntryVar")
+        self.CharacterClassEntryVar = StringVarExtended("CharacterClassEntryVar", ClearOnNew=True)
+        self.CharacterExperienceEntryVar = StringVarExtended("CharacterExperienceEntryVar", ClearOnNew=True)
         self.CharacterExperienceNeededEntryVar = StringVar()
         self.ProficiencyBonusEntryVar = StringVar()
-        self.SpellcasterBoxVar = SavedBooleanVar("SpellcasterBoxVar", DefaultValue=True)
-        self.ConcentrationCheckPromptBoxVar = SavedBooleanVar("ConcentrationCheckPromptBoxVar", DefaultValue=True)
-        self.PortraitBoxVar = SavedBooleanVar("PortraitBoxVar", DefaultValue=True)
-        self.JackOfAllTradesBoxVar = SavedBooleanVar("JackOfAllTradesBoxVar")
-        self.RemarkableAthleteBoxVar = SavedBooleanVar("RemarkableAthleteBoxVar")
-        self.ObservantBoxVar = SavedBooleanVar("ObservantBoxVar")
-        self.LuckyHalflingBoxVar = SavedBooleanVar("LuckyHalflingBoxVar")
+        self.SpellcasterBoxVar = BooleanVarExtended("SpellcasterBoxVar", DefaultValue=True, ClearOnNew=True)
+        self.ConcentrationCheckPromptBoxVar = BooleanVarExtended("ConcentrationCheckPromptBoxVar", DefaultValue=True, ClearOnNew=True)
+        self.PortraitBoxVar = BooleanVarExtended("PortraitBoxVar", DefaultValue=True, ClearOnNew=True)
+        self.JackOfAllTradesBoxVar = BooleanVarExtended("JackOfAllTradesBoxVar", ClearOnNew=True)
+        self.RemarkableAthleteBoxVar = BooleanVarExtended("RemarkableAthleteBoxVar", ClearOnNew=True)
+        self.ObservantBoxVar = BooleanVarExtended("ObservantBoxVar", ClearOnNew=True)
+        self.LuckyHalflingBoxVar = BooleanVarExtended("LuckyHalflingBoxVar", ClearOnNew=True)
 
         # Settings Menu Vars
         self.SettingsMenuVars = {}
@@ -1062,7 +1017,7 @@ class CharacterSheet:
             self.ProficienciesWeaponsHeader.grid(row=0, column=0, sticky=NSEW)
             self.ProficienciesWeaponsFieldFrame = Frame(self.ProficienciesFrame)
             self.ProficienciesWeaponsFieldFrame.grid(row=1, column=0)
-            self.ProficienciesWeaponsField = ScrolledText(self.ProficienciesWeaponsFieldFrame, Width=130, Height=73, SavedDataTag="ProficienciesWeaponsField")
+            self.ProficienciesWeaponsField = ScrolledText(self.ProficienciesWeaponsFieldFrame, Width=130, Height=73, SavedDataTag="ProficienciesWeaponsField", ClearOnNew=True)
             self.ProficienciesWeaponsField.grid(row=0, column=0)
 
             # Armor Proficiencies
@@ -1070,7 +1025,7 @@ class CharacterSheet:
             self.ProficienciesArmorHeader.grid(row=2, column=0, sticky=NSEW)
             self.ProficienciesArmorFieldFrame = Frame(self.ProficienciesFrame)
             self.ProficienciesArmorFieldFrame.grid(row=3, column=0)
-            self.ProficienciesArmorField = ScrolledText(self.ProficienciesArmorFieldFrame, Width=130, Height=73, SavedDataTag="ProficienciesArmorField")
+            self.ProficienciesArmorField = ScrolledText(self.ProficienciesArmorFieldFrame, Width=130, Height=73, SavedDataTag="ProficienciesArmorField", ClearOnNew=True)
             self.ProficienciesArmorField.grid(row=0, column=0)
 
             # Tool and Instrument Proficiencies
@@ -1078,7 +1033,7 @@ class CharacterSheet:
             self.ProficienciesToolsAndInstrumentsHeader.grid(row=4, column=0, sticky=NSEW)
             self.ProficienciesToolsAndInstrumentsFieldFrame = Frame(self.ProficienciesFrame)
             self.ProficienciesToolsAndInstrumentsFieldFrame.grid(row=5, column=0)
-            self.ProficienciesToolsAndInstrumentsField = ScrolledText(self.ProficienciesToolsAndInstrumentsFieldFrame, Width=130, Height=73, SavedDataTag="ProficienciesToolsAndInstrumentsField")
+            self.ProficienciesToolsAndInstrumentsField = ScrolledText(self.ProficienciesToolsAndInstrumentsFieldFrame, Width=130, Height=73, SavedDataTag="ProficienciesToolsAndInstrumentsField", ClearOnNew=True)
             self.ProficienciesToolsAndInstrumentsField.grid(row=0, column=0)
 
             # Language Proficiencies
@@ -1086,7 +1041,7 @@ class CharacterSheet:
             self.ProficienciesLanguagesHeader.grid(row=6, column=0, sticky=NSEW)
             self.ProficienciesLanguagesFieldFrame = Frame(self.ProficienciesFrame)
             self.ProficienciesLanguagesFieldFrame.grid(row=7, column=0)
-            self.ProficienciesLanguagesField = ScrolledText(self.ProficienciesLanguagesFieldFrame, Width=130, Height=73, SavedDataTag="ProficienciesLanguagesField")
+            self.ProficienciesLanguagesField = ScrolledText(self.ProficienciesLanguagesFieldFrame, Width=130, Height=73, SavedDataTag="ProficienciesLanguagesField", ClearOnNew=True)
             self.ProficienciesLanguagesField.grid(row=0, column=0)
 
             # Other Proficiencies
@@ -1094,7 +1049,7 @@ class CharacterSheet:
             self.ProficienciesOtherHeader.grid(row=8, column=0, sticky=NSEW)
             self.ProficienciesOtherFieldFrame = Frame(self.ProficienciesFrame)
             self.ProficienciesOtherFieldFrame.grid(row=9, column=0)
-            self.ProficienciesOtherField = ScrolledText(self.ProficienciesOtherFieldFrame, Width=130, Height=73, SavedDataTag="ProficienciesOtherField")
+            self.ProficienciesOtherField = ScrolledText(self.ProficienciesOtherFieldFrame, Width=130, Height=73, SavedDataTag="ProficienciesOtherField", ClearOnNew=True)
             self.ProficienciesOtherField.grid(row=0, column=0)
 
         # Abilities and Saving Throws
@@ -1141,7 +1096,7 @@ class CharacterSheet:
                 self.AbilitiesNotesFrame = LabelFrame(self.AbilitiesAndSavingThrowsFrame, text="Abilities Notes:")
                 self.AbilitiesNotesFrame.grid_columnconfigure(0, weight=1)
                 self.AbilitiesNotesFrame.grid(row=2, column=0, padx=2, pady=2)
-                self.AbilitiesNotes = ScrolledText(self.AbilitiesNotesFrame, Width=275, Height=180, SavedDataTag="AbilitiesNotes")
+                self.AbilitiesNotes = ScrolledText(self.AbilitiesNotesFrame, Width=275, Height=180, SavedDataTag="AbilitiesNotes", ClearOnNew=True)
                 self.AbilitiesNotes.grid(row=0, column=0)
 
             def ConfigureAbilitiesData(self):
@@ -1171,18 +1126,18 @@ class CharacterSheet:
 
                     # Variables
                     self.AbilityNameVar = StringVar(value=self.AbilityName)
-                    self.AbilityEntryTotalVar = SavedStringVar(self.AbilityName + "AbilityEntryTotalVar", DefaultValue="8")
+                    self.AbilityEntryTotalVar = StringVarExtended(self.AbilityName + "AbilityEntryTotalVar", DefaultValue="8", ClearOnNew=True)
                     self.AbilityEntryModifierVar = StringVar()
-                    self.AbilitySavingThrowProficiencyBoxVar = SavedBooleanVar(self.AbilityName + "AbilitySavingThrowProficiencyBoxVar")
+                    self.AbilitySavingThrowProficiencyBoxVar = BooleanVarExtended(self.AbilityName + "AbilitySavingThrowProficiencyBoxVar", ClearOnNew=True)
                     self.AbilitySavingThrowProficiencyBoxVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
                     self.AbilitySavingThrowModifierVar = StringVar()
 
                     # Config Variables
-                    self.AbilityBaseVar = SavedStringVar(self.AbilityName + "AbilityBaseVar", DefaultValue="8")
-                    self.AbilityRacialVar = SavedStringVar(self.AbilityName + "AbilityRacialVar")
-                    self.AbilityASIVar = SavedStringVar(self.AbilityName + "AbilityASIVar")
-                    self.AbilityMiscVar = SavedStringVar(self.AbilityName + "AbilityMiscVar")
-                    self.AbilityOverrideVar = SavedStringVar(self.AbilityName + "AbilityOverrideVar")
+                    self.AbilityBaseVar = StringVarExtended(self.AbilityName + "AbilityBaseVar", DefaultValue="8", ClearOnNew=True)
+                    self.AbilityRacialVar = StringVarExtended(self.AbilityName + "AbilityRacialVar", ClearOnNew=True)
+                    self.AbilityASIVar = StringVarExtended(self.AbilityName + "AbilityASIVar", ClearOnNew=True)
+                    self.AbilityMiscVar = StringVarExtended(self.AbilityName + "AbilityMiscVar", ClearOnNew=True)
+                    self.AbilityOverrideVar = StringVarExtended(self.AbilityName + "AbilityOverrideVar", ClearOnNew=True)
 
                     # Add to List
                     List.append(self)
@@ -1768,9 +1723,9 @@ class CharacterSheet:
 
                     # Variables
                     self.SkillNameVar = StringVar(value=self.SkillName)
-                    self.ProficiencyBox1Var = SavedBooleanVar(self.SkillName + "SkillProficiency1")
+                    self.ProficiencyBox1Var = BooleanVarExtended(self.SkillName + "SkillProficiency1", ClearOnNew=True)
                     self.ProficiencyBox1Var.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-                    self.ProficiencyBox2Var = SavedBooleanVar(self.SkillName + "SkillProficiency2")
+                    self.ProficiencyBox2Var = BooleanVarExtended(self.SkillName + "SkillProficiency2", ClearOnNew=True)
                     self.ProficiencyBox2Var.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
                     self.TotalModifierVar = StringVar()
 
@@ -1832,27 +1787,27 @@ class CharacterSheet:
     class CombatAndFeatures:
         def __init__(self, master):
             # Variables
-            self.TempHPEntryVar = SavedStringVar("TempHPEntryVar")
-            self.CurrentHPEntryVar = SavedStringVar("CurrentHPEntryVar")
+            self.TempHPEntryVar = StringVarExtended("TempHPEntryVar", ClearOnNew=True)
+            self.CurrentHPEntryVar = StringVarExtended("CurrentHPEntryVar", ClearOnNew=True)
             self.MaxHPEntryVar = StringVar()
-            self.HitDiceEntryVar = SavedStringVar("HitDiceEntryVar")
-            self.HitDiceRemainingEntryVar = SavedStringVar("HitDiceRemainingEntryVar")
-            self.DeathSavingThrowsBoxSuccess1Var = SavedBooleanVar("DeathSavingThrowsBoxSuccess1Var")
-            self.DeathSavingThrowsBoxSuccess2Var = SavedBooleanVar("DeathSavingThrowsBoxSuccess2Var")
-            self.DeathSavingThrowsBoxSuccess3Var = SavedBooleanVar("DeathSavingThrowsBoxSuccess3Var")
-            self.DeathSavingThrowsBoxFailure1Var = SavedBooleanVar("DeathSavingThrowsBoxFailure1Var")
-            self.DeathSavingThrowsBoxFailure2Var = SavedBooleanVar("DeathSavingThrowsBoxFailure2Var")
-            self.DeathSavingThrowsBoxFailure3Var = SavedBooleanVar("DeathSavingThrowsBoxFailure3Var")
+            self.HitDiceEntryVar = StringVarExtended("HitDiceEntryVar", ClearOnNew=True)
+            self.HitDiceRemainingEntryVar = StringVarExtended("HitDiceRemainingEntryVar", ClearOnNew=True)
+            self.DeathSavingThrowsBoxSuccess1Var = BooleanVarExtended("DeathSavingThrowsBoxSuccess1Var", ClearOnNew=True)
+            self.DeathSavingThrowsBoxSuccess2Var = BooleanVarExtended("DeathSavingThrowsBoxSuccess2Var", ClearOnNew=True)
+            self.DeathSavingThrowsBoxSuccess3Var = BooleanVarExtended("DeathSavingThrowsBoxSuccess3Var", ClearOnNew=True)
+            self.DeathSavingThrowsBoxFailure1Var = BooleanVarExtended("DeathSavingThrowsBoxFailure1Var", ClearOnNew=True)
+            self.DeathSavingThrowsBoxFailure2Var = BooleanVarExtended("DeathSavingThrowsBoxFailure2Var", ClearOnNew=True)
+            self.DeathSavingThrowsBoxFailure3Var = BooleanVarExtended("DeathSavingThrowsBoxFailure3Var", ClearOnNew=True)
             self.ACEntryOneVar = StringVar()
             self.ACEntryTwoVar = StringVar()
             self.ACEntryThreeVar = StringVar()
             self.InitiativeEntryVar = StringVar()
-            self.SpeedEntryVar = SavedStringVar("SpeedEntryVar")
+            self.SpeedEntryVar = StringVarExtended("SpeedEntryVar", ClearOnNew=True)
             self.MaxHPVars = {}
             for Index in range(1, 21):
-                self.MaxHPVars[str(Index)] = SavedStringVar("MaxHPData" + str(Index))
-            self.MaxHPVars["HPPerLevel"] = SavedStringVar("MaxHPDataHPPerLevel")
-            self.MaxHPVars["HPOverride"] = SavedStringVar("MaxHPDataHPOverride")
+                self.MaxHPVars[str(Index)] = StringVarExtended("MaxHPData" + str(Index), ClearOnNew=True)
+            self.MaxHPVars["HPPerLevel"] = StringVarExtended("MaxHPDataHPPerLevel", ClearOnNew=True)
+            self.MaxHPVars["HPOverride"] = StringVarExtended("MaxHPDataHPOverride", ClearOnNew=True)
 
             # Center Rows and Columns
             master.grid_rowconfigure(0, weight=1)
@@ -2011,7 +1966,7 @@ class CharacterSheet:
             # Combat and Features Notes
             self.CombatAndFeaturesNotesFrame = LabelFrame(master, text="Combat and Features Notes:")
             self.CombatAndFeaturesNotesFrame.grid(row=5, column=1, columnspan=3)
-            self.CombatAndFeaturesNotes = ScrolledText(self.CombatAndFeaturesNotesFrame, Width=344, Height=180, SavedDataTag="CombatAndFeaturesNotes")
+            self.CombatAndFeaturesNotes = ScrolledText(self.CombatAndFeaturesNotesFrame, Width=344, Height=180, SavedDataTag="CombatAndFeaturesNotes", ClearOnNew=True)
             self.CombatAndFeaturesNotes.grid(row=0, column=0)
 
             # Features
@@ -2370,34 +2325,34 @@ class CharacterSheet:
                     self.List = List
 
                     # Variables
-                    self.NameEntryVar = SavedStringVar()
-                    self.SortOrderVar = SavedStringVar()
-                    self.FeatureDescriptionVar = SavedStringVar()
-                    self.SizeEntryVar = SavedStringVar()
-                    self.TypeAndTagsEntryVar = SavedStringVar()
-                    self.AlignmentEntryVar = SavedStringVar()
-                    self.ProficiencyEntryVar = SavedStringVar()
-                    self.TempHPEntryVar = SavedStringVar()
-                    self.CurrentHPEntryVar = SavedStringVar()
-                    self.MaxHPEntryVar = SavedStringVar()
-                    self.ACEntryVar = SavedStringVar()
-                    self.SpeedEntryVar = SavedStringVar()
-                    self.CRAndExperienceEntryVar = SavedStringVar()
-                    self.AbilitiesStrengthEntryVar = SavedStringVar()
-                    self.AbilitiesDexterityEntryVar = SavedStringVar()
-                    self.AbilitiesConstitutionEntryVar = SavedStringVar()
-                    self.AbilitiesIntelligenceEntryVar = SavedStringVar()
-                    self.AbilitiesWisdomEntryVar = SavedStringVar()
-                    self.AbilitiesCharismaEntryVar = SavedStringVar()
-                    self.SkillSensesAndLanguagesFieldVar = SavedStringVar()
-                    self.SavingThrowsFieldVar = SavedStringVar()
-                    self.VulnerabilitiesResistancesAndImmunitiesFieldVar = SavedStringVar()
-                    self.SpecialTraitsFieldVar = SavedStringVar()
-                    self.ActionsFieldVar = SavedStringVar()
-                    self.ReactionsFieldVar = SavedStringVar()
-                    self.InventoryFieldVar = SavedStringVar()
-                    self.LegendaryActionsAndLairActionsFieldVar = SavedStringVar()
-                    self.NotesFieldVar = SavedStringVar()
+                    self.NameEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.SortOrderVar = StringVarExtended(ClearOnNew=True)
+                    self.FeatureDescriptionVar = StringVarExtended(ClearOnNew=True)
+                    self.SizeEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.TypeAndTagsEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.AlignmentEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.ProficiencyEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.TempHPEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.CurrentHPEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.MaxHPEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.ACEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.SpeedEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.CRAndExperienceEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.AbilitiesStrengthEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.AbilitiesDexterityEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.AbilitiesConstitutionEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.AbilitiesIntelligenceEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.AbilitiesWisdomEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.AbilitiesCharismaEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.SkillSensesAndLanguagesFieldVar = StringVarExtended(ClearOnNew=True)
+                    self.SavingThrowsFieldVar = StringVarExtended(ClearOnNew=True)
+                    self.VulnerabilitiesResistancesAndImmunitiesFieldVar = StringVarExtended(ClearOnNew=True)
+                    self.SpecialTraitsFieldVar = StringVarExtended(ClearOnNew=True)
+                    self.ActionsFieldVar = StringVarExtended(ClearOnNew=True)
+                    self.ReactionsFieldVar = StringVarExtended(ClearOnNew=True)
+                    self.InventoryFieldVar = StringVarExtended(ClearOnNew=True)
+                    self.LegendaryActionsAndLairActionsFieldVar = StringVarExtended(ClearOnNew=True)
+                    self.NotesFieldVar = StringVarExtended(ClearOnNew=True)
 
                     # Feature Vars Dictionary
                     self.FeatureVars = {}
@@ -2624,10 +2579,10 @@ class CharacterSheet:
         def __init__(self, master):
             # Variables
             self.SpellPointsMaxEntryVar = StringVar()
-            self.SpellPointsRemainingEntryVar = SavedStringVar("SpellPointsRemainingEntryVar")
-            self.SpellUsingSpellPointsBoxVar = SavedBooleanVar("SpellUsingSpellPointsBoxVar")
+            self.SpellPointsRemainingEntryVar = StringVarExtended("SpellPointsRemainingEntryVar", ClearOnNew=True)
+            self.SpellUsingSpellPointsBoxVar = BooleanVarExtended("SpellUsingSpellPointsBoxVar", ClearOnNew=True)
             self.SpellUsingSpellPointsBoxVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-            self.ConcentrationBoxVar = SavedBooleanVar("ConcentrationBoxVar")
+            self.ConcentrationBoxVar = BooleanVarExtended("ConcentrationBoxVar", ClearOnNew=True)
 
             # Center Rows and Columns
             master.grid_rowconfigure(0, weight=1)
@@ -2673,7 +2628,7 @@ class CharacterSheet:
             # Spell Notes Frame
             self.SpellNotesFrame = LabelFrame(master, text="Spell Notes:")
             self.SpellNotesFrame.grid(row=5, column=1, padx=2, pady=2, rowspan=3)
-            self.SpellNotesField = ScrolledText(self.SpellNotesFrame, Width=225, Height=330, SavedDataTag="SpellNotesField")
+            self.SpellNotesField = ScrolledText(self.SpellNotesFrame, Width=225, Height=330, SavedDataTag="SpellNotesField", ClearOnNew=True)
             self.SpellNotesField.grid(row=0, column=0)
 
             # Spell Slots Frame
@@ -2977,15 +2932,15 @@ class CharacterSheet:
                     self.Canvas = Canvas
 
                     # Variables
-                    self.PreparedBoxVar = SavedBooleanVar()
-                    self.NameEntryVar = SavedStringVar()
-                    self.SortOrderVar = SavedStringVar()
-                    self.SchoolEntryVar = SavedStringVar()
-                    self.CastingTimeVar = SavedStringVar()
-                    self.RangeVar = SavedStringVar()
-                    self.ComponentsVar = SavedStringVar()
-                    self.DurationVar = SavedStringVar()
-                    self.DescriptionVar = SavedStringVar()
+                    self.PreparedBoxVar = BooleanVarExtended(ClearOnNew=True)
+                    self.NameEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.SortOrderVar = StringVarExtended(ClearOnNew=True)
+                    self.SchoolEntryVar = StringVarExtended(ClearOnNew=True)
+                    self.CastingTimeVar = StringVarExtended(ClearOnNew=True)
+                    self.RangeVar = StringVarExtended(ClearOnNew=True)
+                    self.ComponentsVar = StringVarExtended(ClearOnNew=True)
+                    self.DurationVar = StringVarExtended(ClearOnNew=True)
+                    self.DescriptionVar = StringVarExtended(ClearOnNew=True)
 
                     # Spell Vars
                     self.SpellVars = {}
@@ -3203,9 +3158,9 @@ class CharacterSheet:
             def __init__(self, master, List, SlotLevel, PointValue, Row):
                 self.Row = Row
                 self.SlotLevel = SlotLevel
-                self.SlotsEntryVar = SavedStringVar(self.SlotLevel + "SlotsEntryVar")
+                self.SlotsEntryVar = StringVarExtended(self.SlotLevel + "SlotsEntryVar", ClearOnNew=True)
                 self.SlotsEntryVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-                self.UsedEntryVar = SavedStringVar(self.SlotLevel + "UsedEntryVar")
+                self.UsedEntryVar = StringVarExtended(self.SlotLevel + "UsedEntryVar", ClearOnNew=True)
                 self.PointValue = PointValue
 
                 # Add to List
@@ -3282,15 +3237,15 @@ class CharacterSheet:
     class Inventory:
         def __init__(self, master):
             # Variables
-            self.CoinsEntryCPVar = SavedStringVar("CoinsEntryCPVar")
+            self.CoinsEntryCPVar = StringVarExtended("CoinsEntryCPVar", ClearOnNew=True)
             self.CoinsEntryCPVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-            self.CoinsEntrySPVar = SavedStringVar("CoinsEntrySPVar")
+            self.CoinsEntrySPVar = StringVarExtended("CoinsEntrySPVar", ClearOnNew=True)
             self.CoinsEntrySPVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-            self.CoinsEntryEPVar = SavedStringVar("CoinsEntryEPVar")
+            self.CoinsEntryEPVar = StringVarExtended("CoinsEntryEPVar", ClearOnNew=True)
             self.CoinsEntryEPVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-            self.CoinsEntryGPVar = SavedStringVar("CoinsEntryGPVar")
+            self.CoinsEntryGPVar = StringVarExtended("CoinsEntryGPVar", ClearOnNew=True)
             self.CoinsEntryGPVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-            self.CoinsEntryPPVar = SavedStringVar("CoinsEntryPPVar")
+            self.CoinsEntryPPVar = StringVarExtended("CoinsEntryPPVar", ClearOnNew=True)
             self.CoinsEntryPPVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
             self.ValueCP = Decimal(0.01)
             self.ValueSP = Decimal(0.1)
@@ -3798,23 +3753,23 @@ class CharacterSheet:
                 self.Canvas = Canvas
 
                 # Variables
-                self.NameEntryVar = SavedStringVar()
-                self.CountEntryVar = SavedStringVar()
+                self.NameEntryVar = StringVarExtended(ClearOnNew=True)
+                self.CountEntryVar = StringVarExtended(ClearOnNew=True)
                 self.CountEntryVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-                self.UnitWeightEntryVar = SavedStringVar()
+                self.UnitWeightEntryVar = StringVarExtended(ClearOnNew=True)
                 self.UnitWeightEntryVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-                self.UnitValueEntryVar = SavedStringVar()
+                self.UnitValueEntryVar = StringVarExtended(ClearOnNew=True)
                 self.UnitValueEntryVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-                self.UnitValueDenominationVar = SavedStringVar()
+                self.UnitValueDenominationVar = StringVarExtended(ClearOnNew=True)
                 self.UnitValueDenominationVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
                 self.TotalWeightEntryVar = StringVar()
                 self.TotalValueEntryVar = StringVar()
-                self.CategoryTagVar = SavedStringVar()
+                self.CategoryTagVar = StringVarExtended(ClearOnNew=True)
                 self.CategoryTagVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-                self.CategoryEntryVar = SavedStringVar()
-                self.RarityEntryVar = SavedStringVar()
-                self.DescriptionVar = SavedStringVar()
-                self.SortOrderVar = SavedStringVar()
+                self.CategoryEntryVar = StringVarExtended(ClearOnNew=True)
+                self.RarityEntryVar = StringVarExtended(ClearOnNew=True)
+                self.DescriptionVar = StringVarExtended(ClearOnNew=True)
+                self.SortOrderVar = StringVarExtended(ClearOnNew=True)
 
                 # Item Description Vars
                 self.ItemDescriptionVars = {}
@@ -4051,7 +4006,7 @@ class CharacterSheet:
                 # Variables
                 self.LoadEntryVar = StringVar()
                 self.DaysEntryVar = StringVar()
-                self.ConsumptionRateVar = SavedStringVar(self.Tag + "ConsumptionRateVar", DefaultValue=self.ConsumptionRateDefault)
+                self.ConsumptionRateVar = StringVarExtended(self.Tag + "ConsumptionRateVar", DefaultValue=self.ConsumptionRateDefault, ClearOnNew=True)
 
                 # Supply Display Frame
                 self.SupplyDisplayFrame = LabelFrame(master, text=self.Tag + ":")
@@ -4160,9 +4115,9 @@ class CharacterSheet:
             master.grid_columnconfigure(6, weight=1)
 
             # Notes Text Boxes
-            self.NotesField1 = ScrolledText(master, Width=230, Height=490, SavedDataTag="NotesField1")
+            self.NotesField1 = ScrolledText(master, Width=230, Height=490, SavedDataTag="NotesField1", ClearOnNew=True)
             self.NotesField1.grid(row=0, column=1, padx=2, pady=2, sticky=NSEW)
-            self.NotesField2 = ScrolledText(master, Width=230, Height=490, SavedDataTag="NotesField2")
+            self.NotesField2 = ScrolledText(master, Width=230, Height=490, SavedDataTag="NotesField2", ClearOnNew=True)
             self.NotesField2.grid(row=0, column=3, padx=2, pady=2, sticky=NSEW)
 
             # Additional Notes Frame
@@ -4267,9 +4222,9 @@ class CharacterSheet:
                 self.Canvas = Canvas
 
                 # Variables
-                self.NameEntryVar = SavedStringVar()
-                self.SortOrderVar = SavedStringVar()
-                self.NoteVar = SavedStringVar()
+                self.NameEntryVar = StringVarExtended(ClearOnNew=True)
+                self.SortOrderVar = StringVarExtended(ClearOnNew=True)
+                self.NoteVar = StringVarExtended(ClearOnNew=True)
 
                 # Note Config Vars
                 self.NoteConfigVars = {}
@@ -4428,10 +4383,10 @@ class CharacterSheet:
     class PersonalityAndBackstory:
         def __init__(self, master):
             # Variables
-            self.RaceEntryVar = SavedStringVar("RaceEntryVar")
-            self.BackgroundEntryVar = SavedStringVar("BackgroundEntryVar")
-            self.AlignmentEntryVar = SavedStringVar("AlignmentEntryVar")
-            self.AgeEntryVar = SavedStringVar("AgeEntryVar")
+            self.RaceEntryVar = StringVarExtended("RaceEntryVar", ClearOnNew=True)
+            self.BackgroundEntryVar = StringVarExtended("BackgroundEntryVar", ClearOnNew=True)
+            self.AlignmentEntryVar = StringVarExtended("AlignmentEntryVar", ClearOnNew=True)
+            self.AgeEntryVar = StringVarExtended("AgeEntryVar", ClearOnNew=True)
 
             # Center Widgets
             master.grid_rowconfigure(0, weight=1)
@@ -4477,7 +4432,7 @@ class CharacterSheet:
             # Physical Appearance
             self.PhysicalAppearanceFrame = LabelFrame(self.FirstColumnFrame, text="Physical Appearance:")
             self.PhysicalAppearanceFrame.grid(row=4, column=0, padx=2, pady=2)
-            self.PhysicalAppearanceField = ScrolledText(self.PhysicalAppearanceFrame, Width=170, Height=289, SavedDataTag="PhysicalAppearanceField")
+            self.PhysicalAppearanceField = ScrolledText(self.PhysicalAppearanceFrame, Width=170, Height=289, SavedDataTag="PhysicalAppearanceField", ClearOnNew=True)
             self.PhysicalAppearanceField.grid(row=0, column=0)
 
             # Second Column
@@ -4487,13 +4442,13 @@ class CharacterSheet:
             # Personality Traits
             self.PersonalityTraitsFrame = LabelFrame(self.SecondColumnFrame, text="Personality Traits:")
             self.PersonalityTraitsFrame.grid(row=0, column=0, padx=2, pady=2)
-            self.PersonalityTraitsField = ScrolledText(self.PersonalityTraitsFrame, Width=170, Height=225, SavedDataTag="PersonalityTraitsField")
+            self.PersonalityTraitsField = ScrolledText(self.PersonalityTraitsFrame, Width=170, Height=225, SavedDataTag="PersonalityTraitsField", ClearOnNew=True)
             self.PersonalityTraitsField.grid(row=0, column=0)
 
             # Bonds
             self.BondsFrame = LabelFrame(self.SecondColumnFrame, text="Bonds:")
             self.BondsFrame.grid(row=1, column=0, padx=2, pady=2)
-            self.BondsField = ScrolledText(self.BondsFrame, Width=170, Height=225, SavedDataTag="BondsField")
+            self.BondsField = ScrolledText(self.BondsFrame, Width=170, Height=225, SavedDataTag="BondsField", ClearOnNew=True)
             self.BondsField.grid(row=0, column=0)
 
             # Third Column
@@ -4503,13 +4458,13 @@ class CharacterSheet:
             # Ideals
             self.IdealsFrame = LabelFrame(self.ThirdColumnFrame, text="Ideals:")
             self.IdealsFrame.grid(row=0, column=0, padx=2, pady=2)
-            self.IdealsField = ScrolledText(self.IdealsFrame, Width=170, Height=225, SavedDataTag="IdealsField")
+            self.IdealsField = ScrolledText(self.IdealsFrame, Width=170, Height=225, SavedDataTag="IdealsField", ClearOnNew=True)
             self.IdealsField.grid(row=0, column=0)
 
             # Flaws
             self.FlawsFrame = LabelFrame(self.ThirdColumnFrame, text="Flaws:")
             self.FlawsFrame.grid(row=1, column=0, padx=2, pady=2)
-            self.FlawsField = ScrolledText(self.FlawsFrame, Width=170, Height=225, SavedDataTag="FlawsField")
+            self.FlawsField = ScrolledText(self.FlawsFrame, Width=170, Height=225, SavedDataTag="FlawsField", ClearOnNew=True)
             self.FlawsField.grid(row=0, column=0)
 
             # Fourth Column
@@ -4519,13 +4474,13 @@ class CharacterSheet:
             # Backstory
             self.BackstoryFrame = LabelFrame(self.FourthColumnFrame, text="Backstory:")
             self.BackstoryFrame.grid(row=0, column=0, padx=2, pady=2)
-            self.BackstoryField = ScrolledText(self.BackstoryFrame, Width=170, Height=473, SavedDataTag="BackstoryField")
+            self.BackstoryField = ScrolledText(self.BackstoryFrame, Width=170, Height=473, SavedDataTag="BackstoryField", ClearOnNew=True)
             self.BackstoryField.grid(row=0, column=0)
 
     # Portrait
     class Portrait():
         def __init__(self, master):
-            self.PortraitSelectedVar = SavedBooleanVar("PortraitSelectedVar")
+            self.PortraitSelectedVar = BooleanVarExtended("PortraitSelectedVar", ClearOnNew=True)
             self.PortraitImage = PhotoImage()
 
             # Portrait Holder Frame (Center In Page)
@@ -5408,44 +5363,44 @@ class StatModifier:
 
         # Variables
         self.Variables = {}
-        self.Variables["StrengthMultiplierEntryVar"] = SavedStringVar(Prefix + "StrengthMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["DexterityMultiplierEntryVar"] = SavedStringVar(Prefix + "DexterityMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["ConstitutionMultiplierEntryVar"] = SavedStringVar(Prefix + "ConstitutionMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["IntelligenceMultiplierEntryVar"] = SavedStringVar(Prefix + "IntelligenceMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["WisdomMultiplierEntryVar"] = SavedStringVar(Prefix + "WisdomMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["CharismaMultiplierEntryVar"] = SavedStringVar(Prefix + "CharismaMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["ProficiencyMultiplierEntryVar"] = SavedStringVar(Prefix + "ProficiencyMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["ManualModifierEntryVar"] = SavedStringVar(Prefix + "ManualModifierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["StrengthMinEntryVar"] = SavedStringVar(Prefix + "StrengthMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["DexterityMinEntryVar"] = SavedStringVar(Prefix + "DexterityMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["ConstitutionMinEntryVar"] = SavedStringVar(Prefix + "ConstitutionMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["IntelligenceMinEntryVar"] = SavedStringVar(Prefix + "IntelligenceMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["WisdomMinEntryVar"] = SavedStringVar(Prefix + "WisdomMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["CharismaMinEntryVar"] = SavedStringVar(Prefix + "CharismaMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["ProficiencyMinEntryVar"] = SavedStringVar(Prefix + "ProficiencyMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["StrengthMaxEntryVar"] = SavedStringVar(Prefix + "StrengthMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["DexterityMaxEntryVar"] = SavedStringVar(Prefix + "DexterityMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["ConstitutionMaxEntryVar"] = SavedStringVar(Prefix + "ConstitutionMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["IntelligenceMaxEntryVar"] = SavedStringVar(Prefix + "IntelligenceMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["WisdomMaxEntryVar"] = SavedStringVar(Prefix + "WisdomMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["CharismaMaxEntryVar"] = SavedStringVar(Prefix + "CharismaMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["ProficiencyMaxEntryVar"] = SavedStringVar(Prefix + "ProficiencyMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["StrengthMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "StrengthMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["DexterityMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "DexterityMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["ConstitutionMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "ConstitutionMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["IntelligenceMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "IntelligenceMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["WisdomMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "WisdomMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["CharismaMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "CharismaMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
-        self.Variables["ProficiencyMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "ProficiencyMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
+        self.Variables["StrengthMultiplierEntryVar"] = StringVarExtended(Prefix + "StrengthMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["DexterityMultiplierEntryVar"] = StringVarExtended(Prefix + "DexterityMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["ConstitutionMultiplierEntryVar"] = StringVarExtended(Prefix + "ConstitutionMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["IntelligenceMultiplierEntryVar"] = StringVarExtended(Prefix + "IntelligenceMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["WisdomMultiplierEntryVar"] = StringVarExtended(Prefix + "WisdomMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["CharismaMultiplierEntryVar"] = StringVarExtended(Prefix + "CharismaMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["ProficiencyMultiplierEntryVar"] = StringVarExtended(Prefix + "ProficiencyMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["ManualModifierEntryVar"] = StringVarExtended(Prefix + "ManualModifierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["StrengthMinEntryVar"] = StringVarExtended(Prefix + "StrengthMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["DexterityMinEntryVar"] = StringVarExtended(Prefix + "DexterityMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["ConstitutionMinEntryVar"] = StringVarExtended(Prefix + "ConstitutionMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["IntelligenceMinEntryVar"] = StringVarExtended(Prefix + "IntelligenceMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["WisdomMinEntryVar"] = StringVarExtended(Prefix + "WisdomMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["CharismaMinEntryVar"] = StringVarExtended(Prefix + "CharismaMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["ProficiencyMinEntryVar"] = StringVarExtended(Prefix + "ProficiencyMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["StrengthMaxEntryVar"] = StringVarExtended(Prefix + "StrengthMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["DexterityMaxEntryVar"] = StringVarExtended(Prefix + "DexterityMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["ConstitutionMaxEntryVar"] = StringVarExtended(Prefix + "ConstitutionMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["IntelligenceMaxEntryVar"] = StringVarExtended(Prefix + "IntelligenceMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["WisdomMaxEntryVar"] = StringVarExtended(Prefix + "WisdomMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["CharismaMaxEntryVar"] = StringVarExtended(Prefix + "CharismaMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["ProficiencyMaxEntryVar"] = StringVarExtended(Prefix + "ProficiencyMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["StrengthMultiplierRoundUpBoxVar"] = BooleanVarExtended(Prefix + "StrengthMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["DexterityMultiplierRoundUpBoxVar"] = BooleanVarExtended(Prefix + "DexterityMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["ConstitutionMultiplierRoundUpBoxVar"] = BooleanVarExtended(Prefix + "ConstitutionMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["IntelligenceMultiplierRoundUpBoxVar"] = BooleanVarExtended(Prefix + "IntelligenceMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["WisdomMultiplierRoundUpBoxVar"] = BooleanVarExtended(Prefix + "WisdomMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["CharismaMultiplierRoundUpBoxVar"] = BooleanVarExtended(Prefix + "CharismaMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+        self.Variables["ProficiencyMultiplierRoundUpBoxVar"] = BooleanVarExtended(Prefix + "ProficiencyMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
         if self.ACMode:
-            self.Variables["ACBaseEntryVar"] = SavedStringVar(Prefix + "ACBaseEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
+            self.Variables["ACBaseEntryVar"] = StringVarExtended(Prefix + "ACBaseEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
         if self.DiceRollerMode:
-            self.Variables["ModifiersSubmitted"] = SavedBooleanVar(Prefix + "ModifiersSubmitted" + Suffix if Prefix != "" or Suffix != "" else None)
+            self.Variables["ModifiersSubmitted"] = BooleanVarExtended(Prefix + "ModifiersSubmitted" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
         if WindowInst.Mode == "CharacterSheet":
-            self.Variables["LevelMultiplierEntryVar"] = SavedStringVar(Prefix + "LevelMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-            self.Variables["LevelMinEntryVar"] = SavedStringVar(Prefix + "LevelMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-            self.Variables["LevelMaxEntryVar"] = SavedStringVar(Prefix + "LevelMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None)
-            self.Variables["LevelMultiplierRoundUpBoxVar"] = SavedBooleanVar(Prefix + "LevelMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None)
+            self.Variables["LevelMultiplierEntryVar"] = StringVarExtended(Prefix + "LevelMultiplierEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+            self.Variables["LevelMinEntryVar"] = StringVarExtended(Prefix + "LevelMinEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+            self.Variables["LevelMaxEntryVar"] = StringVarExtended(Prefix + "LevelMaxEntryVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
+            self.Variables["LevelMultiplierRoundUpBoxVar"] = BooleanVarExtended(Prefix + "LevelMultiplierRoundUpBoxVar" + Suffix if Prefix != "" or Suffix != "" else None, ClearOnNew=True)
 
         # Configure Master (Should Be Entry Widget)
         master.configure(state=DISABLED if not self.DiceRollerMode else NORMAL, bg=GlobalInst.ButtonColor, fg="black", disabledbackground=GlobalInst.ButtonColor, disabledforeground="black", cursor=Cursor)
@@ -5856,7 +5811,7 @@ class AbilityScoreDerivatives:
         self.AttackTypeStringSuffix = AttackTypeStringSuffix
 
         # Variables
-        self.AbilityScoreSelectionDropdownVar = SavedStringVar(self.SaveTagPrefix + "AbilitySelectionDropdownVar" + str(self.Column))
+        self.AbilityScoreSelectionDropdownVar = StringVarExtended(self.SaveTagPrefix + "AbilitySelectionDropdownVar" + str(self.Column), ClearOnNew=True)
         self.AbilityScoreSelectionDropdownVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
         self.SaveDCEntryVar = StringVar()
         self.AttackModifierEntryVar = StringVar()
@@ -5897,23 +5852,23 @@ class CreatureData:
     def __init__(self, master, DialogMode=False, DialogData=None):
         # Standalone and NPC Sheet Mode Variables
         if not DialogMode:
-            self.NameEntryVar = SavedStringVar("NameEntryVar")
-            self.SizeEntryVar = SavedStringVar("SizeEntryVar")
-            self.TypeAndTagsEntryVar = SavedStringVar("TypeAndTagsEntryVar")
-            self.AlignmentEntryVar = SavedStringVar("AlignmentEntryVar")
-            self.ProficiencyEntryVar = SavedStringVar("ProficiencyEntryVar")
-            self.TempHPEntryVar = SavedStringVar("TempHPEntryVar")
-            self.CurrentHPEntryVar = SavedStringVar("CurrentHPEntryVar")
-            self.MaxHPEntryVar = SavedStringVar("MaxHPEntryVar")
-            self.ACEntryVar = SavedStringVar("ACEntryVar")
-            self.SpeedEntryVar = SavedStringVar("SpeedEntryVar")
-            self.CRAndExperienceEntryVar = SavedStringVar("CRAndExperienceEntryVar")
-            self.AbilitiesStrengthEntryVar = SavedStringVar("AbilitiesStrengthEntryVar")
-            self.AbilitiesDexterityEntryVar = SavedStringVar("AbilitiesDexterityEntryVar")
-            self.AbilitiesConstitutionEntryVar = SavedStringVar("AbilitiesConstitutionEntryVar")
-            self.AbilitiesIntelligenceEntryVar = SavedStringVar("AbilitiesIntelligenceEntryVar")
-            self.AbilitiesWisdomEntryVar = SavedStringVar("AbilitiesWisdomEntryVar")
-            self.AbilitiesCharismaEntryVar = SavedStringVar("AbilitiesCharismaEntryVar")
+            self.NameEntryVar = StringVarExtended("NameEntryVar", ClearOnNew=True)
+            self.SizeEntryVar = StringVarExtended("SizeEntryVar", ClearOnNew=True)
+            self.TypeAndTagsEntryVar = StringVarExtended("TypeAndTagsEntryVar", ClearOnNew=True)
+            self.AlignmentEntryVar = StringVarExtended("AlignmentEntryVar", ClearOnNew=True)
+            self.ProficiencyEntryVar = StringVarExtended("ProficiencyEntryVar", ClearOnNew=True)
+            self.TempHPEntryVar = StringVarExtended("TempHPEntryVar", ClearOnNew=True)
+            self.CurrentHPEntryVar = StringVarExtended("CurrentHPEntryVar", ClearOnNew=True)
+            self.MaxHPEntryVar = StringVarExtended("MaxHPEntryVar", ClearOnNew=True)
+            self.ACEntryVar = StringVarExtended("ACEntryVar", ClearOnNew=True)
+            self.SpeedEntryVar = StringVarExtended("SpeedEntryVar", ClearOnNew=True)
+            self.CRAndExperienceEntryVar = StringVarExtended("CRAndExperienceEntryVar", ClearOnNew=True)
+            self.AbilitiesStrengthEntryVar = StringVarExtended("AbilitiesStrengthEntryVar", ClearOnNew=True)
+            self.AbilitiesDexterityEntryVar = StringVarExtended("AbilitiesDexterityEntryVar", ClearOnNew=True)
+            self.AbilitiesConstitutionEntryVar = StringVarExtended("AbilitiesConstitutionEntryVar", ClearOnNew=True)
+            self.AbilitiesIntelligenceEntryVar = StringVarExtended("AbilitiesIntelligenceEntryVar", ClearOnNew=True)
+            self.AbilitiesWisdomEntryVar = StringVarExtended("AbilitiesWisdomEntryVar", ClearOnNew=True)
+            self.AbilitiesCharismaEntryVar = StringVarExtended("AbilitiesCharismaEntryVar", ClearOnNew=True)
             if WindowInst.Mode == "NPCSheet":
                 self.OpenErrors = False
                 self.OpenErrorsString = ""
@@ -6159,56 +6114,58 @@ class CreatureData:
         # Skills, Senses, and Languages
         self.SkillSensesAndLanguagesFrame = LabelFrame(self.WidgetMaster, text="Skills, Senses, and Languages:")
         self.SkillSensesAndLanguagesFrame.grid(row=3, column=1, padx=2, pady=2, sticky=NSEW)
-        self.SkillSensesAndLanguagesField = ScrolledText(self.SkillSensesAndLanguagesFrame, Width=300, Height=120, SavedDataTag="SkillSensesAndLanguagesFieldVar" if not DialogMode else None)
+        self.SkillSensesAndLanguagesField = ScrolledText(self.SkillSensesAndLanguagesFrame, Width=300, Height=120, SavedDataTag="SkillSensesAndLanguagesFieldVar" if not DialogMode else None,
+                                                         ClearOnNew=True if not DialogMode else False)
         self.SkillSensesAndLanguagesField.grid(row=0, column=0)
 
         # Special Traits
         self.SpecialTraitsFrame = LabelFrame(self.WidgetMaster, text="Special Traits:")
         self.SpecialTraitsFrame.grid(row=2, column=2, padx=2, pady=2, sticky=NSEW)
-        self.SpecialTraitsField = ScrolledText(self.SpecialTraitsFrame, Width=383, Height=120, SavedDataTag="SpecialTraitsFieldVar" if not DialogMode else None)
+        self.SpecialTraitsField = ScrolledText(self.SpecialTraitsFrame, Width=383, Height=120, SavedDataTag="SpecialTraitsFieldVar" if not DialogMode else None, ClearOnNew=True if not DialogMode else False)
         self.SpecialTraitsField.grid(row=0, column=0)
 
         # Actions
         self.ActionsFrame = LabelFrame(self.WidgetMaster, text="Actions:")
         self.ActionsFrame.grid(row=3, column=2, padx=2, pady=2, sticky=NSEW)
-        self.ActionsField = ScrolledText(self.ActionsFrame, Width=383, Height=120, SavedDataTag="ActionsFieldVar" if not DialogMode else None)
+        self.ActionsField = ScrolledText(self.ActionsFrame, Width=383, Height=120, SavedDataTag="ActionsFieldVar" if not DialogMode else None, ClearOnNew=True if not DialogMode else False)
         self.ActionsField.grid(row=0, column=0)
 
         # Saving Throws
         self.SavingThrowsFrame = LabelFrame(self.WidgetMaster, text="Saving Throws:")
         self.SavingThrowsFrame.grid(row=4, column=0, columnspan=2, padx=2, pady=2, sticky=NSEW)
-        self.SavingThrowsField = ScrolledText(self.SavingThrowsFrame, Width=383, Height=75, SavedDataTag="SavingThrowsFieldVar" if not DialogMode else None)
+        self.SavingThrowsField = ScrolledText(self.SavingThrowsFrame, Width=383, Height=75, SavedDataTag="SavingThrowsFieldVar" if not DialogMode else None, ClearOnNew=True if not DialogMode else False)
         self.SavingThrowsField.grid(row=0, column=0)
 
         # Vulnerabilities, Resistances, and Immunities
         self.VulnerabilitiesResistancesAndImmunitiesFrame = LabelFrame(self.WidgetMaster, text="Vulnerabilities, Resistances, and Immunities:")
         self.VulnerabilitiesResistancesAndImmunitiesFrame.grid(row=5, column=0, columnspan=2, padx=2, pady=2, sticky=NSEW)
         self.VulnerabilitiesResistancesAndImmunitiesField = ScrolledText(self.VulnerabilitiesResistancesAndImmunitiesFrame, Width=383, Height=75,
-                                                                         SavedDataTag="VulnerabilitiesResistancesAndImmunitiesFieldVar" if not DialogMode else None)
+                                                                         SavedDataTag="VulnerabilitiesResistancesAndImmunitiesFieldVar" if not DialogMode else None, ClearOnNew=True if not DialogMode else False)
         self.VulnerabilitiesResistancesAndImmunitiesField.grid(row=0, column=0)
 
         # Inventory
         self.InventoryFrame = LabelFrame(self.WidgetMaster, text="Inventory:")
         self.InventoryFrame.grid(row=6, column=0, columnspan=2, padx=2, pady=2, sticky=NSEW)
-        self.InventoryField = ScrolledText(self.InventoryFrame, Width=383, Height=75, SavedDataTag="InventoryFieldVar" if not DialogMode else None)
+        self.InventoryField = ScrolledText(self.InventoryFrame, Width=383, Height=75, SavedDataTag="InventoryFieldVar" if not DialogMode else None, ClearOnNew=True if not DialogMode else False)
         self.InventoryField.grid(row=0, column=0)
 
         # Reactions
         self.ReactionsFrame = LabelFrame(self.WidgetMaster, text="Reactions:")
         self.ReactionsFrame.grid(row=4, column=2, padx=2, pady=2, sticky=NSEW)
-        self.ReactionsField = ScrolledText(self.ReactionsFrame, Width=383, Height=75, SavedDataTag="ReactionsFieldVar" if not DialogMode else None)
+        self.ReactionsField = ScrolledText(self.ReactionsFrame, Width=383, Height=75, SavedDataTag="ReactionsFieldVar" if not DialogMode else None, ClearOnNew=True if not DialogMode else False)
         self.ReactionsField.grid(row=0, column=0)
 
         # Legendary Actions and Lair Actions
         self.LegendaryActionsAndLairActionsFrame = LabelFrame(self.WidgetMaster, text="Legendary Actions and Lair Actions:")
         self.LegendaryActionsAndLairActionsFrame.grid(row=5, column=2, padx=2, pady=2, sticky=NSEW)
-        self.LegendaryActionsAndLairActionsField = ScrolledText(self.LegendaryActionsAndLairActionsFrame, Width=383, Height=75, SavedDataTag="LegendaryActionsAndLairActionsFieldVar" if not DialogMode else None)
+        self.LegendaryActionsAndLairActionsField = ScrolledText(self.LegendaryActionsAndLairActionsFrame, Width=383, Height=75, SavedDataTag="LegendaryActionsAndLairActionsFieldVar" if not DialogMode else None,
+                                                                ClearOnNew=True if not DialogMode else False)
         self.LegendaryActionsAndLairActionsField.grid(row=0, column=0)
 
         # Notes
         self.NotesFrame = LabelFrame(self.WidgetMaster, text="Notes:")
         self.NotesFrame.grid(row=6, column=2, padx=2, pady=2, sticky=NSEW)
-        self.NotesField = ScrolledText(self.NotesFrame, Width=383, Height=75, SavedDataTag="NotesFieldVar" if not DialogMode else None)
+        self.NotesField = ScrolledText(self.NotesFrame, Width=383, Height=75, SavedDataTag="NotesFieldVar" if not DialogMode else None, ClearOnNew=True if not DialogMode else False)
         self.NotesField.grid(row=0, column=0)
 
         # Create Creature Stats Fields Dictionary
@@ -6524,12 +6481,12 @@ class DiceRoller:
             self.PresetRollsScrolledCanvasWidth = 423
 
         # Variables
-        self.DiceNumberEntryVar = StringVar(value="1")
-        self.DieTypeEntryVar = StringVar(value="20")
-        self.ModifierEntryVar = StringVar(value="0")
-        self.CritMinimumEntryVar = SavedStringVar("CritMinimumEntryVar", DefaultValue="20")
+        self.DiceNumberEntryVar = StringVarExtended(DefaultValue="1", ClearOnNew=True)
+        self.DieTypeEntryVar = StringVarExtended(DefaultValue="20", ClearOnNew=True)
+        self.ModifierEntryVar = StringVarExtended(DefaultValue="0", ClearOnNew=True)
+        self.CritMinimumEntryVar = StringVarExtended("CritMinimumEntryVar", DefaultValue="20", ClearOnNew=True)
         if WindowInst.Mode == "CharacterSheet":
-            self.InspirationBoxVar = SavedBooleanVar("InspirationBoxVar")
+            self.InspirationBoxVar = BooleanVarExtended("InspirationBoxVar", ClearOnNew=True)
             self.InspirationTrueColor = "#7aff63"
             self.InspirationFalseColor = GlobalInst.ButtonColor
 
@@ -6620,7 +6577,7 @@ class DiceRoller:
         # Results
         self.ResultsFieldFrame = LabelFrame(self.DiceRollerFrame, text="Results:")
         self.ResultsFieldFrame.grid(row=2, column=self.ResultsFieldFrameColumn, padx=2, pady=2)
-        self.ResultsField = ScrolledText(self.ResultsFieldFrame, Width=self.ResultsFieldWidth, Height=self.ResultsFieldHeight, Disabled=True, DisabledBackground=GlobalInst.ButtonColor, SavedDataTag="ResultsField")
+        self.ResultsField = ScrolledText(self.ResultsFieldFrame, Width=self.ResultsFieldWidth, Height=self.ResultsFieldHeight, Disabled=True, DisabledBackground=GlobalInst.ButtonColor, SavedDataTag="ResultsField", ClearOnNew=True)
         self.ResultsField.grid(row=0, column=0, padx=2, pady=2)
         self.ResultsField.Text.bind("<Button-1>", self.CopyResults)
         self.ResultsField.Text.bind("<Button-3>", self.ClearResults)
@@ -6919,11 +6876,11 @@ class DiceRoller:
                 self.Canvas = Canvas
 
                 # Variables
-                self.PresetRollNameEntryVar = SavedStringVar()
-                self.PresetRollDiceNumberEntryVar = SavedStringVar()
-                self.PresetRollDieTypeEntryVar = SavedStringVar()
-                self.PresetRollModifierEntryVar = SavedStringVar()
-                self.PresetRollSortOrderVar = SavedStringVar()
+                self.PresetRollNameEntryVar = StringVarExtended(ClearOnNew=True)
+                self.PresetRollDiceNumberEntryVar = StringVarExtended(ClearOnNew=True)
+                self.PresetRollDieTypeEntryVar = StringVarExtended(ClearOnNew=True)
+                self.PresetRollModifierEntryVar = StringVarExtended(ClearOnNew=True)
+                self.PresetRollSortOrderVar = StringVarExtended(ClearOnNew=True)
 
                 # Sort Fields
                 self.SortFields = {}
@@ -7069,9 +7026,9 @@ class DiceRoller:
 class EncounterHeader:
     def __init__(self, master):
         # Variables
-        self.EncounterNameEntryVar = SavedStringVar("EncounterNameEntryVar")
-        self.CREntryVar = SavedStringVar("CREntryVar")
-        self.ExperienceEntryVar = SavedStringVar("ExperienceEntryVar")
+        self.EncounterNameEntryVar = StringVarExtended("EncounterNameEntryVar", ClearOnNew=True)
+        self.CREntryVar = StringVarExtended("CREntryVar", ClearOnNew=True)
+        self.ExperienceEntryVar = StringVarExtended("ExperienceEntryVar", ClearOnNew=True)
 
         # Encounter Header Frame
         self.EncounterHeaderFrame = LabelFrame(master, text="Basic Encounter Info:")
@@ -7104,30 +7061,30 @@ class EncounterHeader:
         self.NotesFrame.grid(row=1, column=0, columnspan=7, padx=2, pady=2, sticky=NSEW)
         self.NotesHeight = 65
         self.NotesWidth = 155
-        self.NotesField1 = ScrolledText(self.NotesFrame, Width=self.NotesWidth, Height=self.NotesHeight, SavedDataTag="NotesField1")
+        self.NotesField1 = ScrolledText(self.NotesFrame, Width=self.NotesWidth, Height=self.NotesHeight, SavedDataTag="NotesField1", ClearOnNew=True)
         self.NotesField1.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-        self.NotesField2 = ScrolledText(self.NotesFrame, Width=self.NotesWidth, Height=self.NotesHeight, SavedDataTag="NotesField2")
+        self.NotesField2 = ScrolledText(self.NotesFrame, Width=self.NotesWidth, Height=self.NotesHeight, SavedDataTag="NotesField2", ClearOnNew=True)
         self.NotesField2.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
-        self.NotesField3 = ScrolledText(self.NotesFrame, Width=self.NotesWidth, Height=self.NotesHeight, SavedDataTag="NotesField3")
+        self.NotesField3 = ScrolledText(self.NotesFrame, Width=self.NotesWidth, Height=self.NotesHeight, SavedDataTag="NotesField3", ClearOnNew=True)
         self.NotesField3.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
 
         # Description
         self.DescriptionFrame = LabelFrame(self.EncounterHeaderFrame, text="Description:")
         self.DescriptionFrame.grid(row=0, column=8, sticky=NSEW, rowspan=2, padx=2, pady=2)
-        self.DescriptionField = ScrolledText(self.DescriptionFrame, Width=180, Height=100, SavedDataTag="DescriptionField")
+        self.DescriptionField = ScrolledText(self.DescriptionFrame, Width=180, Height=100, SavedDataTag="DescriptionField", ClearOnNew=True)
         self.DescriptionField.grid(row=0, column=0, sticky=NSEW)
 
         # Rewards
         self.RewardsFrame = LabelFrame(self.EncounterHeaderFrame, text="Rewards:")
         self.RewardsFrame.grid(row=0, column=9, sticky=NSEW, rowspan=2, padx=2, pady=2)
-        self.RewardsField = ScrolledText(self.RewardsFrame, Width=150, Height=100, SavedDataTag="RewardsField")
+        self.RewardsField = ScrolledText(self.RewardsFrame, Width=150, Height=100, SavedDataTag="RewardsField", ClearOnNew=True)
         self.RewardsField.grid(row=0, column=0, sticky=NSEW)
 
 
 class InitiativeOrder:
     def __init__(self, master):
         # Variables
-        self.RoundEntryVar = SavedStringVar("RoundEntryVar", DefaultValue=str(1))
+        self.RoundEntryVar = StringVarExtended("RoundEntryVar", DefaultValue="1", ClearOnNew=True)
         self.ScrollingDisabledVar = BooleanVar(value=False)
 
         # Initiative Order Frame
@@ -7304,41 +7261,41 @@ class InitiativeOrder:
             self.Row = Row
 
             # Variables
-            self.InitiativeEntryResultEntryVar = SavedStringVar()
-            self.InitiativeEntryTiePriorityDropdownVar = SavedStringVar(DefaultValue=str("1"))
-            self.InitiativeEntryNameEntryVar = SavedStringVar()
-            self.InitiativeEntryACEntryVar = SavedStringVar()
-            self.InitiativeEntryTempHPEntryVar = SavedStringVar()
-            self.InitiativeEntryCurrentHPEntryVar = SavedStringVar()
-            self.InitiativeEntryMaxHPEntryVar = SavedStringVar()
+            self.InitiativeEntryResultEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryTiePriorityDropdownVar = StringVarExtended(DefaultValue="1", ClearOnNew=True)
+            self.InitiativeEntryNameEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryACEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryTempHPEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryCurrentHPEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryMaxHPEntryVar = StringVarExtended(ClearOnNew=True)
             self.ConcentrationTrueColor = "#7aff63"
             self.ConcentrationFalseColor = GlobalInst.ButtonColor
-            self.InitiativeEntryConcentrationBoxVar = SavedBooleanVar()
+            self.InitiativeEntryConcentrationBoxVar = BooleanVarExtended(ClearOnNew=True)
             self.TurnDoneTrueColor = "#7cafff"
-            self.InitiativeEntryTurnDoneVar = SavedBooleanVar()
+            self.InitiativeEntryTurnDoneVar = BooleanVarExtended(ClearOnNew=True)
             self.DeadTrueColor = "#ff6d6d"
-            self.InitiativeEntryDeadVar = SavedBooleanVar()
-            self.InitiativeEntrySizeEntryVar = SavedStringVar()
-            self.InitiativeEntryTypeAndTagsEntryVar = SavedStringVar()
-            self.InitiativeEntryAlignmentEntryVar = SavedStringVar()
-            self.InitiativeEntryProficiencyEntryVar = SavedStringVar()
-            self.InitiativeEntrySpeedEntryVar = SavedStringVar()
-            self.InitiativeEntryCRAndExperienceEntryVar = SavedStringVar()
-            self.InitiativeEntryAbilitiesStrengthEntryVar = SavedStringVar()
-            self.InitiativeEntryAbilitiesDexterityEntryVar = SavedStringVar()
-            self.InitiativeEntryAbilitiesConstitutionEntryVar = SavedStringVar()
-            self.InitiativeEntryAbilitiesIntelligenceEntryVar = SavedStringVar()
-            self.InitiativeEntryAbilitiesWisdomEntryVar = SavedStringVar()
-            self.InitiativeEntryAbilitiesCharismaEntryVar = SavedStringVar()
-            self.InitiativeEntrySkillSensesAndLanguagesFieldVar = SavedStringVar()
-            self.InitiativeEntrySavingThrowsFieldVar = SavedStringVar()
-            self.InitiativeEntryVulnerabilitiesResistancesAndImmunitiesFieldVar = SavedStringVar()
-            self.InitiativeEntrySpecialTraitsFieldVar = SavedStringVar()
-            self.InitiativeEntryActionsFieldVar = SavedStringVar()
-            self.InitiativeEntryReactionsFieldVar = SavedStringVar()
-            self.InitiativeEntryInventoryFieldVar = SavedStringVar()
-            self.InitiativeEntryLegendaryActionsAndLairActionsFieldVar = SavedStringVar()
-            self.InitiativeEntryNotesFieldVar = SavedStringVar()
+            self.InitiativeEntryDeadVar = BooleanVarExtended(ClearOnNew=True)
+            self.InitiativeEntrySizeEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryTypeAndTagsEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryAlignmentEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryProficiencyEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntrySpeedEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryCRAndExperienceEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryAbilitiesStrengthEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryAbilitiesDexterityEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryAbilitiesConstitutionEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryAbilitiesIntelligenceEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryAbilitiesWisdomEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryAbilitiesCharismaEntryVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntrySkillSensesAndLanguagesFieldVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntrySavingThrowsFieldVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryVulnerabilitiesResistancesAndImmunitiesFieldVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntrySpecialTraitsFieldVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryActionsFieldVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryReactionsFieldVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryInventoryFieldVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryLegendaryActionsAndLairActionsFieldVar = StringVarExtended(ClearOnNew=True)
+            self.InitiativeEntryNotesFieldVar = StringVarExtended(ClearOnNew=True)
 
             # Add to List
             self.List.append(self)
@@ -7391,17 +7348,17 @@ class InitiativeOrder:
                                                                indicatoron=False)
 
             # Conditions Field
-            self.InitiativeEntryConditionsField = ScrolledText(self.master, Width=113, Height=35, FontSize=7)
+            self.InitiativeEntryConditionsField = ScrolledText(self.master, Width=113, Height=35, FontSize=7, ClearOnNew=True)
             self.InitiativeEntryConditionsField.ScrolledTextFrame.bind("<Enter>", self.DisableScrolling)
             self.InitiativeEntryConditionsField.ScrolledTextFrame.bind("<Leave>", self.EnableScrolling)
 
             # Location Field
-            self.InitiativeEntryLocationField = ScrolledText(self.master, Width=113, Height=35, FontSize=7)
+            self.InitiativeEntryLocationField = ScrolledText(self.master, Width=113, Height=35, FontSize=7, ClearOnNew=True)
             self.InitiativeEntryLocationField.ScrolledTextFrame.bind("<Enter>", self.DisableScrolling)
             self.InitiativeEntryLocationField.ScrolledTextFrame.bind("<Leave>", self.EnableScrolling)
 
             # Notes Field
-            self.InitiativeEntryNotesField = ScrolledText(self.master, Width=113, Height=35, FontSize=7)
+            self.InitiativeEntryNotesField = ScrolledText(self.master, Width=113, Height=35, FontSize=7, ClearOnNew=True)
             self.InitiativeEntryNotesField.ScrolledTextFrame.bind("<Enter>", self.DisableScrolling)
             self.InitiativeEntryNotesField.ScrolledTextFrame.bind("<Leave>", self.EnableScrolling)
 
@@ -7716,7 +7673,7 @@ class InitiativeOrder:
 class CompactInitiativeOrder:
     def __init__(self, master):
         # Variables
-        self.RoundEntryVar = StringVar(value=str(1))
+        self.RoundEntryVar = StringVar(value="1")
         self.ScrollingDisabledVar = BooleanVar(value=False)
 
         # Initiative Data Frame
@@ -7852,7 +7809,7 @@ class CompactInitiativeOrder:
 
             # Variables
             self.InitiativeEntryResultEntryVar = StringVar()
-            self.InitiativeEntryTiePriorityDropdownVar = StringVar(value=str("1"))
+            self.InitiativeEntryTiePriorityDropdownVar = StringVar(value="1")
             self.InitiativeEntryNameEntryVar = StringVar()
             self.TurnDoneTrueColor = "#7cafff"
             self.InitiativeEntryTurnDoneVar = BooleanVar()
@@ -7956,18 +7913,18 @@ class CompactInitiativeOrder:
 class HoardSheet:
     def __init__(self, master):
         # Variables
-        self.HoardNameEntryVar = SavedStringVar("HoardNameEntryVar")
-        self.HoardLocationEntryVar = SavedStringVar("HoardLocationEntryVar")
-        self.HoardStorageCostsEntryVar = SavedStringVar("HoardStorageCostsEntryVar")
-        self.CoinsEntryCPVar = SavedStringVar("CoinsEntryCPVar")
+        self.HoardNameEntryVar = StringVarExtended("HoardNameEntryVar", ClearOnNew=True)
+        self.HoardLocationEntryVar = StringVarExtended("HoardLocationEntryVar", ClearOnNew=True)
+        self.HoardStorageCostsEntryVar = StringVarExtended("HoardStorageCostsEntryVar", ClearOnNew=True)
+        self.CoinsEntryCPVar = StringVarExtended("CoinsEntryCPVar", ClearOnNew=True)
         self.CoinsEntryCPVar.trace_add("write", lambda a, b, c: self.UpdateHoardStats())
-        self.CoinsEntrySPVar = SavedStringVar("CoinsEntrySPVar")
+        self.CoinsEntrySPVar = StringVarExtended("CoinsEntrySPVar", ClearOnNew=True)
         self.CoinsEntrySPVar.trace_add("write", lambda a, b, c: self.UpdateHoardStats())
-        self.CoinsEntryEPVar = SavedStringVar("CoinsEntryEPVar")
+        self.CoinsEntryEPVar = StringVarExtended("CoinsEntryEPVar", ClearOnNew=True)
         self.CoinsEntryEPVar.trace_add("write", lambda a, b, c: self.UpdateHoardStats())
-        self.CoinsEntryGPVar = SavedStringVar("CoinsEntryGPVar")
+        self.CoinsEntryGPVar = StringVarExtended("CoinsEntryGPVar", ClearOnNew=True)
         self.CoinsEntryGPVar.trace_add("write", lambda a, b, c: self.UpdateHoardStats())
-        self.CoinsEntryPPVar = SavedStringVar("CoinsEntryPPVar")
+        self.CoinsEntryPPVar = StringVarExtended("CoinsEntryPPVar", ClearOnNew=True)
         self.CoinsEntryPPVar.trace_add("write", lambda a, b, c: self.UpdateHoardStats())
         self.ValueCP = Decimal(0.01)
         self.ValueSP = Decimal(0.1)
@@ -8091,7 +8048,7 @@ class HoardSheet:
         # Notes
         self.HoardNotesFrame = LabelFrame(master, text="Notes:")
         self.HoardNotesFrame.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
-        self.HoardNotesField = ScrolledText(self.HoardNotesFrame, SavedDataTag="HoardNotesField", Width=286)
+        self.HoardNotesField = ScrolledText(self.HoardNotesFrame, SavedDataTag="HoardNotesField", Width=286, ClearOnNew=True)
         self.HoardNotesField.grid(row=0, column=0, sticky=NSEW)
 
         # Treasure Items
@@ -8345,21 +8302,21 @@ class HoardSheet:
             self.Canvas = Canvas
 
             # Variables
-            self.NameEntryVar = SavedStringVar()
-            self.CountEntryVar = SavedStringVar()
+            self.NameEntryVar = StringVarExtended(ClearOnNew=True)
+            self.CountEntryVar = StringVarExtended(ClearOnNew=True)
             self.CountEntryVar.trace_add("write", lambda a, b, c: HoardSheetInst.UpdateHoardStats())
-            self.UnitWeightEntryVar = SavedStringVar()
+            self.UnitWeightEntryVar = StringVarExtended(ClearOnNew=True)
             self.UnitWeightEntryVar.trace_add("write", lambda a, b, c: HoardSheetInst.UpdateHoardStats())
-            self.UnitValueEntryVar = SavedStringVar()
+            self.UnitValueEntryVar = StringVarExtended(ClearOnNew=True)
             self.UnitValueEntryVar.trace_add("write", lambda a, b, c: HoardSheetInst.UpdateHoardStats())
-            self.UnitValueDenominationVar = SavedStringVar()
+            self.UnitValueDenominationVar = StringVarExtended(ClearOnNew=True)
             self.UnitValueDenominationVar.trace_add("write", lambda a, b, c: HoardSheetInst.UpdateHoardStats())
             self.TotalWeightEntryVar = StringVar()
             self.TotalValueEntryVar = StringVar()
-            self.CategoryEntryVar = SavedStringVar()
-            self.RarityEntryVar = SavedStringVar()
-            self.DescriptionVar = SavedStringVar()
-            self.SortOrderVar = SavedStringVar()
+            self.CategoryEntryVar = StringVarExtended(ClearOnNew=True)
+            self.RarityEntryVar = StringVarExtended(ClearOnNew=True)
+            self.DescriptionVar = StringVarExtended(ClearOnNew=True)
+            self.SortOrderVar = StringVarExtended(ClearOnNew=True)
 
             # Item Description Vars
             self.ItemDescriptionVars = {}
@@ -8728,12 +8685,15 @@ class StatusBar:
 
 # Scrolled Text
 class ScrolledText:
-    def __init__(self, master, Width=100, Height=100, Disabled=False, DisabledBackground="light gray", FontSize=None, SavedDataTag=None):
+    def __init__(self, master, Width=100, Height=100, Disabled=False, DisabledBackground="light gray", FontSize=None, SavedDataTag=None, DefaultValue="", ClearOnNew=False):
+        # Store Parameters
         self.Width = Width
         self.Height = Height
         self.Disabled = Disabled
         self.FontSize = FontSize
         self.SavedDataTag = SavedDataTag
+        self.DefaultValue = DefaultValue
+        self.ClearOnNew = ClearOnNew
 
         # Scrolled Text Frame
         self.ScrolledTextFrame = Frame(master, width=self.Width, height=self.Height)
@@ -8760,6 +8720,10 @@ class ScrolledText:
         if self.SavedDataTag is not None:
             SavingAndOpeningInst.SavedData[self.SavedDataTag] = self
 
+        # Add to Clearable Fields List
+        if self.ClearOnNew:
+            SavingAndOpeningInst.ClearableFields.append(self)
+
     def get(self):
         return self.Text.get("1.0", "end-1c")
 
@@ -8783,6 +8747,9 @@ class ScrolledText:
     def UpdateTag(self, Tag):
         self.SavedDataTag = Tag
         SavingAndOpeningInst.SavedData[self.SavedDataTag] = self
+
+    def SetToDefault(self):
+        self.set(self.DefaultValue)
 
     class TrackableText(Text):
         def __init__(self, *args, **kwargs):
