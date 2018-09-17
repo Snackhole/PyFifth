@@ -461,45 +461,6 @@ class SavingAndOpening:
             # Clear Portrait
             Inst["Portrait"].Clear()
 
-            # Set All Preset Roll Modifiers to Default Values
-            for Entry in Inst["PresetRolls"].PresetRollsList:
-                Entry.PresetRollModifierEntryStatModifierInst.DefaultValues()
-
-            # All Ability and Skill Modifiers to Default
-            for Entry in Inst["AbilitiesAndSavingThrows"].AbilityEntriesList:
-                Entry.AbilityEntryModifierStatModifierInst.DefaultValues()
-                Entry.AbilitySavingThrowModifierStatModifierInst.DefaultValues()
-            for Entry in Inst["Skills"].SkillsEntriesList:
-                Entry.ModifierEntryStatModifierInst.DefaultValues()
-
-            # Inventory Values to Default
-            Inst["Inventory"].CarryingCapacityEntryStatModifierInst.DefaultValues()
-
-            # Max HP, AC, and Initiative to Default
-            Inst["CombatAndFeatures"].ACEntryOneStatModifierInst.DefaultValues()
-            Inst["CombatAndFeatures"].ACEntryTwoStatModifierInst.DefaultValues()
-            Inst["CombatAndFeatures"].ACEntryThreeStatModifierInst.DefaultValues()
-            Inst["CombatAndFeatures"].InitiativeEntryStatModifierInst.DefaultValues()
-
-            # Ability Score Derivatives to Defaults
-            AllAbilityScoreDerivativesList = Inst["CombatAndFeatures"].AbilityScoreDerivativesList + Inst["Spellcasting"].SpellcastingAbilitiesList
-            for Ability in AllAbilityScoreDerivativesList:
-                Ability.AttackModifierEntryStatModifierInst.DefaultValues()
-                Ability.SaveDCEntryStatModifierInst.DefaultValues()
-
-            # Passive Perception and Investigation to Default
-            Inst["AbilitiesAndSkills"].PassivePerceptionStatModifierInst.DefaultValues()
-            Inst["AbilitiesAndSkills"].PassiveInvestigationStatModifierInst.DefaultValues()
-
-            # Spell Points to Default
-            Inst["Spellcasting"].SpellPointsMaxEntryStatModifierInst.DefaultValues()
-
-        # NPC Sheet Defaults
-        if WindowInst.Mode == "NPCSheet":
-            # Set All Preset Roll Modifiers to Default Values
-            for Entry in Inst["PresetRolls"].PresetRollsList:
-                Entry.PresetRollModifierEntryStatModifierInst.DefaultValues()
-
         # Unflag Opening
         self.Opening = False
 
