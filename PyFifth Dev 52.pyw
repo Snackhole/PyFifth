@@ -9236,7 +9236,7 @@ class ModeSelect(Tk):
         # Configure Window
         self.wm_title("Select Mode - " + GlobalInst.ScriptName)
         GlobalInst.WindowIcon(self)
-        self.ColumnWidth = 250
+        self.ColumnWidth = 300
         self.grid_columnconfigure(0, minsize=self.ColumnWidth)
         self.grid_columnconfigure(1, minsize=self.ColumnWidth)
 
@@ -9256,27 +9256,31 @@ class ModeSelect(Tk):
 
         # Dice Roller Button
         self.DiceRollerModeButton = ButtonExtended(self, text="Dice Roller", command=lambda: self.SelectMode("DiceRoller"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.DiceRollerModeButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+        self.DiceRollerModeButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
 
         # Encounter Manager Button
         self.EncounterManagerModeButton = ButtonExtended(self, text="Encounter Manager", command=lambda: self.SelectMode("EncounterManager"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.EncounterManagerModeButton.grid(row=2, column=1, sticky=NSEW, padx=2, pady=2)
+        self.EncounterManagerModeButton.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
+
+        # Table Roller Button
+        self.TableRollerModeButton = ButtonExtended(self, text="Table Roller", command=lambda: self.SelectMode("TableRoller"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
+        self.TableRollerModeButton.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Compact Initiative
         self.CompactInitiativeModeButton = ButtonExtended(self, text="Compact Initiative Order", command=lambda: self.SelectMode("CompactInitiativeOrder"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.CompactInitiativeModeButton.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
+        self.CompactInitiativeModeButton.grid(row=4, column=0, sticky=NSEW, padx=2, pady=2)
 
         # NPC Sheet Button
         self.NPCSheetModeButton = ButtonExtended(self, text="NPC Sheet", command=lambda: self.SelectMode("NPCSheet"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.NPCSheetModeButton.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
+        self.NPCSheetModeButton.grid(row=4, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Creature Data Utility Button
         self.CreatureDataUtilityModeButton = ButtonExtended(self, text="Creature Data Utility", command=lambda: self.SelectMode("CreatureDataUtility"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.CreatureDataUtilityModeButton.grid(row=4, column=0, sticky=NSEW, padx=2, pady=2)
+        self.CreatureDataUtilityModeButton.grid(row=5, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Coin Calculator Button
         self.CoinCalculatorModeButton = ButtonExtended(self, text="Coin Calculator", command=lambda: self.SelectMode("CoinCalculator"), bg=GlobalInst.ButtonColor, font=self.ButtonsFont)
-        self.CoinCalculatorModeButton.grid(row=4, column=1, sticky=NSEW, padx=2, pady=2)
+        self.CoinCalculatorModeButton.grid(row=5, column=1, sticky=NSEW, padx=2, pady=2)
 
         # Initial Window Behavior
         GlobalInst.WindowGeometry(self)
