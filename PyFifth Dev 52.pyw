@@ -7637,6 +7637,11 @@ class InitiativeOrder:
             self.InitiativeEntryNotesField.lift()
 
 
+class TableRoller:
+    def __init__(self, master):
+        pass
+
+
 class CompactInitiativeOrder:
     def __init__(self, master):
         # Variables
@@ -8603,6 +8608,10 @@ class StatusBar:
             self.Row = 2
             self.Column = 0
             self.ColumnSpan = 2
+        elif WindowInst.Mode == "TableRoller":
+            self.Row = 1
+            self.Column = 0
+            self.ColumnSpan = 1
         elif WindowInst.Mode == "CompactInitiativeOrder":
             self.Row = 1
             self.Column = 0
@@ -9343,7 +9352,7 @@ class Window(Tk):
             Prefix += " - "
 
         # Current Open File and Save Prompt
-        if self.Mode in ["CharacterSheet", "EncounterManager", "CreatureDataUtility", "DiceRoller", "NPCSheet", "HoardSheet"]:
+        if self.Mode in ["CharacterSheet", "EncounterManager", "TableRoller", "CreatureDataUtility", "DiceRoller", "NPCSheet", "HoardSheet"]:
             CurrentOpenFile = SavingAndOpeningInst.CurrentOpenFilePath.get()
             if CurrentOpenFile != "":
                 CurrentOpenFile = " [" + os.path.basename(CurrentOpenFile) + "]"
@@ -9378,6 +9387,7 @@ if __name__ == "__main__":
     WindowTitles["CharacterSheet"] = "Character Sheet - " + GlobalInst.ScriptName
     WindowTitles["DiceRoller"] = "Dice Roller - " + GlobalInst.ScriptName
     WindowTitles["EncounterManager"] = "Encounter Manager - " + GlobalInst.ScriptName
+    WindowTitles["TableRoller"] = "Table Roller - " + GlobalInst.ScriptName
     WindowTitles["CompactInitiativeOrder"] = "Compact Initiative Order - " + GlobalInst.ScriptName
     WindowTitles["CreatureDataUtility"] = "Creature Data Utility - " + GlobalInst.ScriptName
     WindowTitles["CoinCalculator"] = "Coin Calculator - " + GlobalInst.ScriptName
@@ -9389,6 +9399,8 @@ if __name__ == "__main__":
     MinimumResolutions["CharacterSheet"] = (1208, 712)
     MinimumResolutions["DiceRoller"] = (675, 451)
     MinimumResolutions["EncounterManager"] = (1331, 794)
+    # TODO:  Get actual resolution of TableRoller
+    MinimumResolutions["TableRoller"] = (1, 1)
     MinimumResolutions["CompactInitiativeOrder"] = (347, 613)
     MinimumResolutions["CreatureDataUtility"] = (802, 766)
     MinimumResolutions["CoinCalculator"] = (291, 216)
@@ -9419,6 +9431,12 @@ if __name__ == "__main__":
         EncounterHeaderInst = EncounterHeader(WindowInst.WidgetMaster)
         InitiativeOrderInst = InitiativeOrder(WindowInst.WidgetMaster)
         DiceRollerInst = DiceRoller(WindowInst.WidgetMaster)
+        MenuBarInst = MenuBar(WindowInst)
+        SavingAndOpeningInst.TrackModifiedFields()
+    elif WindowInst.Mode == "TableRoller":
+        StatusBarInst = StatusBar(WindowInst)
+        SavingAndOpeningInst = SavingAndOpening()
+        TableRollerInst = TableRoller(WindowInst.WidgetMaster)
         MenuBarInst = MenuBar(WindowInst)
         SavingAndOpeningInst.TrackModifiedFields()
     elif WindowInst.Mode == "CompactInitiativeOrder":
