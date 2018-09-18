@@ -450,17 +450,6 @@ class SavingAndOpening:
         for Field in self.ClearableFields:
             Field.SetToDefault()
 
-        # Encounter Manager Defaults
-        if WindowInst.Mode == "EncounterManager":
-            for Entry in InitiativeOrderInst.InitiativeEntriesList:
-                Entry.TurnDoneOff()
-                Entry.DeadOff()
-
-        # Character Sheet Defaults
-        if WindowInst.Mode == "CharacterSheet":
-            # Clear Portrait
-            Inst["Portrait"].Clear()
-
         # Unflag Opening
         self.Opening = False
 
@@ -476,6 +465,9 @@ class SavingAndOpening:
         # Calculate Stats
         if WindowInst.Mode == "CharacterSheet":
             CharacterSheetInst.UpdateStatsAndInventory()
+
+        # Update Idle Tasks to Avoid Graphics Hanging
+        WindowInst.update_idletasks()
 
         # Flash Status
         StatusBarInst.FlashStatus("New file started.")
@@ -4441,7 +4433,7 @@ class CharacterSheet:
     # Portrait
     class Portrait():
         def __init__(self, master):
-            self.PortraitSelectedVar = BooleanVarExtended("PortraitSelectedVar", ClearOnNew=True)
+            self.PortraitSelectedVar = BooleanVarExtended("PortraitSelectedVar")
             self.PortraitImage = PhotoImage()
 
             # Portrait Holder Frame (Center In Page)
@@ -4467,6 +4459,9 @@ class CharacterSheet:
             # Portrait Instructions
             self.PortraitInstructions = Label(self.PortraitHolderFrame, text="Portrait must be a .gif file no larger than 400 x 400.")
             self.PortraitInstructions.grid(row=2, column=0, columnspan=3, sticky=NSEW)
+
+            # Add to Clearable Fields
+            SavingAndOpeningInst.ClearableFields.append(self)
 
         def Import(self):
             if self.PortraitSelectedVar.get():
@@ -4500,6 +4495,9 @@ class CharacterSheet:
                     return
             self.PortraitSelectedVar.set(False)
             self.PortraitCanvas.delete("all")
+
+        def SetToDefault(self):
+            self.Clear(Force=True)
 
     # Settings Menu
     class SettingsMenu:
@@ -7157,6 +7155,9 @@ class InitiativeOrder:
                 WidgetToBind.bind("<FocusIn>", self.InitiativeOrderScrolledCanvas.MakeFocusVisible)
             CurrentEntry.Display(CurrentIndex)
 
+        # Add to Clearable Fields
+        SavingAndOpeningInst.ClearableFields.append(self)
+
     def NewRound(self):
         if self.ValidRound():
             pass
@@ -7212,6 +7213,11 @@ class InitiativeOrder:
             messagebox.showerror("Invalid Entry", "Round must be greater than 0.")
             return False
         return True
+
+    def SetToDefault(self):
+        for Entry in self.InitiativeEntriesList:
+            Entry.TurnDoneOff()
+            Entry.DeadOff()
 
     class InitiativeEntry:
         def __init__(self, master, List, ScrollingDisabledVar, Row):
