@@ -506,7 +506,7 @@ class SavingAndOpening:
                         self.OpenErrorsString += Line
         if WindowInst.Mode in ["CharacterSheet", "NPCSheet"]:
             for Entry in Inst["PresetRolls"].PresetRollsList:
-                Entry.PresetRollModifierEntryStatModifierInst.DefaultValues()
+                Entry.PresetRollModifierEntryStatModifierInst.SetToDefault()
 
     # Field Tracking
     def TrackModifiedFields(self):
@@ -5437,7 +5437,7 @@ class StatModifier:
                     pass
                 else:
                     SetVars = False
-                    self.DefaultValues()
+                    self.SetToDefault()
             if SetVars:
                 for Tag, Var in ModifierConfigInst.Variables.items():
                     self.Variables[Tag].set(Var.get())
@@ -5488,45 +5488,45 @@ class StatModifier:
             self.Variables["LevelMaxEntryVar"].UpdateTag(Prefix + "LevelMaxEntryVar" + Suffix)
             self.Variables["LevelMultiplierRoundUpBoxVar"].UpdateTag(Prefix + "LevelMultiplierRoundUpBoxVar" + Suffix)
 
-    def DefaultValues(self):
-        self.Variables["StrengthMultiplierEntryVar"].set("")
-        self.Variables["DexterityMultiplierEntryVar"].set("")
-        self.Variables["ConstitutionMultiplierEntryVar"].set("")
-        self.Variables["IntelligenceMultiplierEntryVar"].set("")
-        self.Variables["WisdomMultiplierEntryVar"].set("")
-        self.Variables["CharismaMultiplierEntryVar"].set("")
-        self.Variables["ProficiencyMultiplierEntryVar"].set("")
-        self.Variables["ManualModifierEntryVar"].set("")
-        self.Variables["StrengthMinEntryVar"].set("")
-        self.Variables["DexterityMinEntryVar"].set("")
-        self.Variables["ConstitutionMinEntryVar"].set("")
-        self.Variables["IntelligenceMinEntryVar"].set("")
-        self.Variables["WisdomMinEntryVar"].set("")
-        self.Variables["CharismaMinEntryVar"].set("")
-        self.Variables["ProficiencyMinEntryVar"].set("")
-        self.Variables["StrengthMaxEntryVar"].set("")
-        self.Variables["DexterityMaxEntryVar"].set("")
-        self.Variables["ConstitutionMaxEntryVar"].set("")
-        self.Variables["IntelligenceMaxEntryVar"].set("")
-        self.Variables["WisdomMaxEntryVar"].set("")
-        self.Variables["CharismaMaxEntryVar"].set("")
-        self.Variables["ProficiencyMaxEntryVar"].set("")
-        self.Variables["StrengthMultiplierRoundUpBoxVar"].set(False)
-        self.Variables["DexterityMultiplierRoundUpBoxVar"].set(False)
-        self.Variables["ConstitutionMultiplierRoundUpBoxVar"].set(False)
-        self.Variables["IntelligenceMultiplierRoundUpBoxVar"].set(False)
-        self.Variables["WisdomMultiplierRoundUpBoxVar"].set(False)
-        self.Variables["CharismaMultiplierRoundUpBoxVar"].set(False)
-        self.Variables["ProficiencyMultiplierRoundUpBoxVar"].set(False)
+    def SetToDefault(self):
+        self.Variables["StrengthMultiplierEntryVar"].SetToDefault()
+        self.Variables["DexterityMultiplierEntryVar"].SetToDefault()
+        self.Variables["ConstitutionMultiplierEntryVar"].SetToDefault()
+        self.Variables["IntelligenceMultiplierEntryVar"].SetToDefault()
+        self.Variables["WisdomMultiplierEntryVar"].SetToDefault()
+        self.Variables["CharismaMultiplierEntryVar"].SetToDefault()
+        self.Variables["ProficiencyMultiplierEntryVar"].SetToDefault()
+        self.Variables["ManualModifierEntryVar"].SetToDefault()
+        self.Variables["StrengthMinEntryVar"].SetToDefault()
+        self.Variables["DexterityMinEntryVar"].SetToDefault()
+        self.Variables["ConstitutionMinEntryVar"].SetToDefault()
+        self.Variables["IntelligenceMinEntryVar"].SetToDefault()
+        self.Variables["WisdomMinEntryVar"].SetToDefault()
+        self.Variables["CharismaMinEntryVar"].SetToDefault()
+        self.Variables["ProficiencyMinEntryVar"].SetToDefault()
+        self.Variables["StrengthMaxEntryVar"].SetToDefault()
+        self.Variables["DexterityMaxEntryVar"].SetToDefault()
+        self.Variables["ConstitutionMaxEntryVar"].SetToDefault()
+        self.Variables["IntelligenceMaxEntryVar"].SetToDefault()
+        self.Variables["WisdomMaxEntryVar"].SetToDefault()
+        self.Variables["CharismaMaxEntryVar"].SetToDefault()
+        self.Variables["ProficiencyMaxEntryVar"].SetToDefault()
+        self.Variables["StrengthMultiplierRoundUpBoxVar"].SetToDefault()
+        self.Variables["DexterityMultiplierRoundUpBoxVar"].SetToDefault()
+        self.Variables["ConstitutionMultiplierRoundUpBoxVar"].SetToDefault()
+        self.Variables["IntelligenceMultiplierRoundUpBoxVar"].SetToDefault()
+        self.Variables["WisdomMultiplierRoundUpBoxVar"].SetToDefault()
+        self.Variables["CharismaMultiplierRoundUpBoxVar"].SetToDefault()
+        self.Variables["ProficiencyMultiplierRoundUpBoxVar"].SetToDefault()
         if self.ACMode:
-            self.Variables["ACBaseEntryVar"].set("")
+            self.Variables["ACBaseEntryVar"].SetToDefault()
         if self.DiceRollerMode:
-            self.Variables["ModifiersSubmitted"].set(False)
+            self.Variables["ModifiersSubmitted"].SetToDefault()
         if WindowInst.Mode == "CharacterSheet":
-            self.Variables["LevelMultiplierEntryVar"].set("")
-            self.Variables["LevelMinEntryVar"].set("")
-            self.Variables["LevelMaxEntryVar"].set("")
-            self.Variables["LevelMultiplierRoundUpBoxVar"].set(False)
+            self.Variables["LevelMultiplierEntryVar"].SetToDefault()
+            self.Variables["LevelMinEntryVar"].SetToDefault()
+            self.Variables["LevelMaxEntryVar"].SetToDefault()
+            self.Variables["LevelMultiplierRoundUpBoxVar"].SetToDefault()
 
     class ModifierConfig:
         def __init__(self, CurrentVariables, BonusTo, ACMode=False, DiceRollerMode=False):
@@ -6710,7 +6710,7 @@ class DiceRoller:
             return
 
         # Clear
-        self.ResultsField.set("")
+        self.ResultsField.SetToDefault()
 
     class PresetRolls:
         def __init__(self, master, ResultsField, CritMinimumEntryVar, PresetRollsFrameRow, PresetRollsScrolledCanvasHeight, PresetRollsScrolledCanvasWidth):
@@ -6923,14 +6923,14 @@ class DiceRoller:
                 self.DiceRollerFields["PresetRollModifierEntryVar" + str(self.Row)] = self.PresetRollModifierEntryVar
                 self.DiceRollerFields["PresetRollSortOrderVar" + str(self.Row)] = self.PresetRollSortOrderVar
 
-            def DefaultValues(self):
-                self.PresetRollNameEntryVar.set("")
-                self.PresetRollDiceNumberEntryVar.set("")
-                self.PresetRollDieTypeEntryVar.set("")
-                self.PresetRollModifierEntryVar.set("")
-                self.PresetRollSortOrderVar.set("")
+            def SetToDefault(self):
+                self.PresetRollNameEntryVar.SetToDefault()
+                self.PresetRollDiceNumberEntryVar.SetToDefault()
+                self.PresetRollDieTypeEntryVar.SetToDefault()
+                self.PresetRollModifierEntryVar.SetToDefault()
+                self.PresetRollSortOrderVar.SetToDefault()
                 if WindowInst.Mode in ["CharacterSheet", "NPCSheet"]:
-                    self.PresetRollModifierEntryStatModifierInst.DefaultValues()
+                    self.PresetRollModifierEntryStatModifierInst.SetToDefault()
 
             def DisableScrolling(self, event):
                 self.ScrollingDisabledVar.set(True)
@@ -7639,7 +7639,296 @@ class InitiativeOrder:
 
 class TableRoller:
     def __init__(self, master):
-        pass
+        # Variables
+        self.TablesDescriptionEntryVar = StringVarExtended("TablesDescriptionEntryVar", ClearOnNew=True)
+
+        # Table Roller Frame
+        self.TableRollerFrame = Frame(master)
+        self.TableRollerFrame.grid(row=0, column=0, sticky=NSEW)
+
+        # Tables Description
+        self.TablesDescriptionFrame = LabelFrame(self.TableRollerFrame, text="Description of Tables:")
+        self.TablesDescriptionFrame.grid_columnconfigure(0, weight=1)
+        self.TablesDescriptionFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+        self.TablesDescriptionEntry = EntryExtended(self.TablesDescriptionFrame, textvariable=self.TablesDescriptionEntryVar, justify=CENTER)
+        self.TablesDescriptionEntry.grid(row=0, column=0, sticky=NSEW)
+
+        # Results Field
+        self.ResultsField = ScrolledText(self.TableRollerFrame, Disabled=True, DisabledBackground=GlobalInst.ButtonColor, SavedDataTag="TableRollerResultsField", ClearOnNew=True, Height=200)
+        self.ResultsField.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.ResultsField.Text.bind("<Button-1>", self.CopyResults)
+        self.ResultsField.Text.bind("<Button-3>", self.ClearResults)
+        self.ResultsFieldTooltip = Tooltip(self.ResultsField.ScrolledTextFrame, "Left-click to copy results to the clipboard.\n\nRight-click to clear.")
+
+        # Tables Frame
+        self.TablesFrame = LabelFrame(self.TableRollerFrame, text="Tables:")
+        self.TablesFrame.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+
+        # Tables Notebook
+        self.TablesNotebook = ttk.Notebook(self.TablesFrame, height=423, width=475)
+        self.TablesNotebook.grid(row=0, column=0)
+        self.TablesNotebook.enable_traversal()
+
+        # Tables Notebook Pages
+        for CurrentIndex in range(1, 11):
+            self.RollTable(self.TablesNotebook, str(CurrentIndex))
+
+    def UpdateResultsField(self, UpdateText):
+        CurrentText = self.ResultsField.get()
+        if CurrentText != "":
+            UpdateText += ("\n") * 2
+        NewText = UpdateText + CurrentText
+        self.ResultsField.set(NewText)
+
+    def CopyResults(self, event):
+        self.ResultsField.Text.clipboard_clear()
+        self.ResultsField.Text.clipboard_append(self.ResultsField.get())
+        StatusBarInst.FlashStatus("Results copied to clipboard.")
+
+    def ClearResults(self, event):
+        # Confirm
+        ClearConfirm = messagebox.askyesno("Clear Results", "Are you sure you want to clear the table roll results?  This cannot be undone.")
+        if not ClearConfirm:
+            return
+
+        # Clear
+        self.ResultsField.SetToDefault()
+
+    class RollTable:
+        def __init__(self, master, TableIndex):
+            # Store Parameters
+            self.master = master
+            self.TableIndex = TableIndex
+
+            # Variables
+            self.TableNameEntryVar = StringVarExtended("Table" + self.TableIndex + "TableNameEntryVar", ClearOnNew=True)
+            self.ScrollingDisabledVar = BooleanVar()
+
+            # Roll Table Frame
+            self.RollTableFrame = Frame(self.master)
+            self.master.add(self.RollTableFrame, text="Table " + self.TableIndex)
+
+            # Table Name
+            self.TableNameFrame = LabelFrame(self.RollTableFrame, text="Table Name:")
+            self.TableNameFrame.grid_columnconfigure(0, weight=1)
+            self.TableNameFrame.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+            self.TableNameEntry = EntryExtended(self.TableNameFrame, textvariable=self.TableNameEntryVar, justify=CENTER)
+            self.TableNameEntry.grid(row=0, column=0, sticky=NSEW)
+
+            # Scrolled Canvas
+            self.RollTableEntriesScrolledCanvasFrame = Frame(self.RollTableFrame)
+            self.RollTableEntriesScrolledCanvasFrame.grid(row=1, column=0, sticky=NSEW)
+            self.RollTableEntriesScrolledCanvas = ScrolledCanvas(self.RollTableEntriesScrolledCanvasFrame, NumberOfColumns=3, ScrollingDisabledVar=self.ScrollingDisabledVar, Width=454, Height=300)
+
+            # Scrolled Canvas Headers
+            self.RollTableEntriesScrolledCanvasWeightHeader = Label(self.RollTableEntriesScrolledCanvas.HeaderFrame, text="Weight", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.RollTableEntriesScrolledCanvasWeightHeader.grid(row=0, column=0, sticky=NSEW)
+            self.RollTableEntriesScrolledCanvasWeightHeader.bind("<Button-1>", lambda event: self.Sort("Weight"))
+            self.RollTableEntriesScrolledCanvasWeightHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Weight", SearchMode=True))
+            self.RollTableEntriesScrolledCanvasWeightHeader.bind("<Button-3>", lambda event: self.Sort("Weight", Reverse=True))
+            self.RollTableEntriesScrolledCanvasWeightTooltip = Tooltip(self.RollTableEntriesScrolledCanvasWeightHeader, GlobalInst.SortTooltipString)
+            self.RollTableEntriesScrolledCanvasResultHeader = Label(self.RollTableEntriesScrolledCanvas.HeaderFrame, text="Result", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.RollTableEntriesScrolledCanvasResultHeader.grid(row=0, column=1, sticky=NSEW)
+            self.RollTableEntriesScrolledCanvasResultHeader.bind("<Button-1>", lambda event: self.Sort("Result"))
+            self.RollTableEntriesScrolledCanvasResultHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Result", SearchMode=True))
+            self.RollTableEntriesScrolledCanvasResultHeader.bind("<Button-3>", lambda event: self.Sort("Result", Reverse=True))
+            self.RollTableEntriesScrolledCanvasResultTooltip = Tooltip(self.RollTableEntriesScrolledCanvasWeightHeader, GlobalInst.SortTooltipString)
+            self.RollTableEntriesScrolledCanvasSortOrderHeader = Label(self.RollTableEntriesScrolledCanvas.HeaderFrame, text="Sort\nOrder", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
+            self.RollTableEntriesScrolledCanvasSortOrderHeader.grid(row=0, column=2, sticky=NSEW)
+            self.RollTableEntriesScrolledCanvasSortOrderHeader.bind("<Button-1>", lambda event: self.Sort("Sort Order"))
+            self.RollTableEntriesScrolledCanvasSortOrderHeader.bind("<Shift-Button-1>", lambda event: self.Sort("Sort Order", SearchMode=True))
+            self.RollTableEntriesScrolledCanvasSortOrderHeader.bind("<Button-3>", lambda event: self.Sort("Sort Order", Reverse=True))
+            self.RollTableEntriesScrolledCanvasSortOrderTooltip = Tooltip(self.RollTableEntriesScrolledCanvasWeightHeader, GlobalInst.SortTooltipString)
+
+            # Roll Table Entries List
+            self.RollTableEntriesList = []
+
+            # Roll Table Entries Count
+            self.RollTableEntriesCount = 100
+
+            # Sort Order Values
+            self.SortOrderValuesList = [""]
+            for CurrentIndex in range(1, self.RollTableEntriesCount + 1):
+                self.SortOrderValuesList.append(str(CurrentIndex))
+
+            # Roll Table Entries
+            for CurrentIndex in range(1, self.RollTableEntriesCount + 1):
+                CurrentEntry = self.RollTableEntry(self.RollTableEntriesScrolledCanvas.WindowFrame, self.RollTableEntriesScrolledCanvas, self.RollTableEntriesList, self.ScrollingDisabledVar, self.SortOrderValuesList,
+                                                   self.TableIndex, CurrentIndex)
+                for WidgetToBind in CurrentEntry.WidgetsList:
+                    WidgetToBind.bind("<FocusIn>", self.RollTableEntriesScrolledCanvas.MakeFocusVisible)
+                CurrentEntry.Display(CurrentIndex)
+
+            # Roll Table Button
+            self.RollTableButtonFont = font.Font(size=16)
+            self.RollTableButton = ButtonExtended(self.RollTableFrame, text="Roll Table", bg=GlobalInst.ButtonColor, font=self.RollTableButtonFont, command=self.Roll)
+            self.RollTableButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+
+        def Roll(self):
+            TableRollerInst.UpdateResultsField("Rolled Table " + self.TableIndex)
+
+        def Sort(self, Column, Reverse=False, SearchMode=False):
+            # List to Sort
+            ListToSort = []
+
+            if SearchMode:
+                SearchStringPrompt = StringPrompt(WindowInst, "Search", "What do you want to search for?")
+                WindowInst.wait_window(SearchStringPrompt.Window)
+                if SearchStringPrompt.DataSubmitted.get():
+                    SearchString = SearchStringPrompt.StringEntryVar.get()
+                else:
+                    return
+
+                # Add Fields to List
+                for CurrentEntry in self.RollTableEntriesList:
+                    ListToSort.append((CurrentEntry, CurrentEntry.SortFields[Column].get().lower()))
+
+                # Sort the List
+                SortedList = sorted(ListToSort, key=lambda x: (x[1] == "", SearchString not in x[1]))
+            else:
+                if Column == "Weight":
+                    # Add Fields to List
+                    for CurrentEntry in self.RollTableEntriesList:
+                        ListToSort.append((CurrentEntry, GlobalInst.GetStringVarAsNumber(CurrentEntry.SortFields[Column])))
+
+                    # Sort the List
+                    SortedList = sorted(ListToSort, key=lambda x: ((not Reverse and x[1] == 0) or (Reverse and x[1] != 0), x[1]), reverse=Reverse)
+                elif Column == "Result":
+                    # Add Fields to List
+                    for CurrentEntry in self.RollTableEntriesList:
+                        ListToSort.append((CurrentEntry, CurrentEntry.SortFields[Column].get()))
+
+                    # Sort the List
+                    SortedList = sorted(ListToSort, key=lambda x: ((not Reverse and x[1] == "") or (Reverse and x[1] != ""), x[1].lower()), reverse=Reverse)
+                elif Column == "Sort Order":
+                    # Add Fields to List
+                    for CurrentEntry in self.RollTableEntriesList:
+                        ListToSort.append((CurrentEntry, GlobalInst.GetStringVarAsNumber(CurrentEntry.SortFields[Column])))
+
+                    # Sort the List
+                    SortedList = sorted(ListToSort, key=lambda x: ((not Reverse and x[1] == 0) or (Reverse and x[1] != 0), x[1]), reverse=Reverse)
+                else:
+                    return
+
+            # Adjust Entries to New Order
+            UpdatedList = []
+            for CurrentIndex in range(len(SortedList)):
+                SortedList[CurrentIndex][0].Display(CurrentIndex + 1)
+                UpdatedList.append(SortedList[CurrentIndex][0])
+                SortedList[CurrentIndex][0].List = UpdatedList
+            self.RollTableEntriesList = UpdatedList
+
+            # Flag Save Prompt
+            SavingAndOpeningInst.SavePrompt = True
+
+            # Update Window Title
+            WindowInst.UpdateWindowTitle()
+
+        class RollTableEntry:
+            def __init__(self, master, Canvas, List, ScrollingDisabledVar, SortOrderValuesList, TableIndex, Row):
+                # Store Parameters
+                self.master = master
+                self.ScrollingDisabledVar = ScrollingDisabledVar
+                self.SortOrderValuesList = SortOrderValuesList
+                self.TableIndex = TableIndex
+                self.Row = Row
+                self.List = List
+                self.Canvas = Canvas
+
+                # Variables
+                self.RollTableEntryWeightEntryVar = StringVarExtended(ClearOnNew=True)
+                self.RollTableEntryResultEntryVar = StringVarExtended(ClearOnNew=True)
+                self.RollTableEntrySortOrderVar = StringVarExtended(ClearOnNew=True)
+
+                # Sort Fields
+                self.SortFields = {}
+                self.SortFields["Weight"] = self.RollTableEntryWeightEntryVar
+                self.SortFields["Result"] = self.RollTableEntryResultEntryVar
+                self.SortFields["Sort Order"] = self.RollTableEntrySortOrderVar
+
+                # Add to List
+                self.List.append(self)
+
+                # Weight
+                self.RollTableEntryWeightEntry = EntryExtended(master, justify=CENTER, width=4, textvariable=self.RollTableEntryWeightEntryVar)
+                self.RollTableEntryWeightEntry.ConfigureValidation(lambda NewText: GlobalInst.ValidateNumberFromString(NewText, "Weight must be a whole number.", MinValue=0, LessThanMinString="Weight cannot be negative."), "key")
+
+                # Result
+                self.RollTableEntryResultEntry = EntryExtended(master, justify=CENTER, width=59, textvariable=self.RollTableEntryResultEntryVar, bg=GlobalInst.ButtonColor)
+                self.RollTableEntryResultEntry.bind("<Control-Up>", lambda event: self.MoveInList(-1))
+                self.RollTableEntryResultEntry.bind("<Control-Down>", lambda event: self.MoveInList(1))
+                self.RollTableEntryResultEntryTooltip = Tooltip(self.RollTableEntryResultEntry, "Ctrl+up or ctrl+down to change position in list.")
+
+                # Sort Order
+                self.RollTableEntrySortOrder = DropdownExtended(master, textvariable=self.RollTableEntrySortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
+                self.RollTableEntrySortOrder.bind("<Enter>", self.DisableScrolling)
+                self.RollTableEntrySortOrder.bind("<Leave>", self.EnableScrolling)
+
+                # List of Widgets
+                self.WidgetsList = [self.RollTableEntryWeightEntry, self.RollTableEntryResultEntry, self.RollTableEntrySortOrder]
+
+            def Display(self, Row):
+                self.Row = Row
+
+                # Set Row Size
+                self.master.grid_rowconfigure(self.Row, minsize=26)
+
+                # Place in Grid
+                self.RollTableEntryWeightEntry.grid(row=self.Row, column=0, sticky=NSEW)
+                self.RollTableEntryResultEntry.grid(row=self.Row, column=1, sticky=NSEW)
+                self.RollTableEntrySortOrder.grid(row=self.Row, column=2, sticky=NSEW)
+
+                # Update Tab Order
+                self.LiftWidgets()
+
+                # Update Tags
+                self.RollTableEntryWeightEntryVar.UpdateTag("Table" + self.TableIndex + "RollTableEntryWeightEntry" + str(self.Row))
+                self.RollTableEntryResultEntryVar.UpdateTag("Table" + self.TableIndex + "RollTableEntryResultEntry" + str(self.Row))
+                self.RollTableEntrySortOrderVar.UpdateTag("Table" + self.TableIndex + "RollTableEntrySortOrder" + str(self.Row))
+
+            def DisableScrolling(self, event):
+                self.ScrollingDisabledVar.set(True)
+
+            def EnableScrolling(self, event):
+                self.ScrollingDisabledVar.set(False)
+
+            def MoveInList(self, Delta=0):
+                # Row Variables
+                LastValidRow = len(self.List)
+                CurrentRow = self.Row
+                SwapRow = max(1, min(CurrentRow + Delta, LastValidRow))
+
+                # Handle Invalid Swap
+                if CurrentRow == SwapRow or Delta == 0:
+                    return
+
+                # Swap Rows
+                CurrentEntryIndex = CurrentRow - 1
+                SwapEntryIndex = SwapRow - 1
+                SwapEntry = self.List[SwapEntryIndex]
+                SwapEntry.Display(CurrentRow)
+                self.Display(SwapRow)
+                self.List[SwapEntryIndex] = self
+                self.List[CurrentEntryIndex] = SwapEntry
+
+                # Handle Visibility
+                WindowInst.update_idletasks()
+                self.Canvas.MakeWidgetVisible(self.RollTableEntryWeightEntry)
+
+                # Update Tab Order
+                for CurrentEntry in self.List:
+                    CurrentEntry.LiftWidgets()
+
+                # Flag Save Prompt
+                SavingAndOpeningInst.SavePrompt = True
+
+                # Update Window Title
+                WindowInst.UpdateWindowTitle()
+
+            def LiftWidgets(self):
+                self.RollTableEntryWeightEntry.lift()
+                self.RollTableEntryResultEntry.lift()
+                self.RollTableEntrySortOrder.lift()
 
 
 class CompactInitiativeOrder:
