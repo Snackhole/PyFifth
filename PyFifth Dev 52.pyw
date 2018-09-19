@@ -128,6 +128,8 @@ class Global:
             Widget.bind("<Control-t>", self.NextTurnCompactInitiativeOrder)
             Widget.bind("<Control-T>", self.ClearTurnsCompactInitiativeOrder)
             Widget.bind("<Control-i>", self.SortInitiativeOrderCompactInitiativeOrder)
+        if WindowInst.Mode == "TableRoller":
+            Widget.bind("<Control-r>", self.RollTableRoller)
 
     def Paste(self, Widget):
         SelectionRange = Widget.tag_ranges("sel")
@@ -184,6 +186,10 @@ class Global:
         CompactInitiativeOrderInst.SortInitiativeOrder()
         return "break"
 
+    def RollTableRoller(self, event):
+        TableRollerInst.Roll()
+        return "break"
+
     def NextFocus(self, Widget):
         Widget.tk_focusNext().focus_set()
         return "break"
@@ -212,6 +218,7 @@ class SavingAndOpening:
         self.FileTypes["CharacterSheet"] = self.FileType("Character file", ".char", "Save Character File", "Open Character File", "Character Data.txt")
         self.FileTypes["NPCSheet"] = self.FileType("NPC file", ".npc", "Save NPC File", "Open NPC File", "NPC Data.txt")
         self.FileTypes["HoardSheet"] = self.FileType("Hoard file", ".hrd", "Save Hoard File", "Open Hoard File", "Hoard Data.txt")
+        self.FileTypes["TableRoller"] = self.FileType("Table file", ".tbl", "Save Table File", "Open Table File", "Table Data.txt")
 
         # Bind Closing Protocol
         WindowInst.wm_protocol("WM_DELETE_WINDOW", self.CloseWindow)
@@ -7654,24 +7661,45 @@ class TableRoller:
         self.TablesDescriptionEntry.grid(row=0, column=0, sticky=NSEW)
 
         # Results Field
-        self.ResultsField = ScrolledText(self.TableRollerFrame, Disabled=True, DisabledBackground=GlobalInst.ButtonColor, SavedDataTag="TableRollerResultsField", ClearOnNew=True, Height=200)
-        self.ResultsField.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.ResultsFieldFrame = LabelFrame(self.TableRollerFrame, text="Results:")
+        self.ResultsFieldFrame.grid_columnconfigure(0, weight=1)
+        self.ResultsFieldFrame.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+        self.ResultsField = ScrolledText(self.ResultsFieldFrame, Disabled=True, DisabledBackground=GlobalInst.ButtonColor, SavedDataTag="TableRollerResultsField", ClearOnNew=True, Height=200)
+        self.ResultsField.grid(row=0, column=0, sticky=NSEW)
         self.ResultsField.Text.bind("<Button-1>", self.CopyResults)
         self.ResultsField.Text.bind("<Button-3>", self.ClearResults)
         self.ResultsFieldTooltip = Tooltip(self.ResultsField.ScrolledTextFrame, "Left-click to copy results to the clipboard.\n\nRight-click to clear.")
 
+        # Roll Table Button
+        self.RollTableButtonFont = font.Font(size=16)
+        self.RollCurrentTableButton = ButtonExtended(self.TableRollerFrame, text="Roll Current Table", bg=GlobalInst.ButtonColor, font=self.RollTableButtonFont, command=self.Roll)
+        self.RollCurrentTableButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+        WindowInst.bind("<Control-r>", lambda event: self.Roll())
+        self.RollCurrentTableButtonTooltip = Tooltip(self.RollCurrentTableButton, "Keyboard Shortcut:  Ctrl+R")
+
         # Tables Frame
         self.TablesFrame = LabelFrame(self.TableRollerFrame, text="Tables:")
-        self.TablesFrame.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+        self.TablesFrame.grid(row=3, column=0, sticky=NSEW, padx=2, pady=2)
 
         # Tables Notebook
         self.TablesNotebook = ttk.Notebook(self.TablesFrame, height=423, width=475)
         self.TablesNotebook.grid(row=0, column=0)
         self.TablesNotebook.enable_traversal()
 
+        # List of Roll Tables
+        self.ListOfRollTables = []
+
         # Tables Notebook Pages
         for CurrentIndex in range(1, 11):
-            self.RollTable(self.TablesNotebook, str(CurrentIndex))
+            self.RollTable(self.TablesNotebook, str(CurrentIndex), self.ListOfRollTables)
+
+    def Roll(self):
+        try:
+            CurrentTable = self.ListOfRollTables[self.TablesNotebook.index(self.TablesNotebook.select())]
+            UpdateText = CurrentTable.GetTableName() + " Result:\n" + CurrentTable.GetResultString()
+        except RecursionError:
+            UpdateText = "Recursive table error!"
+        TableRollerInst.UpdateResultsField(UpdateText)
 
     def UpdateResultsField(self, UpdateText):
         CurrentText = self.ResultsField.get()
@@ -7695,14 +7723,18 @@ class TableRoller:
         self.ResultsField.SetToDefault()
 
     class RollTable:
-        def __init__(self, master, TableIndex):
+        def __init__(self, master, TableIndex, ListOfRollTables):
             # Store Parameters
             self.master = master
             self.TableIndex = TableIndex
+            self.ListOfRollTables = ListOfRollTables
 
             # Variables
             self.TableNameEntryVar = StringVarExtended("Table" + self.TableIndex + "TableNameEntryVar", ClearOnNew=True)
             self.ScrollingDisabledVar = BooleanVar()
+
+            # Append to List
+            self.ListOfRollTables.append(self)
 
             # Roll Table Frame
             self.RollTableFrame = Frame(self.master)
@@ -7718,7 +7750,7 @@ class TableRoller:
             # Scrolled Canvas
             self.RollTableEntriesScrolledCanvasFrame = Frame(self.RollTableFrame)
             self.RollTableEntriesScrolledCanvasFrame.grid(row=1, column=0, sticky=NSEW)
-            self.RollTableEntriesScrolledCanvas = ScrolledCanvas(self.RollTableEntriesScrolledCanvasFrame, NumberOfColumns=3, ScrollingDisabledVar=self.ScrollingDisabledVar, Width=454, Height=300)
+            self.RollTableEntriesScrolledCanvas = ScrolledCanvas(self.RollTableEntriesScrolledCanvasFrame, NumberOfColumns=3, ScrollingDisabledVar=self.ScrollingDisabledVar, Width=454, Height=345)
 
             # Scrolled Canvas Headers
             self.RollTableEntriesScrolledCanvasWeightHeader = Label(self.RollTableEntriesScrolledCanvas.HeaderFrame, text="Weight", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
@@ -7759,13 +7791,38 @@ class TableRoller:
                     WidgetToBind.bind("<FocusIn>", self.RollTableEntriesScrolledCanvas.MakeFocusVisible)
                 CurrentEntry.Display(CurrentIndex)
 
-            # Roll Table Button
-            self.RollTableButtonFont = font.Font(size=16)
-            self.RollTableButton = ButtonExtended(self.RollTableFrame, text="Roll Table", bg=GlobalInst.ButtonColor, font=self.RollTableButtonFont, command=self.Roll)
-            self.RollTableButton.grid(row=2, column=0, sticky=NSEW, padx=2, pady=2)
+        def GetResultString(self):
+            # Compile List of Weights Paired with Results
+            ListOfWeightsAndResults = []
+            for Entry in self.RollTableEntriesList:
+                ListOfWeightsAndResults.append((GlobalInst.GetStringVarAsNumber(Entry.RollTableEntryWeightEntryVar), Entry.RollTableEntryResultEntryVar.get()))
 
-        def Roll(self):
-            TableRollerInst.UpdateResultsField("Rolled Table " + self.TableIndex)
+            # Sum Weights
+            SumOfWeights = sum(WeightAndResult[0] for WeightAndResult in ListOfWeightsAndResults)
+
+            # Define Result String
+            if SumOfWeights <= 0:
+                ResultString = "No weights defined!"
+            else:
+                RolledValue = random.randint(1, SumOfWeights)
+                ResultString = ""
+                for Weight, Result in ListOfWeightsAndResults:
+                    RolledValue -= Weight
+                    if RolledValue <= 0:
+                        ResultString = Result
+                        break
+
+            # Handle White Space Result String
+            if ResultString.rstrip() == "":
+                ResultString = "Undefined result!"
+
+            # Handle Subtable Result
+            if ResultString.startswith(("{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}", "{10}")):
+                ResultTableIndex = int(ResultString.split("}")[0].strip("{")) - 1
+                ResultString = self.ListOfRollTables[ResultTableIndex].GetResultString() + " [From " + self.ListOfRollTables[ResultTableIndex].GetTableName() + "]"
+
+            # Return Final Result
+            return ResultString
 
         def Sort(self, Column, Reverse=False, SearchMode=False):
             # List to Sort
@@ -7824,6 +7881,10 @@ class TableRoller:
             # Update Window Title
             WindowInst.UpdateWindowTitle()
 
+        def GetTableName(self):
+            TableName = self.TableNameEntryVar.get()
+            return TableName if TableName.rstrip() != "" else "Table " + self.TableIndex
+
         class RollTableEntry:
             def __init__(self, master, Canvas, List, ScrollingDisabledVar, SortOrderValuesList, TableIndex, Row):
                 # Store Parameters
@@ -7857,7 +7918,7 @@ class TableRoller:
                 self.RollTableEntryResultEntry = EntryExtended(master, justify=CENTER, width=59, textvariable=self.RollTableEntryResultEntryVar, bg=GlobalInst.ButtonColor)
                 self.RollTableEntryResultEntry.bind("<Control-Up>", lambda event: self.MoveInList(-1))
                 self.RollTableEntryResultEntry.bind("<Control-Down>", lambda event: self.MoveInList(1))
-                self.RollTableEntryResultEntryTooltip = Tooltip(self.RollTableEntryResultEntry, "Ctrl+up or ctrl+down to change position in list.")
+                self.RollTableEntryResultEntryTooltip = Tooltip(self.RollTableEntryResultEntry, "Ctrl+up or ctrl+down to change position in list.\n\nStart with \"{1}\", \"{2}\", \"{3}\", etc., to roll on the corresponding table.")
 
                 # Sort Order
                 self.RollTableEntrySortOrder = DropdownExtended(master, textvariable=self.RollTableEntrySortOrderVar, values=self.SortOrderValuesList, width=5, state="readonly", justify=CENTER)
@@ -9688,8 +9749,7 @@ if __name__ == "__main__":
     MinimumResolutions["CharacterSheet"] = (1208, 712)
     MinimumResolutions["DiceRoller"] = (675, 451)
     MinimumResolutions["EncounterManager"] = (1331, 794)
-    # TODO:  Get actual resolution of TableRoller
-    MinimumResolutions["TableRoller"] = (1, 1)
+    MinimumResolutions["TableRoller"] = (503, 873)
     MinimumResolutions["CompactInitiativeOrder"] = (347, 613)
     MinimumResolutions["CreatureDataUtility"] = (802, 766)
     MinimumResolutions["CoinCalculator"] = (291, 216)
