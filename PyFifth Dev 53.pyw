@@ -1707,9 +1707,9 @@ class CharacterSheet:
                     # Modifier
                     self.ModifierEntry = EntryExtended(master, textvariable=self.TotalModifierVar, width=3, justify=CENTER, cursor="dotbox")
                     self.ModifierEntry.grid(row=Row, column=2, sticky=NSEW)
-                    self.ModifierEntryStatModifierInst = StatModifier(self.ModifierEntry, "<Button-3>", "Left-click on a skill modifier to roll 1d20 with it.\n\nRight-click to set a bonus.", self.SkillName, Cursor="dotbox",
-                                                                      Prefix=self.SkillName + "ModifierEntry")
+                    self.ModifierEntryStatModifierInst = StatModifier(self.ModifierEntry, "<Button-3>", "Left-click on a skill modifier to roll 1d20 with it.\n\nShift+left-click to roll with an alternative ability score modifier.\n\nRight-click to set a bonus.", self.SkillName, Cursor="dotbox", Prefix=self.SkillName + "ModifierEntry")
                     self.ModifierEntry.bind("<Button-1>", self.RollSkill)
+                    self.ModifierEntry.bind("<Shift-Button-1>", self.RollSkillWithAlternativeAbilityScore)
 
                 def CalculateSkillModifier(self, Ability, ProficiencyBonus):
                     Modifier = 0
@@ -1742,6 +1742,117 @@ class CharacterSheet:
                     DiceRollerInst.DieTypeEntryVar.set(20)
                     DiceRollerInst.ModifierEntryVar.set(str(FinalModifier))
                     DiceRollerInst.Roll(self.SkillNameVar.get() + " Check:\n")
+
+                def RollSkillWithAlternativeAbilityScore(self, event):
+                    AlternativeAbilityScoreSkillRollPromptInst = self.AlternativeAbilityScoreSkillRollPrompt(WindowInst, self.ProficiencyBox1Var, self.ProficiencyBox2Var, self.ModifierEntryStatModifierInst, self.SkillName)
+                    WindowInst.wait_window(AlternativeAbilityScoreSkillRollPromptInst.Window)
+                    if AlternativeAbilityScoreSkillRollPromptInst.DataSubmitted.get():
+                        print("Sub")
+
+                class AlternativeAbilityScoreSkillRollPrompt:
+                    def __init__(self, master, ProficiencyBox1Var, ProficiencyBox2Var, ModifierEntryStatModifierInst, SkillName):
+                        # Store Parameters
+                        self.ProficiencyBox1Var = ProficiencyBox1Var
+                        self.ProficiencyBox2Var = ProficiencyBox2Var
+                        self.ModifierEntryStatModifierInst = ModifierEntryStatModifierInst
+                        self.SkillName = SkillName
+
+                        # Split Skill Name
+                        self.SplitSkillName = self.SkillName.split(" (")
+
+                        # Ability Score Values
+                        self.DefaultAbilityScore = "(" + self.SplitSkillName[1]
+                        self.AbilityScoreValuesList = ["(STR)", "(DEX)", "(CON)", "(INT)", "(WIS)", "(CHA)"]
+                        self.AbilityScoreModifiersDictionary = {}
+                        self.AbilityScoreModifiersDictionary["(STR)"] = GlobalInst.GetStringVarAsNumber(CharacterSheetInst.AbilitiesAndSkillsInst.AbilitiesAndSavingThrowsInst.StrengthEntry.AbilityEntryModifierVar)
+                        self.AbilityScoreModifiersDictionary["(DEX)"] = GlobalInst.GetStringVarAsNumber(CharacterSheetInst.AbilitiesAndSkillsInst.AbilitiesAndSavingThrowsInst.DexterityEntry.AbilityEntryModifierVar)
+                        self.AbilityScoreModifiersDictionary["(CON)"] = GlobalInst.GetStringVarAsNumber(CharacterSheetInst.AbilitiesAndSkillsInst.AbilitiesAndSavingThrowsInst.ConstitutionEntry.AbilityEntryModifierVar)
+                        self.AbilityScoreModifiersDictionary["(INT)"] = GlobalInst.GetStringVarAsNumber(CharacterSheetInst.AbilitiesAndSkillsInst.AbilitiesAndSavingThrowsInst.IntelligenceEntry.AbilityEntryModifierVar)
+                        self.AbilityScoreModifiersDictionary["(WIS)"] = GlobalInst.GetStringVarAsNumber(CharacterSheetInst.AbilitiesAndSkillsInst.AbilitiesAndSavingThrowsInst.WisdomEntry.AbilityEntryModifierVar)
+                        self.AbilityScoreModifiersDictionary["(CHA)"] = GlobalInst.GetStringVarAsNumber(CharacterSheetInst.AbilitiesAndSkillsInst.AbilitiesAndSavingThrowsInst.CharismaEntry.AbilityEntryModifierVar)
+
+                        # Skill Name Sans Ability
+                        self.SkillNameSansAbility = self.SplitSkillName[0]
+
+                        # Variables
+                        self.DataSubmitted = BooleanVar()
+                        self.AbilityScoreDropdownVar = StringVar(value=self.DefaultAbilityScore)
+                        self.AbilityScoreDropdownVar.trace_add("write", lambda a, b, c: self.CalculateModifier())
+                        self.ModifierEntryVar = StringVar()
+
+                        # Create Window
+                        self.Window = Toplevel(master)
+                        self.Window.wm_attributes("-toolwindow", 1)
+                        self.Window.wm_title(self.SkillNameSansAbility + " Check")
+
+                        # Ability Selection Frame
+                        self.AbilitySelectionFrame = Frame(self.Window)
+                        self.AbilitySelectionFrame.grid(row=0, column=0, sticky=NSEW, columnspan=2)
+
+                        # Skill Label
+                        self.SkillLabel = Label(self.AbilitySelectionFrame, text=self.SkillNameSansAbility)
+                        self.SkillLabel.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
+
+                        # Ability Score Dropdown
+                        self.AbilityScoreDropdown = DropdownExtended(self.AbilitySelectionFrame, values=self.AbilityScoreValuesList, textvariable=self.AbilityScoreDropdownVar, state="readonly", width=7, justify=CENTER)
+                        self.AbilityScoreDropdown.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
+
+                        # Modifier Entry
+                        self.ModifierEntry = EntryExtended(self.AbilitySelectionFrame, textvariable=self.ModifierEntryVar, state=DISABLED, justify=CENTER, width=5, disabledbackground="light gray", disabledforeground="black", cursor="arrow")
+                        self.ModifierEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2, columnspan=2)
+
+                        # Submit Button
+                        self.RollButton = ButtonExtended(self.Window, text="Roll", command=self.Roll, bg=GlobalInst.ButtonColor)
+                        self.RollButton.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
+
+                        # Cancel Button
+                        self.CancelButton = ButtonExtended(self.Window, text="Cancel", command=self.Cancel, bg=GlobalInst.ButtonColor)
+                        self.CancelButton.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
+
+                        # Prevent Main Window Input
+                        self.Window.grab_set()
+
+                        # Handle Config Window Geometry and Focus
+                        GlobalInst.WindowGeometry(self.Window, IsDialog=True, DialogMaster=WindowInst)
+                        self.Window.focus_force()
+
+                        # Focus On Dropdown
+                        self.AbilityScoreDropdown.focus_set()
+
+                        # Calculate Modifier
+                        self.CalculateModifier()
+
+                    def Roll(self):
+                        self.DataSubmitted.set(True)
+                        self.Window.destroy()
+
+                    def Cancel(self):
+                        self.DataSubmitted.set(False)
+                        self.Window.destroy()
+
+                    def CalculateModifier(self):
+                        Modifier = 0
+                        ProficiencyBonus = GlobalInst.GetStringVarAsNumber(CharacterSheetInst.ProficiencyBonusEntryVar)
+                        Proficiency1 = self.ProficiencyBox1Var.get()
+                        Proficiency2 = self.ProficiencyBox2Var.get()
+                        if Proficiency1:
+                            Modifier += ProficiencyBonus
+                        if Proficiency2:
+                            Modifier += ProficiencyBonus
+                        AbilityScoreString = self.AbilityScoreDropdownVar.get()
+                        Modifier += self.AbilityScoreModifiersDictionary[AbilityScoreString] + self.ModifierEntryStatModifierInst.GetModifier()
+                        JackOfAllTradesModifier = Modifier
+                        RemarkableAthleteModifier = Modifier
+                        if not Proficiency1 and not Proficiency2 and CharacterSheetInst.RemarkableAthleteBoxVar.get():
+                            if AbilityScoreString in ["(STR)", "(DEX)", "(CON)"]:
+                                RemarkableAthleteModifier += math.ceil(ProficiencyBonus / 2)
+                        if not Proficiency1 and not Proficiency2 and CharacterSheetInst.JackOfAllTradesBoxVar.get():
+                            JackOfAllTradesModifier += math.floor(ProficiencyBonus / 2)
+                        FinalModifier = max(Modifier, RemarkableAthleteModifier, JackOfAllTradesModifier)
+                        ModifierSign = ""
+                        if FinalModifier >= 1:
+                            ModifierSign = "+"
+                        self.ModifierEntryVar.set(ModifierSign + str(FinalModifier))
 
     # Combat and Features
     class CombatAndFeatures:
@@ -4056,8 +4167,6 @@ class CharacterSheet:
                 def Cancel(self):
                     self.DataSubmitted.set(False)
                     self.Window.destroy()
-
-                    return None
 
                 def GetData(self):
                     return GlobalInst.GetStringVarAsNumber(self.ConsumptionRateEntryVar, Mode="Decimal")
