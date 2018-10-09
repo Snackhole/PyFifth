@@ -1747,7 +1747,10 @@ class CharacterSheet:
                     AlternativeAbilityScoreSkillRollPromptInst = self.AlternativeAbilityScoreSkillRollPrompt(WindowInst, self.ProficiencyBox1Var, self.ProficiencyBox2Var, self.ModifierEntryStatModifierInst, self.SkillName)
                     WindowInst.wait_window(AlternativeAbilityScoreSkillRollPromptInst.Window)
                     if AlternativeAbilityScoreSkillRollPromptInst.DataSubmitted.get():
-                        print("Sub")
+                        DiceRollerInst.DiceNumberEntryVar.set(1)
+                        DiceRollerInst.DieTypeEntryVar.set(20)
+                        DiceRollerInst.ModifierEntryVar.set(GlobalInst.GetStringVarAsNumber(AlternativeAbilityScoreSkillRollPromptInst.ModifierEntryVar))
+                        DiceRollerInst.Roll(AlternativeAbilityScoreSkillRollPromptInst.SkillNameSansAbility + " " + AlternativeAbilityScoreSkillRollPromptInst.AbilityScoreDropdownVar.get() + " Check:\n")
 
                 class AlternativeAbilityScoreSkillRollPrompt:
                     def __init__(self, master, ProficiencyBox1Var, ProficiencyBox2Var, ModifierEntryStatModifierInst, SkillName):
