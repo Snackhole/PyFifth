@@ -6,7 +6,7 @@ from PyInstaller import __main__ as PyInstall
 
 def Build():
     # Version String
-    Version = "Dev 53"
+    Version = "Dev 54"
 
     # Build Variables
     ExecutableScript = "PyFifth " + Version + ".pyw"
