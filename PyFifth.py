@@ -13,7 +13,14 @@ from Build import BuildVariables
 
 
 def StartApp():
-    pass
+    AppInst = QApplication(sys.argv)
+
+    # Main Window Interface
+    ScriptName = BuildVariables["VersionedAppName"]
+    # MainWindowInst = MainWindow(ScriptName, AbsoluteDirectoryPath, AppInst)
+
+    # Enter Main Loop
+    sys.exit(AppInst.exec_())
 
 
 if __name__ == "__main__":
