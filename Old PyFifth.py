@@ -30,17 +30,6 @@ class CharacterSheet:
             if CalculatedModifierString not in ["", CurrentModifierString]:
                 Entry.PresetRollModifierEntryVar.set(CalculatedModifierString)
 
-        # Calculate Max HP
-        self.CombatAndFeaturesInst.CalculateMaxHP(ConstitutionModifier, CharacterLevelValue)
-
-        # Calculate Initiative Bonus
-        InitiativeStatModifier = self.CombatAndFeaturesInst.InitiativeEntryStatModifierInst.GetModifier()
-        TotalInitiativeBonus = InitiativeStatModifier + DexterityModifier
-        InitiativeBonusSign = ""
-        if TotalInitiativeBonus > 0:
-            InitiativeBonusSign = "+"
-        self.CombatAndFeaturesInst.InitiativeEntryVar.set(InitiativeBonusSign + str(TotalInitiativeBonus))
-
         # Calculate Ability Score Derivatives
         AllAbilityScoreDerivativesList = self.CombatAndFeaturesInst.AbilityScoreDerivativesList + self.SpellcastingInst.SpellcastingAbilitiesList
         for Ability in AllAbilityScoreDerivativesList:

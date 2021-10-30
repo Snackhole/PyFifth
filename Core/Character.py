@@ -126,6 +126,10 @@ class Character:
         # Temp Health
         self.Stats["Temp Health"] = 0
 
+        # Initiative Stat Modifier
+        self.Stats["Initiative Stat Modifier"] = self.CreateStatModifier()
+        self.Stats["Initiative Stat Modifier"]["Dexterity Multiplier"] = 1
+
         # Spellcasting Enabled
         self.Stats["Spellcasting Enabled"] = True
 
@@ -182,6 +186,9 @@ class Character:
                 MaxHealth += self.Stats["Max Health Per Level"][str(Level)]
             MaxHealth += (DerivedStats["Constitution Modifier"] + self.Stats["Bonus Max Health Per Level"]) * self.Stats["Level"]
             DerivedStats["Max Health"] = MaxHealth
+        
+        # Initiative
+        DerivedStats["Initiative Modifier"] = self.CalculateStatModifier(self.Stats["Initiative Stat Modifier"])
 
         # Return Derived Stats Dictionary
         return DerivedStats
