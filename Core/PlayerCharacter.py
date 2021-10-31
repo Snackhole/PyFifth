@@ -83,6 +83,14 @@ class PlayerCharacter(Character):
         # Weight Per Coin
         self.WeightPerCoin = Decimal(0.02)
 
+        # Coin Values in CP
+        self.CoinValuesInCP = {}
+        self.CoinValuesInCP["CPValueInCP"] = Decimal(1)
+        self.CoinValuesInCP["SPValueInCP"] = Decimal(10)
+        self.CoinValuesInCP["EPValueInCP"] = Decimal(50)
+        self.CoinValuesInCP["GPValueInCP"] = Decimal(100)
+        self.CoinValuesInCP["PPValueInCP"] = Decimal(1000)
+
     def CreateStats(self):
         # Common Character Stats
         super().CreateStats()
@@ -216,8 +224,8 @@ class PlayerCharacter(Character):
         self.Stats["Coins"]["PP"] = 0
 
         # Supply Consumption Rates
-        self.Stats["Food Consumption Rate"] = Decimal(1)
-        self.Stats["Water Consumption Rate"] = Decimal(8)
+        self.Stats["Food Consumption Rate"] = 1
+        self.Stats["Water Consumption Rate"] = 8
 
         # Stat Calculation Features
         self.Stats["Jack Of All Trades"] = False
@@ -374,12 +382,14 @@ class PlayerCharacter(Character):
         DerivedStats["Item Values"] = Values
 
         # Calculate Supply Days
-        if self.Stats["Food Consumption Rate"] > Decimal(0):
-            FoodDays = (Loads["Food"] / self.Stats["Food Consumption Rate"]).quantize(Decimal("0.01"))
+        FoodRate = Decimal(self.Stats["Food Consumption Rate"])
+        WaterRate = Decimal(self.Stats["Water Consumption Rate"])
+        if FoodRate > Decimal(0):
+            FoodDays = (Loads["Food"] / FoodRate).quantize(Decimal("0.01"))
         else:
             FoodDays = None
-        if self.Stats["Water Consumption Rate"] > Decimal(0):
-            WaterDays = (Loads["Water"] / self.Stats["Water Consumption Rate"]).quantize(Decimal("0.01"))
+        if WaterRate > Decimal(0):
+            WaterDays = (Loads["Water"] / WaterRate).quantize(Decimal("0.01"))
         else:
             WaterDays = None
         DerivedStats["Days of Food"] = FoodDays
@@ -601,6 +611,10 @@ class PlayerCharacter(Character):
         Totals = {}
         Totals["Item Total Weight"] = Decimal(Item["Item Count"]) * Decimal(Item["Item Unit Weight"])
         Totals["Item Total Value"] = Decimal(Item["Item Count"]) * Decimal(Item["Item Unit Value"]) * Decimal(self.CoinValues[Item["Item Unit Value Denomination"]])
+
+    def AlterCoinCounts(self, AlteredCounts):
+        for Denomination, Count in AlteredCounts.items():
+            self.Stats["Coins"][Denomination] = Count
 
     # Additional Notes Methods
     def AddNote(self, NoteName, NoteText):
