@@ -304,6 +304,54 @@ class PlayerCharacter(Character):
         CoinWeight = TotalCoinCount * self.WeightPerCoin
         DerivedStats["Weight of Coins"] = CoinWeight.quantize(Decimal("0.01"))
 
+        # Loads and Values
+        Loads = {}
+        Loads["Total"] = Decimal(0)
+        Loads["Gear"] = Decimal(0)
+        Loads["Food"] = Decimal(0)
+        Loads["Water"] = Decimal(0)
+        Loads["Treasure"] = Decimal(0)
+        Loads["Misc."] = Decimal(0)
+        Loads[""] = Decimal(0)
+
+        Values = {}
+        Values["Total"] = Decimal(0)
+        Values["Gear"] = Decimal(0)
+        Values["Food"] = Decimal(0)
+        Values["Water"] = Decimal(0)
+        Values["Treasure"] = Decimal(0)
+        Values["Misc."] = Decimal(0)
+        Values[""] = Decimal(0)
+
+        # Add Coins to Loads and Values
+        Loads["Total"] += CoinWeight
+        Loads["Treasure"] += CoinWeight
+        Values["Total"] += CoinValue
+        Values["Treasure"] += CoinValue
+
+        # Update Loads and Values from Inventory Items
+        for ItemIndex in range(0, len(self.Stats["Inventory"])):
+            # Per-Item Variables
+            Item = self.Stats["Inventory"][ItemIndex]
+            Tag = Item["Item Category Tag"]
+
+            # Total Weight and Value
+            TotalWeightAndValue = self.CalculateItemTotalWeightAndValue(ItemIndex)
+            TotalItemWeight = TotalWeightAndValue["Item Total Weight"]
+            TotalItemValue = TotalWeightAndValue["Item Total Value"]
+
+            # Totals
+            Loads["Total"] += TotalItemWeight
+            Values["Total"] += TotalItemValue
+
+            # Tags
+            Loads[Tag] += TotalItemWeight
+            Values[Tag] += TotalItemValue
+
+        # Add Loads and Values to Derived Stats
+        DerivedStats["Item Loads"] = Loads
+        DerivedStats["Item Values"] = Values
+
         # Return Derived Stats Dictionary
         return DerivedStats
 
@@ -479,6 +527,47 @@ class PlayerCharacter(Character):
         SwapTarget = self.Stats["Spell List"][TargetIndex]
         self.Stats["Spell List"][TargetIndex] = self.Stats["Spell List"][SpellIndex]
         self.Stats["Spell List"][SpellIndex] = SwapTarget
+
+    # Inventory Methods
+    def AddInventoryItem(self, ItemName, ItemCount, ItemUnitWeight, ItemUnitValue, ItemUnitValueDenomination, ItemCategoryTag, ItemRarity, ItemDescription):
+        NewItem = {}
+        NewItem["Item Name"] = ItemName
+        NewItem["Item Count"] = ItemCount
+        NewItem["Item Unit Weight"] = ItemUnitWeight
+        NewItem["Item Unit Value"] = ItemUnitValue
+        NewItem["Item Unit Value Denomination"] = ItemUnitValueDenomination
+        NewItem["Item Category Tag"] = ItemCategoryTag
+        NewItem["Item Rarity"] = ItemRarity
+        NewItem["Item Description"] = ItemDescription
+        self.Stats["Inventory"].append(NewItem)
+
+    def EditInventoryItem(self, ItemIndex, ItemName, ItemCount, ItemUnitWeight, ItemUnitValue, ItemUnitValueDenomination, ItemCategoryTag, ItemRarity, ItemDescription):
+        Item = self.Stats["Inventory"][ItemIndex]
+        Item["Item Name"] = ItemName
+        Item["Item Count"] = ItemCount
+        Item["Item Unit Weight"] = ItemUnitWeight
+        Item["Item Unit Value"] = ItemUnitValue
+        Item["Item Unit Value Denomination"] = ItemUnitValueDenomination
+        Item["Item Category Tag"] = ItemCategoryTag
+        Item["Item Rarity"] = ItemRarity
+        Item["Item Description"] = ItemDescription
+
+    def DeleteInventoryItem(self, ItemIndex):
+        del self.Stats["Inventory"][ItemIndex]
+
+    def MoveInventoryItem(self, ItemIndex, Delta):
+        TargetIndex = ItemIndex + Delta
+        if TargetIndex < 0 or TargetIndex >= len(self.Stats["Inventory"]):
+            return
+        SwapTarget = self.Stats["Inventory"][TargetIndex]
+        self.Stats["Inventory"][TargetIndex] = self.Stats["Inventory"][ItemIndex]
+        self.Stats["Inventory"][ItemIndex] = SwapTarget
+
+    def CalculateItemTotalWeightAndValue(self, ItemIndex):
+        Item = self.Stats["Inventory"][ItemIndex]
+        Totals = {}
+        Totals["Item Total Weight"] = Decimal(Item["Item Count"]) * Decimal(Item["Item Unit Weight"])
+        Totals["Item Total Value"] = Decimal(Item["Item Count"]) * Decimal(Item["Item Unit Value"]) * Decimal(self.CoinValues[Item["Item Unit Value Denomination"]])
 
     # Additional Notes Methods
     def AddNote(self, NoteName, NoteText):
