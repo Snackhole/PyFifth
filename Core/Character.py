@@ -168,6 +168,7 @@ class Character:
 
         # Concentrating
         self.Stats["Concentrating"] = True
+        self.Stats["Enable Concentration Check"] = True
 
         # Portrait
         self.Stats["Portrait"] = None
@@ -298,11 +299,54 @@ class Character:
     def GetBaseAbilityModifier(self, AbilityScore):
         return math.floor((AbilityScore - 10) / 2)
 
+    # Combat Methods
+    def Damage(self, DamageAmount):
+        TotalDamageAmount = DamageAmount
+        CurrentTempHealth = self.Stats["Temp Health"]
+        CurrentHealth = self.Stats["Current Health"]
+        if CurrentTempHealth == 0:
+            self.Stats["Current Health"] = CurrentHealth - DamageAmount
+        elif CurrentTempHealth >= 1:
+            if CurrentTempHealth < DamageAmount:
+                DamageAmount -= CurrentTempHealth
+                self.Stats["Temp Health"] = 0
+                self.Stats["Current Health"] = CurrentHealth - DamageAmount
+            elif CurrentTempHealth >= DamageAmount:
+                self.Stats["Temp Health"] = CurrentTempHealth - DamageAmount
+        if self.Stats["Concentrating"] and self.Stats["Enable Concentration Check"]:
+            ConcentrationDC = max(10, math.ceil(TotalDamageAmount / 2))
+            return ConcentrationDC
+        else:
+            return None
+
+    def Heal(self, HealingAmount, MaxHealth):
+        CurrentHealth = self.Stats["Current Health"]
+        HealedValue = HealingAmount + max(CurrentHealth, 0)
+        HealedValue = min(HealedValue, MaxHealth)
+        self.Stats["Current Health"] = HealedValue
+
+    # TODO
+    def RollInitiative(self):
+        # BaseModifier = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryVar)
+        # JackOfAllTradesModifier = BaseModifier
+        # RemarkableAthleteModifier = BaseModifier
+        # ProficiencyBonus = GlobalInst.GetStringVarAsNumber(CharacterSheetInst.ProficiencyBonusEntryVar)
+        # if CharacterSheetInst.RemarkableAthleteBoxVar.get():
+        #     RemarkableAthleteModifier += math.ceil(ProficiencyBonus / 2)
+        # if CharacterSheetInst.JackOfAllTradesBoxVar.get():
+        #     JackOfAllTradesModifier += math.floor(ProficiencyBonus / 2)
+        # FinalModifier = max(BaseModifier, RemarkableAthleteModifier, JackOfAllTradesModifier)
+        # DiceRollerInst.DiceNumberEntryVar.set(1)
+        # DiceRollerInst.DieTypeEntryVar.set(20)
+        # DiceRollerInst.ModifierEntryVar.set(str(FinalModifier))
+        # DiceRollerInst.Roll("Initiative:\n")
+        pass
+
     # Feature Methods
-    def AddFeature(self):
+    def AddFeature(self, FeatureName, FeatureText):
         NewFeature = {}
-        NewFeature["Feature Name"] = ""
-        NewFeature["Feature Text"] = ""
+        NewFeature["Feature Name"] = FeatureName
+        NewFeature["Feature Text"] = FeatureText
         self.Stats["Features"].append(NewFeature)
 
     def EditFeature(self, FeatureIndex, FeatureName, FeatureText):
