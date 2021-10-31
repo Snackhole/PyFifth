@@ -200,6 +200,9 @@ class Character:
         self.Stats["Current Spell Points"] = 0
         self.Stats["Spell Points Stat Modifier"] = self.CreateStatModifier()
 
+        # Spell List
+        self.Stats["Spell List"] = []
+
         # Portrait
         self.Stats["Portrait"] = None
         self.Stats["Portrait Enabled"] = True
@@ -431,3 +434,37 @@ class Character:
         if ManualSpellPointsAmount > 0:
             RestoredPoints += ManualSpellPointsAmount
         self.Stats["Current Spell Points"] = min(MaxSpellPoints, CurrentSpellPoints + RestoredPoints)
+
+    def AddSpell(self, SpellName, SpellSchool, SpellCastingTime, SpellRange, SpellComponents, SpellDuration, SpellText, SpellPrepared):
+        Spell = {}
+        Spell["Spell Name"] = SpellName
+        Spell["Spell School"] = SpellSchool
+        Spell["Spell Casting Time"] = SpellCastingTime
+        Spell["Spell Range"] = SpellRange
+        Spell["Spell Components"] = SpellComponents
+        Spell["Spell Duration"] = SpellDuration
+        Spell["Spell Text"] = SpellText
+        Spell["Spell Prepared"] = SpellPrepared
+        self.Stats["Spell List"].append(Spell)
+
+    def EditSpell(self, SpellIndex, SpellName, SpellSchool, SpellCastingTime, SpellRange, SpellComponents, SpellDuration, SpellText, SpellPrepared):
+        Spell = self.Stats["Spell List"][SpellIndex]
+        Spell["Spell Name"] = SpellName
+        Spell["Spell School"] = SpellSchool
+        Spell["Spell Casting Time"] = SpellCastingTime
+        Spell["Spell Range"] = SpellRange
+        Spell["Spell Components"] = SpellComponents
+        Spell["Spell Duration"] = SpellDuration
+        Spell["Spell Text"] = SpellText
+        Spell["Spell Prepared"] = SpellPrepared
+
+    def DeleteSpell(self, SpellIndex):
+        del self.Stats["Spell List"][SpellIndex]
+
+    def MoveSpell(self, SpellIndex, Delta):
+        TargetIndex = SpellIndex + Delta
+        if TargetIndex < 0 or TargetIndex >= len(self.Stats["Spell List"]):
+            return
+        SwapTarget = self.Stats["Spell List"][TargetIndex]
+        self.Stats["Spell List"][TargetIndex] = self.Stats["Spell List"][SpellIndex]
+        self.Stats["Spell List"][SpellIndex] = SwapTarget
