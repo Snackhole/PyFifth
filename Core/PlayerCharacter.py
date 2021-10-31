@@ -201,6 +201,11 @@ class PlayerCharacter(Character):
         self.Stats["Observant"] = False
         self.Stats["Lucky Halfling"] = False
 
+        # Notes
+        self.Stats["Notes 1"] = ""
+        self.Stats["Notes 2"] = ""
+        self.Stats["Additional Notes"] = []
+
     def GetDerivedStats(self):
         # Common Derived Stats
         DerivedStats = super().GetDerivedStats()
@@ -423,16 +428,16 @@ class PlayerCharacter(Character):
         self.Stats["Current Spell Points"] = min(MaxSpellPoints, CurrentSpellPoints + RestoredPoints)
 
     def AddSpell(self, SpellName, SpellSchool, SpellCastingTime, SpellRange, SpellComponents, SpellDuration, SpellText, SpellPrepared):
-        Spell = {}
-        Spell["Spell Name"] = SpellName
-        Spell["Spell School"] = SpellSchool
-        Spell["Spell Casting Time"] = SpellCastingTime
-        Spell["Spell Range"] = SpellRange
-        Spell["Spell Components"] = SpellComponents
-        Spell["Spell Duration"] = SpellDuration
-        Spell["Spell Text"] = SpellText
-        Spell["Spell Prepared"] = SpellPrepared
-        self.Stats["Spell List"].append(Spell)
+        NewSpell = {}
+        NewSpell["Spell Name"] = SpellName
+        NewSpell["Spell School"] = SpellSchool
+        NewSpell["Spell Casting Time"] = SpellCastingTime
+        NewSpell["Spell Range"] = SpellRange
+        NewSpell["Spell Components"] = SpellComponents
+        NewSpell["Spell Duration"] = SpellDuration
+        NewSpell["Spell Text"] = SpellText
+        NewSpell["Spell Prepared"] = SpellPrepared
+        self.Stats["Spell List"].append(NewSpell)
 
     def EditSpell(self, SpellIndex, SpellName, SpellSchool, SpellCastingTime, SpellRange, SpellComponents, SpellDuration, SpellText, SpellPrepared):
         Spell = self.Stats["Spell List"][SpellIndex]
@@ -455,3 +460,26 @@ class PlayerCharacter(Character):
         SwapTarget = self.Stats["Spell List"][TargetIndex]
         self.Stats["Spell List"][TargetIndex] = self.Stats["Spell List"][SpellIndex]
         self.Stats["Spell List"][SpellIndex] = SwapTarget
+
+    # Additional Notes Methods
+    def AddNote(self, NoteName, NoteText):
+        NewNote = {}
+        NewNote["Note Name"] = NoteName
+        NewNote["Note Text"] = NoteText
+        self.Stats["Additional Notes"].append(NewNote)
+
+    def EditNote(self, NoteIndex, NoteName, NoteText):
+        Note = self.Stats["Additional Notes"][NoteIndex]
+        Note["Note Name"] = NoteName
+        Note["Note Text"] = NoteText
+
+    def DeleteNote(self, NoteIndex):
+        del self.Stats["Additional Notes"][NoteIndex]
+
+    def MoveNote(self, NoteIndex, Delta):
+        TargetIndex = NoteIndex + Delta
+        if TargetIndex < 0 or TargetIndex >= len(self.Stats["Additional Notes"]):
+            return
+        SwapTarget = self.Stats["Additional Notes"][TargetIndex]
+        self.Stats["Additional Notes"][TargetIndex] = self.Stats["Additional Notes"][NoteIndex]
+        self.Stats["Additional Notes"][NoteIndex] = SwapTarget
