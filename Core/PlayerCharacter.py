@@ -98,6 +98,36 @@ class PlayerCharacter(Character):
         # Character Name
         self.Stats["Character Name"] = ""
 
+        # Character Race
+        self.Stats["Character Race"] = ""
+
+        # Character Background
+        self.Stats["Character Background"] = ""
+
+        # Character Alignment
+        self.Stats["Character Alignment"] = ""
+
+        # Character Age
+        self.Stats["Character Age"] = ""
+
+        # Character Physical Appearance
+        self.Stats["Character Physical Appearance"] = ""
+
+        # Character Personality Traits
+        self.Stats["Character Personality Traits"] = ""
+
+        # Character Bonds
+        self.Stats["Character Bonds"] = ""
+
+        # Character Ideals
+        self.Stats["Character Ideals"] = ""
+
+        # Character Flaws
+        self.Stats["Character Flaws"] = ""
+
+        # Character Backstory
+        self.Stats["Character Backstory"] = ""
+
         # Character Class
         self.Stats["Character Class"] = ""
 
