@@ -30,71 +30,11 @@ class CharacterSheet:
             if CalculatedModifierString not in ["", CurrentModifierString]:
                 Entry.PresetRollModifierEntryVar.set(CalculatedModifierString)
 
-        # Calculate Ability Score Derivatives
-        AllAbilityScoreDerivativesList = self.CombatAndFeaturesInst.AbilityScoreDerivativesList + self.SpellcastingInst.SpellcastingAbilitiesList
-        for Ability in AllAbilityScoreDerivativesList:
-            AbilityScore = Ability.AbilityScoreSelectionDropdownVar.get()
-            AbilityModifier = 0
-            AttackModifierStatModifier = Ability.AttackModifierEntryStatModifierInst.GetModifier()
-            SaveDCStatModifier = Ability.SaveDCEntryStatModifierInst.GetModifier()
-            if AbilityScore != "":
-                if AbilityScore == "STR":
-                    AbilityModifier = StrengthModifier
-                elif AbilityScore == "DEX":
-                    AbilityModifier = DexterityModifier
-                elif AbilityScore == "CON":
-                    AbilityModifier = ConstitutionModifier
-                elif AbilityScore == "INT":
-                    AbilityModifier = IntelligenceModifier
-                elif AbilityScore == "WIS":
-                    AbilityModifier = WisdomModifier
-                elif AbilityScore == "CHA":
-                    AbilityModifier = CharismaModifier
-                AttackModifier = AbilityModifier + ProficiencyModifier + AttackModifierStatModifier
-                AttackModifierSign = ""
-                if AttackModifier > 0:
-                    AttackModifierSign = "+"
-                Ability.AttackModifierEntryVar.set(AttackModifierSign + str(AttackModifier))
-                SaveDC = AbilityModifier + ProficiencyModifier + SaveDCStatModifier + 8
-                Ability.SaveDCEntryVar.set(str(SaveDC))
-            elif AbilityScore == "":
-                Ability.AttackModifierEntryVar.set("N/A")
-                Ability.SaveDCEntryVar.set("N/A")
-
         # Calculate Spell Points
         self.SpellcastingInst.CalculateSpellPoints()
 
         # Calculate Inventory
         self.InventoryInst.Calculate()
-
-    def Settings(self):
-        # Create Config Window and Wait
-        SettingsMenuInst = self.SettingsMenu(WindowInst, self.SettingsMenuVars)
-        WindowInst.wait_window(SettingsMenuInst.Window)
-
-        # Handle Variables
-        if SettingsMenuInst.DataSubmitted.get():
-            for Tag, Var in SettingsMenuInst.Vars.items():
-                self.SettingsMenuVars[Tag].set(Var.get())
-            self.SpellcasterToggle()
-            self.PortraitToggle()
-
-        # Update Stats and Inventory
-        self.UpdateStatsAndInventory()
-
-    def SpellcasterToggle(self):
-        Spellcaster = self.SpellcasterBoxVar.get()
-        if Spellcaster:
-            self.CharacterStatsNotebook.add(self.SpellcastingPage)
-        if not Spellcaster:
-            self.CharacterStatsNotebook.hide(2)
-
-    def PortraitToggle(self):
-        Portrait = self.PortraitBoxVar.get()
-        if Portrait:
-            self.CharacterStatsNotebook.add(self.PortraitPage)
-        if not Portrait:
-            self.CharacterStatsNotebook.hide(6)
 
     # Combat and Features
     class CombatAndFeatures:

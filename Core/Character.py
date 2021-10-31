@@ -81,6 +81,17 @@ class Character:
             self.Stats["Ability Scores"][Ability + " Stat Modifier"] = self.CreateStatModifier()
             self.Stats["Ability Scores"][Ability + " Save Stat Modifier"] = self.CreateStatModifier()
 
+        # Ability Score Derivatives
+        self.Stats["Ability Score Derivatives"] = {}
+        for Ability in self.Abilities:
+            self.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"] = self.CreateStatModifier()
+            self.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"][Ability + " Multiplier"] = 1
+            self.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"]["Proficiency Multiplier"] = 1
+            self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"] = self.CreateStatModifier()
+            self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"][Ability + " Multiplier"] = 1
+            self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"]["Proficency Multiplier"] = 1
+            self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"]["Manual Modifier"] = 8
+
         # Skills
         self.Stats["Skills"] = {}
         for Skill in self.Skills:
@@ -186,9 +197,14 @@ class Character:
                 MaxHealth += self.Stats["Max Health Per Level"][str(Level)]
             MaxHealth += (DerivedStats["Constitution Modifier"] + self.Stats["Bonus Max Health Per Level"]) * self.Stats["Level"]
             DerivedStats["Max Health"] = MaxHealth
-        
+
         # Initiative
         DerivedStats["Initiative Modifier"] = self.CalculateStatModifier(self.Stats["Initiative Stat Modifier"])
+
+        # Ability Score Derivatives
+        for Ability in self.Abilities:
+            DerivedStats[Ability + " Attack Modifier Stat Modifier"] = self.CalculateStatModifier(self.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"])
+            DerivedStats[Ability + " Save DC Stat Modifier"] = self.CalculateStatModifier(self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"])
 
         # Return Derived Stats Dictionary
         return DerivedStats
