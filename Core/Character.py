@@ -137,9 +137,31 @@ class Character:
         # Temp Health
         self.Stats["Temp Health"] = 0
 
+        # Hit Dice
+        self.Stats["Total Hit Dice"] = ""
+        self.Stats["Hit Dice Remaining"] = ""
+
+        # Death Saving Throws
+        self.Stats["Death Saving Throws"] = {}
+        self.Stats["Death Saving Throws"]["Failure 1"] = False
+        self.Stats["Death Saving Throws"]["Failure 2"] = False
+        self.Stats["Death Saving Throws"]["Failure 3"] = False
+        self.Stats["Death Saving Throws"]["Success 1"] = False
+        self.Stats["Death Saving Throws"]["Success 2"] = False
+        self.Stats["Death Saving Throws"]["Success 3"] = False
+
         # Initiative Stat Modifier
         self.Stats["Initiative Stat Modifier"] = self.CreateStatModifier()
         self.Stats["Initiative Stat Modifier"]["Dexterity Multiplier"] = 1
+
+        # Speed
+        self.Stats["Speed"] = 0
+
+        # Combat and Features Notes
+        self.Stats["Combat and Features Notes"] = ""
+
+        # Features
+        self.Stats["Features"] = []
 
         # Spellcasting Enabled
         self.Stats["Spellcasting Enabled"] = True
@@ -209,6 +231,7 @@ class Character:
         # Return Derived Stats Dictionary
         return DerivedStats
 
+    # Stat Calculation Methods
     def CalculateAbilityModifiers(self, Ability):
         # Ability Score
         AbilityScore = self.Stats["Ability Scores"][Ability]
@@ -274,3 +297,26 @@ class Character:
 
     def GetBaseAbilityModifier(self, AbilityScore):
         return math.floor((AbilityScore - 10) / 2)
+
+    # Feature Methods
+    def AddFeature(self):
+        NewFeature = {}
+        NewFeature["Feature Name"] = ""
+        NewFeature["Feature Text"] = ""
+        self.Stats["Features"].append(NewFeature)
+
+    def EditFeature(self, FeatureIndex, FeatureName, FeatureText):
+        Feature = self.Stats["Features"][FeatureIndex]
+        Feature["Feature Name"] = FeatureName
+        Feature["Feature Text"] = FeatureText
+
+    def DeleteFeature(self, FeatureIndex):
+        del self.Stats["Features"][FeatureIndex]
+
+    def MoveFeature(self, FeatureIndex, Delta):
+        TargetIndex = FeatureIndex + Delta
+        if TargetIndex < 0 or TargetIndex >= len(self.Stats["Features"]):
+            return
+        SwapTarget = self.Stats["Features"][TargetIndex]
+        self.Stats["Features"][TargetIndex] = self.Stats["Features"][FeatureIndex]
+        self.Stats["Features"][FeatureIndex] = SwapTarget
