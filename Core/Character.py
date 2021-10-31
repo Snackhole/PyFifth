@@ -29,6 +29,7 @@ class Character:
 
         # Portrait
         self.Stats["Portrait"] = None
+        self.Stats["Portrait File Extension"] = None
         self.Stats["Portrait Enabled"] = True
 
     def GetDerivedStats(self):
@@ -73,3 +74,14 @@ class Character:
         HealedValue = HealingAmount + max(CurrentHealth, 0)
         HealedValue = min(HealedValue, MaxHealth)
         self.Stats["Current Health"] = HealedValue
+
+    # Portrait Methods
+    def SetPortrait(self, PortraitFilePath):
+        pass
+
+    def ExportPortrait(self, ExportFilePath):
+        pass
+
+    def DeletePortrait(self):
+        self.Stats["Portrait"] = None
+        self.Stats["Portrait File Extension"] = None
