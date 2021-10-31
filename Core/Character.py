@@ -364,3 +364,13 @@ class Character:
         SwapTarget = self.Stats["Features"][TargetIndex]
         self.Stats["Features"][TargetIndex] = self.Stats["Features"][FeatureIndex]
         self.Stats["Features"][FeatureIndex] = SwapTarget
+
+    # Spellcasting Methods TODO
+    def CalculateSpellPoints(self):
+        pass
+
+    def ExpendSpellPoints(self):
+        pass
+
+    def RestoreSpellPoints(self):
+        pass
