@@ -73,20 +73,3 @@ class Character:
         HealedValue = HealingAmount + max(CurrentHealth, 0)
         HealedValue = min(HealedValue, MaxHealth)
         self.Stats["Current Health"] = HealedValue
-
-    # TODO
-    def RollInitiative(self):
-        # BaseModifier = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryVar)
-        # JackOfAllTradesModifier = BaseModifier
-        # RemarkableAthleteModifier = BaseModifier
-        # ProficiencyBonus = GlobalInst.GetStringVarAsNumber(CharacterSheetInst.ProficiencyBonusEntryVar)
-        # if CharacterSheetInst.RemarkableAthleteBoxVar.get():
-        #     RemarkableAthleteModifier += math.ceil(ProficiencyBonus / 2)
-        # if CharacterSheetInst.JackOfAllTradesBoxVar.get():
-        #     JackOfAllTradesModifier += math.floor(ProficiencyBonus / 2)
-        # FinalModifier = max(BaseModifier, RemarkableAthleteModifier, JackOfAllTradesModifier)
-        # DiceRollerInst.DiceNumberEntryVar.set(1)
-        # DiceRollerInst.DieTypeEntryVar.set(20)
-        # DiceRollerInst.ModifierEntryVar.set(str(FinalModifier))
-        # DiceRollerInst.Roll("Initiative:\n")
-        pass
