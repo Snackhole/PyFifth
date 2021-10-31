@@ -55,6 +55,21 @@ class Character:
         self.LevelDerivedValues["19"] = {"Proficiency Bonus": 6, "Experience Needed": 355000}
         self.LevelDerivedValues["20"] = {"Proficiency Bonus": 6, "Experience Needed": "N/A"}
 
+        # Spell Slot Levels
+        self.SpellSlotLevels = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"]
+
+        # Spell Point Values
+        self.SpellPointValues = {}
+        self.SpellPointValues["1st"] = 2
+        self.SpellPointValues["2nd"] = 3
+        self.SpellPointValues["3rd"] = 5
+        self.SpellPointValues["4th"] = 6
+        self.SpellPointValues["5th"] = 7
+        self.SpellPointValues["6th"] = 9
+        self.SpellPointValues["7th"] = 10
+        self.SpellPointValues["8th"] = 11
+        self.SpellPointValues["9th"] = 13
+
     def CreateStats(self):
         # Stats Dictionary
         self.Stats = {}
@@ -170,6 +185,21 @@ class Character:
         self.Stats["Concentrating"] = True
         self.Stats["Enable Concentration Check"] = True
 
+        # Spell Notes
+        self.Stats["Spell Notes"] = ""
+
+        # Spell Slots
+        self.Stats["Spell Slots"] = {}
+        for SpellSlotLevel in self.SpellSlotLevels:
+            self.Stats["Spell Slots"][SpellSlotLevel] = {}
+            self.Stats["Spell Slots"][SpellSlotLevel]["Current"] = 0
+            self.Stats["Spell Slots"][SpellSlotLevel]["Max"] = 0
+
+        # Spell Points
+        self.Stats["Spell Points Enabled"] = False
+        self.Stats["Current Spell Points"] = 0
+        self.Stats["Spell Points Stat Modifier"] = self.CreateStatModifier()
+
         # Portrait
         self.Stats["Portrait"] = None
         self.Stats["Portrait Enabled"] = True
@@ -228,6 +258,12 @@ class Character:
         for Ability in self.Abilities:
             DerivedStats[Ability + " Attack Modifier Stat Modifier"] = self.CalculateStatModifier(self.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"])
             DerivedStats[Ability + " Save DC Stat Modifier"] = self.CalculateStatModifier(self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"])
+
+        # Spell Points
+        if self.Stats["Spell Points Enabled"]:
+            DerivedStats["Max Spell Points"] = self.CalculateSpellPoints()
+        else:
+            DerivedStats["Max Spell Points"] = None
 
         # Return Derived Stats Dictionary
         return DerivedStats
@@ -365,12 +401,33 @@ class Character:
         self.Stats["Features"][TargetIndex] = self.Stats["Features"][FeatureIndex]
         self.Stats["Features"][FeatureIndex] = SwapTarget
 
-    # Spellcasting Methods TODO
+    # Spellcasting Methods
     def CalculateSpellPoints(self):
-        pass
+        TotalPoints = 0
+        for SpellSlotLevel in self.SpellSlotLevels:
+            TotalPoints += self.Stats["Spell Slots"][SpellSlotLevel]["Max"] * self.SpellPointValues[SpellSlotLevel]
+        TotalPoints += self.CalculateStatModifier(self.Stats["Spell Points Stat Modifier"])
+        return TotalPoints
 
-    def ExpendSpellPoints(self):
-        pass
+    def ExpendSpellPoints(self, SpellSlotLevel, SpellSlotAmount, ManualSpellPointsAmount):
+        if not self.Stats["Spell Points Enabled"]:
+            return None
+        CurrentSpellPoints = self.Stats["Current Spell Points"]
+        ExpendedPoints = 0
+        if SpellSlotLevel != "None" and SpellSlotAmount > 0:
+            ExpendedPoints += SpellSlotAmount * self.SpellPointValues[SpellSlotLevel]
+        if ManualSpellPointsAmount > 0:
+            ExpendedPoints += ManualSpellPointsAmount
+        self.Stats["Current Spell Points"] = max(0, CurrentSpellPoints - ExpendedPoints)
 
-    def RestoreSpellPoints(self):
-        pass
+    def RestoreSpellPoints(self, SpellSlotLevel, SpellSlotAmount, ManualSpellPointsAmount):
+        if not self.Stats["Spell Points Enabled"]:
+            return None
+        CurrentSpellPoints = self.Stats["Current Spell Points"]
+        MaxSpellPoints = self.CalculateSpellPoints()
+        RestoredPoints = 0
+        if SpellSlotLevel != "None" and SpellSlotAmount > 0:
+            RestoredPoints += SpellSlotAmount * self.SpellPointValues[SpellSlotLevel]
+        if ManualSpellPointsAmount > 0:
+            RestoredPoints += ManualSpellPointsAmount
+        self.Stats["Current Spell Points"] = min(MaxSpellPoints, CurrentSpellPoints + RestoredPoints)
