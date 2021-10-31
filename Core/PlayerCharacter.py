@@ -215,6 +215,10 @@ class PlayerCharacter(Character):
         self.Stats["Coins"]["GP"] = 0
         self.Stats["Coins"]["PP"] = 0
 
+        # Supply Consumption Rates
+        self.Stats["Food Consumption Rate"] = Decimal(1)
+        self.Stats["Water Consumption Rate"] = Decimal(8)
+
         # Stat Calculation Features
         self.Stats["Jack Of All Trades"] = False
         self.Stats["Remarkable Athlete"] = False
@@ -348,9 +352,38 @@ class PlayerCharacter(Character):
             Loads[Tag] += TotalItemWeight
             Values[Tag] += TotalItemValue
 
+        # Quantize Loads and Values
+        Loads["Total"] = Loads["Total"].quantize(Decimal("0.01"))
+        Loads["Gear"] = Loads["Gear"].quantize(Decimal("0.01"))
+        Loads["Food"] = Loads["Food"].quantize(Decimal("0.01"))
+        Loads["Water"] = Loads["Water"].quantize(Decimal("0.01"))
+        Loads["Treasure"] = Loads["Treasure"].quantize(Decimal("0.01"))
+        Loads["Misc."] = Loads["Misc."].quantize(Decimal("0.01"))
+        Loads[""] = Loads[""].quantize(Decimal("0.01"))
+
+        Values["Total"] = Values["Total"].quantize(Decimal("0.01"))
+        Values["Gear"] = Values["Gear"].quantize(Decimal("0.01"))
+        Values["Food"] = Values["Food"].quantize(Decimal("0.01"))
+        Values["Water"] = Values["Water"].quantize(Decimal("0.01"))
+        Values["Treasure"] = Values["Treasure"].quantize(Decimal("0.01"))
+        Values["Misc."] = Values["Misc."].quantize(Decimal("0.01"))
+        Values[""] = Values[""].quantize(Decimal("0.01"))
+
         # Add Loads and Values to Derived Stats
         DerivedStats["Item Loads"] = Loads
         DerivedStats["Item Values"] = Values
+
+        # Calculate Supply Days
+        if self.Stats["Food Consumption Rate"] > Decimal(0):
+            FoodDays = (Loads["Food"] / self.Stats["Food Consumption Rate"]).quantize(Decimal("0.01"))
+        else:
+            FoodDays = None
+        if self.Stats["Water Consumption Rate"] > Decimal(0):
+            WaterDays = (Loads["Water"] / self.Stats["Water Consumption Rate"]).quantize(Decimal("0.01"))
+        else:
+            WaterDays = None
+        DerivedStats["Days of Food"] = FoodDays
+        DerivedStats["Days of Water"] = WaterDays
 
         # Return Derived Stats Dictionary
         return DerivedStats
