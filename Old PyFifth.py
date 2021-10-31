@@ -37,22 +37,6 @@ class CharacterSheet:
     class Inventory:
         def __init__(self, master):
             # Variables
-            self.CoinsEntryCPVar = StringVarExtended("CoinsEntryCPVar", ClearOnNew=True)
-            self.CoinsEntryCPVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-            self.CoinsEntrySPVar = StringVarExtended("CoinsEntrySPVar", ClearOnNew=True)
-            self.CoinsEntrySPVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-            self.CoinsEntryEPVar = StringVarExtended("CoinsEntryEPVar", ClearOnNew=True)
-            self.CoinsEntryEPVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-            self.CoinsEntryGPVar = StringVarExtended("CoinsEntryGPVar", ClearOnNew=True)
-            self.CoinsEntryGPVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-            self.CoinsEntryPPVar = StringVarExtended("CoinsEntryPPVar", ClearOnNew=True)
-            self.CoinsEntryPPVar.trace_add("write", lambda a, b, c: CharacterSheetInst.UpdateStatsAndInventory())
-            self.ValueCP = Decimal(0.01)
-            self.ValueSP = Decimal(0.1)
-            self.ValueEP = Decimal(0.5)
-            self.ValueGP = Decimal(1)
-            self.ValuePP = Decimal(10)
-            self.WeightPerCoin = Decimal(0.02)
             self.CoinValueEntryVar = StringVar()
             self.CoinWeightEntryVar = StringVar()
             self.CarryingCapacityVar = StringVar()
@@ -165,57 +149,6 @@ class CharacterSheet:
                                                 cursor="arrow")
             self.MiscValueEntry.grid(row=3, column=1, sticky=NSEW, padx=2, pady=2)
 
-            # Coins
-            self.CoinsFrame = LabelFrame(self.InventoryDataFrame, text="Coins:")
-            self.CoinsFrame.grid_rowconfigure(0, weight=1)
-            self.CoinsFrame.grid_rowconfigure(4, weight=1)
-            self.CoinsFrame.grid_columnconfigure(0, weight=1)
-            self.CoinsFrame.grid_columnconfigure(2, weight=1)
-            self.CoinsFrame.grid(row=0, column=6, padx=2, pady=2, sticky=NSEW, rowspan=2)
-            self.CoinsInputHolderFrame = Frame(self.CoinsFrame)
-            self.CoinsInputHolderFrame.grid(row=1, column=1)
-            self.CoinsHeaderCP = Label(self.CoinsInputHolderFrame, text="CP", bd=2, relief=GROOVE)
-            self.CoinsHeaderCP.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-            self.CoinsEntryCP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryCPVar)
-            self.CoinsEntryCP.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-            self.CoinsHeaderSP = Label(self.CoinsInputHolderFrame, text="SP", bd=2, relief=GROOVE)
-            self.CoinsHeaderSP.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
-            self.CoinsEntrySP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntrySPVar)
-            self.CoinsEntrySP.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-            self.CoinsHeaderEP = Label(self.CoinsInputHolderFrame, text="EP", bd=2, relief=GROOVE)
-            self.CoinsHeaderEP.grid(row=0, column=2, sticky=NSEW, padx=2, pady=2)
-            self.CoinsEntryEP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryEPVar)
-            self.CoinsEntryEP.grid(row=1, column=2, sticky=NSEW, padx=2, pady=2)
-            self.CoinsHeaderGP = Label(self.CoinsInputHolderFrame, text="GP", bd=2, relief=GROOVE)
-            self.CoinsHeaderGP.grid(row=0, column=3, sticky=NSEW, padx=2, pady=2)
-            self.CoinsEntryGP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryGPVar)
-            self.CoinsEntryGP.grid(row=1, column=3, sticky=NSEW, padx=2, pady=2)
-            self.CoinsHeaderPP = Label(self.CoinsInputHolderFrame, text="PP", bd=2, relief=GROOVE)
-            self.CoinsHeaderPP.grid(row=0, column=4, sticky=NSEW, padx=2, pady=2)
-            self.CoinsEntryPP = CoinsEntry(self.CoinsInputHolderFrame, width=5, justify=CENTER, textvariable=self.CoinsEntryPPVar)
-            self.CoinsEntryPP.grid(row=1, column=4, sticky=NSEW, padx=2, pady=2)
-
-            # Coin Value and Weight
-            self.CoinValueAndWeightHolderFrame = Frame(self.CoinsFrame)
-            self.CoinValueAndWeightHolderFrame.grid_columnconfigure(0, weight=1)
-            self.CoinValueAndWeightHolderFrame.grid_columnconfigure(1, weight=1)
-            self.CoinValueAndWeightHolderFrame.grid(row=2, column=1, sticky=NSEW)
-            self.CoinValueHeader = Label(self.CoinValueAndWeightHolderFrame, text="Coin Value\n(gp)", bd=2, relief=GROOVE, bg=GlobalInst.ButtonColor)
-            self.CoinValueHeader.grid(row=0, column=0, sticky=NSEW, padx=2, pady=2)
-            self.CoinValueHeader.bind("<Button-1>", self.GainCoins)
-            self.CoinValueHeader.bind("<Button-3>", self.SpendCoins)
-            self.CoinValueTooltip = Tooltip(self.CoinValueHeader, "Left-click to gain coins.\n\nRight-click to spend.")
-            self.CoinValueEntry = EntryExtended(self.CoinValueAndWeightHolderFrame, width=13, justify=CENTER, textvariable=self.CoinValueEntryVar, state=DISABLED, disabledforeground="black",
-                                                disabledbackground="light gray",
-                                                cursor="arrow")
-            self.CoinValueEntry.grid(row=1, column=0, sticky=NSEW, padx=2, pady=2)
-            self.CoinWeightHeader = Label(self.CoinValueAndWeightHolderFrame, text="Coin Weight\n(lbs.)", bd=2, relief=GROOVE)
-            self.CoinWeightHeader.grid(row=0, column=1, sticky=NSEW, padx=2, pady=2)
-            self.CoinWeightEntry = EntryExtended(self.CoinValueAndWeightHolderFrame, width=13, justify=CENTER, textvariable=self.CoinWeightEntryVar, state=DISABLED, disabledforeground="black",
-                                                 disabledbackground="light gray",
-                                                 cursor="arrow")
-            self.CoinWeightEntry.grid(row=1, column=1, sticky=NSEW, padx=2, pady=2)
-
             # Supplies
             self.FoodDisplay = self.SupplyDisplay(self.InventoryDataFrame, "1", "Food")
             self.FoodDisplay.grid(row=0, column=8, padx=2, pady=2, sticky=NSEW)
@@ -304,31 +237,6 @@ class CharacterSheet:
                 CurrentEntry.Display(CurrentIndex)
 
         def Calculate(self):
-            # Carrying Capacity
-            CarryingCapacity = (15 * GlobalInst.GetStringVarAsNumber(
-                Inst["AbilitiesAndSavingThrows"].StrengthEntry.AbilityEntryTotalVar)) + self.CarryingCapacityEntryStatModifierInst.GetModifier()
-            self.CarryingCapacityVar.set(CarryingCapacity)
-
-            # Coin Counts
-            CPCount = GlobalInst.GetStringVarAsNumber(self.CoinsEntryCPVar, Mode="Decimal")
-            SPCount = GlobalInst.GetStringVarAsNumber(self.CoinsEntrySPVar, Mode="Decimal")
-            EPCount = GlobalInst.GetStringVarAsNumber(self.CoinsEntryEPVar, Mode="Decimal")
-            GPCount = GlobalInst.GetStringVarAsNumber(self.CoinsEntryGPVar, Mode="Decimal")
-            PPCount = GlobalInst.GetStringVarAsNumber(self.CoinsEntryPPVar, Mode="Decimal")
-            TotalCoinCount = CPCount + SPCount + EPCount + GPCount + PPCount
-
-            # Coin Value
-            CoinValue = Decimal(0)
-            CoinValue += CPCount * self.ValueCP
-            CoinValue += SPCount * self.ValueSP
-            CoinValue += EPCount * self.ValueEP
-            CoinValue += GPCount * self.ValueGP
-            CoinValue += PPCount * self.ValuePP
-            self.CoinValueEntryVar.set(str(CoinValue.quantize(Decimal("0.01"))))
-
-            # Coin Weight
-            CoinWeight = Decimal(TotalCoinCount * self.WeightPerCoin)
-            self.CoinWeightEntryVar.set(str(CoinWeight.quantize(Decimal("0.01"))))
 
             # Loads and Values
             Loads = {}
@@ -516,11 +424,6 @@ class CharacterSheet:
                 Entry.TotalValueEntryVar.set("")
                 Entry.CategoryTagVar.set("")
                 Entry.SortOrderVar.set("")
-
-        def OpenCoinCalculator(self):
-            # Create Coin Calculator Window and Wait
-            self.CoinCalculatorInst = CoinCalculator(WindowInst, DialogMode=True)
-            WindowInst.wait_window(self.CoinCalculatorInst.Window)
 
         def SpendCoins(self, event):
             # Create Config Window and Wait

@@ -1,4 +1,5 @@
 import math
+from decimal import *
 
 from Core.Character import Character
 
@@ -70,6 +71,17 @@ class PlayerCharacter(Character):
         self.SpellPointValues["7th"] = 10
         self.SpellPointValues["8th"] = 11
         self.SpellPointValues["9th"] = 13
+
+        # Coin Values
+        self.CoinValues = {}
+        self.CoinValues["CP"] = Decimal(0.01)
+        self.CoinValues["SP"] = Decimal(0.1)
+        self.CoinValues["EP"] = Decimal(0.5)
+        self.CoinValues["GP"] = Decimal(1)
+        self.CoinValues["PP"] = Decimal(10)
+
+        # Weight Per Coin
+        self.WeightPerCoin = Decimal(0.02)
 
     def CreateStats(self):
         # Common Character Stats
@@ -191,6 +203,18 @@ class PlayerCharacter(Character):
         # Spell List
         self.Stats["Spell List"] = []
 
+        # Carrying Capacity
+        self.Stats["Carrying Capacity Stat Modifier"] = self.CreateStatModifier()
+
+        # Inventory
+        self.Stats["Inventory"] = []
+        self.Stats["Coins"] = {}
+        self.Stats["Coins"]["CP"] = 0
+        self.Stats["Coins"]["SP"] = 0
+        self.Stats["Coins"]["EP"] = 0
+        self.Stats["Coins"]["GP"] = 0
+        self.Stats["Coins"]["PP"] = 0
+
         # Stat Calculation Features
         self.Stats["Jack Of All Trades"] = False
         self.Stats["Remarkable Athlete"] = False
@@ -255,6 +279,30 @@ class PlayerCharacter(Character):
             DerivedStats["Max Spell Points"] = self.CalculateSpellPoints()
         else:
             DerivedStats["Max Spell Points"] = None
+
+        # Carrying Capacity
+        DerivedStats["Carrying Capacity"] = (15 * self.Stats["Ability Scores"]["Strength"]) + self.CalculateStatModifier(self.Stats["Carrying Capacity Stat Modifier"])
+
+        # Coin Counts
+        CPCount = Decimal(self.Stats["Coins"]["CP"])
+        SPCount = Decimal(self.Stats["Coins"]["SP"])
+        EPCount = Decimal(self.Stats["Coins"]["EP"])
+        GPCount = Decimal(self.Stats["Coins"]["GP"])
+        PPCount = Decimal(self.Stats["Coins"]["PP"])
+        TotalCoinCount = CPCount + SPCount + EPCount + GPCount + PPCount
+
+        # Coin Value
+        CoinValue = Decimal(0)
+        CoinValue += CPCount * self.CoinValues["CP"]
+        CoinValue += SPCount * self.CoinValues["SP"]
+        CoinValue += EPCount * self.CoinValues["EP"]
+        CoinValue += GPCount * self.CoinValues["GP"]
+        CoinValue += PPCount * self.CoinValues["PP"]
+        DerivedStats["Value of Coins"] = CoinValue.quantize(Decimal("0.01"))
+
+        # Coin Weight
+        CoinWeight = TotalCoinCount * self.WeightPerCoin
+        DerivedStats["Weight of Coins"] = CoinWeight.quantize(Decimal("0.01"))
 
         # Return Derived Stats Dictionary
         return DerivedStats
