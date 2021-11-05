@@ -2,6 +2,7 @@ import math
 from decimal import *
 
 from Core.Character import Character
+from Core.DiceRoller import DiceRoller
 
 
 class PlayerCharacter(Character):
@@ -140,6 +141,9 @@ class PlayerCharacter(Character):
         # Player Name
         self.Stats["Player Name"] = ""
 
+        # Inspiration
+        self.Stats["Inspiration"] = False
+
         # Ability Scores
         self.Stats["Ability Scores"] = {}
         for Ability in self.Abilities:
@@ -267,6 +271,12 @@ class PlayerCharacter(Character):
         self.Stats["Notes 1"] = ""
         self.Stats["Notes 2"] = ""
         self.Stats["Additional Notes"] = []
+
+        # Dice Roller
+        self.Stats["Dice Roller"] = DiceRoller(Character=self)
+
+        # Crit Minimum
+        self.Stats["Crit Minimum"] = 20
 
     def GetDerivedStats(self):
         # Common Derived Stats
