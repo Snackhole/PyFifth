@@ -49,11 +49,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         pass
 
     def LoadConfigs(self):
-        super().LoadConfigs()
+        pass
 
     def SaveConfigs(self):
-        super().SaveConfigs()
-
         # TODO Keybindings
         # with open(self.GetResourcePath("Configs/Keybindings.cfg"), "w") as ConfigFile:
         #     ConfigFile.write(json.dumps(self.Keybindings, indent=2))

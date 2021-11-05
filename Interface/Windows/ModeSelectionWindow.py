@@ -58,7 +58,7 @@ class ModeSelectionWindow(Window):
             os.mkdir(self.GetResourcePath("Configs"))
         with open(self.GetResourcePath("Configs/Theme.cfg"), "w") as ConfigFile:
             ConfigFile.write(json.dumps(self.Theme))
-        return super().closeEvent(event)
+        event.accept()
 
     def SetTheme(self):
         Themes = list(self.Themes.keys())

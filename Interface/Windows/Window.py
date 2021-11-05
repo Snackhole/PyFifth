@@ -40,17 +40,6 @@ class Window(QMainWindow):
         # Load Theme
         self.LoadTheme()
 
-    def LoadConfigs(self):
-        pass
-
-    def SaveConfigs(self):
-        if not os.path.isdir(self.GetResourcePath("Configs")):
-            os.mkdir(self.GetResourcePath("Configs"))
-
-        # Theme
-        with open(self.GetResourcePath("Configs/Theme.cfg"), "w") as ConfigFile:
-            ConfigFile.write(json.dumps(self.Theme))
-
     def UpdateWindowTitle(self):
         self.setWindowTitle(self.ScriptName)
 
