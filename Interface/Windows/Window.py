@@ -3,7 +3,7 @@ import os
 
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon, QPalette, QColor
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFrame, QMessageBox, QInputDialog
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFrame, QMessageBox
 
 
 class Window(QMainWindow):
@@ -216,12 +216,3 @@ class Window(QMainWindow):
             self.Theme = "Light"
         self.AppInst.setStyle("Fusion")
         self.AppInst.setPalette(self.Themes[self.Theme])
-
-    def SetTheme(self):
-        Themes = list(self.Themes.keys())
-        Themes.sort()
-        CurrentThemeIndex = Themes.index(self.Theme)
-        Theme, OK = QInputDialog.getItem(self, "Set Theme", "Set theme (requires restart to take effect):", Themes, current=CurrentThemeIndex, editable=False)
-        if OK:
-            self.Theme = Theme
-            self.DisplayMessageBox("The new theme will be active after PyFifth is restarted.")

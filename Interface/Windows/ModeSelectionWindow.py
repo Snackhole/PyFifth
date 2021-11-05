@@ -2,7 +2,7 @@ import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QPushButton, QGridLayout, QComboBox, QLabel
+from PyQt5.QtWidgets import QPushButton, QGridLayout, QComboBox, QLabel, QInputDialog
 
 from Interface.Windows.Window import Window
 
@@ -59,3 +59,12 @@ class ModeSelectionWindow(Window):
         with open(self.GetResourcePath("Configs/Theme.cfg"), "w") as ConfigFile:
             ConfigFile.write(json.dumps(self.Theme))
         return super().closeEvent(event)
+
+    def SetTheme(self):
+        Themes = list(self.Themes.keys())
+        Themes.sort()
+        CurrentThemeIndex = Themes.index(self.Theme)
+        Theme, OK = QInputDialog.getItem(self, "Set Theme", "Set theme (requires restart to take effect):", Themes, current=CurrentThemeIndex, editable=False)
+        if OK:
+            self.Theme = Theme
+            self.DisplayMessageBox("The new theme will be active after PyFifth is restarted or a mode is selected.")
