@@ -1,3 +1,6 @@
+import json
+import os
+
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QPushButton, QGridLayout, QComboBox, QLabel
 
@@ -25,12 +28,15 @@ class ModeSelectionWindow(Window):
         # Buttons
         self.OpenButton = QPushButton("Open")
         self.OpenButton.clicked.connect(lambda: self.SelectMode(self.ModeComboBox.currentText()))
+        self.SetThemeButton = QPushButton("Set Theme")
+        self.SetThemeButton.clicked.connect(self.SetTheme)
 
         # Create and Set Layout
         self.Layout = QGridLayout()
         self.Layout.addWidget(self.ModeLabel, 0, 0)
         self.Layout.addWidget(self.ModeComboBox, 0, 1)
         self.Layout.addWidget(self.OpenButton, 1, 0, 1, 2)
+        self.Layout.addWidget(self.SetThemeButton, 2, 0, 1, 2)
         self.Frame.setLayout(self.Layout)
 
     def UpdateWindowTitle(self):
@@ -46,3 +52,10 @@ class ModeSelectionWindow(Window):
             self.SelectMode(self.ModeComboBox.currentText())
         else:
             super().keyPressEvent(QKeyEvent)
+
+    def closeEvent(self, event):
+        if not os.path.isdir(self.GetResourcePath("Configs")):
+            os.mkdir(self.GetResourcePath("Configs"))
+        with open(self.GetResourcePath("Configs/Theme.cfg"), "w") as ConfigFile:
+            ConfigFile.write(json.dumps(self.Theme))
+        return super().closeEvent(event)
