@@ -5,13 +5,15 @@ from Interface.Windows.Window import Window
 
 
 class ModeSelectionWindow(Window):
-    def __init__(self, ScriptName, AbsoluteDirectoryPath):
-        super().__init__(ScriptName, AbsoluteDirectoryPath)
+    def __init__(self, ScriptName, AbsoluteDirectoryPath, AppInst):
+        super().__init__(ScriptName, AbsoluteDirectoryPath, AppInst)
 
         # Create Mode Value
         self.Mode = None
 
     def CreateInterface(self):
+        super().LoadTheme()
+
         # Mode Label
         self.ModeLabel = QLabel("Mode:")
 

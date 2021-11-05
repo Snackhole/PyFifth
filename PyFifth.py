@@ -21,7 +21,7 @@ def StartApp():
     ScriptName = BuildVariables["VersionedAppName"]
 
     # Mode Selection Window
-    ModeSelectionWindowInst = ModeSelectionWindow(ScriptName, AbsoluteDirectoryPath)
+    ModeSelectionWindowInst = ModeSelectionWindow(ScriptName, AbsoluteDirectoryPath, AppInst)
 
     # Enter Mode Selection Loop
     AppInst.exec_()
@@ -34,7 +34,7 @@ def StartApp():
         Modes["Character Sheet"] = CharacterSheetWindow
 
         # Create Mode Window
-        ModeWindowInst = Modes[Mode](ScriptName, AbsoluteDirectoryPath)
+        ModeWindowInst = Modes[Mode](ScriptName, AbsoluteDirectoryPath, AppInst)
 
         # Enter Mode Loop
         sys.exit(AppInst.exec_())
