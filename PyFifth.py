@@ -10,6 +10,7 @@ if sys.path[0] != AbsoluteDirectoryPath:
 from PyQt5.QtWidgets import QApplication
 
 from Interface.Windows.ModeSelectionWindow import ModeSelectionWindow
+from Interface.Windows.CharacterSheetWindow import CharacterSheetWindow
 from Build import BuildVariables
 
 
@@ -25,18 +26,18 @@ def StartApp():
     # Enter Mode Selection Loop
     AppInst.exec_()
 
-    # # Initialize Mode
-    # Mode = ModeSelectionWindowInst.Mode
-    # if Mode is not None:
-    #     # Modes Dictionary
-    #     Modes = {}
-    #     Modes["Dice Roller"] = DiceRollerWindow
+    # Initialize Mode
+    Mode = ModeSelectionWindowInst.Mode
+    if Mode is not None:
+        # Modes Dictionary
+        Modes = {}
+        Modes["Character Sheet"] = CharacterSheetWindow
 
-    #     # Create Mode Window
-    #     ModeWindowInst = Modes[Mode](ScriptName, AbsoluteDirectoryPath)
+        # Create Mode Window
+        ModeWindowInst = Modes[Mode](ScriptName, AbsoluteDirectoryPath)
 
-    #     # Enter Mode Loop
-    #     sys.exit(AppInst.exec_())
+        # Enter Mode Loop
+        sys.exit(AppInst.exec_())
 
 
 if __name__ == "__main__":
