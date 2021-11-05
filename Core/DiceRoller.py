@@ -1,14 +1,13 @@
 import copy
 import random
 
-# from SaveAndLoad.JSONSerializer import SerializableMixin
+from SaveAndLoad.JSONSerializer import SerializableMixin
 
 
-# class DiceRoller(SerializableMixin):
-class DiceRoller():
+class DiceRoller(SerializableMixin):
     def __init__(self, Character=None):
-        # # Initialize SerializableMixin
-        # super().__init__()
+        # Initialize SerializableMixin
+        super().__init__()
 
         # Store Parameters
         self.Character = Character

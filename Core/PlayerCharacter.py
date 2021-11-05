@@ -3,11 +3,19 @@ from decimal import *
 
 from Core.Character import Character
 from Core.DiceRoller import DiceRoller
+from SaveAndLoad.JSONSerializer import SerializableMixin
 
 
-class PlayerCharacter(Character):
+class PlayerCharacter(Character, SerializableMixin):
     def __init__(self):
+        # Initialize Character and SerializableMixin
         super().__init__()
+
+        # Create Static Values
+        self.CreateStaticValues()
+
+        # Create Stats
+        self.CreateStats()
 
     def CreateStaticValues(self):
         # Common Static Values
@@ -678,3 +686,18 @@ class PlayerCharacter(Character):
         SwapTarget = self.Stats["Additional Notes"][TargetIndex]
         self.Stats["Additional Notes"][TargetIndex] = self.Stats["Additional Notes"][NoteIndex]
         self.Stats["Additional Notes"][NoteIndex] = SwapTarget
+
+    # Serialization Methods
+    def SetState(self, NewState):
+        self.Stats = NewState["Stats"]
+
+    def GetState(self):
+        State = {}
+        State["Stats"] = self.Stats
+        return State
+
+    @classmethod
+    def CreateFromState(cls, State):
+        NewPlayerCharacter = cls()
+        NewPlayerCharacter.SetState(State)
+        return NewPlayerCharacter
