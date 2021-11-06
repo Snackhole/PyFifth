@@ -286,6 +286,52 @@ class PlayerCharacter(Character, SerializableMixin):
         # Crit Minimum
         self.Stats["Crit Minimum"] = 20
 
+    def UpdateStat(self, Stat, NewValue):
+        # Update Common Stats
+        if super().UpdateStat(Stat, NewValue):
+            return True
+
+        if Stat in [
+            "Character Name",
+            "Character Race",
+            "Character Background",
+            "Character Alignment",
+            "Character Age",
+            "Character Physical Appearance",
+            "Character Personality Traits",
+            "Character Bonds",
+            "Character Ideals",
+            "Character Flaws",
+            "Character Backstory",
+            "Character Class",
+            "Level",
+            "Character Experience Earned",
+            "Player Name",
+            "Inspiration",
+            "Bonus Max Health Per Level",
+            "Max Health Override",
+            "Total Hit Dice",
+            "Hit Dice Remaining",
+            "Combat and Features Notes",
+            "Spellcasting Enabled",
+            "Spell Notes",
+            "Spell Points Enabled",
+            "Current Spell Points",
+            "Food Consumption Rate",
+            "Water Consumption Rate",
+            "Jack Of All Trades",
+            "Remarkable Athlete",
+            "Observant",
+            "Lucky Halfling",
+            "Notes 1",
+            "Notes 2",
+            "Crit Minimum"
+        ]:
+            self.Stats[Stat] = NewValue
+            return True
+
+        return False
+
     def GetDerivedStats(self):
         # Common Derived Stats
         DerivedStats = super().GetDerivedStats()

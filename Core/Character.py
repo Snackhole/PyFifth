@@ -35,6 +35,22 @@ class Character:
         self.Stats["Portrait File Extension"] = None
         self.Stats["Portrait Enabled"] = True
 
+    def UpdateStat(self, Stat, NewValue):
+        if Stat in [
+            "Current Health",
+            "Temp Health",
+            "Speed",
+            "Concentrating",
+            "Enable Concentration Check",
+            "Portrait",
+            "Portrait File Extension",
+            "Portrait Enabled"
+        ]:
+            self.Stats[Stat] = NewValue
+            return True
+
+        return False
+
     def GetDerivedStats(self):
         # Derived Stats Dictionary
         DerivedStats = {}

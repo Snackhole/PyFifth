@@ -1,7 +1,8 @@
 import json
 import os
 
-from PyQt5.QtWidgets import QGridLayout
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit
 
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
@@ -35,8 +36,18 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
     def CreateInterface(self):
         super().LoadTheme()
 
+        # Header
+        self.NameLabel = QLabel("Name:")
+        self.NameLineEdit = QLineEdit()
+        self.NameLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.NameLineEdit.textChanged.connect(lambda: self.UpdateStat("Character Name", self.NameLineEdit.text()))
+
         # Create and Set Layout
         self.Layout = QGridLayout()
+        self.HeaderLayout = QGridLayout()
+        self.HeaderLayout.addWidget(self.NameLabel, 0, 0)
+        self.HeaderLayout.addWidget(self.NameLineEdit, 0, 1)
+        self.Layout.addLayout(self.HeaderLayout, 0, 0)
         self.Frame.setLayout(self.Layout)
 
     def CreateActions(self):
@@ -62,9 +73,21 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         # Gzip Mode
         self.SaveGzipMode()
 
+    # Player Character Methods
+    def UpdateStat(self, Stat, NewValue):
+        self.PlayerCharacter.UpdateStat(Stat, NewValue)
+        self.UpdateUnsavedChangesFlag(True)
+
+    # Save and Open Methods
+    def UpdateUnsavedChangesFlag(self, UnsavedChanges):
+        self.UnsavedChanges = UnsavedChanges
+        self.UpdateDisplay()
+
     # Display Update Methods
     def UpdateDisplay(self):
         self.UpdateWindowTitle()
 
     def UpdateWindowTitle(self):
-        self.setWindowTitle(self.ScriptName + " Character Sheet")
+        CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
+        UnsavedChangesIndicator = " *" if self.UnsavedChanges else ""
+        self.setWindowTitle(self.ScriptName + " Character Sheet" + CurrentFileTitleSection + UnsavedChangesIndicator)
