@@ -235,13 +235,22 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
     # Roller Methods TODO
     def RollActionTriggered(self):
-        pass
+        DiceNumber = self.DiceRollerWidget.DiceNumberSpinBox.value()
+        DieType = self.DiceRollerWidget.DieTypeSpinBox.value()
+        Modifier = self.DiceRollerWidget.ModifierSpinBox.value()
+        self.PlayerCharacter.Stats["Dice Roller"].RollDice(DiceNumber, DieType, Modifier)
+        self.UpdateUnsavedChangesFlag(True)
 
     def RollPresetRollActionTriggered(self):
         pass
 
     def AverageRollActionTriggered(self):
-        pass
+        DiceNumber = self.DiceRollerWidget.DiceNumberSpinBox.value()
+        DieType = self.DiceRollerWidget.DieTypeSpinBox.value()
+        Modifier = self.DiceRollerWidget.ModifierSpinBox.value()
+        AverageResult = self.PlayerCharacter.Stats["Dice Roller"].AverageRoll(DiceNumber, DieType, Modifier)
+        AverageResultText = "The average result of " + str(DiceNumber) + "d" + str(DieType) + ("+" if Modifier >= 0 else "") + str(Modifier) + " is:\n\n" + str(AverageResult)
+        self.DisplayMessageBox(AverageResultText)
 
     def AddPresetRoll(self):
         pass
