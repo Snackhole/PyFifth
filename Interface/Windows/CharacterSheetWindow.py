@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QGridLayout, QLabel, QSpinBox, QMessageBox, QAction
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.InspirationButton import InspirationButton
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -75,6 +76,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.NeededExperienceLineEdit = CenteredLineEdit()
         self.NeededExperienceLineEdit.setReadOnly(True)
 
+        # Dice Roller
+        self.InspirationButton = InspirationButton(self)
+
         # Create and Set Layout
         self.Layout = QGridLayout()
 
@@ -93,7 +97,14 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.HeaderLayout.addWidget(self.NeededExperienceLineEdit, 1, 5)
         self.HeaderLayout.setColumnStretch(1, 1)
 
-        self.Layout.addLayout(self.HeaderLayout, 0, 0)
+        self.StatsLayout = QGridLayout()
+
+        self.DiceRollerLayout = QGridLayout()
+        self.DiceRollerLayout.addWidget(self.InspirationButton, 0, 0)
+
+        self.Layout.addLayout(self.HeaderLayout, 0, 0, 1, 2)
+        self.Layout.addLayout(self.StatsLayout, 1, 0)
+        self.Layout.addLayout(self.DiceRollerLayout, 1, 1)
         self.Frame.setLayout(self.Layout)
 
         # Create Actions
@@ -256,6 +267,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.ClassLineEdit.setText(self.PlayerCharacter.Stats["Character Class"])
             self.LevelSpinBox.setValue(self.PlayerCharacter.Stats["Character Level"])
             self.ExperienceSpinBox.setValue(self.PlayerCharacter.Stats["Character Experience Earned"])
+            self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
