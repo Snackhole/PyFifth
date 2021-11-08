@@ -2,7 +2,7 @@ import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QGridLayout, QLabel, QSpinBox
+from PyQt5.QtWidgets import QGridLayout, QLabel, QSpinBox, QMessageBox
 
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
@@ -121,6 +121,23 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.UpdateUnsavedChangesFlag(True)
 
     # Save and Open Methods
+    def closeEvent(self, event):
+        Close = True
+        if self.UnsavedChanges:
+            SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
+            if SavePrompt == QMessageBox.Yes:
+                if not self.Save(self.PlayerCharacter):
+                    Close = False
+            elif SavePrompt == QMessageBox.No:
+                pass
+            elif SavePrompt == QMessageBox.Cancel:
+                Close = False
+        if not Close:
+            event.ignore()
+        else:
+            self.SaveConfigs()
+            event.accept()
+
     def UpdateUnsavedChangesFlag(self, UnsavedChanges):
         self.UnsavedChanges = UnsavedChanges
         self.UpdateDisplay()
