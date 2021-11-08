@@ -1,8 +1,9 @@
+import copy
 import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QGridLayout, QLabel, QSpinBox, QMessageBox
+from PyQt5.QtWidgets import QGridLayout, QLabel, QSpinBox, QMessageBox, QAction
 
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
@@ -18,6 +19,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.ScriptName = ScriptName
         self.AbsoluteDirectoryPath = AbsoluteDirectoryPath
         self.AppInst = AppInst
+
+        # Variables
+        self.Opening = False
 
         # Initialize Window
         super().__init__(ScriptName, AbsoluteDirectoryPath, AppInst)
@@ -92,22 +96,85 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.Layout.addLayout(self.HeaderLayout, 0, 0)
         self.Frame.setLayout(self.Layout)
 
+        # Create Actions
+        self.CreateActions()
+
+        # Create Menu Bar
+        self.CreateMenuBar()
+
+        # Create Status Bar
+        self.StatusBar = self.statusBar()
+
+        # Create Keybindings
+        self.CreateKeybindings()
+
     def CreateActions(self):
-        pass
+        self.NewAction = QAction("New")
+        self.NewAction.triggered.connect(self.NewActionTriggered)
+
+        self.OpenAction = QAction("Open")
+        self.OpenAction.triggered.connect(self.OpenActionTriggered)
+
+        self.SaveAction = QAction("Save")
+        self.SaveAction.triggered.connect(self.SaveActionTriggered)
+
+        self.SaveAsAction = QAction("Save As")
+        self.SaveAsAction.triggered.connect(self.SaveAsActionTriggered)
+
+        self.GzipModeAction = QAction("Gzip Mode (Smaller Files)")
+        self.GzipModeAction.setCheckable(True)
+        self.GzipModeAction.setChecked(self.GzipMode)
+        self.GzipModeAction.triggered.connect(self.ToggleGzipMode)
+
+        self.QuitAction = QAction("Quit")
+        self.QuitAction.triggered.connect(self.close)
 
     def CreateMenuBar(self):
-        pass
+        self.MenuBar = self.menuBar()
+
+        self.FileMenu = self.MenuBar.addMenu("File")
+        self.FileMenu.addAction(self.NewAction)
+        self.FileMenu.addAction(self.OpenAction)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction(self.SaveAction)
+        self.FileMenu.addAction(self.SaveAsAction)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction(self.GzipModeAction)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction(self.QuitAction)
 
     def CreateKeybindings(self):
-        pass
+        self.DefaultKeybindings = {}
+        self.DefaultKeybindings["NewAction"] = "Ctrl+N"
+        self.DefaultKeybindings["OpenAction"] = "Ctrl+O"
+        self.DefaultKeybindings["SaveAction"] = "Ctrl+S"
+        self.DefaultKeybindings["SaveAsAction"] = "Ctrl+Shift+S"
+        self.DefaultKeybindings["QuitAction"] = "Ctrl+Q"
 
     def LoadConfigs(self):
-        pass
+        # Keybindings
+        KeybindingsFile = self.GetResourcePath("Configs/Keybindings.cfg")
+        if os.path.isfile(KeybindingsFile):
+            with open(KeybindingsFile, "r") as ConfigFile:
+                self.Keybindings = json.loads(ConfigFile.read())
+        else:
+            self.Keybindings = copy.deepcopy(self.DefaultKeybindings)
+        for Action, Keybinding in self.DefaultKeybindings.items():
+            if Action not in self.Keybindings:
+                self.Keybindings[Action] = Keybinding
+        InvalidBindings = []
+        for Action in self.Keybindings.keys():
+            if Action not in self.DefaultKeybindings:
+                InvalidBindings.append(Action)
+        for InvalidBinding in InvalidBindings:
+            del self.Keybindings[InvalidBinding]
+        for Action, Keybinding in self.Keybindings.items():
+            getattr(self, Action).setShortcut(Keybinding)
 
     def SaveConfigs(self):
-        # TODO Keybindings
-        # with open(self.GetResourcePath("Configs/Keybindings.cfg"), "w") as ConfigFile:
-        #     ConfigFile.write(json.dumps(self.Keybindings, indent=2))
+        # Keybindings
+        with open(self.GetResourcePath("Configs/Keybindings.cfg"), "w") as ConfigFile:
+            ConfigFile.write(json.dumps(self.Keybindings, indent=2))
 
         # Last Opened Directory
         self.SaveLastOpenedDirectory()
@@ -117,10 +184,37 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
     # Player Character Methods
     def UpdateStat(self, Stat, NewValue):
-        self.PlayerCharacter.UpdateStat(Stat, NewValue)
-        self.UpdateUnsavedChangesFlag(True)
+        if not self.Opening:
+            self.PlayerCharacter.UpdateStat(Stat, NewValue)
+            self.UpdateUnsavedChangesFlag(True)
 
     # Save and Open Methods
+    def NewActionTriggered(self):
+        if self.New(self.PlayerCharacter):
+            self.PlayerCharacter = PlayerCharacter()
+        self.Opening = True
+        self.UpdateDisplay()
+        self.Opening = False
+
+    def OpenActionTriggered(self):
+        OpenData = self.Open(self.PlayerCharacter)
+        if OpenData is not None:
+            self.PlayerCharacter = OpenData
+        self.Opening = True
+        self.UpdateDisplay()
+        self.Opening = False
+
+    def SaveActionTriggered(self):
+        self.Save(self.PlayerCharacter)
+        self.UpdateDisplay()
+
+    def SaveAsActionTriggered(self):
+        self.Save(self.PlayerCharacter, SaveAs=True)
+        self.UpdateDisplay()
+
+    def ToggleGzipMode(self):
+        self.GzipMode = not self.GzipMode
+
     def closeEvent(self, event):
         Close = True
         if self.UnsavedChanges:
@@ -156,6 +250,12 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         # Needed Experience
         ExperienceNeeded = str(self.DerivedStats["Experience Needed"])
         self.NeededExperienceLineEdit.setText(ExperienceNeeded)
+
+        if self.Opening:
+            self.NameLineEdit.setText(self.PlayerCharacter.Stats["Character Name"])
+            self.ClassLineEdit.setText(self.PlayerCharacter.Stats["Character Class"])
+            self.LevelSpinBox.setValue(self.PlayerCharacter.Stats["Character Level"])
+            self.ExperienceSpinBox.setValue(self.PlayerCharacter.Stats["Character Experience Earned"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
