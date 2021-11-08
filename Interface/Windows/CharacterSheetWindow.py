@@ -158,6 +158,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.AverageRollAction = QAction("Average Roll")
         self.AverageRollAction.triggered.connect(self.AverageRollActionTriggered)
 
+        self.SetCritMinimumAction = QAction("Set Crit Minimum")
+        self.SetCritMinimumAction.triggered.connect(self.SetCritMinimumActionTriggered)
+
         self.AddLogEntryAction = QAction("Add Log Entry")
         self.AddLogEntryAction.triggered.connect(self.AddLogEntryActionTriggered)
 
@@ -185,6 +188,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.RollerMenu.addAction(self.RollAction)
         self.RollerMenu.addAction(self.RollPresetRollAction)
         self.RollerMenu.addAction(self.AverageRollAction)
+        self.RollerMenu.addAction(self.SetCritMinimumAction)
 
         self.LogMenu = self.MenuBar.addMenu("Log")
         self.LogMenu.addAction(self.AddLogEntryAction)
@@ -257,6 +261,12 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         AverageResult = self.PlayerCharacter.Stats["Dice Roller"].AverageRoll(DiceNumber, DieType, Modifier)
         AverageResultText = "The average result of " + str(DiceNumber) + "d" + str(DieType) + ("+" if Modifier >= 0 else "") + str(Modifier) + " is:\n\n" + str(AverageResult)
         self.DisplayMessageBox(AverageResultText)
+
+    def SetCritMinimumActionTriggered(self):
+        CritMin, OK = QInputDialog.getInt(self, "Set Crit Minimum", "Set crit minimum to:", self.PlayerCharacter.Stats["Crit Minimum"], 1, 20)
+        if OK:
+            self.PlayerCharacter.Stats["Crit Minimum"] = CritMin
+            self.UpdateUnsavedChangesFlag(True)
 
     # TODO
     def AddPresetRoll(self):
