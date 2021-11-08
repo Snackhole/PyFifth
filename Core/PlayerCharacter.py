@@ -141,7 +141,7 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["Character Class"] = ""
 
         # Level
-        self.Stats["Level"] = 1
+        self.Stats["Character Level"] = 1
 
         # Character Experience Earned
         self.Stats["Character Experience Earned"] = 0
@@ -304,7 +304,7 @@ class PlayerCharacter(Character, SerializableMixin):
             "Character Flaws",
             "Character Backstory",
             "Character Class",
-            "Level",
+            "Character Level",
             "Character Experience Earned",
             "Player Name",
             "Inspiration",
@@ -336,12 +336,15 @@ class PlayerCharacter(Character, SerializableMixin):
         # Common Derived Stats
         DerivedStats = super().GetDerivedStats()
 
+        # Proficiency
+        DerivedStats["Proficiency Bonus"] = self.CalculateProficiencyBonus()
+
         # Experience Needed
-        DerivedStats["Experience Needed"] = self.LevelDerivedValues[str(self.Stats["Level"])]["Experience Needed"]
+        DerivedStats["Experience Needed"] = self.LevelDerivedValues[str(self.Stats["Character Level"])]["Experience Needed"]
 
         # Ability and Saving Throw Modifiers
         for Ability in self.Abilities:
-            Mods = self.CalculateAbilityModifiers(Ability, DerivedStats)
+            Mods = self.CalculateAbilityModifiers(Ability)
             DerivedStats[Ability + " Modifier"] = Mods["Ability Modifier"]
             DerivedStats[Ability + " Saving Throw Modifier"] = Mods["Save Modifier"]
 
@@ -367,9 +370,9 @@ class PlayerCharacter(Character, SerializableMixin):
             DerivedStats["Max Health"] = self.Stats["Max Health Override"]
         else:
             MaxHealth = 0
-            for Level in range(1, self.Stats["Level"] + 1):
+            for Level in range(1, self.Stats["Character Level"] + 1):
                 MaxHealth += self.Stats["Max Health Per Level"][str(Level)]
-            MaxHealth += (DerivedStats["Constitution Modifier"] + self.Stats["Bonus Max Health Per Level"]) * self.Stats["Level"]
+            MaxHealth += (DerivedStats["Constitution Modifier"] + self.Stats["Bonus Max Health Per Level"]) * self.Stats["Character Level"]
             DerivedStats["Max Health"] = MaxHealth
 
         # Initiative
@@ -493,8 +496,8 @@ class PlayerCharacter(Character, SerializableMixin):
         return DerivedStats
 
     # Stat Calculation Methods
-    def CalculateProficiencyModifier(self):
-        return self.LevelDerivedValues[str(self.Stats["Level"])]["Proficiency Bonus"]
+    def CalculateProficiencyBonus(self):
+        return self.LevelDerivedValues[str(self.Stats["Character Level"])]["Proficiency Bonus"]
 
     def CreateStatModifier(self, ACMode=False):
         StatModifier = {}
@@ -519,18 +522,42 @@ class PlayerCharacter(Character, SerializableMixin):
     def CalculateStatModifier(self, StatModifier):
         CalculatedModifier = 0
 
-        # Ability, Proficiency, and Level Stat Modifiers
-        for Stat in (self.Abilities + ["Proficiency", "Level"]):
-            StatMod = self.GetBaseAbilityModifier(self.Stats["Ability Scores"][Stat]) * StatModifier[Stat + " Multiplier"]
-            if StatModifier[Stat + " Multiplier Round Up"]:
-                StatMod = math.ceil(StatMod)
+        # Ability Modifiers
+        for Ability in self.Abilities:
+            AbilityMod = self.GetBaseAbilityModifier(self.Stats["Ability Scores"][Ability]) * StatModifier[Ability + " Multiplier"]
+            if StatModifier[Ability + " Multiplier Round Up"]:
+                AbilityMod = math.ceil(AbilityMod)
             else:
-                StatMod = math.floor(StatMod)
-            if StatModifier[Stat + " Max"] is not None:
-                StatMod = min(StatMod, StatModifier[Stat + " Max"])
-            if StatModifier[Stat + " Min"] is not None:
-                StatMod = max(StatMod, StatModifier[Stat + " Min"])
-            CalculatedModifier += StatMod
+                AbilityMod = math.floor(AbilityMod)
+            if StatModifier[Ability + " Max"] is not None:
+                AbilityMod = min(AbilityMod, StatModifier[Ability + " Max"])
+            if StatModifier[Ability + " Min"] is not None:
+                AbilityMod = max(AbilityMod, StatModifier[Ability + " Min"])
+            CalculatedModifier += AbilityMod
+
+        # Level Modifier
+        LevelMod = self.Stats["Character Level"] * StatModifier["Level Multiplier"]
+        if StatModifier["Level Multiplier Round Up"]:
+            LevelMod = math.ceil(LevelMod)
+        else:
+            LevelMod = math.floor(LevelMod)
+        if StatModifier["Level Max"] is not None:
+            LevelMod = min(LevelMod, StatModifier["Level Max"])
+        if StatModifier["Level Min"] is not None:
+            LevelMod = max(LevelMod, StatModifier["Level Min"])
+        CalculatedModifier += LevelMod
+
+        # Proficiency Modifier
+        ProficiencyMod = self.CalculateProficiencyBonus() * StatModifier["Proficiency Multiplier"]
+        if StatModifier["Proficiency Multiplier Round Up"]:
+            ProficiencyMod = math.ceil(ProficiencyMod)
+        else:
+            ProficiencyMod = math.floor(ProficiencyMod)
+        if StatModifier["Proficiency Max"] is not None:
+            ProficiencyMod = min(ProficiencyMod, StatModifier["Proficiency Max"])
+        if StatModifier["Proficiency Min"] is not None:
+            ProficiencyMod = max(ProficiencyMod, StatModifier["Proficiency Min"])
+        CalculatedModifier += ProficiencyMod
 
         # Manual Modifier
         CalculatedModifier += StatModifier["Manual Modifier"]

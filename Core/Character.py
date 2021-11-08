@@ -55,9 +55,6 @@ class Character:
         # Derived Stats Dictionary
         DerivedStats = {}
 
-        # Proficiency
-        DerivedStats["Proficiency Modifier"] = self.LevelDerivedValues[str(self.Stats["Level"])]["Proficiency Bonus"]
-
         # Return Derived Stats Dictionary
         return DerivedStats
 
