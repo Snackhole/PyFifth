@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QGridLayout, QLabel, QSpinBox, QMessageBox, QAction
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Widgets.InspirationButton import InspirationButton
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
@@ -77,6 +78,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.NeededExperienceLineEdit.setReadOnly(True)
 
         # Dice Roller
+        self.DiceRollerWidget = DiceRollerWidget(self)
         self.InspirationButton = InspirationButton(self)
 
         # Create and Set Layout
@@ -100,7 +102,8 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.StatsLayout = QGridLayout()
 
         self.DiceRollerLayout = QGridLayout()
-        self.DiceRollerLayout.addWidget(self.InspirationButton, 0, 0)
+        self.DiceRollerLayout.addWidget(self.DiceRollerWidget, 0, 0)
+        self.DiceRollerLayout.addWidget(self.InspirationButton, 1, 0)
 
         self.Layout.addLayout(self.HeaderLayout, 0, 0, 1, 2)
         self.Layout.addLayout(self.StatsLayout, 1, 0)
@@ -140,6 +143,24 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.QuitAction = QAction("Quit")
         self.QuitAction.triggered.connect(self.close)
 
+        self.RollAction = QAction("Roll")
+        self.RollAction.triggered.connect(self.RollActionTriggered)
+
+        self.RollPresetRollAction = QAction("Roll Preset Roll")
+        self.RollPresetRollAction.triggered.connect(self.RollPresetRollActionTriggered)
+
+        self.AverageRollAction = QAction("Average Roll")
+        self.AverageRollAction.triggered.connect(self.AverageRollActionTriggered)
+
+        self.AddLogEntryAction = QAction("Add Log Entry")
+        self.AddLogEntryAction.triggered.connect(self.AddLogEntryActionTriggered)
+
+        self.RemoveLastLogEntryAction = QAction("Remove Last Log Entry")
+        self.RemoveLastLogEntryAction.triggered.connect(self.RemoveLastLogEntryActionTriggered)
+
+        self.ClearLogAction = QAction("Clear Log")
+        self.ClearLogAction.triggered.connect(self.ClearLogActionTriggered)
+
     def CreateMenuBar(self):
         self.MenuBar = self.menuBar()
 
@@ -154,6 +175,16 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction(self.QuitAction)
 
+        self.RollerMenu = self.MenuBar.addMenu("Roller")
+        self.RollerMenu.addAction(self.RollAction)
+        self.RollerMenu.addAction(self.RollPresetRollAction)
+        self.RollerMenu.addAction(self.AverageRollAction)
+
+        self.LogMenu = self.MenuBar.addMenu("Log")
+        self.LogMenu.addAction(self.AddLogEntryAction)
+        self.LogMenu.addAction(self.RemoveLastLogEntryAction)
+        self.LogMenu.addAction(self.ClearLogAction)
+
     def CreateKeybindings(self):
         self.DefaultKeybindings = {}
         self.DefaultKeybindings["NewAction"] = "Ctrl+N"
@@ -161,6 +192,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.DefaultKeybindings["SaveAction"] = "Ctrl+S"
         self.DefaultKeybindings["SaveAsAction"] = "Ctrl+Shift+S"
         self.DefaultKeybindings["QuitAction"] = "Ctrl+Q"
+        self.DefaultKeybindings["RollAction"] = "Ctrl+R"
+        self.DefaultKeybindings["RollPresetRollAction"] = "Ctrl+Shift+R"
+        self.DefaultKeybindings["AverageRollAction"] = "Ctrl+Alt+R"
 
     def LoadConfigs(self):
         # Keybindings
@@ -198,6 +232,43 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         if not self.Opening:
             self.PlayerCharacter.UpdateStat(Stat, NewValue)
             self.UpdateUnsavedChangesFlag(True)
+
+    # Roller Methods TODO
+    def RollActionTriggered(self):
+        pass
+
+    def RollPresetRollActionTriggered(self):
+        pass
+
+    def AverageRollActionTriggered(self):
+        pass
+
+    def AddPresetRoll(self):
+        pass
+
+    def DeletePresetRoll(self):
+        pass
+
+    def EditPresetRoll(self):
+        pass
+
+    def CopyPresetRoll(self):
+        pass
+
+    def MovePresetRollUp(self):
+        pass
+
+    def MovePresetRollDown(self):
+        pass
+
+    def AddLogEntryActionTriggered(self):
+        pass
+
+    def RemoveLastLogEntryActionTriggered(self):
+        pass
+
+    def ClearLogActionTriggered(self):
+        pass
 
     # Save and Open Methods
     def NewActionTriggered(self):
@@ -261,6 +332,19 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         # Needed Experience
         ExperienceNeeded = str(self.DerivedStats["Experience Needed"])
         self.NeededExperienceLineEdit.setText(ExperienceNeeded)
+
+        # Results Log
+        ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
+        self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
+
+        # Preset Rolls
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentSelectionIndex = CurrentSelection[0].Index
+            self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
+            self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentSelectionIndex)
+        else:
+            self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
 
         if self.Opening:
             self.NameLineEdit.setText(self.PlayerCharacter.Stats["Character Name"])
