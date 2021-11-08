@@ -3,7 +3,7 @@ import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QGridLayout, QLabel, QSpinBox, QMessageBox, QAction
+from PyQt5.QtWidgets import QGridLayout, QInputDialog, QLabel, QSpinBox, QMessageBox, QAction
 
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
@@ -271,13 +271,23 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         pass
 
     def AddLogEntryActionTriggered(self):
-        pass
+        LogText, OK = QInputDialog.getText(self, "Add Log Entry", "Add text to log:")
+        if OK:
+            if LogText == "":
+                self.DisplayMessageBox("Log entries cannot be blank.")
+                return
+            self.PlayerCharacter.Stats["Dice Roller"].AddLogEntry(LogText)
+            self.UpdateUnsavedChangesFlag(True)
 
     def RemoveLastLogEntryActionTriggered(self):
-        pass
+        if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            self.PlayerCharacter.Stats["Dice Roller"].RemoveLastLogEntry()
+            self.UpdateUnsavedChangesFlag(True)
 
     def ClearLogActionTriggered(self):
-        pass
+        if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            self.PlayerCharacter.Stats["Dice Roller"].ClearLog()
+            self.UpdateUnsavedChangesFlag(True)
 
     # Save and Open Methods
     def NewActionTriggered(self):
