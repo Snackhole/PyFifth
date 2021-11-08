@@ -3,7 +3,7 @@ import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QGridLayout, QInputDialog, QLabel, QSpinBox, QMessageBox, QAction
+from PyQt5.QtWidgets import QFrame, QGridLayout, QInputDialog, QLabel, QSpinBox, QMessageBox, QAction
 
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
@@ -84,6 +84,8 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         # Create and Set Layout
         self.Layout = QGridLayout()
 
+        self.HeaderFrame = QFrame()
+        self.HeaderFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
         self.HeaderLayout = QGridLayout()
         self.HeaderLayout.addWidget(self.NameLabel, 0, 0)
         self.HeaderLayout.addWidget(self.NameLineEdit, 0, 1)
@@ -98,16 +100,20 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.HeaderLayout.addWidget(self.NeededExperienceLabel, 1, 4)
         self.HeaderLayout.addWidget(self.NeededExperienceLineEdit, 1, 5)
         self.HeaderLayout.setColumnStretch(1, 1)
+        self.HeaderFrame.setLayout(self.HeaderLayout)
 
         self.StatsLayout = QGridLayout()
 
+        self.DiceRollerFrame = QFrame()
+        self.DiceRollerFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
         self.DiceRollerLayout = QGridLayout()
         self.DiceRollerLayout.addWidget(self.DiceRollerWidget, 0, 0)
         self.DiceRollerLayout.addWidget(self.InspirationButton, 1, 0)
+        self.DiceRollerFrame.setLayout(self.DiceRollerLayout)
 
-        self.Layout.addLayout(self.HeaderLayout, 0, 0, 1, 2)
+        self.Layout.addWidget(self.HeaderFrame, 0, 0, 1, 2)
         self.Layout.addLayout(self.StatsLayout, 1, 0)
-        self.Layout.addLayout(self.DiceRollerLayout, 1, 1)
+        self.Layout.addWidget(self.DiceRollerFrame, 1, 1)
         self.Frame.setLayout(self.Layout)
 
         # Create Actions
@@ -252,6 +258,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         AverageResultText = "The average result of " + str(DiceNumber) + "d" + str(DieType) + ("+" if Modifier >= 0 else "") + str(Modifier) + " is:\n\n" + str(AverageResult)
         self.DisplayMessageBox(AverageResultText)
 
+    # TODO
     def AddPresetRoll(self):
         pass
 
