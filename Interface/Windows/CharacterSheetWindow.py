@@ -253,7 +253,13 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.UpdateUnsavedChangesFlag(True)
 
     def RollPresetRollActionTriggered(self):
-        pass
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetRoll = CurrentSelection[0]
+            CurrentPresetRollIndex = CurrentPresetRoll.Index
+            self.PlayerCharacter.Stats["Dice Roller"].RollPresetRoll(CurrentPresetRollIndex)
+            self.UpdateUnsavedChangesFlag(True)
+            self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentPresetRollIndex)
 
     def AverageRollActionTriggered(self):
         DiceNumber = self.DiceRollerWidget.DiceNumberSpinBox.value()
@@ -269,7 +275,6 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacter.Stats["Crit Minimum"] = CritMin
             self.UpdateUnsavedChangesFlag(True)
 
-    # TODO
     def AddPresetRoll(self):
         PresetRollIndex = self.PlayerCharacter.Stats["Dice Roller"].AddPresetRoll()
         self.UpdateDisplay()
@@ -282,19 +287,49 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(PresetRollIndex)
 
     def DeletePresetRoll(self):
-        pass
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+                CurrentPresetRoll = CurrentSelection[0]
+                CurrentPresetRollIndex = CurrentPresetRoll.Index
+                self.PlayerCharacter.Stats["Dice Roller"].DeletePresetRoll(CurrentPresetRollIndex)
+                self.UpdateUnsavedChangesFlag(True)
+                PresetRollsLength = len(self.PlayerCharacter.Stats["Dice Roller"].PresetRolls)
+                if PresetRollsLength > 0:
+                    self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentPresetRollIndex if CurrentPresetRollIndex < PresetRollsLength else PresetRollsLength - 1)
 
     def EditPresetRoll(self):
-        pass
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetRoll = CurrentSelection[0]
+            CurrentPresetRollIndex = CurrentPresetRoll.Index
+            EditPresetRollDialogInst = EditPresetRollDialog(self, self.PlayerCharacter.Stats["Dice Roller"], CurrentPresetRollIndex)
+            if EditPresetRollDialogInst.UnsavedChanges:
+                self.UpdateUnsavedChangesFlag(True)
 
     def CopyPresetRoll(self):
-        pass
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetRoll = CurrentSelection[0]
+            CurrentPresetRollIndex = CurrentPresetRoll.Index
+            NewPresetRollIndex = self.PlayerCharacter.Stats["Dice Roller"].CopyPresetRoll(CurrentPresetRollIndex)
+            self.UpdateUnsavedChangesFlag(True)
+            self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(NewPresetRollIndex)
 
     def MovePresetRollUp(self):
-        pass
+        self.MovePresetRoll(-1)
 
     def MovePresetRollDown(self):
-        pass
+        self.MovePresetRoll(1)
+
+    def MovePresetRoll(self, Delta):
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetRoll = CurrentSelection[0]
+            CurrentPresetRollIndex = CurrentPresetRoll.Index
+            if self.PlayerCharacter.Stats["Dice Roller"].MovePresetRoll(CurrentPresetRollIndex, Delta):
+                self.UpdateUnsavedChangesFlag(True)
+                self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentPresetRollIndex + Delta)
 
     def AddLogEntryActionTriggered(self):
         LogText, OK = QInputDialog.getText(self, "Add Log Entry", "Add text to log:")
