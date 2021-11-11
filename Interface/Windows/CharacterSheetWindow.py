@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QFrame, QGridLayout, QInputDialog, QLabel, QSpinBox,
 
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
+from Interface.Dialogs.EditPresetRollDialog import EditPresetRollDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Widgets.InspirationButton import InspirationButton
@@ -270,7 +271,15 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
     # TODO
     def AddPresetRoll(self):
-        pass
+        PresetRollIndex = self.PlayerCharacter.Stats["Dice Roller"].AddPresetRoll()
+        self.UpdateDisplay()
+        EditPresetRollDialogInst = EditPresetRollDialog(self, self.PlayerCharacter.Stats["Dice Roller"], PresetRollIndex, AddMode=True)
+        if EditPresetRollDialogInst.Cancelled:
+            self.PlayerCharacter.Stats["Dice Roller"].DeleteLastPresetRoll()
+            self.UpdateDisplay()
+        else:
+            self.UpdateUnsavedChangesFlag(True)
+            self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(PresetRollIndex)
 
     def DeletePresetRoll(self):
         pass
