@@ -244,7 +244,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacter.UpdateStat(Stat, NewValue)
             self.UpdateUnsavedChangesFlag(True)
 
-    # Roller Methods TODO
+    # Roller Methods
     def RollActionTriggered(self):
         DiceNumber = self.DiceRollerWidget.DiceNumberSpinBox.value()
         DieType = self.DiceRollerWidget.DieTypeSpinBox.value()
@@ -306,6 +306,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             EditPresetRollDialogInst = EditPresetRollDialog(self, self.PlayerCharacter.Stats["Dice Roller"], CurrentPresetRollIndex)
             if EditPresetRollDialogInst.UnsavedChanges:
                 self.UpdateUnsavedChangesFlag(True)
+                self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentPresetRollIndex)
 
     def CopyPresetRoll(self):
         CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
