@@ -586,8 +586,7 @@ class PlayerCharacter(Character, SerializableMixin):
         Mods["Save Modifier"] = SaveModifier
         return Mods
 
-    # Combat Methods
-    # TODO
+    # TODO:  Combat Methods
     def RollInitiative(self):
         # BaseModifier = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryVar)
         # JackOfAllTradesModifier = BaseModifier

@@ -3,7 +3,7 @@ import copy
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QGridLayout, QPushButton, QSpinBox, QSizePolicy, QMessageBox
 
-# TODO:  from Interface.Dialogs.EditResultMessageDialog import EditResultMessageDialog
+from Interface.Dialogs.EditResultMessageDialog import EditResultMessageDialog
 from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
 from Interface.Widgets.ResultMessagesTreeWidget import ResultMessagesTreeWidget
 
@@ -55,7 +55,6 @@ class EditPresetRollDialog(QDialog):
         self.DieTypeSpinBox.setValue(self.PresetRoll["Die Type"])
         self.DieTypeSpinBox.valueChanged.connect(self.UpdatePresetRoll)
 
-        # TODO
         self.ModifierButton = QPushButton("Modifier")
         self.ModifierButton.clicked.connect(self.EditModifier)
 
@@ -144,74 +143,67 @@ class EditPresetRollDialog(QDialog):
         # self.UnsavedChanges = True
         pass
 
-    # TODO:  Result message editing
     def AddResultMessage(self):
-        pass
-        # ResultMessageIndex = self.DiceRoller.AddResultMessage(self.PresetRollIndex)
-        # self.UpdateDisplay()
-        # EditResultMessageDialogInst = EditResultMessageDialog(self, ResultMessageIndex, AddMode=True)
-        # if EditResultMessageDialogInst.Cancelled:
-        #     self.DiceRoller.DeleteLastResultMessage(self.PresetRollIndex)
-        #     self.UpdateDisplay()
-        # else:
-        #     self.UnsavedChanges = True
-        #     self.UpdateDisplay()
-        #     self.ResultMessagesTreeWidget.SelectIndex(ResultMessageIndex)
+        ResultMessageIndex = self.DiceRoller.AddResultMessage(self.PresetRollIndex)
+        self.UpdateDisplay()
+        EditResultMessageDialogInst = EditResultMessageDialog(self, ResultMessageIndex, AddMode=True)
+        if EditResultMessageDialogInst.Cancelled:
+            self.DiceRoller.DeleteLastResultMessage(self.PresetRollIndex)
+            self.UpdateDisplay()
+        else:
+            self.UnsavedChanges = True
+            self.UpdateDisplay()
+            self.ResultMessagesTreeWidget.SelectIndex(ResultMessageIndex)
 
     def DeleteResultMessage(self):
-        pass
-        # CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
-        # if len(CurrentSelection) > 0:
-        #     if self.MainWindow.DisplayMessageBox("Are you sure you want to delete this result message?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
-        #         CurrentResultMessage = CurrentSelection[0]
-        #         CurrentResultMessageIndex = CurrentResultMessage.Index
-        #         self.DiceRoller.DeleteResultMessage(self.PresetRollIndex, CurrentResultMessageIndex)
-        #         self.UnsavedChanges = True
-        #         self.UpdateDisplay()
-        #         ResultMessagesLength = len(self.PresetRoll["Result Messages"])
-        #         if ResultMessagesLength > 0:
-        #             self.ResultMessagesTreeWidget.SelectIndex(CurrentResultMessageIndex if CurrentResultMessageIndex < ResultMessagesLength else ResultMessagesLength - 1)
+        CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this result message?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+                CurrentResultMessage = CurrentSelection[0]
+                CurrentResultMessageIndex = CurrentResultMessage.Index
+                self.DiceRoller.DeleteResultMessage(self.PresetRollIndex, CurrentResultMessageIndex)
+                self.UnsavedChanges = True
+                self.UpdateDisplay()
+                ResultMessagesLength = len(self.PresetRoll["Result Messages"])
+                if ResultMessagesLength > 0:
+                    self.ResultMessagesTreeWidget.SelectIndex(CurrentResultMessageIndex if CurrentResultMessageIndex < ResultMessagesLength else ResultMessagesLength - 1)
 
     def EditResultMessage(self):
-        pass
-        # CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
-        # if len(CurrentSelection) > 0:
-        #     CurrentResultMessage = CurrentSelection[0]
-        #     CurrentResultMessageIndex = CurrentResultMessage.Index
-        #     EditResultMessageDialogInst = EditResultMessageDialog(self, CurrentResultMessageIndex)
-        #     if EditResultMessageDialogInst.UnsavedChanges:
-        #         self.UnsavedChanges = True
-        #         self.UpdateDisplay()
+        CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentResultMessage = CurrentSelection[0]
+            CurrentResultMessageIndex = CurrentResultMessage.Index
+            EditResultMessageDialogInst = EditResultMessageDialog(self, CurrentResultMessageIndex)
+            if EditResultMessageDialogInst.UnsavedChanges:
+                self.UnsavedChanges = True
+                self.UpdateDisplay()
+                self.ResultMessagesTreeWidget.SelectIndex(CurrentResultMessageIndex)
 
     def CopyResultMessage(self):
-        pass
-        # CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
-        # if len(CurrentSelection) > 0:
-        #     CurrentResultMessage = CurrentSelection[0]
-        #     CurrentResultMessageIndex = CurrentResultMessage.Index
-        #     NewResultMessageIndex = self.DiceRoller.CopyResultMessage(self.PresetRollIndex, CurrentResultMessageIndex)
-        #     self.UnsavedChanges = True
-        #     self.UpdateDisplay()
-        #     self.ResultMessagesTreeWidget.SelectIndex(NewResultMessageIndex)
+        CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentResultMessage = CurrentSelection[0]
+            CurrentResultMessageIndex = CurrentResultMessage.Index
+            NewResultMessageIndex = self.DiceRoller.CopyResultMessage(self.PresetRollIndex, CurrentResultMessageIndex)
+            self.UnsavedChanges = True
+            self.UpdateDisplay()
+            self.ResultMessagesTreeWidget.SelectIndex(NewResultMessageIndex)
 
     def MoveResultMessageUp(self):
-        pass
-        # self.MoveResultMessage(-1)
+        self.MoveResultMessage(-1)
 
     def MoveResultMessageDown(self):
-        pass
-        # self.MoveResultMessage(1)
+        self.MoveResultMessage(1)
 
     def MoveResultMessage(self, Delta):
-        pass
-        # CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
-        # if len(CurrentSelection) > 0:
-        #     CurrentResultMessage = CurrentSelection[0]
-        #     CurrentResultMessageIndex = CurrentResultMessage.Index
-        #     if self.DiceRoller.MoveResultMessage(self.PresetRollIndex, CurrentResultMessageIndex, Delta):
-        #         self.UnsavedChanges = True
-        #         self.UpdateDisplay()
-        #         self.ResultMessagesTreeWidget.SelectIndex(CurrentResultMessageIndex + Delta)
+        CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentResultMessage = CurrentSelection[0]
+            CurrentResultMessageIndex = CurrentResultMessage.Index
+            if self.DiceRoller.MoveResultMessage(self.PresetRollIndex, CurrentResultMessageIndex, Delta):
+                self.UnsavedChanges = True
+                self.UpdateDisplay()
+                self.ResultMessagesTreeWidget.SelectIndex(CurrentResultMessageIndex + Delta)
 
     def UpdatePresetRoll(self):
         self.PresetRoll["Name"] = self.NameLineEdit.text()
