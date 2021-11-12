@@ -604,22 +604,9 @@ class PlayerCharacter(Character, SerializableMixin):
         Mods["Save Modifier"] = SaveModifier
         return Mods
 
-    # TODO:  Combat Methods
+    # Combat Methods
     def RollInitiative(self):
-        # BaseModifier = GlobalInst.GetStringVarAsNumber(self.InitiativeEntryVar)
-        # JackOfAllTradesModifier = BaseModifier
-        # RemarkableAthleteModifier = BaseModifier
-        # ProficiencyBonus = GlobalInst.GetStringVarAsNumber(CharacterSheetInst.ProficiencyBonusEntryVar)
-        # if CharacterSheetInst.RemarkableAthleteBoxVar.get():
-        #     RemarkableAthleteModifier += math.ceil(ProficiencyBonus / 2)
-        # if CharacterSheetInst.JackOfAllTradesBoxVar.get():
-        #     JackOfAllTradesModifier += math.floor(ProficiencyBonus / 2)
-        # FinalModifier = max(BaseModifier, RemarkableAthleteModifier, JackOfAllTradesModifier)
-        # DiceRollerInst.DiceNumberEntryVar.set(1)
-        # DiceRollerInst.DieTypeEntryVar.set(20)
-        # DiceRollerInst.ModifierEntryVar.set(str(FinalModifier))
-        # DiceRollerInst.Roll("Initiative:\n")
-        pass
+        self.Stats["Dice Roller"].RollDice(1, 20, self.Stats["Initiative Stat Modifier"], LogPrefix="Initiative:\n")
 
     # Feature Methods
     def AddFeature(self, FeatureName, FeatureText):
