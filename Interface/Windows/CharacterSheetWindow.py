@@ -173,6 +173,16 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.QuitAction = QAction("Quit")
         self.QuitAction.triggered.connect(self.close)
 
+        self.SpellcastingEnabledAction = QAction("Spellcasting Enabled")
+        self.SpellcastingEnabledAction.setCheckable(True)
+        self.SpellcastingEnabledAction.setChecked(True)
+        self.SpellcastingEnabledAction.triggered.connect(self.ToggleSpellcastingEnabled)
+
+        self.PortraitEnabledAction = QAction("Portrait Enabled")
+        self.PortraitEnabledAction.setCheckable(True)
+        self.PortraitEnabledAction.setChecked(True)
+        self.PortraitEnabledAction.triggered.connect(self.TogglePortraitEnabled)
+
         self.RollAction = QAction("Roll")
         self.RollAction.triggered.connect(self.RollActionTriggered)
 
@@ -208,16 +218,20 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction(self.QuitAction)
 
+        self.CharacterSettingsMenu = self.MenuBar.addMenu("Character Settings")
+        self.CharacterSettingsMenu.addAction(self.SpellcastingEnabledAction)
+        self.CharacterSettingsMenu.addAction(self.PortraitEnabledAction)
+        self.CharacterSettingsMenu.addSeparator()
+        self.CharacterSettingsMenu.addAction(self.SetCritMinimumAction)
+
         self.RollerMenu = self.MenuBar.addMenu("Roller")
         self.RollerMenu.addAction(self.RollAction)
         self.RollerMenu.addAction(self.RollPresetRollAction)
         self.RollerMenu.addAction(self.AverageRollAction)
-        self.RollerMenu.addAction(self.SetCritMinimumAction)
-
-        self.LogMenu = self.MenuBar.addMenu("Log")
-        self.LogMenu.addAction(self.AddLogEntryAction)
-        self.LogMenu.addAction(self.RemoveLastLogEntryAction)
-        self.LogMenu.addAction(self.ClearLogAction)
+        self.RollerMenu.addSeparator()
+        self.RollerMenu.addAction(self.AddLogEntryAction)
+        self.RollerMenu.addAction(self.RemoveLastLogEntryAction)
+        self.RollerMenu.addAction(self.ClearLogAction)
 
     def CreateKeybindings(self):
         self.DefaultKeybindings = {}
@@ -437,6 +451,12 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         ExperienceNeeded = str(self.DerivedStats["Experience Needed"])
         self.NeededExperienceLineEdit.setText(ExperienceNeeded)
 
+        # Spellcasting Enabled
+        self.StatsTabWidget.setTabVisible(2, self.PlayerCharacter.Stats["Spellcasting Enabled"])
+
+        # Portrait Enabled
+        self.StatsTabWidget.setTabVisible(6, self.PlayerCharacter.Stats["Portrait Enabled"])
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
@@ -456,6 +476,14 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.LevelSpinBox.setValue(self.PlayerCharacter.Stats["Character Level"])
             self.ExperienceSpinBox.setValue(self.PlayerCharacter.Stats["Character Experience Earned"])
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
+            self.SpellcastingEnabledAction.setChecked(self.PlayerCharacter.Stats["Spellcasting Enabled"])
+            self.PortraitEnabledAction.setChecked(self.PlayerCharacter.Stats["Portrait Enabled"])
+
+    def ToggleSpellcastingEnabled(self):
+        self.UpdateStat("Spellcasting Enabled", self.SpellcastingEnabledAction.isChecked())
+
+    def TogglePortraitEnabled(self):
+        self.UpdateStat("Portrait Enabled", self.PortraitEnabledAction.isChecked())
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
