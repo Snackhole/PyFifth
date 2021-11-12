@@ -283,9 +283,6 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["Water Consumption Rate"] = 8
 
         # Stat Calculation Features
-        self.Stats["Jack of All Trades"] = False
-        self.Stats["Remarkable Athlete"] = False
-        self.Stats["Observant"] = False
         self.Stats["Lucky Halfling"] = False
 
         # Notes
@@ -337,9 +334,6 @@ class PlayerCharacter(Character, SerializableMixin):
             "Current Spell Points",
             "Food Consumption Rate",
             "Water Consumption Rate",
-            "Jack of All Trades",
-            "Remarkable Athlete",
-            "Observant",
             "Lucky Halfling",
             "Notes 1",
             "Notes 2",
@@ -371,12 +365,8 @@ class PlayerCharacter(Character, SerializableMixin):
             DerivedStats[Skill + " Modifier"] = self.CalculateStatModifier(self.Stats["Skills"][Skill + " Stat Modifier"])
 
         # Passive Perception and Investigation
-        if self.Stats["Observant"]:
-            ObservantBonus = 5
-        else:
-            ObservantBonus = 0
-        DerivedStats["Passive Perception"] = 10 + DerivedStats["Perception Modifier"] + self.CalculateStatModifier(self.Stats["Skills"]["Passive Perception Stat Modifier"]) + ObservantBonus
-        DerivedStats["Passive Investigation"] = 10 + DerivedStats["Investigation Modifier"] + self.CalculateStatModifier(self.Stats["Skills"]["Passive Investigation Stat Modifier"]) + ObservantBonus
+        DerivedStats["Passive Perception"] = 10 + DerivedStats["Perception Modifier"] + self.CalculateStatModifier(self.Stats["Skills"]["Passive Perception Stat Modifier"])
+        DerivedStats["Passive Investigation"] = 10 + DerivedStats["Investigation Modifier"] + self.CalculateStatModifier(self.Stats["Skills"]["Passive Investigation Stat Modifier"])
 
         # AC
         DerivedStats["AC 1"] = self.CalculateStatModifier(self.Stats["AC Stat Modifier 1"])

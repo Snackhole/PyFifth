@@ -188,21 +188,6 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.PortraitEnabledAction.setChecked(True)
         self.PortraitEnabledAction.triggered.connect(self.TogglePortraitEnabled)
 
-        self.JackOfAllTradesAction = QAction("Jack of All Trades")
-        self.JackOfAllTradesAction.setCheckable(True)
-        self.JackOfAllTradesAction.setChecked(False)
-        self.JackOfAllTradesAction.triggered.connect(self.ToggleJackOfAllTrades)
-
-        self.RemarkableAthleteAction = QAction("Remarkable Athlete")
-        self.RemarkableAthleteAction.setCheckable(True)
-        self.RemarkableAthleteAction.setChecked(False)
-        self.RemarkableAthleteAction.triggered.connect(self.ToggleRemarkableAthlete)
-
-        self.ObservantAction = QAction("Observant")
-        self.ObservantAction.setCheckable(True)
-        self.ObservantAction.setChecked(False)
-        self.ObservantAction.triggered.connect(self.ToggleObservant)
-
         self.LuckyHalflingAction = QAction("Lucky Halfling")
         self.LuckyHalflingAction.setCheckable(True)
         self.LuckyHalflingAction.setChecked(False)
@@ -247,9 +232,6 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.CharacterSettingsMenu.addAction(self.SpellcastingEnabledAction)
         self.CharacterSettingsMenu.addAction(self.ConcentrationCheckPromptEnabledAction)
         self.CharacterSettingsMenu.addAction(self.PortraitEnabledAction)
-        self.CharacterSettingsMenu.addAction(self.JackOfAllTradesAction)
-        self.CharacterSettingsMenu.addAction(self.RemarkableAthleteAction)
-        self.CharacterSettingsMenu.addAction(self.ObservantAction)
         self.CharacterSettingsMenu.addAction(self.LuckyHalflingAction)
         self.CharacterSettingsMenu.addSeparator()
         self.CharacterSettingsMenu.addAction(self.SetCritMinimumAction)
@@ -319,15 +301,6 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
     def TogglePortraitEnabled(self):
         self.UpdateStat("Portrait Enabled", self.PortraitEnabledAction.isChecked())
-
-    def ToggleJackOfAllTrades(self):
-        self.UpdateStat("Jack of All Trades", self.JackOfAllTradesAction.isChecked())
-
-    def ToggleRemarkableAthlete(self):
-        self.UpdateStat("Remarkable Athlete", self.RemarkableAthleteAction.isChecked())
-
-    def ToggleObservant(self):
-        self.UpdateStat("Observant", self.ObservantAction.isChecked())
 
     def ToggleLuckyHalfling(self):
         self.UpdateStat("Lucky Halfling", self.LuckyHalflingAction.isChecked())
@@ -530,9 +503,6 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.SpellcastingEnabledAction.setChecked(self.PlayerCharacter.Stats["Spellcasting Enabled"])
             self.ConcentrationCheckPromptEnabledAction.setChecked(self.PlayerCharacter.Stats["Enable Concentration Check"])
             self.PortraitEnabledAction.setChecked(self.PlayerCharacter.Stats["Portrait Enabled"])
-            self.JackOfAllTradesAction.setChecked(self.PlayerCharacter.Stats["Jack of All Trades"])
-            self.RemarkableAthleteAction.setChecked(self.PlayerCharacter.Stats["Remarkable Athlete"])
-            self.ObservantAction.setChecked(self.PlayerCharacter.Stats["Observant"])
             self.LuckyHalflingAction.setChecked(self.PlayerCharacter.Stats["Lucky Halfling"])
 
     def UpdateWindowTitle(self):
