@@ -380,7 +380,63 @@ class EditModifierDialog(QDialog):
     def UpdateStatModifier(self):
         if not self.ValidInput():
             return
-        
+
+        # Base AC
+        if "Base AC" in self.StatModifier:
+            self.StatModifier["Base AC"] = self.BaseACSpinBox.value()
+
+        # Strength Multiplier
+        self.StatModifier["Strength Multiplier"] = self.StrengthMultiplierSpinBox.value()
+        self.StatModifier["Strength Multiplier Round Up"] = self.StrengthMultiplierRoundUpCheckBox.isChecked()
+        self.StatModifier["Strength Min"] = self.StrengthMinSpinBox.value() if self.StrengthMinSpinBox.value() != -1 else None
+        self.StatModifier["Strength Max"] = self.StrengthMaxSpinBox.value() if self.StrengthMaxSpinBox.value() != -1 else None
+
+        # Dexterity Multiplier
+        self.StatModifier["Dexterity Multiplier"] = self.DexterityMultiplierSpinBox.value()
+        self.StatModifier["Dexterity Multiplier Round Up"] = self.DexterityMultiplierRoundUpCheckBox.isChecked()
+        self.StatModifier["Dexterity Min"] = self.DexterityMinSpinBox.value() if self.DexterityMinSpinBox.value() != -1 else None
+        self.StatModifier["Dexterity Max"] = self.DexterityMaxSpinBox.value() if self.DexterityMaxSpinBox.value() != -1 else None
+
+        # Constitution Multiplier
+        self.StatModifier["Constitution Multiplier"] = self.ConstitutionMultiplierSpinBox.value()
+        self.StatModifier["Constitution Multiplier Round Up"] = self.ConstitutionMultiplierRoundUpCheckBox.isChecked()
+        self.StatModifier["Constitution Min"] = self.ConstitutionMinSpinBox.value() if self.ConstitutionMinSpinBox.value() != -1 else None
+        self.StatModifier["Constitution Max"] = self.ConstitutionMaxSpinBox.value() if self.ConstitutionMaxSpinBox.value() != -1 else None
+
+        # Intelligence Multiplier
+        self.StatModifier["Intelligence Multiplier"] = self.IntelligenceMultiplierSpinBox.value()
+        self.StatModifier["Intelligence Multiplier Round Up"] = self.IntelligenceMultiplierRoundUpCheckBox.isChecked()
+        self.StatModifier["Intelligence Min"] = self.IntelligenceMinSpinBox.value() if self.IntelligenceMinSpinBox.value() != -1 else None
+        self.StatModifier["Intelligence Max"] = self.IntelligenceMaxSpinBox.value() if self.IntelligenceMaxSpinBox.value() != -1 else None
+
+        # Wisdom Multiplier
+        self.StatModifier["Wisdom Multiplier"] = self.WisdomMultiplierSpinBox.value()
+        self.StatModifier["Wisdom Multiplier Round Up"] = self.WisdomMultiplierRoundUpCheckBox.isChecked()
+        self.StatModifier["Wisdom Min"] = self.WisdomMinSpinBox.value() if self.WisdomMinSpinBox.value() != -1 else None
+        self.StatModifier["Wisdom Max"] = self.WisdomMaxSpinBox.value() if self.WisdomMaxSpinBox.value() != -1 else None
+
+        # Charisma Multiplier
+        self.StatModifier["Charisma Multiplier"] = self.CharismaMultiplierSpinBox.value()
+        self.StatModifier["Charisma Multiplier Round Up"] = self.CharismaMultiplierRoundUpCheckBox.isChecked()
+        self.StatModifier["Charisma Min"] = self.CharismaMinSpinBox.value() if self.CharismaMinSpinBox.value() != -1 else None
+        self.StatModifier["Charisma Max"] = self.CharismaMaxSpinBox.value() if self.CharismaMaxSpinBox.value() != -1 else None
+
+        # Proficiency Multiplier
+        self.StatModifier["Proficiency Multiplier"] = self.ProficiencyMultiplierSpinBox.value()
+        self.StatModifier["Proficiency Multiplier Round Up"] = self.ProficiencyMultiplierRoundUpCheckBox.isChecked()
+        self.StatModifier["Proficiency Min"] = self.ProficiencyMinSpinBox.value() if self.ProficiencyMinSpinBox.value() != -1 else None
+        self.StatModifier["Proficiency Max"] = self.ProficiencyMaxSpinBox.value() if self.ProficiencyMaxSpinBox.value() != -1 else None
+
+        # Level Multiplier
+        if "Level Multiplier" in self.StatModifier:
+            self.StatModifier["Level Multiplier"] = self.LevelMultiplierSpinBox.value()
+            self.StatModifier["Level Multiplier Round Up"] = self.LevelMultiplierRoundUpCheckBox.isChecked()
+            self.StatModifier["Level Min"] = self.LevelMinSpinBox.value() if self.LevelMinSpinBox.value() != -1 else None
+            self.StatModifier["Level Max"] = self.LevelMaxSpinBox.value() if self.LevelMaxSpinBox.value() != -1 else None
+
+        # Manual Modifier
+        self.StatModifier["Manual Modifier"] = self.ManualModifierSpinBox.value()
+
         self.UnsavedChanges = True
 
     def Done(self):
