@@ -178,10 +178,38 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.SpellcastingEnabledAction.setChecked(True)
         self.SpellcastingEnabledAction.triggered.connect(self.ToggleSpellcastingEnabled)
 
+        self.ConcentrationCheckPromptEnabledAction = QAction("Concentration Check Prompt Enabled")
+        self.ConcentrationCheckPromptEnabledAction.setCheckable(True)
+        self.ConcentrationCheckPromptEnabledAction.setChecked(True)
+        self.ConcentrationCheckPromptEnabledAction.triggered.connect(self.ToggleConcentrationCheckPromptEnabled)
+
         self.PortraitEnabledAction = QAction("Portrait Enabled")
         self.PortraitEnabledAction.setCheckable(True)
         self.PortraitEnabledAction.setChecked(True)
         self.PortraitEnabledAction.triggered.connect(self.TogglePortraitEnabled)
+
+        self.JackOfAllTradesAction = QAction("Jack of All Trades")
+        self.JackOfAllTradesAction.setCheckable(True)
+        self.JackOfAllTradesAction.setChecked(False)
+        self.JackOfAllTradesAction.triggered.connect(self.ToggleJackOfAllTrades)
+
+        self.RemarkableAthleteAction = QAction("Remarkable Athlete")
+        self.RemarkableAthleteAction.setCheckable(True)
+        self.RemarkableAthleteAction.setChecked(False)
+        self.RemarkableAthleteAction.triggered.connect(self.ToggleRemarkableAthlete)
+
+        self.ObservantAction = QAction("Observant")
+        self.ObservantAction.setCheckable(True)
+        self.ObservantAction.setChecked(False)
+        self.ObservantAction.triggered.connect(self.ToggleObservant)
+
+        self.LuckyHalflingAction = QAction("Lucky Halfling")
+        self.LuckyHalflingAction.setCheckable(True)
+        self.LuckyHalflingAction.setChecked(False)
+        self.LuckyHalflingAction.triggered.connect(self.ToggleLuckyHalfling)
+
+        self.SetCritMinimumAction = QAction("Set Crit Minimum")
+        self.SetCritMinimumAction.triggered.connect(self.SetCritMinimumActionTriggered)
 
         self.RollAction = QAction("Roll")
         self.RollAction.triggered.connect(self.RollActionTriggered)
@@ -191,9 +219,6 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
         self.AverageRollAction = QAction("Average Roll")
         self.AverageRollAction.triggered.connect(self.AverageRollActionTriggered)
-
-        self.SetCritMinimumAction = QAction("Set Crit Minimum")
-        self.SetCritMinimumAction.triggered.connect(self.SetCritMinimumActionTriggered)
 
         self.AddLogEntryAction = QAction("Add Log Entry")
         self.AddLogEntryAction.triggered.connect(self.AddLogEntryActionTriggered)
@@ -220,7 +245,12 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
         self.CharacterSettingsMenu = self.MenuBar.addMenu("Character Settings")
         self.CharacterSettingsMenu.addAction(self.SpellcastingEnabledAction)
+        self.CharacterSettingsMenu.addAction(self.ConcentrationCheckPromptEnabledAction)
         self.CharacterSettingsMenu.addAction(self.PortraitEnabledAction)
+        self.CharacterSettingsMenu.addAction(self.JackOfAllTradesAction)
+        self.CharacterSettingsMenu.addAction(self.RemarkableAthleteAction)
+        self.CharacterSettingsMenu.addAction(self.ObservantAction)
+        self.CharacterSettingsMenu.addAction(self.LuckyHalflingAction)
         self.CharacterSettingsMenu.addSeparator()
         self.CharacterSettingsMenu.addAction(self.SetCritMinimumAction)
 
@@ -280,6 +310,27 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         if not self.Opening:
             self.PlayerCharacter.UpdateStat(Stat, NewValue)
             self.UpdateUnsavedChangesFlag(True)
+
+    def ToggleSpellcastingEnabled(self):
+        self.UpdateStat("Spellcasting Enabled", self.SpellcastingEnabledAction.isChecked())
+
+    def ToggleConcentrationCheckPromptEnabled(self):
+        self.UpdateStat("Enable Concentration Check", self.ConcentrationCheckPromptEnabledAction.isChecked())
+
+    def TogglePortraitEnabled(self):
+        self.UpdateStat("Portrait Enabled", self.PortraitEnabledAction.isChecked())
+
+    def ToggleJackOfAllTrades(self):
+        self.UpdateStat("Jack of All Trades", self.JackOfAllTradesAction.isChecked())
+
+    def ToggleRemarkableAthlete(self):
+        self.UpdateStat("Remarkable Athlete", self.RemarkableAthleteAction.isChecked())
+
+    def ToggleObservant(self):
+        self.UpdateStat("Observant", self.ObservantAction.isChecked())
+
+    def ToggleLuckyHalfling(self):
+        self.UpdateStat("Lucky Halfling", self.LuckyHalflingAction.isChecked())
 
     # Roller Methods
     def RollActionTriggered(self):
@@ -477,13 +528,12 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.ExperienceSpinBox.setValue(self.PlayerCharacter.Stats["Character Experience Earned"])
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
             self.SpellcastingEnabledAction.setChecked(self.PlayerCharacter.Stats["Spellcasting Enabled"])
+            self.ConcentrationCheckPromptEnabledAction.setChecked(self.PlayerCharacter.Stats["Enable Concentration Check"])
             self.PortraitEnabledAction.setChecked(self.PlayerCharacter.Stats["Portrait Enabled"])
-
-    def ToggleSpellcastingEnabled(self):
-        self.UpdateStat("Spellcasting Enabled", self.SpellcastingEnabledAction.isChecked())
-
-    def TogglePortraitEnabled(self):
-        self.UpdateStat("Portrait Enabled", self.PortraitEnabledAction.isChecked())
+            self.JackOfAllTradesAction.setChecked(self.PlayerCharacter.Stats["Jack of All Trades"])
+            self.RemarkableAthleteAction.setChecked(self.PlayerCharacter.Stats["Remarkable Athlete"])
+            self.ObservantAction.setChecked(self.PlayerCharacter.Stats["Observant"])
+            self.LuckyHalflingAction.setChecked(self.PlayerCharacter.Stats["Lucky Halfling"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""

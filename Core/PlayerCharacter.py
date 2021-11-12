@@ -283,7 +283,7 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["Water Consumption Rate"] = 8
 
         # Stat Calculation Features
-        self.Stats["Jack Of All Trades"] = False
+        self.Stats["Jack of All Trades"] = False
         self.Stats["Remarkable Athlete"] = False
         self.Stats["Observant"] = False
         self.Stats["Lucky Halfling"] = False
@@ -337,7 +337,7 @@ class PlayerCharacter(Character, SerializableMixin):
             "Current Spell Points",
             "Food Consumption Rate",
             "Water Consumption Rate",
-            "Jack Of All Trades",
+            "Jack of All Trades",
             "Remarkable Athlete",
             "Observant",
             "Lucky Halfling",
