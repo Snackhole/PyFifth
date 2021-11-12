@@ -138,7 +138,6 @@ class EditPresetRollDialog(QDialog):
         # Execute Dialog
         self.exec_()
 
-    # TODO:  Modifier editing
     def EditModifier(self):
         StatModifierDescription = ("modifier for " + self.NameLineEdit.text()) if self.NameLineEdit.text() != "" else "modifier"
         EditModifierDialogInst = EditModifierDialog(self, self.CharacterWindow, self.PresetRoll["Modifier"], StatModifierDescription)
@@ -207,13 +206,15 @@ class EditPresetRollDialog(QDialog):
                 self.ResultMessagesTreeWidget.SelectIndex(CurrentResultMessageIndex + Delta)
 
     def UpdatePresetRoll(self):
+        if not self.ValidInput():
+            return
         self.PresetRoll["Name"] = self.NameLineEdit.text()
         self.PresetRoll["Dice Number"] = self.DiceNumberSpinBox.value()
         self.PresetRoll["Die Type"] = self.DieTypeSpinBox.value()
         self.UnsavedChanges = True
 
     def Done(self):
-        if self.ValidInput():
+        if self.ValidInput(Alert=True):
             self.close()
 
     def Cancel(self):
@@ -222,9 +223,10 @@ class EditPresetRollDialog(QDialog):
         self.Cancelled = True
         self.close()
 
-    def ValidInput(self):
+    def ValidInput(self, Alert=False):
         if self.NameLineEdit.text() == "":
-            self.CharacterWindow.DisplayMessageBox("Preset rolls must have a name.", Icon=QMessageBox.Warning, Parent=self)
+            if Alert:
+                self.CharacterWindow.DisplayMessageBox("Preset rolls must have a name.", Icon=QMessageBox.Warning, Parent=self)
             return False
         return True
 
