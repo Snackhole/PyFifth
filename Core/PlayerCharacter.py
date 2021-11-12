@@ -179,6 +179,13 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["Skills"]["Passive Perception Stat Modifier"] = self.CreateStatModifier()
         self.Stats["Skills"]["Passive Investigation Stat Modifier"] = self.CreateStatModifier()
 
+        # Proficiencies
+        self.Stats["Weapons Proficiencies"] = ""
+        self.Stats["Armor Proficiencies"] = ""
+        self.Stats["Tools and Instruments Proficiencies"] = ""
+        self.Stats["Languages Proficiencies"] = ""
+        self.Stats["Other Proficiencies"] = ""
+
         # AC
         self.Stats["AC Stat Modifier 1"] = self.CreateStatModifier(ACMode=True)
         self.Stats["AC Stat Modifier 1"]["Base AC"] = 10
@@ -314,6 +321,11 @@ class PlayerCharacter(Character, SerializableMixin):
             "Character Experience Earned",
             "Player Name",
             "Inspiration",
+            "Weapons Proficiencies",
+            "Armor Proficiencies",
+            "Tools and Instruments Proficiencies",
+            "Languages Proficiencies",
+            "Other Proficiencies",
             "Bonus Max Health Per Level",
             "Max Health Override",
             "Total Hit Dice",
