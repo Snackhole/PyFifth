@@ -3,6 +3,7 @@ import copy
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QGridLayout, QPushButton, QSpinBox, QSizePolicy, QMessageBox
 
+from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Dialogs.EditResultMessageDialog import EditResultMessageDialog
 from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
 from Interface.Widgets.ResultMessagesTreeWidget import ResultMessagesTreeWidget
@@ -13,7 +14,6 @@ class EditPresetRollDialog(QDialog):
         super().__init__(parent=CharacterWindow)
 
         # Store Parameters
-
         self.CharacterWindow = CharacterWindow
         self.DiceRoller = DiceRoller
         self.PresetRollIndex = PresetRollIndex
@@ -140,8 +140,9 @@ class EditPresetRollDialog(QDialog):
 
     # TODO:  Modifier editing
     def EditModifier(self):
-        # self.UnsavedChanges = True
-        pass
+        StatModifierDescription = ("modifier for " + self.NameLineEdit.text()) if self.NameLineEdit.text() != "" else "modifier"
+        EditModifierDialogInst = EditModifierDialog(self, self.CharacterWindow, self.PresetRoll["Modifier"], StatModifierDescription)
+        self.UnsavedChanges = EditModifierDialogInst.UnsavedChanges
 
     def AddResultMessage(self):
         ResultMessageIndex = self.DiceRoller.AddResultMessage(self.PresetRollIndex)
