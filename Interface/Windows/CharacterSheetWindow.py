@@ -3,7 +3,7 @@ import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QInputDialog, QLabel, QSpinBox, QMessageBox, QAction
+from PyQt5.QtWidgets import QFrame, QGridLayout, QInputDialog, QLabel, QSpinBox, QMessageBox, QAction, QTabWidget
 
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
@@ -78,6 +78,25 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.NeededExperienceLineEdit = CenteredLineEdit()
         self.NeededExperienceLineEdit.setReadOnly(True)
 
+        # Stats Tab Widget
+        self.StatsTabWidget = QTabWidget()
+        self.StatsTabWidget.setUsesScrollButtons(False)
+        # TODO:  Replace QFrames with widgets
+        self.PlayerCharacterAbilitiesAndSkillsWidget = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterAbilitiesAndSkillsWidget, "Abilities and Skills")
+        self.PlayerCharacterCombatAndFeaturesWidget = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterCombatAndFeaturesWidget, "Combat and Features")
+        self.PlayerCharacterSpellcastingWidget = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterSpellcastingWidget, "Spellcasting")
+        self.PlayerCharacterInventoryWidget = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterInventoryWidget, "Inventory")
+        self.PlayerCharacterNotesWidget = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterNotesWidget, "Notes")
+        self.PlayerCharacterPersonalityAndBackstoryWidget = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterPersonalityAndBackstoryWidget, "Personality and Backstory")
+        self.PlayerCharacterPortraitWidget = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterPortraitWidget, "Portrait")
+
         # Dice Roller
         self.DiceRollerWidget = DiceRollerWidget(self)
         self.InspirationButton = InspirationButton(self)
@@ -103,7 +122,11 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.HeaderLayout.setColumnStretch(1, 1)
         self.HeaderFrame.setLayout(self.HeaderLayout)
 
+        self.StatsFrame = QFrame()
+        self.StatsFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
         self.StatsLayout = QGridLayout()
+        self.StatsLayout.addWidget(self.StatsTabWidget, 0, 0)
+        self.StatsFrame.setLayout(self.StatsLayout)
 
         self.DiceRollerFrame = QFrame()
         self.DiceRollerFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
@@ -113,7 +136,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.DiceRollerFrame.setLayout(self.DiceRollerLayout)
 
         self.Layout.addWidget(self.HeaderFrame, 0, 0, 1, 2)
-        self.Layout.addLayout(self.StatsLayout, 1, 0)
+        self.Layout.addWidget(self.StatsFrame, 1, 0)
         self.Layout.addWidget(self.DiceRollerFrame, 1, 1)
         self.Frame.setLayout(self.Layout)
 
