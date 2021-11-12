@@ -181,8 +181,14 @@ class PlayerCharacter(Character, SerializableMixin):
 
         # AC
         self.Stats["AC Stat Modifier 1"] = self.CreateStatModifier(ACMode=True)
+        self.Stats["AC Stat Modifier 1"]["Base AC"] = 10
+        self.Stats["AC Stat Modifier 1"]["Dexterity Multiplier"] = 1
         self.Stats["AC Stat Modifier 2"] = self.CreateStatModifier(ACMode=True)
+        self.Stats["AC Stat Modifier 2"]["Base AC"] = 10
+        self.Stats["AC Stat Modifier 2"]["Dexterity Multiplier"] = 1
         self.Stats["AC Stat Modifier 3"] = self.CreateStatModifier(ACMode=True)
+        self.Stats["AC Stat Modifier 3"]["Base AC"] = 10
+        self.Stats["AC Stat Modifier 3"]["Dexterity Multiplier"] = 1
 
         # Max Health
         self.Stats["Max Health Per Level"] = {}
@@ -516,7 +522,7 @@ class PlayerCharacter(Character, SerializableMixin):
         StatModifier["Level Max"] = None
         StatModifier["Manual Modifier"] = 0
         if ACMode:
-            StatModifier["AC Base"] = 0
+            StatModifier["Base AC"] = 0
         return StatModifier
 
     def CalculateStatModifier(self, StatModifier):
@@ -563,8 +569,8 @@ class PlayerCharacter(Character, SerializableMixin):
         CalculatedModifier += StatModifier["Manual Modifier"]
 
         # AC
-        if "AC Base" in StatModifier:
-            CalculatedModifier += StatModifier["AC Base"]
+        if "Base AC" in StatModifier:
+            CalculatedModifier += StatModifier["Base AC"]
 
         # Return Calculated Modifier
         return CalculatedModifier
