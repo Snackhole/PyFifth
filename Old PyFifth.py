@@ -1,24 +1,15 @@
-# PyFifth is coded in Python 3.6.3 on Windows 10.  Earlier or later versions and other operating systems may or may not work.
-
 import json
 import math
 import os
-import platform
-import random
-import string
 from decimal import *
 from time import sleep
 from tkinter import *
 from tkinter import filedialog
 from tkinter import font
 from tkinter import messagebox
-from tkinter import ttk
 from zipfile import ZipFile
 
-from Build import VersionedAppName
 
-
-# Window Elements
 class CoinCalculator:
     def __init__(self, master, DialogMode=False):
         self.CPEntryVar = StringVar()
