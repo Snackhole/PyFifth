@@ -25,6 +25,8 @@ class EditModifierDialog(QDialog):
         if "Base AC" in self.StatModifier:
             self.BaseACLabel = QLabel("Base AC")
             self.BaseACLabel.setAlignment(QtCore.Qt.AlignCenter)
+            self.BaseACLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+            self.BaseACLabel.setMargin(5)
             self.BaseACSpinBox = QSpinBox()
             self.BaseACSpinBox.setAlignment(QtCore.Qt.AlignCenter)
             self.BaseACSpinBox.setButtonSymbols(self.BaseACSpinBox.NoButtons)
@@ -327,6 +329,8 @@ class EditModifierDialog(QDialog):
         # Manual Modifier
         self.ManualModifierLabel = QLabel("Manual Modifier")
         self.ManualModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ManualModifierLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.ManualModifierLabel.setMargin(5)
         self.ManualModifierSpinBox = QSpinBox()
         self.ManualModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.ManualModifierSpinBox.setButtonSymbols(self.ManualModifierSpinBox.NoButtons)
@@ -376,6 +380,7 @@ class EditModifierDialog(QDialog):
     def UpdateStatModifier(self):
         if not self.ValidInput():
             return
+        
         self.UnsavedChanges = True
 
     def Done(self):
