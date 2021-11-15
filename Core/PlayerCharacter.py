@@ -157,7 +157,9 @@ class PlayerCharacter(Character, SerializableMixin):
         for Ability in self.Abilities:
             self.Stats["Ability Scores"][Ability] = 8
             self.Stats["Ability Scores"][Ability + " Stat Modifier"] = self.CreateStatModifier()
+            self.Stats["Ability Scores"][Ability + " Stat Modifier"][Ability + " Multiplier"] = 1
             self.Stats["Ability Scores"][Ability + " Save Stat Modifier"] = self.CreateStatModifier()
+            self.Stats["Ability Scores"][Ability + " Save Stat Modifier"][Ability + " Multiplier"] = 1
 
         # Ability Score Derivatives
         self.Stats["Ability Score Derivatives"] = {}
@@ -177,7 +179,11 @@ class PlayerCharacter(Character, SerializableMixin):
             AssociatedAbility = self.SkillsAssociatedAbilities[Skill]
             self.Stats["Skills"][Skill + " Stat Modifier"][AssociatedAbility + " Multiplier"] = 1
         self.Stats["Skills"]["Passive Perception Stat Modifier"] = self.CreateStatModifier()
+        self.Stats["Skills"]["Passive Perception Stat Modifier"]["Manual Modifier"] = 10
+        self.Stats["Skills"]["Passive Perception Stat Modifier"]["Wisdom Multiplier"] = 1
         self.Stats["Skills"]["Passive Investigation Stat Modifier"] = self.CreateStatModifier()
+        self.Stats["Skills"]["Passive Investigation Stat Modifier"]["Manual Modifier"] = 10
+        self.Stats["Skills"]["Passive Investigation Stat Modifier"]["Intelligence Multiplier"] = 1
 
         # Proficiencies
         self.Stats["Weapons Proficiencies"] = ""
