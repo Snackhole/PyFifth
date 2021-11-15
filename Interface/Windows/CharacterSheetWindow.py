@@ -11,6 +11,7 @@ from Interface.Dialogs.EditPresetRollDialog import EditPresetRollDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Widgets.InspirationButton import InspirationButton
+from Interface.Widgets.PlayerCharacterAbilitiesAndSkillsWidget import PlayerCharacterAbilitiesAndSkillsWidget
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -82,20 +83,20 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.StatsTabWidget = QTabWidget()
         self.StatsTabWidget.setUsesScrollButtons(False)
         # TODO:  Replace QFrames with widgets
-        self.PlayerCharacterAbilitiesAndSkillsWidget = QFrame()
-        self.StatsTabWidget.addTab(self.PlayerCharacterAbilitiesAndSkillsWidget, "Abilities and Skills")
-        self.PlayerCharacterCombatAndFeaturesWidget = QFrame()
-        self.StatsTabWidget.addTab(self.PlayerCharacterCombatAndFeaturesWidget, "Combat and Features")
-        self.PlayerCharacterSpellcastingWidget = QFrame()
-        self.StatsTabWidget.addTab(self.PlayerCharacterSpellcastingWidget, "Spellcasting")
-        self.PlayerCharacterInventoryWidget = QFrame()
-        self.StatsTabWidget.addTab(self.PlayerCharacterInventoryWidget, "Inventory")
-        self.PlayerCharacterNotesWidget = QFrame()
-        self.StatsTabWidget.addTab(self.PlayerCharacterNotesWidget, "Notes")
-        self.PlayerCharacterPersonalityAndBackstoryWidget = QFrame()
-        self.StatsTabWidget.addTab(self.PlayerCharacterPersonalityAndBackstoryWidget, "Personality and Backstory")
-        self.PlayerCharacterPortraitWidget = QFrame()
-        self.StatsTabWidget.addTab(self.PlayerCharacterPortraitWidget, "Portrait")
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst = PlayerCharacterAbilitiesAndSkillsWidget(self)
+        self.StatsTabWidget.addTab(self.PlayerCharacterAbilitiesAndSkillsWidgetInst, "Abilities and Skills")
+        self.PlayerCharacterCombatAndFeaturesWidgetInst = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterCombatAndFeaturesWidgetInst, "Combat and Features")
+        self.PlayerCharacterSpellcastingWidgetInst = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterSpellcastingWidgetInst, "Spellcasting")
+        self.PlayerCharacterInventoryWidgetInst = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterInventoryWidgetInst, "Inventory")
+        self.PlayerCharacterNotesWidgetInst = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterNotesWidgetInst, "Notes")
+        self.PlayerCharacterPersonalityAndBackstoryWidgetInst = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterPersonalityAndBackstoryWidgetInst, "Personality and Backstory")
+        self.PlayerCharacterPortraitWidgetInst = QFrame()
+        self.StatsTabWidget.addTab(self.PlayerCharacterPortraitWidgetInst, "Portrait")
 
         # Dice Roller
         self.DiceRollerWidget = DiceRollerWidget(self)
