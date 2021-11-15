@@ -65,7 +65,7 @@ class DiceRoller(SerializableMixin):
                     Results["Log Suffix"] += "\n" + ResultMessage["Result Text"]
             if not self.Character is None:
                 if Results["Dice Number"] == 1 and Results["Die Type"] == 20 and Results["Rolls"][0] >= self.Character.Stats["Crit Minimum"]:
-                    Results["Log Suffix"] += "\n" + "Crit!"
+                    Results["Log Suffix"] += "\nCrit!"
 
             # Add to Log
             self.ResultsLog.append(self.CreateLogEntryText(Results))
