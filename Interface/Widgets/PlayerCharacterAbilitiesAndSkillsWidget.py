@@ -393,6 +393,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.WeaponsProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
         self.WeaponsProficienciesLabel.setMargin(5)
         self.WeaponsProficiencesTextEdit = QTextEdit()
+        self.WeaponsProficiencesTextEdit.setTabChangesFocus(True)
         self.WeaponsProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Weapons Proficiencies", self.WeaponsProficiencesTextEdit.toPlainText()))
 
         # Armor Proficiencies
@@ -401,6 +402,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.ArmorProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
         self.ArmorProficienciesLabel.setMargin(5)
         self.ArmorProficiencesTextEdit = QTextEdit()
+        self.ArmorProficiencesTextEdit.setTabChangesFocus(True)
         self.ArmorProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Armor Proficiencies", self.ArmorProficiencesTextEdit.toPlainText()))
 
         # Tools and Instruments Proficiencies
@@ -409,6 +411,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.ToolsAndInstrumentsProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
         self.ToolsAndInstrumentsProficienciesLabel.setMargin(5)
         self.ToolsAndInstrumentsProficiencesTextEdit = QTextEdit()
+        self.ToolsAndInstrumentsProficiencesTextEdit.setTabChangesFocus(True)
         self.ToolsAndInstrumentsProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Tools and Instruments Proficiencies", self.ToolsAndInstrumentsProficiencesTextEdit.toPlainText()))
 
         # Languages Proficiencies
@@ -417,6 +420,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.LanguagesProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
         self.LanguagesProficienciesLabel.setMargin(5)
         self.LanguagesProficiencesTextEdit = QTextEdit()
+        self.LanguagesProficiencesTextEdit.setTabChangesFocus(True)
         self.LanguagesProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Languages Proficiencies", self.LanguagesProficiencesTextEdit.toPlainText()))
 
         # Other Proficiencies
@@ -425,6 +429,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.OtherProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
         self.OtherProficienciesLabel.setMargin(5)
         self.OtherProficiencesTextEdit = QTextEdit()
+        self.OtherProficiencesTextEdit.setTabChangesFocus(True)
         self.OtherProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Other Proficiencies", self.OtherProficiencesTextEdit.toPlainText()))
 
     def CreateAndSetLayout(self):
