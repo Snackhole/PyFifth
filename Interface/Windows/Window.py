@@ -33,7 +33,10 @@ class Window(QMainWindow):
 
         # Set Central Frame
         self.setCentralWidget(self.Frame)
+
+        # Show Window
         self.show()
+        self.SetGeometryToMinimum()
         self.Center()
 
     def CreateInterface(self):
@@ -60,6 +63,12 @@ class Window(QMainWindow):
         return self.AbsoluteDirectoryPath + "/" + RelativeLocation
 
     # Window Management Methods
+    def SetGeometryToMinimum(self):
+        FrameGeometryRectangle = self.frameGeometry()
+        FrameGeometryRectangle.setWidth(self.minimumWidth())
+        FrameGeometryRectangle.setHeight(self.minimumHeight())
+        self.setGeometry(FrameGeometryRectangle)
+
     def Center(self):
         FrameGeometryRectangle = self.frameGeometry()
         DesktopCenterPoint = QApplication.primaryScreen().availableGeometry().center()

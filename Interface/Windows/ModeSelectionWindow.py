@@ -18,7 +18,7 @@ class ModeSelectionWindow(Window):
         super().LoadTheme()
 
         # Mode Label
-        self.ModeLabel = QLabel("Mode:")
+        self.ModeLabel = QLabel("PyFifth Mode:")
 
         # Mode ComboBox
         self.ModeComboBox = QComboBox()
