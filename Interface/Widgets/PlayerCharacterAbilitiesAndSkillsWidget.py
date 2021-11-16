@@ -47,19 +47,19 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
 
         self.AbilitiesAndSavingThrowsHeaderAbilityLabel = QLabel("Ability")
         self.AbilitiesAndSavingThrowsHeaderAbilityLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.AbilitiesAndSavingThrowsHeaderAbilityLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.AbilitiesAndSavingThrowsHeaderAbilityLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.AbilitiesAndSavingThrowsHeaderAbilityLabel.setMargin(5)
         self.AbilitiesAndSavingThrowsHeaderTotalLabel = QLabel("Total")
         self.AbilitiesAndSavingThrowsHeaderTotalLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.AbilitiesAndSavingThrowsHeaderTotalLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.AbilitiesAndSavingThrowsHeaderTotalLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.AbilitiesAndSavingThrowsHeaderTotalLabel.setMargin(5)
         self.AbilitiesAndSavingThrowsHeaderModifierLabel = QLabel("Modifier")
         self.AbilitiesAndSavingThrowsHeaderModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.AbilitiesAndSavingThrowsHeaderModifierLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.AbilitiesAndSavingThrowsHeaderModifierLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.AbilitiesAndSavingThrowsHeaderModifierLabel.setMargin(5)
         self.AbilitiesAndSavingThrowsHeaderSavingThrowLabel = QLabel("Saving Throw")
         self.AbilitiesAndSavingThrowsHeaderSavingThrowLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.AbilitiesAndSavingThrowsHeaderSavingThrowLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.AbilitiesAndSavingThrowsHeaderSavingThrowLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.AbilitiesAndSavingThrowsHeaderSavingThrowLabel.setMargin(5)
 
         # Strength
@@ -230,11 +230,11 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
 
         self.SkillsHeaderSkillLabel = QLabel("Skill")
         self.SkillsHeaderSkillLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.SkillsHeaderSkillLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.SkillsHeaderSkillLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.SkillsHeaderSkillLabel.setMargin(5)
         self.SkillsHeaderModifierLabel = QLabel("Modifier")
         self.SkillsHeaderModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.SkillsHeaderModifierLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.SkillsHeaderModifierLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.SkillsHeaderModifierLabel.setMargin(5)
 
         # Acrobatics (DEX)
@@ -443,11 +443,11 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
 
         self.PassiveSkillsHeaderSkillLabel = QLabel("Skill")
         self.PassiveSkillsHeaderSkillLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.PassiveSkillsHeaderSkillLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.PassiveSkillsHeaderSkillLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.PassiveSkillsHeaderSkillLabel.setMargin(5)
         self.PassiveSkillsHeaderScoreLabel = QLabel("Score")
         self.PassiveSkillsHeaderScoreLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.PassiveSkillsHeaderScoreLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.PassiveSkillsHeaderScoreLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.PassiveSkillsHeaderScoreLabel.setMargin(5)
 
         # Passive Perception
@@ -478,7 +478,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         # Weapons Proficiencies
         self.WeaponsProficienciesLabel = QLabel("Weapons")
         self.WeaponsProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.WeaponsProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.WeaponsProficienciesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.WeaponsProficienciesLabel.setMargin(5)
         self.WeaponsProficiencesTextEdit = QTextEdit()
         self.WeaponsProficiencesTextEdit.setTabChangesFocus(True)
@@ -487,7 +487,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         # Armor Proficiencies
         self.ArmorProficienciesLabel = QLabel("Armor")
         self.ArmorProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.ArmorProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.ArmorProficienciesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.ArmorProficienciesLabel.setMargin(5)
         self.ArmorProficiencesTextEdit = QTextEdit()
         self.ArmorProficiencesTextEdit.setTabChangesFocus(True)
@@ -496,7 +496,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         # Tools and Instruments Proficiencies
         self.ToolsAndInstrumentsProficienciesLabel = QLabel("Tools and Instruments")
         self.ToolsAndInstrumentsProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.ToolsAndInstrumentsProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.ToolsAndInstrumentsProficienciesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.ToolsAndInstrumentsProficienciesLabel.setMargin(5)
         self.ToolsAndInstrumentsProficiencesTextEdit = QTextEdit()
         self.ToolsAndInstrumentsProficiencesTextEdit.setTabChangesFocus(True)
@@ -505,7 +505,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         # Languages Proficiencies
         self.LanguagesProficienciesLabel = QLabel("Languages")
         self.LanguagesProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.LanguagesProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.LanguagesProficienciesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.LanguagesProficienciesLabel.setMargin(5)
         self.LanguagesProficiencesTextEdit = QTextEdit()
         self.LanguagesProficiencesTextEdit.setTabChangesFocus(True)
@@ -514,7 +514,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         # Other Proficiencies
         self.OtherProficienciesLabel = QLabel("Other")
         self.OtherProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.OtherProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.OtherProficienciesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.OtherProficienciesLabel.setMargin(5)
         self.OtherProficiencesTextEdit = QTextEdit()
         self.OtherProficiencesTextEdit.setTabChangesFocus(True)

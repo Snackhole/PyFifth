@@ -106,7 +106,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.Layout = QGridLayout()
 
         self.HeaderFrame = QFrame()
-        self.HeaderFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
+        self.HeaderFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
         self.HeaderLayout = QGridLayout()
         self.HeaderLayout.addWidget(self.NameLabel, 0, 0)
         self.HeaderLayout.addWidget(self.NameLineEdit, 0, 1)
@@ -125,13 +125,13 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.HeaderFrame.setLayout(self.HeaderLayout)
 
         self.StatsFrame = QFrame()
-        self.StatsFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
+        self.StatsFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
         self.StatsLayout = QGridLayout()
         self.StatsLayout.addWidget(self.StatsTabWidget, 0, 0)
         self.StatsFrame.setLayout(self.StatsLayout)
 
         self.DiceRollerFrame = QFrame()
-        self.DiceRollerFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
+        self.DiceRollerFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
         self.DiceRollerLayout = QGridLayout()
         self.DiceRollerLayout.addWidget(self.DiceRollerWidget, 0, 0)
         self.DiceRollerLayout.addWidget(self.InspirationButton, 1, 0)
