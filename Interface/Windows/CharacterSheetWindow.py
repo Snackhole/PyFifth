@@ -483,6 +483,46 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         # Portrait Enabled
         self.StatsTabWidget.setTabVisible(6, self.PlayerCharacter.Stats["Portrait Enabled"])
 
+        # Abilities and Saving Throws
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StrengthTotalLineEdit.setText(str(self.DerivedStats["Strength Total Score"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StrengthModifierLineEdit.setText(str(self.DerivedStats["Strength Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StrengthSavingThrowLineEdit.setText(str(self.DerivedStats["Strength Saving Throw Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DexterityTotalLineEdit.setText(str(self.DerivedStats["Dexterity Total Score"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DexterityModifierLineEdit.setText(str(self.DerivedStats["Dexterity Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DexteritySavingThrowLineEdit.setText(str(self.DerivedStats["Dexterity Saving Throw Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ConstitutionTotalLineEdit.setText(str(self.DerivedStats["Constitution Total Score"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ConstitutionModifierLineEdit.setText(str(self.DerivedStats["Constitution Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ConstitutionSavingThrowLineEdit.setText(str(self.DerivedStats["Constitution Saving Throw Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntelligenceTotalLineEdit.setText(str(self.DerivedStats["Intelligence Total Score"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntelligenceModifierLineEdit.setText(str(self.DerivedStats["Intelligence Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntelligenceSavingThrowLineEdit.setText(str(self.DerivedStats["Intelligence Saving Throw Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WisdomTotalLineEdit.setText(str(self.DerivedStats["Wisdom Total Score"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WisdomModifierLineEdit.setText(str(self.DerivedStats["Wisdom Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WisdomSavingThrowLineEdit.setText(str(self.DerivedStats["Wisdom Saving Throw Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.CharismaTotalLineEdit.setText(str(self.DerivedStats["Charisma Total Score"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.CharismaModifierLineEdit.setText(str(self.DerivedStats["Charisma Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.CharismaSavingThrowLineEdit.setText(str(self.DerivedStats["Charisma Saving Throw Modifier"]))
+
+        # Skills
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.AcrobaticsModifierLineEdit.setText(str(self.DerivedStats["Acrobatics Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.AnimalHandlingModifierLineEdit.setText(str(self.DerivedStats["Animal Handling Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ArcanaModifierLineEdit.setText(str(self.DerivedStats["Arcana Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.AthleticsModifierLineEdit.setText(str(self.DerivedStats["Athletics Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DeceptionModifierLineEdit.setText(str(self.DerivedStats["Deception Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.HistoryModifierLineEdit.setText(str(self.DerivedStats["History Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.InsightModifierLineEdit.setText(str(self.DerivedStats["Insight Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntimidationModifierLineEdit.setText(str(self.DerivedStats["Intimidation Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.InvestigationModifierLineEdit.setText(str(self.DerivedStats["Investigation Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.MedicineModifierLineEdit.setText(str(self.DerivedStats["Medicine Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.NatureModifierLineEdit.setText(str(self.DerivedStats["Nature Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PerceptionModifierLineEdit.setText(str(self.DerivedStats["Perception Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PerformanceModifierLineEdit.setText(str(self.DerivedStats["Performance Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PersuasionModifierLineEdit.setText(str(self.DerivedStats["Persuasion Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ReligionModifierLineEdit.setText(str(self.DerivedStats["Religion Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.SleightOfHandModifierLineEdit.setText(str(self.DerivedStats["Sleight of Hand Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StealthModifierLineEdit.setText(str(self.DerivedStats["Stealth Modifier"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.SurvivalModifierLineEdit.setText(str(self.DerivedStats["Survival Modifier"]))
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
@@ -497,11 +537,23 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
 
         if self.Opening:
+            # Header
             self.NameLineEdit.setText(self.PlayerCharacter.Stats["Character Name"])
             self.ClassLineEdit.setText(self.PlayerCharacter.Stats["Character Class"])
             self.LevelSpinBox.setValue(self.PlayerCharacter.Stats["Character Level"])
             self.ExperienceSpinBox.setValue(self.PlayerCharacter.Stats["Character Experience Earned"])
+
+            # Proficiencies
+            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WeaponsProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Weapons Proficiencies"])
+            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ArmorProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Armor Proficiencies"])
+            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ToolsAndInstrumentsProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Tools and Instruments Proficiencies"])
+            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.LanguagesProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Languages Proficiencies"])
+            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.OtherProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Other Proficiencies"])
+
+            # Inspiration
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
+
+            # Settings
             self.SpellcastingEnabledAction.setChecked(self.PlayerCharacter.Stats["Spellcasting Enabled"])
             self.ConcentrationCheckPromptEnabledAction.setChecked(self.PlayerCharacter.Stats["Enable Concentration Check"])
             self.PortraitEnabledAction.setChecked(self.PlayerCharacter.Stats["Portrait Enabled"])
