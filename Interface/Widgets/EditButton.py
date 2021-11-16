@@ -4,10 +4,12 @@ from PyQt5.QtWidgets import QPushButton
 
 
 class EditButton(QPushButton):
-    def __init__(self, Slot):
+    def __init__(self, Slot, Tooltip="Edit"):
         super().__init__()
 
         self.CreateIcon()
+
+        self.setToolTip(Tooltip)
 
         self.clicked.connect(Slot)
 
