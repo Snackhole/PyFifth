@@ -523,6 +523,10 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StealthModifierLineEdit.setText(str(self.DerivedStats["Stealth Modifier"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.SurvivalModifierLineEdit.setText(str(self.DerivedStats["Survival Modifier"]))
 
+        # Passive Scores
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PassivePerceptionLineEdit.setText(str(self.DerivedStats["Passive Perception"]))
+        self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PassiveInvestigationLineEdit.setText(str(self.DerivedStats["Passive Investigation"]))
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
