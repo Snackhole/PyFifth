@@ -14,7 +14,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.CharacterWindow = CharacterWindow
 
         # Styles
-        self.SectionLabelStyle = "QLabel {font-size: 10pt;}"
+        self.SectionLabelStyle = "QLabel {font-size: 10pt; font-weight: bold;}"
 
         # Header Label Margin
         self.HeaderLabelMargin = 5
@@ -380,6 +380,37 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.SurvivalModifierRollButton = RollButton(lambda: self.Roll("Survival (WIS) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Survival Stat Modifier"]), Tooltip="Roll Survival (WIS) Check")
         self.SurvivalModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
+        # Passive Scores Header
+        self.PassiveScoresLabel = QLabel("Passive Scores")
+        self.PassiveScoresLabel.setStyleSheet(self.SectionLabelStyle)
+        self.PassiveScoresLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PassiveScoresLabel.setMargin(self.HeaderLabelMargin)
+
+        self.PassiveSkillsHeaderSkillLabel = QLabel("Skill")
+        self.PassiveSkillsHeaderSkillLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PassiveSkillsHeaderSkillLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.PassiveSkillsHeaderSkillLabel.setMargin(5)
+        self.PassiveSkillsHeaderScoreLabel = QLabel("Score")
+        self.PassiveSkillsHeaderScoreLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PassiveSkillsHeaderScoreLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.PassiveSkillsHeaderScoreLabel.setMargin(5)
+
+        # Passive Perception
+        self.PassivePerceptionLabel = QLabel("Perception")
+        self.PassivePerceptionLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PassivePerceptionLineEdit = QLineEdit()
+        self.PassivePerceptionLineEdit.setSizePolicy(self.InputsSizePolicy)
+        self.PassivePerceptionLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.PassivePerceptionLineEdit.setEnabled(False)
+
+        # Passive Investigation
+        self.PassiveInvestigationLabel = QLabel("Investigation")
+        self.PassiveInvestigationLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PassiveInvestigationLineEdit = QLineEdit()
+        self.PassiveInvestigationLineEdit.setSizePolicy(self.InputsSizePolicy)
+        self.PassiveInvestigationLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.PassiveInvestigationLineEdit.setEnabled(False)
+
     def CreateProficiencyInputs(self):
         # Header
         self.ProficienciesLabel = QLabel("Proficiencies")
@@ -484,7 +515,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
             self.AbilitiesAndSavingThrowsLayout.setRowStretch(Row, 1)
         for Column in [1, 2, 4]:
             self.AbilitiesAndSavingThrowsLayout.setColumnStretch(Column, 1)
-        self.Layout.addLayout(self.AbilitiesAndSavingThrowsLayout, 0, 0)
+        self.Layout.addLayout(self.AbilitiesAndSavingThrowsLayout, 0, 0, 2, 1)
 
         # Skills Table
         self.SkillsLayout = QGridLayout()
@@ -551,6 +582,20 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.SkillsLayout.setColumnStretch(1, 1)
         self.Layout.addLayout(self.SkillsLayout, 0, 1)
 
+        # Passive Scores Table
+        self.PassiveScoresLayout = QGridLayout()
+        self.PassiveScoresLayout.addWidget(self.PassiveScoresLabel, 0, 0, 1, 2)
+        self.PassiveScoresLayout.addWidget(self.PassiveSkillsHeaderSkillLabel, 1, 0)
+        self.PassiveScoresLayout.addWidget(self.PassiveSkillsHeaderScoreLabel, 1, 1)
+        self.PassiveScoresLayout.addWidget(self.PassivePerceptionLabel, 2, 0)
+        self.PassiveScoresLayout.addWidget(self.PassivePerceptionLineEdit, 2, 1)
+        self.PassiveScoresLayout.addWidget(self.PassiveInvestigationLabel, 3, 0)
+        self.PassiveScoresLayout.addWidget(self.PassiveInvestigationLineEdit, 3, 1)
+        for Row in [2, 3]:
+            self.PassiveScoresLayout.setRowStretch(Row, 1)
+        self.PassiveScoresLayout.setColumnStretch(1, 1)
+        self.Layout.addLayout(self.PassiveScoresLayout, 1, 1)
+
         # Proficiencies
         self.ProficienciesLayout = QGridLayout()
         self.ProficienciesLayout.addWidget(self.ProficienciesLabel, 0, 0)
@@ -566,7 +611,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.ProficienciesLayout.addWidget(self.OtherProficiencesTextEdit, 10, 0)
         for Row in [2, 4, 6, 8, 10]:
             self.ProficienciesLayout.setRowStretch(Row, 1)
-        self.Layout.addLayout(self.ProficienciesLayout, 0, 2)
+        self.Layout.addLayout(self.ProficienciesLayout, 0, 2, 2, 1)
 
         # Ability Scores Table Stretching
         self.Layout.setColumnStretch(0, 1)
