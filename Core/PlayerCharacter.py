@@ -155,7 +155,11 @@ class PlayerCharacter(Character, SerializableMixin):
         # Ability Scores
         self.Stats["Ability Scores"] = {}
         for Ability in self.Abilities:
-            self.Stats["Ability Scores"][Ability] = 8
+            self.Stats["Ability Scores"][Ability + " Base"] = 8
+            self.Stats["Ability Scores"][Ability + " Racial"] = 0
+            self.Stats["Ability Scores"][Ability + " ASI"] = 0
+            self.Stats["Ability Scores"][Ability + " Miscellaneous"] = 0
+            self.Stats["Ability Scores"][Ability + " Override"] = None
             self.Stats["Ability Scores"][Ability + " Stat Modifier"] = self.CreateStatModifier()
             self.Stats["Ability Scores"][Ability + " Stat Modifier"][Ability + " Multiplier"] = 1
             self.Stats["Ability Scores"][Ability + " Save Stat Modifier"] = self.CreateStatModifier()
@@ -362,9 +366,10 @@ class PlayerCharacter(Character, SerializableMixin):
 
         # Ability and Saving Throw Modifiers
         for Ability in self.Abilities:
-            Mods = self.CalculateAbilityModifiers(Ability)
-            DerivedStats[Ability + " Modifier"] = Mods["Ability Modifier"]
-            DerivedStats[Ability + " Saving Throw Modifier"] = Mods["Save Modifier"]
+            TotalAbilityScore = self.GetTotalAbilityScore(Ability)
+            DerivedStats[Ability + " Total Score"] = TotalAbilityScore
+            DerivedStats[Ability + " Modifier"] = self.CalculateStatModifier(self.Stats["Ability Scores"][Ability + " Stat Modifier"])
+            DerivedStats[Ability + " Saving Throw Modifier"] = self.CalculateStatModifier(self.Stats["Ability Scores"][Ability + " Save Stat Modifier"])
 
         # Skill Modifiers
         for Skill in self.Skills:
@@ -404,7 +409,7 @@ class PlayerCharacter(Character, SerializableMixin):
             DerivedStats["Max Spell Points"] = None
 
         # Carrying Capacity
-        DerivedStats["Carrying Capacity"] = (15 * self.Stats["Ability Scores"]["Strength"]) + self.CalculateStatModifier(self.Stats["Carrying Capacity Stat Modifier"])
+        DerivedStats["Carrying Capacity"] = (15 * DerivedStats["Strength Total Score"]) + self.CalculateStatModifier(self.Stats["Carrying Capacity Stat Modifier"])
 
         # Coin Counts
         CPCount = Decimal(self.Stats["Coins"]["CP"])
@@ -538,7 +543,7 @@ class PlayerCharacter(Character, SerializableMixin):
 
         # Ability Modifiers
         for Ability in self.Abilities:
-            AbilityMod = self.GetBaseAbilityModifier(self.Stats["Ability Scores"][Ability]) * StatModifier[Ability + " Multiplier"]
+            AbilityMod = math.floor((self.GetTotalAbilityScore(Ability) - 10) / 2) * StatModifier[Ability + " Multiplier"]
             if StatModifier[Ability + " Multiplier Round Up"]:
                 AbilityMod = math.ceil(AbilityMod)
             else:
@@ -583,22 +588,14 @@ class PlayerCharacter(Character, SerializableMixin):
         # Return Calculated Modifier
         return CalculatedModifier
 
-    def CalculateAbilityModifiers(self, Ability):
-        # Ability Score
-        AbilityScore = self.Stats["Ability Scores"][Ability]
-
-        # Calculate Mods
-        BaseAbilityModifier = self.GetBaseAbilityModifier(AbilityScore)
-        CalculatedAbilityStatModifier = self.CalculateStatModifier(self.Stats["Ability Scores"][Ability + " Stat Modifier"])
-        CalculatedSaveStatModifier = self.CalculateStatModifier(self.Stats["Ability Scores"][Ability + " Save Stat Modifier"])
-        AbilityModifier = BaseAbilityModifier + CalculatedAbilityStatModifier
-        SaveModifier = BaseAbilityModifier + CalculatedSaveStatModifier
-
-        # Return Mods
-        Mods = {}
-        Mods["Ability Modifier"] = AbilityModifier
-        Mods["Save Modifier"] = SaveModifier
-        return Mods
+    def GetTotalAbilityScore(self, Ability):
+        TotalAbilityScore = self.Stats["Ability Scores"][Ability + " Base"]
+        TotalAbilityScore += self.Stats["Ability Scores"][Ability + " Racial"]
+        TotalAbilityScore += self.Stats["Ability Scores"][Ability + " ASI"]
+        TotalAbilityScore += self.Stats["Ability Scores"][Ability + " Miscellaneous"]
+        if self.Stats["Ability Scores"][Ability + " Override"] is not None:
+            TotalAbilityScore += self.Stats["Ability Scores"][Ability + " Override"]
+        return TotalAbilityScore
 
     # Combat Methods
     def RollInitiative(self):

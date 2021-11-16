@@ -58,13 +58,6 @@ class Character:
         # Return Derived Stats Dictionary
         return DerivedStats
 
-    # Stat Calculation Methods
-    def CalculateProficiencyModifier(self):
-        return None
-
-    def GetBaseAbilityModifier(self, AbilityScore):
-        return math.floor((AbilityScore - 10) / 2)
-
     # Combat Methods
     def Damage(self, DamageAmount):
         TotalDamageAmount = DamageAmount
