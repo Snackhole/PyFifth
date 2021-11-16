@@ -66,6 +66,10 @@ class DiceRoller(SerializableMixin):
             if not self.Character is None:
                 if Results["Dice Number"] == 1 and Results["Die Type"] == 20 and Results["Rolls"][0] >= self.Character.Stats["Crit Minimum"]:
                     Results["Log Suffix"] += "\nCrit!"
+                elif Results["Dice Number"] == 1 and Results["Die Type"] == 20 and Results["Rolls"][0] == 1:
+                    Results["Log Suffix"] += "\nCrit Fail!"
+                    if self.Character.Stats["Lucky Halfling"]:
+                        Results["Log Suffix"] += "  But you're lucky, so if this was an attack roll, ability check, or saving throw, you get to roll again one time!"
 
             # Add to Log
             self.ResultsLog.append(self.CreateLogEntryText(Results))
