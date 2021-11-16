@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QLineEdit, QSizePolicy
+from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QLineEdit, QSizePolicy, QTextEdit
 
 from Interface.Widgets.EditButton import EditButton
 from Interface.Widgets.RollButton import RollButton
@@ -16,6 +16,9 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         # Styles
         self.SectionLabelStyle = "QLabel {font-size: 10pt;}"
 
+        # Header Label Margin
+        self.HeaderLabelMargin = 5
+
         # Inputs Size Policy
         self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
@@ -25,6 +28,9 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         # Skills
         self.CreateSkillsTable()
 
+        # Proficiencies
+        self.CreateProficiencyInputs()
+
         # Create and Set Layout
         self.CreateAndSetLayout()
 
@@ -33,6 +39,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.AbilitiesAndSavingThrowsLabel = QLabel("Abilities and Saving Throws")
         self.AbilitiesAndSavingThrowsLabel.setStyleSheet(self.SectionLabelStyle)
         self.AbilitiesAndSavingThrowsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.AbilitiesAndSavingThrowsLabel.setMargin(self.HeaderLabelMargin)
 
         self.AbilitiesAndSavingThrowsEditButton = EditButton(lambda: self.EditAbilityScores(), Tooltip="Edit Ability Scores and Saving Throws")
         self.AbilitiesAndSavingThrowsEditButton.setSizePolicy(self.InputsSizePolicy)
@@ -179,6 +186,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.SkillsLabel = QLabel("Skills")
         self.SkillsLabel.setStyleSheet(self.SectionLabelStyle)
         self.SkillsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SkillsLabel.setMargin(self.HeaderLabelMargin)
 
         self.SkillsEditButton = EditButton(lambda: self.EditSkills(), Tooltip="Edit Skills")
         self.SkillsEditButton.setSizePolicy(self.InputsSizePolicy)
@@ -372,6 +380,53 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.SurvivalModifierRollButton = RollButton(lambda: self.Roll("Survival (WIS) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Survival Stat Modifier"]), Tooltip="Roll Survival (WIS) Check")
         self.SurvivalModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
+    def CreateProficiencyInputs(self):
+        # Header
+        self.ProficienciesLabel = QLabel("Proficiencies")
+        self.ProficienciesLabel.setStyleSheet(self.SectionLabelStyle)
+        self.ProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ProficienciesLabel.setMargin(self.HeaderLabelMargin)
+
+        # Weapons Proficiencies
+        self.WeaponsProficienciesLabel = QLabel("Weapons")
+        self.WeaponsProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.WeaponsProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.WeaponsProficienciesLabel.setMargin(5)
+        self.WeaponsProficiencesTextEdit = QTextEdit()
+        self.WeaponsProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Weapons Proficiencies", self.WeaponsProficiencesTextEdit.toPlainText()))
+
+        # Armor Proficiencies
+        self.ArmorProficienciesLabel = QLabel("Armor")
+        self.ArmorProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ArmorProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.ArmorProficienciesLabel.setMargin(5)
+        self.ArmorProficiencesTextEdit = QTextEdit()
+        self.ArmorProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Armor Proficiencies", self.ArmorProficiencesTextEdit.toPlainText()))
+
+        # Tools and Instruments Proficiencies
+        self.ToolsAndInstrumentsProficienciesLabel = QLabel("Tools and Instruments")
+        self.ToolsAndInstrumentsProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ToolsAndInstrumentsProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.ToolsAndInstrumentsProficienciesLabel.setMargin(5)
+        self.ToolsAndInstrumentsProficiencesTextEdit = QTextEdit()
+        self.ToolsAndInstrumentsProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Tools and Instruments Proficiencies", self.ToolsAndInstrumentsProficiencesTextEdit.toPlainText()))
+
+        # Languages Proficiencies
+        self.LanguagesProficienciesLabel = QLabel("Languages")
+        self.LanguagesProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.LanguagesProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.LanguagesProficienciesLabel.setMargin(5)
+        self.LanguagesProficiencesTextEdit = QTextEdit()
+        self.LanguagesProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Languages Proficiencies", self.LanguagesProficiencesTextEdit.toPlainText()))
+
+        # Other Proficiencies
+        self.OtherProficienciesLabel = QLabel("Other")
+        self.OtherProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.OtherProficienciesLabel.setFrameStyle(QLabel.Panel | QLabel.Plain)
+        self.OtherProficienciesLabel.setMargin(5)
+        self.OtherProficiencesTextEdit = QTextEdit()
+        self.OtherProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Other Proficiencies", self.OtherProficiencesTextEdit.toPlainText()))
+
     def CreateAndSetLayout(self):
         # Create Layout
         self.Layout = QGridLayout()
@@ -490,6 +545,23 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
             self.SkillsLayout.setRowStretch(Row, 1)
         self.SkillsLayout.setColumnStretch(1, 1)
         self.Layout.addLayout(self.SkillsLayout, 0, 1)
+
+        # Proficiencies
+        self.ProficienciesLayout = QGridLayout()
+        self.ProficienciesLayout.addWidget(self.ProficienciesLabel, 0, 0)
+        self.ProficienciesLayout.addWidget(self.WeaponsProficienciesLabel, 1, 0)
+        self.ProficienciesLayout.addWidget(self.WeaponsProficiencesTextEdit, 2, 0)
+        self.ProficienciesLayout.addWidget(self.ArmorProficienciesLabel, 3, 0)
+        self.ProficienciesLayout.addWidget(self.ArmorProficiencesTextEdit, 4, 0)
+        self.ProficienciesLayout.addWidget(self.ToolsAndInstrumentsProficienciesLabel, 5, 0)
+        self.ProficienciesLayout.addWidget(self.ToolsAndInstrumentsProficiencesTextEdit, 6, 0)
+        self.ProficienciesLayout.addWidget(self.LanguagesProficienciesLabel, 7, 0)
+        self.ProficienciesLayout.addWidget(self.LanguagesProficiencesTextEdit, 8, 0)
+        self.ProficienciesLayout.addWidget(self.OtherProficienciesLabel, 9, 0)
+        self.ProficienciesLayout.addWidget(self.OtherProficiencesTextEdit, 10, 0)
+        for Row in [2, 4, 6, 8, 10]:
+            self.ProficienciesLayout.setRowStretch(Row, 1)
+        self.Layout.addLayout(self.ProficienciesLayout, 0, 2)
 
         # Ability Scores Table Stretching
         self.Layout.setColumnStretch(0, 1)
