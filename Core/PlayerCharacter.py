@@ -376,8 +376,8 @@ class PlayerCharacter(Character, SerializableMixin):
             DerivedStats[Skill + " Modifier"] = self.CalculateStatModifier(self.Stats["Skills"][Skill + " Stat Modifier"])
 
         # Passive Perception and Investigation
-        DerivedStats["Passive Perception"] = 10 + DerivedStats["Perception Modifier"] + self.CalculateStatModifier(self.Stats["Skills"]["Passive Perception Stat Modifier"])
-        DerivedStats["Passive Investigation"] = 10 + DerivedStats["Investigation Modifier"] + self.CalculateStatModifier(self.Stats["Skills"]["Passive Investigation Stat Modifier"])
+        DerivedStats["Passive Perception"] = self.CalculateStatModifier(self.Stats["Skills"]["Passive Perception Stat Modifier"])
+        DerivedStats["Passive Investigation"] = self.CalculateStatModifier(self.Stats["Skills"]["Passive Investigation Stat Modifier"])
 
         # AC
         DerivedStats["AC 1"] = self.CalculateStatModifier(self.Stats["AC Stat Modifier 1"])
