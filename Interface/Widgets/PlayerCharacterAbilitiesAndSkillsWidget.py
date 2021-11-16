@@ -422,6 +422,8 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.AbilitiesAndSavingThrowsLayout.addWidget(self.CharismaSavingThrowRollButton, 7, 5)
         for Row in range(2, 8):
             self.AbilitiesAndSavingThrowsLayout.setRowStretch(Row, 1)
+        for Column in [1, 2, 4]:
+            self.AbilitiesAndSavingThrowsLayout.setColumnStretch(Column, 1)
         self.Layout.addLayout(self.AbilitiesAndSavingThrowsLayout, 0, 0)
 
         # Skills Table
@@ -486,7 +488,11 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.SkillsLayout.addWidget(self.SurvivalModifierRollButton, 19, 2)
         for Row in range(2, 20):
             self.SkillsLayout.setRowStretch(Row, 1)
-        self.Layout.addLayout(self.SkillsLayout, 0, 2)
+        self.SkillsLayout.setColumnStretch(1, 1)
+        self.Layout.addLayout(self.SkillsLayout, 0, 1)
+
+        # Ability Scores Table Stretching
+        self.Layout.setColumnStretch(0, 1)
 
         # Set Layout
         self.setLayout(self.Layout)

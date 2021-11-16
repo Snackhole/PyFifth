@@ -155,6 +155,7 @@ class DiceRollerWidget(QFrame):
         self.ResultsLogLayout = QGridLayout()
         self.ResultsLogLayout.addWidget(self.ResultsLogLabel, 0, 0)
         self.ResultsLogLayout.addWidget(self.ResultsLogTextEdit, 1, 0)
+        self.ResultsLogLayout.setColumnMinimumWidth(0, 200)
         self.ResultsLogFrame.setLayout(self.ResultsLogLayout)
         self.Layout.addWidget(self.ResultsLogFrame, 0, 1, 2, 1)
 
