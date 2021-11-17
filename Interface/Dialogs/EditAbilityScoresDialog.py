@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox
 
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
+from Interface.Dialogs.RollForAbilityScoresDialog import RollForAbilityScoresDialog
 from Interface.Widgets.EditButton import EditButton
 
 
@@ -27,9 +28,9 @@ class EditAbilityScoresDialog(QDialog):
 
         # Roll or Point Buy Buttons
         self.RollButton = QPushButton("Roll for Ability Scores")
-        self.RollButton.clicked.connect(self.Roll)
+        self.RollButton.clicked.connect(self.RollForAbilityScores)
         self.PointBuyButton = QPushButton("Use Point Buy for Ability Scores")
-        self.PointBuyButton.clicked.connect(self.PointBuy)
+        self.PointBuyButton.clicked.connect(self.PointBuyAbilityScores)
 
         # Ability Scores Inputs List
         self.AbilityScoresInputsList = []
@@ -447,10 +448,18 @@ class EditAbilityScoresDialog(QDialog):
         # Execute Dialog
         self.exec_()
 
-    def Roll(self):
-        pass
+    def RollForAbilityScores(self):
+        RollForAbilityScoresDialogInst = RollForAbilityScoresDialog(self, self.CharacterWindow)
+        if RollForAbilityScoresDialogInst.RolledAbilityScores is not None:
+            self.StrengthBaseSpinBox.setValue(RollForAbilityScoresDialogInst.RolledAbilityScores["Strength"])
+            self.DexterityBaseSpinBox.setValue(RollForAbilityScoresDialogInst.RolledAbilityScores["Dexterity"])
+            self.ConstitutionBaseSpinBox.setValue(RollForAbilityScoresDialogInst.RolledAbilityScores["Constitution"])
+            self.IntelligenceBaseSpinBox.setValue(RollForAbilityScoresDialogInst.RolledAbilityScores["Intelligence"])
+            self.WisdomBaseSpinBox.setValue(RollForAbilityScoresDialogInst.RolledAbilityScores["Wisdom"])
+            self.CharismaBaseSpinBox.setValue(RollForAbilityScoresDialogInst.RolledAbilityScores["Charisma"])
+            self.UnsavedChanges = True
 
-    def PointBuy(self):
+    def PointBuyAbilityScores(self):
         pass
 
     def UpdateAbilityScores(self, Ability, AbilitySubScore, NewValue):
