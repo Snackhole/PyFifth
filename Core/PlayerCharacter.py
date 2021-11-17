@@ -597,6 +597,17 @@ class PlayerCharacter(Character, SerializableMixin):
             TotalAbilityScore = self.Stats["Ability Scores"][Ability + " Override"]
         return TotalAbilityScore
 
+    def GetRolledAbilityScores(self):
+        RolledScores = []
+        for RolledScore in range(6):
+            CurrentRolls = []
+            for CurrentRoll in range(4):
+                Results = self.Stats["Dice Roller"].RollDice(1, 6, 0, SkipLogging=True)
+                CurrentRolls.append(Results["Total"])
+            CurrentRolls.remove(min(CurrentRolls))
+            RolledScores.append(sum(CurrentRolls))
+        return RolledScores
+
     # Combat Methods
     def RollInitiative(self):
         self.Stats["Dice Roller"].RollDice(1, 20, self.Stats["Initiative Stat Modifier"], LogPrefix="Initiative:\n")
