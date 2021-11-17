@@ -594,7 +594,7 @@ class PlayerCharacter(Character, SerializableMixin):
         TotalAbilityScore += self.Stats["Ability Scores"][Ability + " ASI"]
         TotalAbilityScore += self.Stats["Ability Scores"][Ability + " Miscellaneous"]
         if self.Stats["Ability Scores"][Ability + " Override"] is not None:
-            TotalAbilityScore += self.Stats["Ability Scores"][Ability + " Override"]
+            TotalAbilityScore = self.Stats["Ability Scores"][Ability + " Override"]
         return TotalAbilityScore
 
     # Combat Methods
