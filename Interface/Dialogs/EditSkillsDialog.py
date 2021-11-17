@@ -64,20 +64,21 @@ class EditSkillsDialog(QDialog):
                 self.SkillInputsLayout.addWidget(self.SkillInputsList[CurrentWidgetsIndex][0], Row, Column)
                 self.SkillInputsLayout.addWidget(self.SkillInputsList[CurrentWidgetsIndex][1], Row, Column + 1)
                 CurrentWidgetsIndex += 1
-        self.Layout.addLayout(self.SkillInputsLayout, 1, 0)
-
         self.PassiveSkillInputsLayout = QGridLayout()
         self.PassiveSkillInputsLayout.addWidget(self.SkillInputsList[CurrentWidgetsIndex][0], 0, 0)
         self.PassiveSkillInputsLayout.addWidget(self.SkillInputsList[CurrentWidgetsIndex][1], 0, 1)
         CurrentWidgetsIndex += 1
         self.PassiveSkillInputsLayout.addWidget(self.SkillInputsList[CurrentWidgetsIndex][0], 0, 2)
         self.PassiveSkillInputsLayout.addWidget(self.SkillInputsList[CurrentWidgetsIndex][1], 0, 3)
-        self.Layout.addLayout(self.PassiveSkillInputsLayout, 2, 0)
+        self.SkillInputsLayout.addLayout(self.PassiveSkillInputsLayout, 6, 0, 1, 6)
+        self.Layout.addLayout(self.SkillInputsLayout, 1, 0)
 
         self.DialogButtonsLayout = QGridLayout()
         self.DialogButtonsLayout.addWidget(self.DoneButton, 0, 0)
         self.DialogButtonsLayout.addWidget(self.CancelButton, 0, 1)
         self.Layout.addLayout(self.DialogButtonsLayout, 3, 0)
+
+        self.Layout.setRowStretch(1, 1)
 
         self.setLayout(self.Layout)
 
