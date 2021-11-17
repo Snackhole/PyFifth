@@ -100,6 +100,17 @@ class PlayerCharacter(Character, SerializableMixin):
         self.CoinValuesInCP["GPValueInCP"] = Decimal(100)
         self.CoinValuesInCP["PPValueInCP"] = Decimal(1000)
 
+        # Point Buy Costs
+        self.PointBuyCosts = {}
+        self.PointBuyCosts[8] = 0
+        self.PointBuyCosts[9] = 1
+        self.PointBuyCosts[10] = 2
+        self.PointBuyCosts[11] = 3
+        self.PointBuyCosts[12] = 4
+        self.PointBuyCosts[13] = 5
+        self.PointBuyCosts[14] = 7
+        self.PointBuyCosts[15] = 9
+
     def CreateStats(self):
         # Common Character Stats
         super().CreateStats()
@@ -607,6 +618,12 @@ class PlayerCharacter(Character, SerializableMixin):
             CurrentRolls.remove(min(CurrentRolls))
             RolledScores.append(sum(CurrentRolls))
         return RolledScores
+
+    def CalculatePointBuyPointsRemaining(self, Scores):
+        PointsRemaining = 27
+        for Score in Scores:
+            PointsRemaining -= self.PointBuyCosts[Score]
+        return PointsRemaining
 
     # Combat Methods
     def RollInitiative(self):
