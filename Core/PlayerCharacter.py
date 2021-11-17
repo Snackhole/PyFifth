@@ -175,6 +175,7 @@ class PlayerCharacter(Character, SerializableMixin):
             self.Stats["Ability Scores"][Ability + " Stat Modifier"][Ability + " Multiplier"] = 1
             self.Stats["Ability Scores"][Ability + " Save Stat Modifier"] = self.CreateStatModifier()
             self.Stats["Ability Scores"][Ability + " Save Stat Modifier"][Ability + " Multiplier"] = 1
+        self.Stats["Ability Scores"]["Ability Score Notes"] = ""
 
         # Ability Score Derivatives
         self.Stats["Ability Score Derivatives"] = {}

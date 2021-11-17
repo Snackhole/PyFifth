@@ -1,7 +1,7 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox, QSizePolicy, QTextEdit
 
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Dialogs.PointBuyAbilityScoresDialog import PointBuyAbilityScoresDialog
@@ -462,6 +462,17 @@ class EditAbilityScoresDialog(QDialog):
         self.AbilityScoreTotalSpinBoxesDictionary["Wisdom"] = self.WisdomTotalSpinBox
         self.AbilityScoreTotalSpinBoxesDictionary["Charisma"] = self.CharismaTotalSpinBox
 
+        # Ability Score Notes
+        self.AbilityScoreNotesLabel = QLabel("Ability Score Notes")
+        self.AbilityScoreNotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.AbilityScoreNotesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.AbilityScoreNotesLabel.setMargin(5)
+
+        self.AbilityScoreNotesTextEdit = QTextEdit()
+        self.AbilityScoreNotesTextEdit.setTabChangesFocus(True)
+        self.AbilityScoreNotesTextEdit.setPlainText(self.AbilityScores["Ability Score Notes"])
+        self.AbilityScoreNotesTextEdit.textChanged.connect(self.UpdateAbilityScoreNotes)
+
         # Dialog Buttons
         self.DoneButton = QPushButton("Done")
         self.DoneButton.clicked.connect(self.Done)
@@ -471,12 +482,12 @@ class EditAbilityScoresDialog(QDialog):
         # Layout
         self.Layout = QGridLayout()
 
-        self.Layout.addWidget(self.PromptLabel, 0, 0)
+        self.Layout.addWidget(self.PromptLabel, 0, 0, 1, 2)
 
         self.RollOrPointBuyLayout = QGridLayout()
         self.RollOrPointBuyLayout.addWidget(self.RollButton, 0, 0)
         self.RollOrPointBuyLayout.addWidget(self.PointBuyButton, 0, 1)
-        self.Layout.addLayout(self.RollOrPointBuyLayout, 1, 0)
+        self.Layout.addLayout(self.RollOrPointBuyLayout, 1, 0, 1, 2)
 
         self.AbilityScoresTableLayout = QGridLayout()
         for Row in range(len(self.AbilityScoresInputsList)):
@@ -490,12 +501,19 @@ class EditAbilityScoresDialog(QDialog):
             self.AbilityScoresTableLayout.addWidget(RowWidgets[6], Row, 6)
             self.AbilityScoresTableLayout.addWidget(RowWidgets[7], Row, 7)
             self.AbilityScoresTableLayout.addWidget(RowWidgets[8], Row, 8)
+            if Row != 0:
+                self.AbilityScoresTableLayout.setRowStretch(Row, 1)
         self.Layout.addLayout(self.AbilityScoresTableLayout, 2, 0)
+
+        self.AbilityScoreNotesLayout = QGridLayout()
+        self.AbilityScoreNotesLayout.addWidget(self.AbilityScoreNotesLabel, 0, 0)
+        self.AbilityScoreNotesLayout.addWidget(self.AbilityScoreNotesTextEdit, 1, 0)
+        self.Layout.addLayout(self.AbilityScoreNotesLayout, 2, 1)
 
         self.DialogButtonsLayout = QGridLayout()
         self.DialogButtonsLayout.addWidget(self.DoneButton, 0, 0)
         self.DialogButtonsLayout.addWidget(self.CancelButton, 0, 1)
-        self.Layout.addLayout(self.DialogButtonsLayout, 3, 0)
+        self.Layout.addLayout(self.DialogButtonsLayout, 3, 0, 1, 2)
 
         self.Layout.setRowStretch(2, 1)
 
@@ -534,6 +552,10 @@ class EditAbilityScoresDialog(QDialog):
         self.AbilityScores[Ability + " " + AbilitySubScore] = NewValue
         for Ability, TotalSpinBox in self.AbilityScoreTotalSpinBoxesDictionary.items():
             TotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore(Ability))
+        self.UnsavedChanges = True
+
+    def UpdateAbilityScoreNotes(self):
+        self.AbilityScores["Ability Score Notes"] = self.AbilityScoreNotesTextEdit.toPlainText()
         self.UnsavedChanges = True
 
     def EditModifier(self, Modifier):
