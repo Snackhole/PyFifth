@@ -2,6 +2,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QLineEdit, QSizePolicy, QTextEdit
 
 from Interface.Dialogs.EditAbilityScoresDialog import EditAbilityScoresDialog
+from Interface.Dialogs.EditSkillsDialog import EditSkillsDialog
 from Interface.Widgets.EditButton import EditButton
 from Interface.Widgets.RollButton import RollButton
 
@@ -683,7 +684,9 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)
 
     def EditSkills(self):
-        pass
+        EditSkillsDialogInst = EditSkillsDialog(self.CharacterWindow)
+        if EditSkillsDialogInst.UnsavedChanges:
+            self.CharacterWindow.UpdateUnsavedChangesFlag(True)
 
     def Roll(self, Prefix, StatModifier):
         self.CharacterWindow.PlayerCharacter.Stats["Dice Roller"].RollDice(1, 20, StatModifier, LogPrefix=Prefix)
