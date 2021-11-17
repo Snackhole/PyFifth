@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QLineEdit, QSizePolicy, QTextEdit
 
+from Interface.Dialogs.EditAbilityScoresDialog import EditAbilityScoresDialog
 from Interface.Widgets.EditButton import EditButton
 from Interface.Widgets.RollButton import RollButton
 
@@ -677,7 +678,9 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.setLayout(self.Layout)
 
     def EditAbilityScores(self):
-        pass
+        EditAbilityScoresDialogInst = EditAbilityScoresDialog(self.CharacterWindow)
+        if EditAbilityScoresDialogInst.UnsavedChanges:
+            self.CharacterWindow.UpdateUnsavedChangesFlag(True)
 
     def EditSkills(self):
         pass
