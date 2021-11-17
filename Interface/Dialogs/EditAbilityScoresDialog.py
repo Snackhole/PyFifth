@@ -1,9 +1,10 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox
+from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox, QSizePolicy
 
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
+from Interface.Dialogs.PointBuyAbilityScoresDialog import PointBuyAbilityScoresDialog
 from Interface.Dialogs.RollForAbilityScoresDialog import RollForAbilityScoresDialog
 from Interface.Widgets.EditButton import EditButton
 
@@ -21,6 +22,9 @@ class EditAbilityScoresDialog(QDialog):
         self.AbilityScoresOriginalState = copy.deepcopy(self.AbilityScores)
         self.UnsavedChanges = False
         self.Cancelled = False
+
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Prompt Label
         self.PromptLabel = QLabel("Set your ability score data:")
@@ -89,6 +93,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.StrengthBaseSpinBox = QSpinBox()
         self.StrengthBaseSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.StrengthBaseSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.StrengthBaseSpinBox.setButtonSymbols(self.StrengthBaseSpinBox.NoButtons)
         self.StrengthBaseSpinBox.setRange(1, 1000000000)
         self.StrengthBaseSpinBox.setValue(self.AbilityScores["Strength Base"])
@@ -96,6 +101,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.StrengthRacialSpinBox = QSpinBox()
         self.StrengthRacialSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.StrengthRacialSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.StrengthRacialSpinBox.setButtonSymbols(self.StrengthRacialSpinBox.NoButtons)
         self.StrengthRacialSpinBox.setRange(0, 1000000000)
         self.StrengthRacialSpinBox.setValue(self.AbilityScores["Strength Racial"])
@@ -103,6 +109,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.StrengthASISpinBox = QSpinBox()
         self.StrengthASISpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.StrengthASISpinBox.setSizePolicy(self.InputsSizePolicy)
         self.StrengthASISpinBox.setButtonSymbols(self.StrengthASISpinBox.NoButtons)
         self.StrengthASISpinBox.setRange(0, 1000000000)
         self.StrengthASISpinBox.setValue(self.AbilityScores["Strength ASI"])
@@ -110,6 +117,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.StrengthMiscSpinBox = QSpinBox()
         self.StrengthMiscSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.StrengthMiscSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.StrengthMiscSpinBox.setButtonSymbols(self.StrengthMiscSpinBox.NoButtons)
         self.StrengthMiscSpinBox.setRange(0, 1000000000)
         self.StrengthMiscSpinBox.setValue(self.AbilityScores["Strength Miscellaneous"])
@@ -117,6 +125,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.StrengthOverrideSpinBox = QSpinBox()
         self.StrengthOverrideSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.StrengthOverrideSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.StrengthOverrideSpinBox.setButtonSymbols(self.StrengthOverrideSpinBox.NoButtons)
         self.StrengthOverrideSpinBox.setRange(0, 1000000000)
         self.StrengthOverrideSpinBox.setSpecialValueText("None")
@@ -125,13 +134,17 @@ class EditAbilityScoresDialog(QDialog):
 
         self.StrengthTotalSpinBox = QSpinBox()
         self.StrengthTotalSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.StrengthTotalSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.StrengthTotalSpinBox.setButtonSymbols(self.StrengthTotalSpinBox.NoButtons)
         self.StrengthTotalSpinBox.setRange(1, 1000000000)
         self.StrengthTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Strength"))
+        self.StrengthTotalSpinBox.setReadOnly(True)
 
         self.StrengthAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Strength Stat Modifier"), Tooltip="Edit Strength Ability Check Modifier")
+        self.StrengthAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.StrengthSavingThrowModifierButton = EditButton(lambda: self.EditModifier("Strength Save Stat Modifier"), Tooltip="Edit Strength Saving Throw Modifier")
+        self.StrengthSavingThrowModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.AbilityScoresInputsList.append((self.StrengthLabel, self.StrengthBaseSpinBox, self.StrengthRacialSpinBox, self.StrengthASISpinBox, self.StrengthMiscSpinBox, self.StrengthOverrideSpinBox, self.StrengthTotalSpinBox, self.StrengthAbilityCheckModifierButton, self.StrengthSavingThrowModifierButton))
 
@@ -141,6 +154,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.DexterityBaseSpinBox = QSpinBox()
         self.DexterityBaseSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DexterityBaseSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DexterityBaseSpinBox.setButtonSymbols(self.DexterityBaseSpinBox.NoButtons)
         self.DexterityBaseSpinBox.setRange(1, 1000000000)
         self.DexterityBaseSpinBox.setValue(self.AbilityScores["Dexterity Base"])
@@ -148,6 +162,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.DexterityRacialSpinBox = QSpinBox()
         self.DexterityRacialSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DexterityRacialSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DexterityRacialSpinBox.setButtonSymbols(self.DexterityRacialSpinBox.NoButtons)
         self.DexterityRacialSpinBox.setRange(0, 1000000000)
         self.DexterityRacialSpinBox.setValue(self.AbilityScores["Dexterity Racial"])
@@ -155,6 +170,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.DexterityASISpinBox = QSpinBox()
         self.DexterityASISpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DexterityASISpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DexterityASISpinBox.setButtonSymbols(self.DexterityASISpinBox.NoButtons)
         self.DexterityASISpinBox.setRange(0, 1000000000)
         self.DexterityASISpinBox.setValue(self.AbilityScores["Dexterity ASI"])
@@ -162,6 +178,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.DexterityMiscSpinBox = QSpinBox()
         self.DexterityMiscSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DexterityMiscSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DexterityMiscSpinBox.setButtonSymbols(self.DexterityMiscSpinBox.NoButtons)
         self.DexterityMiscSpinBox.setRange(0, 1000000000)
         self.DexterityMiscSpinBox.setValue(self.AbilityScores["Dexterity Miscellaneous"])
@@ -169,6 +186,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.DexterityOverrideSpinBox = QSpinBox()
         self.DexterityOverrideSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DexterityOverrideSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DexterityOverrideSpinBox.setButtonSymbols(self.DexterityOverrideSpinBox.NoButtons)
         self.DexterityOverrideSpinBox.setRange(0, 1000000000)
         self.DexterityOverrideSpinBox.setSpecialValueText("None")
@@ -177,13 +195,17 @@ class EditAbilityScoresDialog(QDialog):
 
         self.DexterityTotalSpinBox = QSpinBox()
         self.DexterityTotalSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DexterityTotalSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DexterityTotalSpinBox.setButtonSymbols(self.DexterityTotalSpinBox.NoButtons)
         self.DexterityTotalSpinBox.setRange(1, 1000000000)
         self.DexterityTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Dexterity"))
+        self.DexterityTotalSpinBox.setReadOnly(True)
 
         self.DexterityAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Dexterity Stat Modifier"), Tooltip="Edit Dexterity Ability Check Modifier")
+        self.DexterityAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.DexteritySavingThrowModifierButton = EditButton(lambda: self.EditModifier("Dexterity Save Stat Modifier"), Tooltip="Edit Dexterity Saving Throw Modifier")
+        self.DexteritySavingThrowModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.AbilityScoresInputsList.append((self.DexterityLabel, self.DexterityBaseSpinBox, self.DexterityRacialSpinBox, self.DexterityASISpinBox, self.DexterityMiscSpinBox, self.DexterityOverrideSpinBox, self.DexterityTotalSpinBox, self.DexterityAbilityCheckModifierButton, self.DexteritySavingThrowModifierButton))
 
@@ -193,6 +215,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.ConstitutionBaseSpinBox = QSpinBox()
         self.ConstitutionBaseSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ConstitutionBaseSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionBaseSpinBox.setButtonSymbols(self.ConstitutionBaseSpinBox.NoButtons)
         self.ConstitutionBaseSpinBox.setRange(1, 1000000000)
         self.ConstitutionBaseSpinBox.setValue(self.AbilityScores["Constitution Base"])
@@ -200,6 +223,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.ConstitutionRacialSpinBox = QSpinBox()
         self.ConstitutionRacialSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ConstitutionRacialSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionRacialSpinBox.setButtonSymbols(self.ConstitutionRacialSpinBox.NoButtons)
         self.ConstitutionRacialSpinBox.setRange(0, 1000000000)
         self.ConstitutionRacialSpinBox.setValue(self.AbilityScores["Constitution Racial"])
@@ -207,6 +231,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.ConstitutionASISpinBox = QSpinBox()
         self.ConstitutionASISpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ConstitutionASISpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionASISpinBox.setButtonSymbols(self.ConstitutionASISpinBox.NoButtons)
         self.ConstitutionASISpinBox.setRange(0, 1000000000)
         self.ConstitutionASISpinBox.setValue(self.AbilityScores["Constitution ASI"])
@@ -214,6 +239,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.ConstitutionMiscSpinBox = QSpinBox()
         self.ConstitutionMiscSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ConstitutionMiscSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionMiscSpinBox.setButtonSymbols(self.ConstitutionMiscSpinBox.NoButtons)
         self.ConstitutionMiscSpinBox.setRange(0, 1000000000)
         self.ConstitutionMiscSpinBox.setValue(self.AbilityScores["Constitution Miscellaneous"])
@@ -221,6 +247,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.ConstitutionOverrideSpinBox = QSpinBox()
         self.ConstitutionOverrideSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ConstitutionOverrideSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionOverrideSpinBox.setButtonSymbols(self.ConstitutionOverrideSpinBox.NoButtons)
         self.ConstitutionOverrideSpinBox.setRange(0, 1000000000)
         self.ConstitutionOverrideSpinBox.setSpecialValueText("None")
@@ -229,13 +256,17 @@ class EditAbilityScoresDialog(QDialog):
 
         self.ConstitutionTotalSpinBox = QSpinBox()
         self.ConstitutionTotalSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ConstitutionTotalSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionTotalSpinBox.setButtonSymbols(self.ConstitutionTotalSpinBox.NoButtons)
         self.ConstitutionTotalSpinBox.setRange(1, 1000000000)
         self.ConstitutionTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Constitution"))
+        self.ConstitutionTotalSpinBox.setReadOnly(True)
 
         self.ConstitutionAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Constitution Stat Modifier"), Tooltip="Edit Constitution Ability Check Modifier")
+        self.ConstitutionAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.ConstitutionSavingThrowModifierButton = EditButton(lambda: self.EditModifier("Constitution Save Stat Modifier"), Tooltip="Edit Constitution Saving Throw Modifier")
+        self.ConstitutionSavingThrowModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.AbilityScoresInputsList.append((self.ConstitutionLabel, self.ConstitutionBaseSpinBox, self.ConstitutionRacialSpinBox, self.ConstitutionASISpinBox, self.ConstitutionMiscSpinBox, self.ConstitutionOverrideSpinBox, self.ConstitutionTotalSpinBox, self.ConstitutionAbilityCheckModifierButton, self.ConstitutionSavingThrowModifierButton))
 
@@ -245,6 +276,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.IntelligenceBaseSpinBox = QSpinBox()
         self.IntelligenceBaseSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.IntelligenceBaseSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceBaseSpinBox.setButtonSymbols(self.IntelligenceBaseSpinBox.NoButtons)
         self.IntelligenceBaseSpinBox.setRange(1, 1000000000)
         self.IntelligenceBaseSpinBox.setValue(self.AbilityScores["Intelligence Base"])
@@ -252,6 +284,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.IntelligenceRacialSpinBox = QSpinBox()
         self.IntelligenceRacialSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.IntelligenceRacialSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceRacialSpinBox.setButtonSymbols(self.IntelligenceRacialSpinBox.NoButtons)
         self.IntelligenceRacialSpinBox.setRange(0, 1000000000)
         self.IntelligenceRacialSpinBox.setValue(self.AbilityScores["Intelligence Racial"])
@@ -259,6 +292,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.IntelligenceASISpinBox = QSpinBox()
         self.IntelligenceASISpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.IntelligenceASISpinBox.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceASISpinBox.setButtonSymbols(self.IntelligenceASISpinBox.NoButtons)
         self.IntelligenceASISpinBox.setRange(0, 1000000000)
         self.IntelligenceASISpinBox.setValue(self.AbilityScores["Intelligence ASI"])
@@ -266,6 +300,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.IntelligenceMiscSpinBox = QSpinBox()
         self.IntelligenceMiscSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.IntelligenceMiscSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceMiscSpinBox.setButtonSymbols(self.IntelligenceMiscSpinBox.NoButtons)
         self.IntelligenceMiscSpinBox.setRange(0, 1000000000)
         self.IntelligenceMiscSpinBox.setValue(self.AbilityScores["Intelligence Miscellaneous"])
@@ -273,6 +308,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.IntelligenceOverrideSpinBox = QSpinBox()
         self.IntelligenceOverrideSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.IntelligenceOverrideSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceOverrideSpinBox.setButtonSymbols(self.IntelligenceOverrideSpinBox.NoButtons)
         self.IntelligenceOverrideSpinBox.setRange(0, 1000000000)
         self.IntelligenceOverrideSpinBox.setSpecialValueText("None")
@@ -281,13 +317,17 @@ class EditAbilityScoresDialog(QDialog):
 
         self.IntelligenceTotalSpinBox = QSpinBox()
         self.IntelligenceTotalSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.IntelligenceTotalSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceTotalSpinBox.setButtonSymbols(self.IntelligenceTotalSpinBox.NoButtons)
         self.IntelligenceTotalSpinBox.setRange(1, 1000000000)
         self.IntelligenceTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Intelligence"))
+        self.IntelligenceTotalSpinBox.setReadOnly(True)
 
         self.IntelligenceAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Intelligence Stat Modifier"), Tooltip="Edit Intelligence Ability Check Modifier")
+        self.IntelligenceAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.IntelligenceSavingThrowModifierButton = EditButton(lambda: self.EditModifier("Intelligence Save Stat Modifier"), Tooltip="Edit Intelligence Saving Throw Modifier")
+        self.IntelligenceSavingThrowModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.AbilityScoresInputsList.append((self.IntelligenceLabel, self.IntelligenceBaseSpinBox, self.IntelligenceRacialSpinBox, self.IntelligenceASISpinBox, self.IntelligenceMiscSpinBox, self.IntelligenceOverrideSpinBox, self.IntelligenceTotalSpinBox, self.IntelligenceAbilityCheckModifierButton, self.IntelligenceSavingThrowModifierButton))
 
@@ -297,6 +337,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.WisdomBaseSpinBox = QSpinBox()
         self.WisdomBaseSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.WisdomBaseSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WisdomBaseSpinBox.setButtonSymbols(self.WisdomBaseSpinBox.NoButtons)
         self.WisdomBaseSpinBox.setRange(1, 1000000000)
         self.WisdomBaseSpinBox.setValue(self.AbilityScores["Wisdom Base"])
@@ -304,6 +345,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.WisdomRacialSpinBox = QSpinBox()
         self.WisdomRacialSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.WisdomRacialSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WisdomRacialSpinBox.setButtonSymbols(self.WisdomRacialSpinBox.NoButtons)
         self.WisdomRacialSpinBox.setRange(0, 1000000000)
         self.WisdomRacialSpinBox.setValue(self.AbilityScores["Wisdom Racial"])
@@ -311,6 +353,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.WisdomASISpinBox = QSpinBox()
         self.WisdomASISpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.WisdomASISpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WisdomASISpinBox.setButtonSymbols(self.WisdomASISpinBox.NoButtons)
         self.WisdomASISpinBox.setRange(0, 1000000000)
         self.WisdomASISpinBox.setValue(self.AbilityScores["Wisdom ASI"])
@@ -318,6 +361,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.WisdomMiscSpinBox = QSpinBox()
         self.WisdomMiscSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.WisdomMiscSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WisdomMiscSpinBox.setButtonSymbols(self.WisdomMiscSpinBox.NoButtons)
         self.WisdomMiscSpinBox.setRange(0, 1000000000)
         self.WisdomMiscSpinBox.setValue(self.AbilityScores["Wisdom Miscellaneous"])
@@ -325,6 +369,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.WisdomOverrideSpinBox = QSpinBox()
         self.WisdomOverrideSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.WisdomOverrideSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WisdomOverrideSpinBox.setButtonSymbols(self.WisdomOverrideSpinBox.NoButtons)
         self.WisdomOverrideSpinBox.setRange(0, 1000000000)
         self.WisdomOverrideSpinBox.setSpecialValueText("None")
@@ -333,13 +378,17 @@ class EditAbilityScoresDialog(QDialog):
 
         self.WisdomTotalSpinBox = QSpinBox()
         self.WisdomTotalSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.WisdomTotalSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WisdomTotalSpinBox.setButtonSymbols(self.WisdomTotalSpinBox.NoButtons)
         self.WisdomTotalSpinBox.setRange(1, 1000000000)
         self.WisdomTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Wisdom"))
+        self.WisdomTotalSpinBox.setReadOnly(True)
 
         self.WisdomAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Wisdom Stat Modifier"), Tooltip="Edit Wisdom Ability Check Modifier")
+        self.WisdomAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.WisdomSavingThrowModifierButton = EditButton(lambda: self.EditModifier("Wisdom Save Stat Modifier"), Tooltip="Edit Wisdom Saving Throw Modifier")
+        self.WisdomSavingThrowModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.AbilityScoresInputsList.append((self.WisdomLabel, self.WisdomBaseSpinBox, self.WisdomRacialSpinBox, self.WisdomASISpinBox, self.WisdomMiscSpinBox, self.WisdomOverrideSpinBox, self.WisdomTotalSpinBox, self.WisdomAbilityCheckModifierButton, self.WisdomSavingThrowModifierButton))
 
@@ -349,6 +398,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.CharismaBaseSpinBox = QSpinBox()
         self.CharismaBaseSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CharismaBaseSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CharismaBaseSpinBox.setButtonSymbols(self.CharismaBaseSpinBox.NoButtons)
         self.CharismaBaseSpinBox.setRange(1, 1000000000)
         self.CharismaBaseSpinBox.setValue(self.AbilityScores["Charisma Base"])
@@ -356,6 +406,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.CharismaRacialSpinBox = QSpinBox()
         self.CharismaRacialSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CharismaRacialSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CharismaRacialSpinBox.setButtonSymbols(self.CharismaRacialSpinBox.NoButtons)
         self.CharismaRacialSpinBox.setRange(0, 1000000000)
         self.CharismaRacialSpinBox.setValue(self.AbilityScores["Charisma Racial"])
@@ -363,6 +414,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.CharismaASISpinBox = QSpinBox()
         self.CharismaASISpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CharismaASISpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CharismaASISpinBox.setButtonSymbols(self.CharismaASISpinBox.NoButtons)
         self.CharismaASISpinBox.setRange(0, 1000000000)
         self.CharismaASISpinBox.setValue(self.AbilityScores["Charisma ASI"])
@@ -370,6 +422,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.CharismaMiscSpinBox = QSpinBox()
         self.CharismaMiscSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CharismaMiscSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CharismaMiscSpinBox.setButtonSymbols(self.CharismaMiscSpinBox.NoButtons)
         self.CharismaMiscSpinBox.setRange(0, 1000000000)
         self.CharismaMiscSpinBox.setValue(self.AbilityScores["Charisma Miscellaneous"])
@@ -377,6 +430,7 @@ class EditAbilityScoresDialog(QDialog):
 
         self.CharismaOverrideSpinBox = QSpinBox()
         self.CharismaOverrideSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CharismaOverrideSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CharismaOverrideSpinBox.setButtonSymbols(self.CharismaOverrideSpinBox.NoButtons)
         self.CharismaOverrideSpinBox.setRange(0, 1000000000)
         self.CharismaOverrideSpinBox.setSpecialValueText("None")
@@ -385,13 +439,17 @@ class EditAbilityScoresDialog(QDialog):
 
         self.CharismaTotalSpinBox = QSpinBox()
         self.CharismaTotalSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CharismaTotalSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CharismaTotalSpinBox.setButtonSymbols(self.CharismaTotalSpinBox.NoButtons)
         self.CharismaTotalSpinBox.setRange(1, 1000000000)
         self.CharismaTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Charisma"))
+        self.CharismaTotalSpinBox.setReadOnly(True)
 
         self.CharismaAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Charisma Stat Modifier"), Tooltip="Edit Charisma Ability Check Modifier")
+        self.CharismaAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.CharismaSavingThrowModifierButton = EditButton(lambda: self.EditModifier("Charisma Save Stat Modifier"), Tooltip="Edit Charisma Saving Throw Modifier")
+        self.CharismaSavingThrowModifierButton.setSizePolicy(self.InputsSizePolicy)
 
         self.AbilityScoresInputsList.append((self.CharismaLabel, self.CharismaBaseSpinBox, self.CharismaRacialSpinBox, self.CharismaASISpinBox, self.CharismaMiscSpinBox, self.CharismaOverrideSpinBox, self.CharismaTotalSpinBox, self.CharismaAbilityCheckModifierButton, self.CharismaSavingThrowModifierButton))
 
@@ -439,6 +497,8 @@ class EditAbilityScoresDialog(QDialog):
         self.DialogButtonsLayout.addWidget(self.CancelButton, 0, 1)
         self.Layout.addLayout(self.DialogButtonsLayout, 3, 0)
 
+        self.Layout.setRowStretch(2, 1)
+
         self.setLayout(self.Layout)
 
         # Set Window Title and Icon
@@ -460,7 +520,15 @@ class EditAbilityScoresDialog(QDialog):
             self.UnsavedChanges = True
 
     def PointBuyAbilityScores(self):
-        pass
+        PointBuyAbilityScoresDialogInst = PointBuyAbilityScoresDialog(self, self.CharacterWindow)
+        if PointBuyAbilityScoresDialogInst.PointBoughtAbilityScores is not None:
+            self.StrengthBaseSpinBox.setValue(PointBuyAbilityScoresDialogInst.PointBoughtAbilityScores["Strength"])
+            self.DexterityBaseSpinBox.setValue(PointBuyAbilityScoresDialogInst.PointBoughtAbilityScores["Dexterity"])
+            self.ConstitutionBaseSpinBox.setValue(PointBuyAbilityScoresDialogInst.PointBoughtAbilityScores["Constitution"])
+            self.IntelligenceBaseSpinBox.setValue(PointBuyAbilityScoresDialogInst.PointBoughtAbilityScores["Intelligence"])
+            self.WisdomBaseSpinBox.setValue(PointBuyAbilityScoresDialogInst.PointBoughtAbilityScores["Wisdom"])
+            self.CharismaBaseSpinBox.setValue(PointBuyAbilityScoresDialogInst.PointBoughtAbilityScores["Charisma"])
+            self.UnsavedChanges = True
 
     def UpdateAbilityScores(self, Ability, AbilitySubScore, NewValue):
         self.AbilityScores[Ability + " " + AbilitySubScore] = NewValue

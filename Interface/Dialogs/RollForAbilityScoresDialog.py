@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QComboBox, QDialog, QGridLayout, QPushButton, QSpinBox, QMessageBox
+from PyQt5.QtWidgets import QComboBox, QDialog, QGridLayout, QPushButton, QSpinBox, QMessageBox, QSizePolicy
 
 
 class RollForAbilityScoresDialog(QDialog):
@@ -14,6 +14,9 @@ class RollForAbilityScoresDialog(QDialog):
         self.AbilitiesList = self.CharacterWindow.PlayerCharacter.Abilities
         self.InputsSuffixes = ["One", "Two", "Three", "Four", "Five", "Six"]
 
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
         # Roll Button
         self.RollAbilityScoresButton = QPushButton("Roll Ability Scores")
         self.RollAbilityScoresButton.clicked.connect(self.RollAbilityScores)
@@ -24,6 +27,7 @@ class RollForAbilityScoresDialog(QDialog):
             # ComboBox
             self.Inputs["ComboBox " + InputsSuffix] = QComboBox()
             ComboBox = self.Inputs["ComboBox " + InputsSuffix]
+            ComboBox.setSizePolicy(self.InputsSizePolicy)
             ComboBox.addItems(self.AbilitiesList)
             ComboBox.setEditable(False)
 
@@ -31,6 +35,7 @@ class RollForAbilityScoresDialog(QDialog):
             self.Inputs["SpinBox " + InputsSuffix] = QSpinBox()
             SpinBox = self.Inputs["SpinBox " + InputsSuffix]
             SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+            SpinBox.setSizePolicy(self.InputsSizePolicy)
             SpinBox.setButtonSymbols(self.Inputs["SpinBox " + InputsSuffix].NoButtons)
             SpinBox.setRange(0, 18)
             SpinBox.setSpecialValueText("Not Rolled")
@@ -61,6 +66,8 @@ class RollForAbilityScoresDialog(QDialog):
         self.DialogButtonsLayout.addWidget(self.DoneButton, 0, 0)
         self.DialogButtonsLayout.addWidget(self.CancelButton, 0, 1)
         self.Layout.addLayout(self.DialogButtonsLayout, 2, 0)
+
+        self.Layout.setRowStretch(2, 1)
 
         self.setLayout(self.Layout)
 
