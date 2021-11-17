@@ -3,6 +3,7 @@ import copy
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox
 
+from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Widgets.EditButton import EditButton
 
 
@@ -459,7 +460,8 @@ class EditAbilityScoresDialog(QDialog):
         self.UnsavedChanges = True
 
     def EditModifier(self, Modifier):
-        pass
+        EditModifierDialogInst = EditModifierDialog(self, self.CharacterWindow, self.AbilityScores[Modifier], Modifier)
+        self.UnsavedChanges = EditModifierDialogInst.UnsavedChanges
 
     def Done(self):
         self.close()
