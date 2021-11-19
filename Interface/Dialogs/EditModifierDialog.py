@@ -374,6 +374,9 @@ class EditModifierDialog(QDialog):
         self.setWindowTitle(self.CharacterWindow.ScriptName)
         self.setWindowIcon(self.CharacterWindow.WindowIcon)
 
+        # Update Display
+        self.UpdateDisplay()
+
         # Execute Dialog
         self.exec_()
 
@@ -437,7 +440,33 @@ class EditModifierDialog(QDialog):
         # Manual Modifier
         self.StatModifier["Manual Modifier"] = self.ManualModifierSpinBox.value()
 
+        # Update Unsaved Changes
         self.UnsavedChanges = True
+
+        # Update Display
+        self.UpdateDisplay()
+
+    def UpdateDisplay(self):
+        SpinBoxes = [self.StrengthMultiplierSpinBox, self.DexterityMultiplierSpinBox, self.ConstitutionMultiplierSpinBox, self.IntelligenceMultiplierSpinBox, self.WisdomMultiplierSpinBox, self.CharismaMultiplierSpinBox, self.ProficiencyMultiplierSpinBox, self.ManualModifierSpinBox]
+        if "Base AC" in self.StatModifier:
+            SpinBoxes.append(self.BaseACSpinBox)
+        if "Level Multiplier" in self.StatModifier:
+            SpinBoxes.append(self.LevelMultiplierSpinBox)
+
+        for SpinBox in SpinBoxes:
+            if type(SpinBox) is QDoubleSpinBox:
+                StyleSheetPrefix = "QDoubleSpinBox "
+            else:
+                StyleSheetPrefix = "QSpinBox "
+            PositiveStyleSheet = StyleSheetPrefix + "{background-color: green}"
+            ZeroStyleSheet = StyleSheetPrefix + "{}"
+            NegativeStyleSheet = StyleSheetPrefix + "{background-color: red}"
+            if SpinBox.value() > 0.0:
+                SpinBox.setStyleSheet(PositiveStyleSheet)
+            elif SpinBox.value() == 0.0:
+                SpinBox.setStyleSheet(ZeroStyleSheet)
+            else:
+                SpinBox.setStyleSheet(NegativeStyleSheet)
 
     def Done(self):
         if self.ValidInput(Alert=True):
