@@ -675,6 +675,9 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         # Ability Scores Table Stretching
         self.Layout.setColumnStretch(0, 1)
 
+        # Skills Stretching
+        self.Layout.setRowStretch(0, 1)
+
         # Set Layout
         self.setLayout(self.Layout)
 
