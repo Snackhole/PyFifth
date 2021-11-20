@@ -458,9 +458,9 @@ class EditModifierDialog(QDialog):
                 StyleSheetPrefix = "QDoubleSpinBox "
             else:
                 StyleSheetPrefix = "QSpinBox "
-            PositiveStyleSheet = StyleSheetPrefix + "{background-color: green}"
+            PositiveStyleSheet = StyleSheetPrefix + "{background-color: darkgreen}"
             ZeroStyleSheet = StyleSheetPrefix + "{}"
-            NegativeStyleSheet = StyleSheetPrefix + "{background-color: red}"
+            NegativeStyleSheet = StyleSheetPrefix + "{background-color: darkred}"
             if SpinBox.value() > 0.0:
                 SpinBox.setStyleSheet(PositiveStyleSheet)
             elif SpinBox.value() == 0.0:

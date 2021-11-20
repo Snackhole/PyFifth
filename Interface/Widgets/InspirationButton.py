@@ -11,5 +11,5 @@ class InspirationButton(QPushButton):
 
         # Configure
         self.setCheckable(True)
-        self.setStyleSheet("QPushButton {font-size: 16pt;}\nQPushButton:checked {background-color: green}")
+        self.setStyleSheet("QPushButton {font-size: 16pt;}\nQPushButton:checked {background-color: darkgreen}")
         self.clicked.connect(lambda: self.CharacterSheetWindow.UpdateStat("Inspiration", self.isChecked()))

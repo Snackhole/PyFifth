@@ -169,9 +169,9 @@ class PointBuyAbilityScoresDialog(QDialog):
         PointsRemaining = self.CharacterWindow.PlayerCharacter.CalculatePointBuyPointsRemaining(Scores)
         self.PointsRemainingSpinBox.setValue(PointsRemaining)
         if PointsRemaining < 0:
-            self.PointsRemainingSpinBox.setStyleSheet("QSpinBox {background-color: red;}")
+            self.PointsRemainingSpinBox.setStyleSheet("QSpinBox {background-color: darkred;}")
         else:
-            self.PointsRemainingSpinBox.setStyleSheet("QSpinBox {background-color: green;}")
+            self.PointsRemainingSpinBox.setStyleSheet("QSpinBox {background-color: darkgreen;}")
 
     def Done(self):
         if not self.ValidInput(Alert=True):
