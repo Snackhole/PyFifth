@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QLineEdit, QSizePolicy, QTextEdit
+from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QPushButton, QSizePolicy, QTextEdit
 
+from Interface.Dialogs.AlternateAbilityScoreSkillRollDialog import AlternateAbilityScoreSkillRollDialog
 from Interface.Dialogs.EditAbilityScoresDialog import EditAbilityScoresDialog
 from Interface.Dialogs.EditSkillsDialog import EditSkillsDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
@@ -402,6 +403,10 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.SurvivalModifierRollButton = RollButton(lambda: self.Roll("Survival (WIS) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Survival Stat Modifier"]), Tooltip="Roll Survival (WIS) Check")
         self.SurvivalModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
+        # Roll Skill with Alternate Ability Score
+        self.AlternateAbilityScoreSkillRollButton = QPushButton("Roll Skill with Alternate Ability Score")
+        self.AlternateAbilityScoreSkillRollButton.clicked.connect(self.AlternateAbilityScoreSkillRoll)
+
         # Passive Scores Header
         self.PassiveScoresLabel = QLabel("Passive Scores")
         self.PassiveScoresLabel.setStyleSheet(self.SectionLabelStyle)
@@ -599,6 +604,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.SkillsLayout.addWidget(self.SurvivalLabel, 19, 0)
         self.SkillsLayout.addWidget(self.SurvivalModifierLineEdit, 19, 1)
         self.SkillsLayout.addWidget(self.SurvivalModifierRollButton, 19, 2)
+        self.SkillsLayout.addWidget(self.AlternateAbilityScoreSkillRollButton, 20, 0, 1, 3)
         for Row in range(2, 20):
             self.SkillsLayout.setRowStretch(Row, 1)
         self.SkillsLayout.setColumnStretch(1, 1)
@@ -657,3 +663,8 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
     def Roll(self, Prefix, StatModifier):
         self.CharacterWindow.PlayerCharacter.Stats["Dice Roller"].RollDice(1, 20, StatModifier, LogPrefix=Prefix)
         self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+
+    def AlternateAbilityScoreSkillRoll(self):
+        AlternateAbilityScoreSkillRollDialogInst = AlternateAbilityScoreSkillRollDialog(self.CharacterWindow)
+        if AlternateAbilityScoreSkillRollDialogInst.RollData is not None:
+            self.Roll(AlternateAbilityScoreSkillRollDialogInst.RollData["Prefix"], AlternateAbilityScoreSkillRollDialogInst.RollData["Stat Modifier"])
