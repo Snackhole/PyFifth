@@ -26,6 +26,12 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
         # Variables
         self.Opening = False
+        self.SavingThrowModifierLineEditStyleSheet = "QLineEdit {font-size: 16pt;}"
+        self.SavingThrowProficiencyLineEditStyleSheet = "QLineEdit {font-size: 16pt; background-color: darkgreen;}"
+        self.SavingThrowExpertiseLineEditStyleSheet = "QLineEdit {font-size: 16pt; background-color: darkgoldenrod;}"
+        self.SkillModifierLineEditStyleSheet = "QLineEdit {}"
+        self.SkillProficiencyLineEditStyleSheet = "QLineEdit {background-color: darkgreen;}"
+        self.SkillExpertiseLineEditStyleSheet = "QLineEdit {background-color: darkgoldenrod;}"
 
         # Initialize Window
         super().__init__(ScriptName, AbsoluteDirectoryPath, AppInst)
@@ -487,41 +493,65 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StrengthTotalLineEdit.setText(str(self.DerivedStats["Strength Total Score"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StrengthModifierLineEdit.setText(("+" if self.DerivedStats["Strength Modifier"] >= 0 else "") + str(self.DerivedStats["Strength Modifier"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StrengthSavingThrowLineEdit.setText(("+" if self.DerivedStats["Strength Saving Throw Modifier"] >= 0 else "") + str(self.DerivedStats["Strength Saving Throw Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StrengthSavingThrowLineEdit, self.PlayerCharacter.Stats["Ability Scores"]["Strength Save Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DexterityTotalLineEdit.setText(str(self.DerivedStats["Dexterity Total Score"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DexterityModifierLineEdit.setText(("+" if self.DerivedStats["Dexterity Modifier"] >= 0 else "") + str(self.DerivedStats["Dexterity Modifier"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DexteritySavingThrowLineEdit.setText(("+" if self.DerivedStats["Dexterity Saving Throw Modifier"] >= 0 else "") + str(self.DerivedStats["Dexterity Saving Throw Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DexteritySavingThrowLineEdit, self.PlayerCharacter.Stats["Ability Scores"]["Dexterity Save Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ConstitutionTotalLineEdit.setText(str(self.DerivedStats["Constitution Total Score"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ConstitutionModifierLineEdit.setText(("+" if self.DerivedStats["Constitution Modifier"] >= 0 else "") + str(self.DerivedStats["Constitution Modifier"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ConstitutionSavingThrowLineEdit.setText(("+" if self.DerivedStats["Constitution Saving Throw Modifier"] >= 0 else "") + str(self.DerivedStats["Constitution Saving Throw Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ConstitutionSavingThrowLineEdit, self.PlayerCharacter.Stats["Ability Scores"]["Constitution Save Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntelligenceTotalLineEdit.setText(str(self.DerivedStats["Intelligence Total Score"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntelligenceModifierLineEdit.setText(("+" if self.DerivedStats["Intelligence Modifier"] >= 0 else "") + str(self.DerivedStats["Intelligence Modifier"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntelligenceSavingThrowLineEdit.setText(("+" if self.DerivedStats["Intelligence Saving Throw Modifier"] >= 0 else "") + str(self.DerivedStats["Intelligence Saving Throw Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntelligenceSavingThrowLineEdit, self.PlayerCharacter.Stats["Ability Scores"]["Intelligence Save Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WisdomTotalLineEdit.setText(str(self.DerivedStats["Wisdom Total Score"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WisdomModifierLineEdit.setText(("+" if self.DerivedStats["Wisdom Modifier"] >= 0 else "") + str(self.DerivedStats["Wisdom Modifier"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WisdomSavingThrowLineEdit.setText(("+" if self.DerivedStats["Wisdom Saving Throw Modifier"] >= 0 else "") + str(self.DerivedStats["Wisdom Saving Throw Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WisdomSavingThrowLineEdit, self.PlayerCharacter.Stats["Ability Scores"]["Wisdom Save Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.CharismaTotalLineEdit.setText(str(self.DerivedStats["Charisma Total Score"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.CharismaModifierLineEdit.setText(("+" if self.DerivedStats["Charisma Modifier"] >= 0 else "") + str(self.DerivedStats["Charisma Modifier"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.CharismaSavingThrowLineEdit.setText(("+" if self.DerivedStats["Charisma Saving Throw Modifier"] >= 0 else "") + str(self.DerivedStats["Charisma Saving Throw Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.CharismaSavingThrowLineEdit, self.PlayerCharacter.Stats["Ability Scores"]["Charisma Save Stat Modifier"])
 
         # Skills
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.AcrobaticsModifierLineEdit.setText(("+" if self.DerivedStats["Acrobatics Modifier"] >= 0 else "") + str(self.DerivedStats["Acrobatics Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.AcrobaticsModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Acrobatics Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.AnimalHandlingModifierLineEdit.setText(("+" if self.DerivedStats["Animal Handling Modifier"] >= 0 else "") + str(self.DerivedStats["Animal Handling Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.AnimalHandlingModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Animal Handling Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ArcanaModifierLineEdit.setText(("+" if self.DerivedStats["Arcana Modifier"] >= 0 else "") + str(self.DerivedStats["Arcana Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ArcanaModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Arcana Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.AthleticsModifierLineEdit.setText(("+" if self.DerivedStats["Athletics Modifier"] >= 0 else "") + str(self.DerivedStats["Athletics Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.AthleticsModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Athletics Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DeceptionModifierLineEdit.setText(("+" if self.DerivedStats["Deception Modifier"] >= 0 else "") + str(self.DerivedStats["Deception Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DeceptionModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Deception Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.HistoryModifierLineEdit.setText(("+" if self.DerivedStats["History Modifier"] >= 0 else "") + str(self.DerivedStats["History Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.HistoryModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["History Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.InsightModifierLineEdit.setText(("+" if self.DerivedStats["Insight Modifier"] >= 0 else "") + str(self.DerivedStats["Insight Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.InsightModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Insight Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntimidationModifierLineEdit.setText(("+" if self.DerivedStats["Intimidation Modifier"] >= 0 else "") + str(self.DerivedStats["Intimidation Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntimidationModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Intimidation Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.InvestigationModifierLineEdit.setText(("+" if self.DerivedStats["Investigation Modifier"] >= 0 else "") + str(self.DerivedStats["Investigation Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.InvestigationModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Investigation Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.MedicineModifierLineEdit.setText(("+" if self.DerivedStats["Medicine Modifier"] >= 0 else "") + str(self.DerivedStats["Medicine Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.MedicineModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Medicine Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.NatureModifierLineEdit.setText(("+" if self.DerivedStats["Nature Modifier"] >= 0 else "") + str(self.DerivedStats["Nature Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.NatureModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Nature Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PerceptionModifierLineEdit.setText(("+" if self.DerivedStats["Perception Modifier"] >= 0 else "") + str(self.DerivedStats["Perception Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PerceptionModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Perception Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PerformanceModifierLineEdit.setText(("+" if self.DerivedStats["Performance Modifier"] >= 0 else "") + str(self.DerivedStats["Performance Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PerformanceModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Performance Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PersuasionModifierLineEdit.setText(("+" if self.DerivedStats["Persuasion Modifier"] >= 0 else "") + str(self.DerivedStats["Persuasion Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PersuasionModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Persuasion Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ReligionModifierLineEdit.setText(("+" if self.DerivedStats["Religion Modifier"] >= 0 else "") + str(self.DerivedStats["Religion Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ReligionModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Religion Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.SleightOfHandModifierLineEdit.setText(("+" if self.DerivedStats["Sleight of Hand Modifier"] >= 0 else "") + str(self.DerivedStats["Sleight of Hand Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.SleightOfHandModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Sleight of Hand Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StealthModifierLineEdit.setText(("+" if self.DerivedStats["Stealth Modifier"] >= 0 else "") + str(self.DerivedStats["Stealth Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StealthModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Stealth Stat Modifier"])
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.SurvivalModifierLineEdit.setText(("+" if self.DerivedStats["Survival Modifier"] >= 0 else "") + str(self.DerivedStats["Survival Modifier"]))
+        self.SetProficiencyIndicators(self.PlayerCharacterAbilitiesAndSkillsWidgetInst.SurvivalModifierLineEdit, self.PlayerCharacter.Stats["Skills"]["Survival Stat Modifier"])
 
         # Passive Scores
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PassivePerceptionLineEdit.setText(str(self.DerivedStats["Passive Perception"]))
@@ -562,6 +592,28 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.ConcentrationCheckPromptEnabledAction.setChecked(self.PlayerCharacter.Stats["Enable Concentration Check"])
             self.PortraitEnabledAction.setChecked(self.PlayerCharacter.Stats["Portrait Enabled"])
             self.LuckyHalflingAction.setChecked(self.PlayerCharacter.Stats["Lucky Halfling"])
+
+    def SetProficiencyIndicators(self, LineEdit, StatModifier):
+        if LineEdit in [self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StrengthSavingThrowLineEdit, self.PlayerCharacterAbilitiesAndSkillsWidgetInst.DexteritySavingThrowLineEdit, self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ConstitutionSavingThrowLineEdit, self.PlayerCharacterAbilitiesAndSkillsWidgetInst.IntelligenceSavingThrowLineEdit, self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WisdomSavingThrowLineEdit, self.PlayerCharacterAbilitiesAndSkillsWidgetInst.CharismaSavingThrowLineEdit]:
+            if StatModifier["Proficiency Multiplier"] == 1:
+                LineEdit.setStyleSheet(self.SavingThrowProficiencyLineEditStyleSheet)
+                LineEdit.setToolTip("Proficient")
+            elif StatModifier["Proficiency Multiplier"] == 2:
+                LineEdit.setStyleSheet(self.SavingThrowExpertiseLineEditStyleSheet)
+                LineEdit.setToolTip("Expertise")
+            else:
+                LineEdit.setStyleSheet(self.SavingThrowModifierLineEditStyleSheet)
+                LineEdit.setToolTip("")
+        else:
+            if StatModifier["Proficiency Multiplier"] == 1:
+                LineEdit.setStyleSheet(self.SkillProficiencyLineEditStyleSheet)
+                LineEdit.setToolTip("Proficient")
+            elif StatModifier["Proficiency Multiplier"] == 2:
+                LineEdit.setStyleSheet(self.SkillExpertiseLineEditStyleSheet)
+                LineEdit.setToolTip("Expertise")
+            else:
+                LineEdit.setStyleSheet(self.SkillModifierLineEditStyleSheet)
+                LineEdit.setToolTip("")
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
