@@ -24,7 +24,7 @@ class RollForAbilityScoresDialog(QDialog):
         # Inputs
         self.Inputs = {}
         for InputsSuffix in self.InputsSuffixes:
-            # ComboBox
+            # Combo Box
             self.Inputs["ComboBox " + InputsSuffix] = QComboBox()
             ComboBox = self.Inputs["ComboBox " + InputsSuffix]
             ComboBox.setSizePolicy(self.InputsSizePolicy)

@@ -20,7 +20,7 @@ class ModeSelectionWindow(Window):
         # Mode Label
         self.ModeLabel = QLabel("PyFifth Mode:")
 
-        # Mode ComboBox
+        # Mode Combo Box
         self.ModeComboBox = QComboBox()
         self.ModeComboBox.addItem("Character Sheet")
         self.ModeComboBox.setEditable(False)
