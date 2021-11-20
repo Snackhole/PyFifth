@@ -164,18 +164,7 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["Inspiration"] = False
 
         # Ability Scores
-        self.Stats["Ability Scores"] = {}
-        for Ability in self.Abilities:
-            self.Stats["Ability Scores"][Ability + " Base"] = 8
-            self.Stats["Ability Scores"][Ability + " Racial"] = 0
-            self.Stats["Ability Scores"][Ability + " ASI"] = 0
-            self.Stats["Ability Scores"][Ability + " Miscellaneous"] = 0
-            self.Stats["Ability Scores"][Ability + " Override"] = None
-            self.Stats["Ability Scores"][Ability + " Stat Modifier"] = self.CreateStatModifier()
-            self.Stats["Ability Scores"][Ability + " Stat Modifier"][Ability + " Multiplier"] = 1
-            self.Stats["Ability Scores"][Ability + " Save Stat Modifier"] = self.CreateStatModifier()
-            self.Stats["Ability Scores"][Ability + " Save Stat Modifier"][Ability + " Multiplier"] = 1
-        self.Stats["Ability Scores"]["Ability Score Notes"] = ""
+        self.Stats["Ability Scores"] = self.CreateAbilityScoresStats()
 
         # Ability Score Derivatives
         self.Stats["Ability Score Derivatives"] = {}
@@ -189,17 +178,7 @@ class PlayerCharacter(Character, SerializableMixin):
             self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"]["Manual Modifier"] = 8
 
         # Skills
-        self.Stats["Skills"] = {}
-        for Skill in self.Skills:
-            self.Stats["Skills"][Skill + " Stat Modifier"] = self.CreateStatModifier()
-            AssociatedAbility = self.SkillsAssociatedAbilities[Skill]
-            self.Stats["Skills"][Skill + " Stat Modifier"][AssociatedAbility + " Multiplier"] = 1
-        self.Stats["Skills"]["Passive Perception Stat Modifier"] = self.CreateStatModifier()
-        self.Stats["Skills"]["Passive Perception Stat Modifier"]["Manual Modifier"] = 10
-        self.Stats["Skills"]["Passive Perception Stat Modifier"]["Wisdom Multiplier"] = 1
-        self.Stats["Skills"]["Passive Investigation Stat Modifier"] = self.CreateStatModifier()
-        self.Stats["Skills"]["Passive Investigation Stat Modifier"]["Manual Modifier"] = 10
-        self.Stats["Skills"]["Passive Investigation Stat Modifier"]["Intelligence Multiplier"] = 1
+        self.Stats["Skills"] = self.CreateSkillsStats()
 
         # Proficiencies
         self.Stats["Weapons Proficiencies"] = ""
@@ -365,6 +344,35 @@ class PlayerCharacter(Character, SerializableMixin):
             return True
 
         return False
+
+    def CreateAbilityScoresStats(self):
+        AbilityScores = {}
+        for Ability in self.Abilities:
+            AbilityScores[Ability + " Base"] = 8
+            AbilityScores[Ability + " Racial"] = 0
+            AbilityScores[Ability + " ASI"] = 0
+            AbilityScores[Ability + " Miscellaneous"] = 0
+            AbilityScores[Ability + " Override"] = None
+            AbilityScores[Ability + " Stat Modifier"] = self.CreateStatModifier()
+            AbilityScores[Ability + " Stat Modifier"][Ability + " Multiplier"] = 1
+            AbilityScores[Ability + " Save Stat Modifier"] = self.CreateStatModifier()
+            AbilityScores[Ability + " Save Stat Modifier"][Ability + " Multiplier"] = 1
+        AbilityScores["Ability Score Notes"] = ""
+        return AbilityScores
+
+    def CreateSkillsStats(self):
+        Skills = {}
+        for Skill in self.Skills:
+            Skills[Skill + " Stat Modifier"] = self.CreateStatModifier()
+            AssociatedAbility = self.SkillsAssociatedAbilities[Skill]
+            Skills[Skill + " Stat Modifier"][AssociatedAbility + " Multiplier"] = 1
+        Skills["Passive Perception Stat Modifier"] = self.CreateStatModifier()
+        Skills["Passive Perception Stat Modifier"]["Manual Modifier"] = 10
+        Skills["Passive Perception Stat Modifier"]["Wisdom Multiplier"] = 1
+        Skills["Passive Investigation Stat Modifier"] = self.CreateStatModifier()
+        Skills["Passive Investigation Stat Modifier"]["Manual Modifier"] = 10
+        Skills["Passive Investigation Stat Modifier"]["Intelligence Multiplier"] = 1
+        return Skills
 
     def GetDerivedStats(self):
         # Common Derived Stats

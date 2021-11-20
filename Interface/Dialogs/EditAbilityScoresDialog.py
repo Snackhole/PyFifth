@@ -1,7 +1,7 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox, QSizePolicy, QTextEdit
+from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox, QSizePolicy, QTextEdit, QMessageBox
 
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Dialogs.PointBuyAbilityScoresDialog import PointBuyAbilityScoresDialog
@@ -476,6 +476,8 @@ class EditAbilityScoresDialog(QDialog):
         # Dialog Buttons
         self.DoneButton = QPushButton("Done")
         self.DoneButton.clicked.connect(self.Done)
+        self.SetToDefaultButton = QPushButton("Set to Default")
+        self.SetToDefaultButton.clicked.connect(self.SetToDefault)
         self.CancelButton = QPushButton("Cancel")
         self.CancelButton.clicked.connect(self.Cancel)
 
@@ -512,7 +514,8 @@ class EditAbilityScoresDialog(QDialog):
 
         self.DialogButtonsLayout = QGridLayout()
         self.DialogButtonsLayout.addWidget(self.DoneButton, 0, 0)
-        self.DialogButtonsLayout.addWidget(self.CancelButton, 0, 1)
+        self.DialogButtonsLayout.addWidget(self.SetToDefaultButton, 0, 1)
+        self.DialogButtonsLayout.addWidget(self.CancelButton, 0, 2)
         self.Layout.addLayout(self.DialogButtonsLayout, 3, 0, 1, 2)
 
         self.Layout.setRowStretch(2, 1)
@@ -564,6 +567,14 @@ class EditAbilityScoresDialog(QDialog):
 
     def Done(self):
         self.close()
+
+    def SetToDefault(self):
+        Confirm = self.CharacterWindow.DisplayMessageBox("Are you sure you want to set ability score data to default values?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self)
+        if Confirm == QMessageBox.Yes:
+            DefaultAbilityScoreData = self.CharacterWindow.PlayerCharacter.CreateAbilityScoresStats()
+            self.AbilityScores.update(DefaultAbilityScoreData)
+            self.UnsavedChanges = True
+            self.close()
 
     def Cancel(self):
         self.AbilityScores.update(self.AbilityScoresOriginalState)

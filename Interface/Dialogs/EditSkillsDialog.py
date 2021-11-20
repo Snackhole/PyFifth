@@ -2,7 +2,7 @@ import copy
 import functools
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSizePolicy, QMessageBox
 
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Widgets.EditButton import EditButton
@@ -49,6 +49,8 @@ class EditSkillsDialog(QDialog):
         # Dialog Buttons
         self.DoneButton = QPushButton("Done")
         self.DoneButton.clicked.connect(self.Done)
+        self.SetToDefaultButton = QPushButton("Set to Default")
+        self.SetToDefaultButton.clicked.connect(self.SetToDefault)
         self.CancelButton = QPushButton("Cancel")
         self.CancelButton.clicked.connect(self.Cancel)
 
@@ -75,7 +77,8 @@ class EditSkillsDialog(QDialog):
 
         self.DialogButtonsLayout = QGridLayout()
         self.DialogButtonsLayout.addWidget(self.DoneButton, 0, 0)
-        self.DialogButtonsLayout.addWidget(self.CancelButton, 0, 1)
+        self.DialogButtonsLayout.addWidget(self.SetToDefaultButton, 0, 1)
+        self.DialogButtonsLayout.addWidget(self.CancelButton, 0, 2)
         self.Layout.addLayout(self.DialogButtonsLayout, 3, 0)
 
         self.Layout.setRowStretch(1, 1)
@@ -95,6 +98,14 @@ class EditSkillsDialog(QDialog):
 
     def Done(self):
         self.close()
+
+    def SetToDefault(self):
+        Confirm = self.CharacterWindow.DisplayMessageBox("Are you sure you want to set skills data to default values?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self)
+        if Confirm == QMessageBox.Yes:
+            DefaultSkillsData = self.CharacterWindow.PlayerCharacter.CreateSkillsStats()
+            self.Skills.update(DefaultSkillsData)
+            self.UnsavedChanges = True
+            self.close()
 
     def Cancel(self):
         self.Skills.update(self.SkillsOriginalState)
