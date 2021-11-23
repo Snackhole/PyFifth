@@ -18,6 +18,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Styles
         self.SectionLabelStyle = "QLabel {font-size: 10pt; font-weight: bold;}"
+        self.HPSpinBoxStyle = "QSpinBox {font-size: 16pt;}"
 
         # Header Label Margin
         self.HeaderLabelMargin = 5
@@ -45,6 +46,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.TempHPSpinBox = QSpinBox()
         self.TempHPSpinBox.setRange(0, 1000000000)
         self.TempHPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.TempHPSpinBox.setStyleSheet(self.HPSpinBoxStyle)
         self.TempHPSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.TempHPSpinBox.setButtonSymbols(self.TempHPSpinBox.NoButtons)
         self.TempHPSpinBox.setValue(0)
@@ -57,6 +59,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.CurrentHPSpinBox = QSpinBox()
         self.CurrentHPSpinBox.setRange(-1000000000, 1000000000)
         self.CurrentHPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CurrentHPSpinBox.setStyleSheet(self.HPSpinBoxStyle)
         self.CurrentHPSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CurrentHPSpinBox.setButtonSymbols(self.CurrentHPSpinBox.NoButtons)
         self.CurrentHPSpinBox.setValue(0)
@@ -69,6 +72,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.MaxHPSpinBox = QSpinBox()
         self.MaxHPSpinBox.setRange(0, 1000000000)
         self.MaxHPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.MaxHPSpinBox.setStyleSheet(self.HPSpinBoxStyle)
         self.MaxHPSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.MaxHPSpinBox.setButtonSymbols(self.MaxHPSpinBox.NoButtons)
         self.MaxHPSpinBox.setValue(0)
