@@ -342,6 +342,10 @@ class PlayerCharacter(Character, SerializableMixin):
         ]:
             self.Stats[Stat] = NewValue
             return True
+        elif type(Stat) is tuple:
+            if len(Stat) == 2:
+                self.Stats[Stat[0]][Stat[1]] = NewValue
+                return True
 
         return False
 
