@@ -199,29 +199,30 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["AC Stat Modifier 3"]["Dexterity Multiplier"] = 1
 
         # Max Health
-        self.Stats["Max Health Per Level"] = {}
-        self.Stats["Max Health Per Level"]["1"] = 0
-        self.Stats["Max Health Per Level"]["2"] = 0
-        self.Stats["Max Health Per Level"]["3"] = 0
-        self.Stats["Max Health Per Level"]["4"] = 0
-        self.Stats["Max Health Per Level"]["5"] = 0
-        self.Stats["Max Health Per Level"]["6"] = 0
-        self.Stats["Max Health Per Level"]["7"] = 0
-        self.Stats["Max Health Per Level"]["8"] = 0
-        self.Stats["Max Health Per Level"]["9"] = 0
-        self.Stats["Max Health Per Level"]["10"] = 0
-        self.Stats["Max Health Per Level"]["11"] = 0
-        self.Stats["Max Health Per Level"]["12"] = 0
-        self.Stats["Max Health Per Level"]["13"] = 0
-        self.Stats["Max Health Per Level"]["14"] = 0
-        self.Stats["Max Health Per Level"]["15"] = 0
-        self.Stats["Max Health Per Level"]["16"] = 0
-        self.Stats["Max Health Per Level"]["17"] = 0
-        self.Stats["Max Health Per Level"]["18"] = 0
-        self.Stats["Max Health Per Level"]["19"] = 0
-        self.Stats["Max Health Per Level"]["20"] = 0
-        self.Stats["Bonus Max Health Per Level"] = 0
-        self.Stats["Max Health Override"] = None
+        self.Stats["Health"] = {}
+        self.Stats["Health"]["Max Health Per Level"] = {}
+        self.Stats["Health"]["Max Health Per Level"]["1"] = 6
+        self.Stats["Health"]["Max Health Per Level"]["2"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["3"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["4"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["5"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["6"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["7"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["8"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["9"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["10"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["11"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["12"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["13"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["14"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["15"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["16"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["17"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["18"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["19"] = 1
+        self.Stats["Health"]["Max Health Per Level"]["20"] = 1
+        self.Stats["Health"]["Bonus Max Health Per Level"] = 0
+        self.Stats["Health"]["Max Health Override"] = None
 
         # Hit Dice
         self.Stats["Total Hit Dice"] = ""
@@ -632,13 +633,13 @@ class PlayerCharacter(Character, SerializableMixin):
         return PointsRemaining
 
     def CalculateMaxHealth(self):
-        if self.Stats["Max Health Override"] is not None:
-            MaxHealth = self.Stats["Max Health Override"]
+        if self.Stats["Health"]["Max Health Override"] is not None:
+            MaxHealth = self.Stats["Health"]["Max Health Override"]
         else:
+            ConstitutionModifier = self.CalculateStatModifier(self.Stats["Ability Scores"]["Constitution Stat Modifier"])
             MaxHealth = 0
             for Level in range(1, self.Stats["Character Level"] + 1):
-                MaxHealth += self.Stats["Max Health Per Level"][str(Level)]
-            MaxHealth += (self.CalculateStatModifier(self.Stats["Ability Scores"]["Constitution Stat Modifier"]) + self.Stats["Bonus Max Health Per Level"]) * self.Stats["Character Level"]
+                MaxHealth += max(self.Stats["Health"]["Max Health Per Level"][str(Level)] + ConstitutionModifier + self.Stats["Health"]["Bonus Max Health Per Level"], 1)
         return MaxHealth
 
     # Combat Methods
