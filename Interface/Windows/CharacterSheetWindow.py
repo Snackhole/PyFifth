@@ -12,6 +12,7 @@ from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Widgets.InspirationButton import InspirationButton
 from Interface.Widgets.PlayerCharacterAbilitiesAndSkillsWidget import PlayerCharacterAbilitiesAndSkillsWidget
+from Interface.Widgets.PlayerCharacterCombatAndFeaturesWidget import PlayerCharacterCombatAndFeaturesWidget
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -88,11 +89,11 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         # Stats Tab Widget
         self.StatsTabWidget = QTabWidget()
         self.StatsTabWidget.setUsesScrollButtons(False)
-        # TODO:  Replace QFrames with widgets
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst = PlayerCharacterAbilitiesAndSkillsWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterAbilitiesAndSkillsWidgetInst, "Abilities and Skills")
-        self.PlayerCharacterCombatAndFeaturesWidgetInst = QFrame()
+        self.PlayerCharacterCombatAndFeaturesWidgetInst = PlayerCharacterCombatAndFeaturesWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterCombatAndFeaturesWidgetInst, "Combat and Features")
+        # TODO:  Replace QFrames with widgets
         self.PlayerCharacterSpellcastingWidgetInst = QFrame()
         self.StatsTabWidget.addTab(self.PlayerCharacterSpellcastingWidgetInst, "Spellcasting")
         self.PlayerCharacterInventoryWidgetInst = QFrame()
@@ -583,6 +584,18 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ToolsAndInstrumentsProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Tools and Instruments Proficiencies"])
             self.PlayerCharacterAbilitiesAndSkillsWidgetInst.LanguagesProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Languages Proficiencies"])
             self.PlayerCharacterAbilitiesAndSkillsWidgetInst.OtherProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Other Proficiencies"])
+
+            # Vitality
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.TempHPSpinBox.setValue(self.PlayerCharacter.Stats["Temp Health"])
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.CurrentHPSpinBox.setValue(self.PlayerCharacter.Stats["Current Health"])
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.TotalHitDiceLineEdit.setText(self.PlayerCharacter.Stats["Total Hit Dice"])
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.HitDiceRemainingLineEdit.setText(self.PlayerCharacter.Stats["Hit Dice Remaining"])
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.DeathSavingThrowsSuccessCheckBoxOne.setChecked(self.PlayerCharacter.Stats["Death Saving Throws"]["Success 1"])
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.DeathSavingThrowsSuccessCheckBoxTwo.setChecked(self.PlayerCharacter.Stats["Death Saving Throws"]["Success 2"])
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.DeathSavingThrowsSuccessCheckBoxThree.setChecked(self.PlayerCharacter.Stats["Death Saving Throws"]["Success 3"])
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.DeathSavingThrowsFailureCheckBoxOne.setChecked(self.PlayerCharacter.Stats["Death Saving Throws"]["Failure 1"])
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.DeathSavingThrowsFailureCheckBoxTwo.setChecked(self.PlayerCharacter.Stats["Death Saving Throws"]["Failure 2"])
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.DeathSavingThrowsFailureCheckBoxThree.setChecked(self.PlayerCharacter.Stats["Death Saving Throws"]["Failure 3"])
 
             # Inspiration
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
