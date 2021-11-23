@@ -26,7 +26,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.AppInst = AppInst
 
         # Variables
-        self.Opening = False
+        self.UpdatingFieldsFromPlayerCharacter = False
         self.SavingThrowModifierLineEditStyleSheet = "QLineEdit {font-size: 16pt;}"
         self.SavingThrowProficiencyLineEditStyleSheet = "QLineEdit {font-size: 16pt; background-color: darkgreen;}"
         self.SavingThrowExpertiseLineEditStyleSheet = "QLineEdit {font-size: 16pt; background-color: darkgoldenrod;}"
@@ -298,7 +298,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
     # Player Character Methods
     def UpdateStat(self, Stat, NewValue):
-        if not self.Opening:
+        if not self.UpdatingFieldsFromPlayerCharacter:
             self.PlayerCharacter.UpdateStat(Stat, NewValue)
             self.UpdateUnsavedChangesFlag(True)
 
@@ -425,17 +425,17 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
     def NewActionTriggered(self):
         if self.New(self.PlayerCharacter):
             self.PlayerCharacter = PlayerCharacter()
-        self.Opening = True
+        self.UpdatingFieldsFromPlayerCharacter = True
         self.UpdateDisplay()
-        self.Opening = False
+        self.UpdatingFieldsFromPlayerCharacter = False
 
     def OpenActionTriggered(self):
         OpenData = self.Open(self.PlayerCharacter)
         if OpenData is not None:
             self.PlayerCharacter = OpenData
-        self.Opening = True
+        self.UpdatingFieldsFromPlayerCharacter = True
         self.UpdateDisplay()
-        self.Opening = False
+        self.UpdatingFieldsFromPlayerCharacter = False
 
     def SaveActionTriggered(self):
         self.Save(self.PlayerCharacter)
@@ -558,6 +558,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PassivePerceptionLineEdit.setText(str(self.DerivedStats["Passive Perception"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PassiveInvestigationLineEdit.setText(str(self.DerivedStats["Passive Investigation"]))
 
+        # Max HP
+        self.PlayerCharacterCombatAndFeaturesWidgetInst.MaxHPSpinBox.setValue(self.DerivedStats["Max Health"])
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
@@ -571,7 +574,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         else:
             self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
 
-        if self.Opening:
+        if self.UpdatingFieldsFromPlayerCharacter:
             # Header
             self.NameLineEdit.setText(self.PlayerCharacter.Stats["Character Name"])
             self.ClassLineEdit.setText(self.PlayerCharacter.Stats["Character Class"])
