@@ -19,6 +19,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         # Styles
         self.SectionLabelStyle = "QLabel {font-size: 10pt; font-weight: bold;}"
         self.HPSpinBoxStyle = "QSpinBox {font-size: 16pt;}"
+        self.NegativeCurrentHealthSpinBoxStyle = "QSpinBox {font-size: 16pt; background-color: darkred}"
 
         # Header Label Margin
         self.HeaderLabelMargin = 5
@@ -62,7 +63,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.CurrentHPSpinBox.setStyleSheet(self.HPSpinBoxStyle)
         self.CurrentHPSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CurrentHPSpinBox.setButtonSymbols(self.CurrentHPSpinBox.NoButtons)
-        self.CurrentHPSpinBox.setValue(0)
+        self.CurrentHPSpinBox.setValue(5)
         self.CurrentHPSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Current Health", self.CurrentHPSpinBox.value()))
 
         # Max HP

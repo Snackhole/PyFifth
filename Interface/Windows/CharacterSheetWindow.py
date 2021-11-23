@@ -558,6 +558,10 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PassivePerceptionLineEdit.setText(str(self.DerivedStats["Passive Perception"]))
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.PassiveInvestigationLineEdit.setText(str(self.DerivedStats["Passive Investigation"]))
 
+        # Set Negative Current HP Indicator
+        Style = self.PlayerCharacterCombatAndFeaturesWidgetInst.HPSpinBoxStyle if self.PlayerCharacter.Stats["Current Health"] >= 0 else self.PlayerCharacterCombatAndFeaturesWidgetInst.NegativeCurrentHealthSpinBoxStyle
+        self.PlayerCharacterCombatAndFeaturesWidgetInst.CurrentHPSpinBox.setStyleSheet(Style)
+
         # Max HP
         self.PlayerCharacterCombatAndFeaturesWidgetInst.MaxHPSpinBox.setValue(self.DerivedStats["Max Health"])
 
