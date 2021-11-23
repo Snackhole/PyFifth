@@ -2,6 +2,9 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QCheckBox, QFrame, QLabel, QSizePolicy, QGridLayout, QSpinBox
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.DamageButton import DamageButton
+from Interface.Widgets.EditButton import EditButton
+from Interface.Widgets.HealButton import HealButton
 
 
 class PlayerCharacterCombatAndFeaturesWidget(QFrame):
@@ -70,6 +73,11 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.MaxHPSpinBox.setValue(0)
         self.MaxHPSpinBox.setReadOnly(True)
 
+        # HP Buttons
+        self.DamageButton = DamageButton(self.Damage)
+        self.HealButton = HealButton(self.Heal)
+        self.EditMaxHPButton = EditButton(self.EditMaxHP, "Edit Max HP")
+
         # Total Hit Dice
         self.TotalHitDiceLabel = QLabel("Total Hit Dice:")
         self.TotalHitDiceLabel.setAlignment(QtCore.Qt.AlignCenter)
@@ -116,7 +124,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.VitalityLayout = QGridLayout()
 
         self.VitalityLayout.addWidget(self.VitalityHeader, 0, 0, 1, 2)
-        
+
         self.HPLayout = QGridLayout()
         self.HPLayout.addWidget(self.TempHPLabel, 0, 0)
         self.HPLayout.addWidget(self.TempHPSpinBox, 1, 0)
@@ -124,6 +132,11 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.HPLayout.addWidget(self.CurrentHPSpinBox, 3, 0)
         self.HPLayout.addWidget(self.MaxHPLabel, 4, 0)
         self.HPLayout.addWidget(self.MaxHPSpinBox, 5, 0)
+        self.HPButtonsLayout = QGridLayout()
+        self.HPButtonsLayout.addWidget(self.DamageButton, 0, 0)
+        self.HPButtonsLayout.addWidget(self.HealButton, 0, 1)
+        self.HPButtonsLayout.addWidget(self.EditMaxHPButton, 0, 2)
+        self.HPLayout.addLayout(self.HPButtonsLayout, 6, 0)
         self.VitalityLayout.addLayout(self.HPLayout, 1, 0, 2, 1)
 
         self.HitDiceLayout = QGridLayout()
@@ -149,3 +162,12 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Set Layout
         self.setLayout(self.Layout)
+
+    def Damage(self):
+        pass
+
+    def Heal(self):
+        pass
+
+    def EditMaxHP(self):
+        pass
