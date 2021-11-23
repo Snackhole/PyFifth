@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QSizePolicy, QGridLayout, QSpinBox
 
+from Interface.Dialogs.EditMaxHPDialog import EditMaxHPDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DamageButton import DamageButton
 from Interface.Widgets.EditButton import EditButton
@@ -185,4 +186,6 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)
 
     def EditMaxHP(self):
-        pass
+        EditMaxHPDialogInst = EditMaxHPDialog(self.CharacterWindow)
+        if EditMaxHPDialogInst.UnsavedChanges:
+            self.CharacterWindow.UpdateUnsavedChangesFlag(True)
