@@ -198,6 +198,9 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["AC Stat Modifier 3"]["Base AC"] = 10
         self.Stats["AC Stat Modifier 3"]["Dexterity Multiplier"] = 1
 
+        # Current Health
+        self.Stats["Current Health"] = 5
+
         # Max Health
         self.Stats["Health"] = {}
         self.Stats["Health"]["Max Health Per Level"] = {}

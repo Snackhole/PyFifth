@@ -18,7 +18,7 @@ class Character:
         self.Stats = {}
 
         # Current Health
-        self.Stats["Current Health"] = 0
+        self.Stats["Current Health"] = 1
 
         # Temp Health
         self.Stats["Temp Health"] = 0
