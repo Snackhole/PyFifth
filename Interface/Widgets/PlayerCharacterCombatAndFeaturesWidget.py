@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QCheckBox, QFrame, QLabel, QSizePolicy, QGridLayout, QSpinBox
+from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QSizePolicy, QGridLayout, QSpinBox
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DamageButton import DamageButton
@@ -164,10 +164,25 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.setLayout(self.Layout)
 
     def Damage(self):
-        pass
+        DamageAmount, OK = QInputDialog.getInt(self, "Damage", "How much damage?", 1, 1, 1000000000)
+        if OK:
+            ConcentrationDC = self.CharacterWindow.PlayerCharacter.Damage(DamageAmount)
+            self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = True
+            self.TempHPSpinBox.setValue(self.CharacterWindow.PlayerCharacter.Stats["Temp Health"])
+            self.CurrentHPSpinBox.setValue(self.CharacterWindow.PlayerCharacter.Stats["Current Health"])
+            self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = False
+            self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+            if ConcentrationDC is not None:
+                self.CharacterWindow.DisplayMessageBox("DC " + str(ConcentrationDC) + " Constitution saving throw required to maintain concentration.", Parent=self)
 
     def Heal(self):
-        pass
+        HealAmount, OK = QInputDialog.getInt(self, "Heal", "Heal how much?", 1, 1, 1000000000)
+        if OK:
+            self.CharacterWindow.PlayerCharacter.Heal(HealAmount, self.CharacterWindow.PlayerCharacter.CalculateMaxHealth())
+            self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = True
+            self.CurrentHPSpinBox.setValue(self.CharacterWindow.PlayerCharacter.Stats["Current Health"])
+            self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = False
+            self.CharacterWindow.UpdateUnsavedChangesFlag(True)
 
     def EditMaxHP(self):
         pass

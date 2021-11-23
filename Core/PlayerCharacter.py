@@ -409,14 +409,7 @@ class PlayerCharacter(Character, SerializableMixin):
         DerivedStats["AC 3"] = self.CalculateStatModifier(self.Stats["AC Stat Modifier 3"])
 
         # Health
-        if self.Stats["Max Health Override"] is not None:
-            DerivedStats["Max Health"] = self.Stats["Max Health Override"]
-        else:
-            MaxHealth = 0
-            for Level in range(1, self.Stats["Character Level"] + 1):
-                MaxHealth += self.Stats["Max Health Per Level"][str(Level)]
-            MaxHealth += (DerivedStats["Constitution Modifier"] + self.Stats["Bonus Max Health Per Level"]) * self.Stats["Character Level"]
-            DerivedStats["Max Health"] = MaxHealth
+        DerivedStats["Max Health"] = self.CalculateMaxHealth()
 
         # Initiative
         DerivedStats["Initiative Modifier"] = self.CalculateStatModifier(self.Stats["Initiative Stat Modifier"])
@@ -637,6 +630,16 @@ class PlayerCharacter(Character, SerializableMixin):
         for Score in Scores:
             PointsRemaining -= self.PointBuyCosts[Score]
         return PointsRemaining
+
+    def CalculateMaxHealth(self):
+        if self.Stats["Max Health Override"] is not None:
+            MaxHealth = self.Stats["Max Health Override"]
+        else:
+            MaxHealth = 0
+            for Level in range(1, self.Stats["Character Level"] + 1):
+                MaxHealth += self.Stats["Max Health Per Level"][str(Level)]
+            MaxHealth += (self.CalculateStatModifier(self.Stats["Ability Scores"]["Constitution Stat Modifier"]) + self.Stats["Bonus Max Health Per Level"]) * self.Stats["Character Level"]
+        return MaxHealth
 
     # Combat Methods
     def RollInitiative(self):
