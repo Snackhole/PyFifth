@@ -639,6 +639,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             for AbilityScoreDerivativeWidget in [self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst1, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst2, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst3]:
                 AbilityScoreDerivativeWidget.AbilityComboBox.setCurrentText(self.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][AbilityScoreDerivativeWidget.Index])
 
+            # Combat and Features Notes
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.CombatAndFeaturesNotesTextEdit.setText(self.PlayerCharacter.Stats["Combat and Features Notes"])
+
             # Inspiration
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
 

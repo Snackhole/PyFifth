@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTabWidget
+from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTabWidget, QTextEdit
 
 from Interface.Dialogs.EditMaxHPDialog import EditMaxHPDialog
 from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
@@ -44,6 +44,9 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Create Ability Score Derivatives
         self.CreateAbilityScoreDerivatives()
+
+        # Create Combat and Features Notes
+        self.CreateCombatAndFeaturesNotes()
 
         # Create and Set Layout
         self.CreateAndSetLayout()
@@ -104,7 +107,6 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.TotalHitDiceLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.TotalHitDiceLineEdit = CenteredLineEdit()
-        self.TotalHitDiceLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.TotalHitDiceLineEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Total Hit Dice", self.TotalHitDiceLineEdit.text()))
 
         # Hit Dice Remaining
@@ -112,31 +114,36 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.HitDiceRemainingLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.HitDiceRemainingLineEdit = CenteredLineEdit()
-        self.HitDiceRemainingLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.HitDiceRemainingLineEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Hit Dice Remaining", self.HitDiceRemainingLineEdit.text()))
 
         # Death Saving Throws
         self.DeathSavingThrowsLabel = QLabel("Death Saving Throws:")
         self.DeathSavingThrowsLabel.setAlignment(QtCore.Qt.AlignCenter)
 
-        self.DeathSavingThrowsSuccessesLabel = QLabel("Succ.")
+        self.DeathSavingThrowsSuccessesLabel = QLabel("Success")
         self.DeathSavingThrowsSuccessesLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.DeathSavingThrowsSuccessCheckBoxOne = QCheckBox()
+        self.DeathSavingThrowsSuccessCheckBoxOne.setSizePolicy(self.InputsSizePolicy)
         self.DeathSavingThrowsSuccessCheckBoxOne.stateChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Death Saving Throws", "Success 1"), self.DeathSavingThrowsSuccessCheckBoxOne.isChecked()))
         self.DeathSavingThrowsSuccessCheckBoxTwo = QCheckBox()
+        self.DeathSavingThrowsSuccessCheckBoxTwo.setSizePolicy(self.InputsSizePolicy)
         self.DeathSavingThrowsSuccessCheckBoxTwo.stateChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Death Saving Throws", "Success 2"), self.DeathSavingThrowsSuccessCheckBoxTwo.isChecked()))
         self.DeathSavingThrowsSuccessCheckBoxThree = QCheckBox()
+        self.DeathSavingThrowsSuccessCheckBoxThree.setSizePolicy(self.InputsSizePolicy)
         self.DeathSavingThrowsSuccessCheckBoxThree.stateChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Death Saving Throws", "Success 3"), self.DeathSavingThrowsSuccessCheckBoxThree.isChecked()))
 
         self.DeathSavingThrowsFailuresLabel = QLabel("Fail")
         self.DeathSavingThrowsFailuresLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.DeathSavingThrowsFailureCheckBoxOne = QCheckBox()
+        self.DeathSavingThrowsFailureCheckBoxOne.setSizePolicy(self.InputsSizePolicy)
         self.DeathSavingThrowsFailureCheckBoxOne.stateChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Death Saving Throws", "Failure 1"), self.DeathSavingThrowsFailureCheckBoxOne.isChecked()))
         self.DeathSavingThrowsFailureCheckBoxTwo = QCheckBox()
+        self.DeathSavingThrowsFailureCheckBoxTwo.setSizePolicy(self.InputsSizePolicy)
         self.DeathSavingThrowsFailureCheckBoxTwo.stateChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Death Saving Throws", "Failure 2"), self.DeathSavingThrowsFailureCheckBoxTwo.isChecked()))
         self.DeathSavingThrowsFailureCheckBoxThree = QCheckBox()
+        self.DeathSavingThrowsFailureCheckBoxThree.setSizePolicy(self.InputsSizePolicy)
         self.DeathSavingThrowsFailureCheckBoxThree.stateChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Death Saving Throws", "Failure 3"), self.DeathSavingThrowsFailureCheckBoxThree.isChecked()))
 
     def CreateACTabs(self):
@@ -241,6 +248,17 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AbilityScoreDerivativeWidgetInst2 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 1)
         self.AbilityScoreDerivativeWidgetInst3 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 2)
 
+    def CreateCombatAndFeaturesNotes(self):
+        # Combat and Features Notes Label
+        self.CombatAndFeaturesNotesLabel = QLabel("Combat and Features Notes")
+        self.CombatAndFeaturesNotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CombatAndFeaturesNotesLabel.setStyleSheet(self.SectionLabelStyle)
+        
+        # Combat and Features Notes Text Edit
+        self.CombatAndFeaturesNotesTextEdit = QTextEdit()
+        self.CombatAndFeaturesNotesTextEdit.setTabChangesFocus(True)
+        self.CombatAndFeaturesNotesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Combat and Features Notes", self.CombatAndFeaturesNotesTextEdit.toPlainText()))
+
     def CreateAndSetLayout(self):
         # Create Layout
         self.Layout = QGridLayout()
@@ -284,9 +302,11 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.DeathSavingThrowsLayout.addWidget(self.DeathSavingThrowsFailureCheckBoxOne, 2, 1)
         self.DeathSavingThrowsLayout.addWidget(self.DeathSavingThrowsFailureCheckBoxTwo, 2, 2)
         self.DeathSavingThrowsLayout.addWidget(self.DeathSavingThrowsFailureCheckBoxThree, 2, 3)
+        for Row in [1, 2]:
+            self.DeathSavingThrowsLayout.setRowStretch(Row, 1)
         self.VitalityLayout.addLayout(self.DeathSavingThrowsLayout, 2, 1)
 
-        self.VitalityLayout.setRowStretch(1, 1)
+        self.VitalityLayout.setRowStretch(2, 1)
         self.VitalityLayout.setColumnStretch(1, 1)
 
         self.Layout.addLayout(self.VitalityLayout, 0, 0, 3, 1)
@@ -334,6 +354,16 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst2, 1, 1)
         self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst3, 1, 2)
         self.Layout.addLayout(self.AbilityScoreDerivativesLayout, 3, 0, 1, 2)
+
+        # Combat and Features Notes
+        self.CombatAndFeaturesNotesLayout = QGridLayout()
+        self.CombatAndFeaturesNotesLayout.addWidget(self.CombatAndFeaturesNotesLabel, 0, 0)
+        self.CombatAndFeaturesNotesLayout.addWidget(self.CombatAndFeaturesNotesTextEdit, 1, 0)
+        self.CombatAndFeaturesNotesLayout.setRowStretch(1, 1)
+        self.Layout.addLayout(self.CombatAndFeaturesNotesLayout, 4, 0, 1, 2)
+
+        # Layout Stretching
+        self.Layout.setRowStretch(4, 1)
 
         # Set Layout
         self.setLayout(self.Layout)
