@@ -19,6 +19,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Styles
         self.SectionLabelStyle = "QLabel {font-size: 10pt; font-weight: bold;}"
+        self.CombatAndFeaturesSpinBoxStyle = "QSpinBox {font-size: 16pt;}"
         self.HPSpinBoxStyle = "QSpinBox {font-size: 16pt;}"
         self.NegativeCurrentHealthSpinBoxStyle = "QSpinBox {font-size: 16pt; background-color: darkred}"
 
@@ -153,6 +154,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AC1SpinBox = QSpinBox()
         self.AC1SpinBox.setRange(0, 1000000000)
         self.AC1SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.AC1SpinBox.setStyleSheet(self.CombatAndFeaturesSpinBoxStyle)
         self.AC1SpinBox.setSizePolicy(self.InputsSizePolicy)
         self.AC1SpinBox.setButtonSymbols(self.AC1SpinBox.NoButtons)
         self.AC1SpinBox.setValue(0)
@@ -161,6 +163,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AC2SpinBox = QSpinBox()
         self.AC2SpinBox.setRange(0, 1000000000)
         self.AC2SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.AC2SpinBox.setStyleSheet(self.CombatAndFeaturesSpinBoxStyle)
         self.AC2SpinBox.setSizePolicy(self.InputsSizePolicy)
         self.AC2SpinBox.setButtonSymbols(self.AC2SpinBox.NoButtons)
         self.AC2SpinBox.setValue(0)
@@ -169,6 +172,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AC3SpinBox = QSpinBox()
         self.AC3SpinBox.setRange(0, 1000000000)
         self.AC3SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.AC3SpinBox.setStyleSheet(self.CombatAndFeaturesSpinBoxStyle)
         self.AC3SpinBox.setSizePolicy(self.InputsSizePolicy)
         self.AC3SpinBox.setButtonSymbols(self.AC3SpinBox.NoButtons)
         self.AC3SpinBox.setValue(0)
@@ -192,6 +196,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.InitiativeSpinBox = QSpinBox()
         self.InitiativeSpinBox.setRange(-1000000000, 1000000000)
         self.InitiativeSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.InitiativeSpinBox.setStyleSheet(self.CombatAndFeaturesSpinBoxStyle)
         self.InitiativeSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.InitiativeSpinBox.setButtonSymbols(self.InitiativeSpinBox.NoButtons)
         self.InitiativeSpinBox.setValue(0)
@@ -213,8 +218,9 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Speed Spin Box
         self.SpeedSpinBox = QSpinBox()
-        self.SpeedSpinBox.setRange(-1000000000, 1000000000)
+        self.SpeedSpinBox.setRange(0, 1000000000)
         self.SpeedSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpeedSpinBox.setStyleSheet(self.CombatAndFeaturesSpinBoxStyle)
         self.SpeedSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.SpeedSpinBox.setButtonSymbols(self.SpeedSpinBox.NoButtons)
         self.SpeedSpinBox.setValue(30)
