@@ -6,6 +6,7 @@ from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DamageButton import DamageButton
 from Interface.Widgets.EditButton import EditButton
 from Interface.Widgets.HealButton import HealButton
+from Interface.Widgets.RollButton import RollButton
 
 
 class PlayerCharacterCombatAndFeaturesWidget(QFrame):
@@ -32,6 +33,9 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Create AC Tabs
         self.CreateACTabs()
+
+        # Create Initiative
+        self.CreateInitiative()
 
         # Create and Set Layout
         self.CreateAndSetLayout()
@@ -175,6 +179,29 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AC3EditButton = EditButton(lambda: self.EditAC("3"), "Edit AC Stat Modifier 3")
         self.AC3EditButton.setSizePolicy(self.InputsSizePolicy)
 
+    def CreateInitiative(self):
+        # Initiative Label
+        self.InitiativeLabel = QLabel("Initiative:")
+        self.InitiativeLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.InitiativeLabel.setStyleSheet(self.SectionLabelStyle)
+
+        # Initiative Spin Box
+        self.InitiativeSpinBox = QSpinBox()
+        self.InitiativeSpinBox.setRange(-1000000000, 1000000000)
+        self.InitiativeSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.InitiativeSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.InitiativeSpinBox.setButtonSymbols(self.InitiativeSpinBox.NoButtons)
+        self.InitiativeSpinBox.setValue(0)
+        self.InitiativeSpinBox.setReadOnly(True)
+
+        # Initiative Roll Button
+        self.InitiativeRollButton = RollButton(self.RollInitiative, "Roll Initiative")
+        self.InitiativeRollButton.setSizePolicy(self.InputsSizePolicy)
+
+        # Initiative Edit Button
+        self.InitiativeEditButton = EditButton(self.EditInitiative, "Edit Initiative Modifier")
+        self.InitiativeEditButton.setSizePolicy(self.InputsSizePolicy)
+
     def CreateAndSetLayout(self):
         # Create Layout
         self.Layout = QGridLayout()
@@ -225,6 +252,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         self.Layout.addLayout(self.VitalityLayout, 0, 0, 3, 1)
 
+        # AC Tab Widget
         self.AC1Layout = QGridLayout()
         self.AC1Layout.addWidget(self.AC1SpinBox, 0, 0)
         self.AC1Layout.addWidget(self.AC1EditButton, 0, 1)
@@ -242,6 +270,16 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AC3TabFrame.setLayout(self.AC3Layout)
 
         self.Layout.addWidget(self.ACTabWidget, 0, 1)
+
+        # Initiative
+        self.InitiativeLayout = QGridLayout()
+        self.InitiativeLayout.addWidget(self.InitiativeLabel, 0, 0, 1, 3)
+        self.InitiativeLayout.addWidget(self.InitiativeSpinBox, 1, 0)
+        self.InitiativeLayout.addWidget(self.InitiativeRollButton, 1, 1)
+        self.InitiativeLayout.addWidget(self.InitiativeEditButton, 1, 2)
+        self.InitiativeLayout.setRowStretch(1, 1)
+        self.InitiativeLayout.setColumnStretch(0, 1)
+        self.Layout.addLayout(self.InitiativeLayout, 1, 1)
 
         # Set Layout
         self.setLayout(self.Layout)
@@ -274,3 +312,10 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
     def EditAC(self, AC):
         self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["AC Stat Modifier " + AC], "AC Stat Modifier " + AC)
+
+    def RollInitiative(self):
+        self.CharacterWindow.PlayerCharacter.Stats["Dice Roller"].RollDice(1, 20, self.CharacterWindow.PlayerCharacter.Stats["Initiative Stat Modifier"], LogPrefix="Initiative:\n")
+        self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+
+    def EditInitiative(self):
+        self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Initiative Stat Modifier"], "Initiative Stat Modifier")

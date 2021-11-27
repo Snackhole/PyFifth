@@ -576,6 +576,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.PlayerCharacterCombatAndFeaturesWidgetInst.AC2SpinBox.setValue(self.DerivedStats["AC 2"])
         self.PlayerCharacterCombatAndFeaturesWidgetInst.AC3SpinBox.setValue(self.DerivedStats["AC 3"])
 
+        # Initiative
+        self.PlayerCharacterCombatAndFeaturesWidgetInst.InitiativeSpinBox.setValue(self.DerivedStats["Initiative Modifier"])
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
