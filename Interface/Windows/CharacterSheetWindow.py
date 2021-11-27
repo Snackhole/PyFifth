@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QFrame, QGridLayout, QInputDialog, QLabel, QSpinBox,
 
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
+from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Dialogs.EditPresetRollDialog import EditPresetRollDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
@@ -302,6 +303,11 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacter.UpdateStat(Stat, NewValue)
             self.UpdateUnsavedChangesFlag(True)
 
+    def EditStatModifier(self, ParentWidget, StatModifier, StatModifierDescription):
+        EditModifierDialogInst = EditModifierDialog(ParentWidget, self, StatModifier, StatModifierDescription)
+        if EditModifierDialogInst.UnsavedChanges:
+            self.UpdateUnsavedChangesFlag(True)
+
     def ToggleSpellcastingEnabled(self):
         self.UpdateStat("Spellcasting Enabled", self.SpellcastingEnabledAction.isChecked())
 
@@ -564,6 +570,11 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
         # Max HP
         self.PlayerCharacterCombatAndFeaturesWidgetInst.MaxHPSpinBox.setValue(self.DerivedStats["Max Health"])
+
+        # AC
+        self.PlayerCharacterCombatAndFeaturesWidgetInst.AC1SpinBox.setValue(self.DerivedStats["AC 1"])
+        self.PlayerCharacterCombatAndFeaturesWidgetInst.AC2SpinBox.setValue(self.DerivedStats["AC 2"])
+        self.PlayerCharacterCombatAndFeaturesWidgetInst.AC3SpinBox.setValue(self.DerivedStats["AC 3"])
 
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()

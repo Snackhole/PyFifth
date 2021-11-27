@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QSizePolicy, QGridLayout, QSpinBox
+from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTabWidget
 
 from Interface.Dialogs.EditMaxHPDialog import EditMaxHPDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
@@ -29,6 +29,9 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Create Vitality Table
         self.CreateVitalityTable()
+
+        # Create AC Tabs
+        self.CreateACTabs()
 
         # Create and Set Layout
         self.CreateAndSetLayout()
@@ -124,6 +127,54 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.DeathSavingThrowsFailureCheckBoxThree = QCheckBox()
         self.DeathSavingThrowsFailureCheckBoxThree.stateChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Death Saving Throws", "Failure 3"), self.DeathSavingThrowsFailureCheckBoxThree.isChecked()))
 
+    def CreateACTabs(self):
+        # AC Tab Widget
+        self.ACTabWidget = QTabWidget()
+        self.ACTabWidget.setUsesScrollButtons(False)
+
+        # AC Tab Frames
+        self.AC1TabFrame = QFrame()
+        self.ACTabWidget.addTab(self.AC1TabFrame, "AC 1")
+
+        self.AC2TabFrame = QFrame()
+        self.ACTabWidget.addTab(self.AC2TabFrame, "AC 2")
+
+        self.AC3TabFrame = QFrame()
+        self.ACTabWidget.addTab(self.AC3TabFrame, "AC 3")
+
+        # AC Spin Boxes
+        self.AC1SpinBox = QSpinBox()
+        self.AC1SpinBox.setRange(0, 1000000000)
+        self.AC1SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.AC1SpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.AC1SpinBox.setButtonSymbols(self.AC1SpinBox.NoButtons)
+        self.AC1SpinBox.setValue(0)
+        self.AC1SpinBox.setReadOnly(True)
+
+        self.AC2SpinBox = QSpinBox()
+        self.AC2SpinBox.setRange(0, 1000000000)
+        self.AC2SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.AC2SpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.AC2SpinBox.setButtonSymbols(self.AC2SpinBox.NoButtons)
+        self.AC2SpinBox.setValue(0)
+        self.AC2SpinBox.setReadOnly(True)
+
+        self.AC3SpinBox = QSpinBox()
+        self.AC3SpinBox.setRange(0, 1000000000)
+        self.AC3SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.AC3SpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.AC3SpinBox.setButtonSymbols(self.AC3SpinBox.NoButtons)
+        self.AC3SpinBox.setValue(0)
+        self.AC3SpinBox.setReadOnly(True)
+
+        # AC Edit Buttons
+        self.AC1EditButton = EditButton(lambda: self.EditAC("1"), "Edit AC Stat Modifier 1")
+        self.AC1EditButton.setSizePolicy(self.InputsSizePolicy)
+        self.AC2EditButton = EditButton(lambda: self.EditAC("2"), "Edit AC Stat Modifier 2")
+        self.AC2EditButton.setSizePolicy(self.InputsSizePolicy)
+        self.AC3EditButton = EditButton(lambda: self.EditAC("3"), "Edit AC Stat Modifier 3")
+        self.AC3EditButton.setSizePolicy(self.InputsSizePolicy)
+
     def CreateAndSetLayout(self):
         # Create Layout
         self.Layout = QGridLayout()
@@ -172,7 +223,25 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.VitalityLayout.setRowStretch(1, 1)
         self.VitalityLayout.setColumnStretch(1, 1)
 
-        self.Layout.addLayout(self.VitalityLayout, 0, 0)
+        self.Layout.addLayout(self.VitalityLayout, 0, 0, 3, 1)
+
+        self.AC1Layout = QGridLayout()
+        self.AC1Layout.addWidget(self.AC1SpinBox, 0, 0)
+        self.AC1Layout.addWidget(self.AC1EditButton, 0, 1)
+        self.AC1Layout.setColumnStretch(0, 1)
+        self.AC1TabFrame.setLayout(self.AC1Layout)
+        self.AC2Layout = QGridLayout()
+        self.AC2Layout.addWidget(self.AC2SpinBox, 0, 0)
+        self.AC2Layout.addWidget(self.AC2EditButton, 0, 1)
+        self.AC2Layout.setColumnStretch(0, 1)
+        self.AC2TabFrame.setLayout(self.AC2Layout)
+        self.AC3Layout = QGridLayout()
+        self.AC3Layout.addWidget(self.AC3SpinBox, 0, 0)
+        self.AC3Layout.addWidget(self.AC3EditButton, 0, 1)
+        self.AC3Layout.setColumnStretch(0, 1)
+        self.AC3TabFrame.setLayout(self.AC3Layout)
+
+        self.Layout.addWidget(self.ACTabWidget, 0, 1)
 
         # Set Layout
         self.setLayout(self.Layout)
@@ -202,3 +271,6 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         EditMaxHPDialogInst = EditMaxHPDialog(self.CharacterWindow)
         if EditMaxHPDialogInst.UnsavedChanges:
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+
+    def EditAC(self, AC):
+        self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["AC Stat Modifier " + AC], "AC Stat Modifier " + AC)
