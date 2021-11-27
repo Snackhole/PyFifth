@@ -89,6 +89,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.TotalHitDiceLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.TotalHitDiceLineEdit = CenteredLineEdit()
+        self.TotalHitDiceLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.TotalHitDiceLineEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Total Hit Dice", self.TotalHitDiceLineEdit.text()))
 
         # Hit Dice Remaining
@@ -96,6 +97,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.HitDiceRemainingLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.HitDiceRemainingLineEdit = CenteredLineEdit()
+        self.HitDiceRemainingLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.HitDiceRemainingLineEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Hit Dice Remaining", self.HitDiceRemainingLineEdit.text()))
 
         # Death Saving Throws
@@ -143,6 +145,8 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.HPButtonsLayout.addWidget(self.HealButton, 0, 1)
         self.HPButtonsLayout.addWidget(self.EditMaxHPButton, 0, 2)
         self.HPLayout.addLayout(self.HPButtonsLayout, 6, 0)
+        for Row in [1, 3, 5]:
+            self.HPLayout.setRowStretch(Row, 1)
         self.VitalityLayout.addLayout(self.HPLayout, 1, 0, 2, 1)
 
         self.HitDiceLayout = QGridLayout()
@@ -150,6 +154,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.HitDiceLayout.addWidget(self.TotalHitDiceLineEdit, 0, 1)
         self.HitDiceLayout.addWidget(self.HitDiceRemainingLabel, 1, 0)
         self.HitDiceLayout.addWidget(self.HitDiceRemainingLineEdit, 1, 1)
+        self.HitDiceLayout.setColumnStretch(1, 1)
         self.VitalityLayout.addLayout(self.HitDiceLayout, 1, 1)
 
         self.DeathSavingThrowsLayout = QGridLayout()
@@ -163,6 +168,9 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.DeathSavingThrowsLayout.addWidget(self.DeathSavingThrowsFailureCheckBoxTwo, 2, 2)
         self.DeathSavingThrowsLayout.addWidget(self.DeathSavingThrowsFailureCheckBoxThree, 2, 3)
         self.VitalityLayout.addLayout(self.DeathSavingThrowsLayout, 2, 1)
+
+        self.VitalityLayout.setRowStretch(1, 1)
+        self.VitalityLayout.setColumnStretch(1, 1)
 
         self.Layout.addLayout(self.VitalityLayout, 0, 0)
 
