@@ -584,7 +584,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             Ability = self.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][AbilityScoreDerivativeWidget.Index]
             if Ability == "":
                 AbilityScoreDerivativeWidget.SaveDCLineEdit.setText("N/A")
+                AbilityScoreDerivativeWidget.SaveDCLineEdit.setStyleSheet(self.SkillModifierLineEditStyleSheet)
                 AbilityScoreDerivativeWidget.AttackModifierLineEdit.setText("N/A")
+                AbilityScoreDerivativeWidget.AttackModifierLineEdit.setStyleSheet(self.SkillModifierLineEditStyleSheet)
             else:
                 AbilityScoreDerivativeWidget.SaveDCLineEdit.setText(str(self.DerivedStats[Ability + " Save DC Stat Modifier"]))
                 AbilityScoreDerivativeWidget.AttackModifierLineEdit.setText(("+" if self.DerivedStats[Ability + " Attack Modifier Stat Modifier"] >= 0 else "") + str(self.DerivedStats[Ability + " Attack Modifier Stat Modifier"]))
