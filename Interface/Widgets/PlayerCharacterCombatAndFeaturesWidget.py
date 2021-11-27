@@ -37,6 +37,9 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         # Create Initiative
         self.CreateInitiative()
 
+        # Create Speed
+        self.CreateSpeed()
+
         # Create and Set Layout
         self.CreateAndSetLayout()
 
@@ -202,6 +205,21 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.InitiativeEditButton = EditButton(self.EditInitiative, "Edit Initiative Modifier")
         self.InitiativeEditButton.setSizePolicy(self.InputsSizePolicy)
 
+    def CreateSpeed(self):
+        # Speed Label
+        self.SpeedLabel = QLabel("Speed:")
+        self.SpeedLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpeedLabel.setStyleSheet(self.SectionLabelStyle)
+
+        # Speed Spin Box
+        self.SpeedSpinBox = QSpinBox()
+        self.SpeedSpinBox.setRange(-1000000000, 1000000000)
+        self.SpeedSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpeedSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpeedSpinBox.setButtonSymbols(self.SpeedSpinBox.NoButtons)
+        self.SpeedSpinBox.setValue(30)
+        self.SpeedSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Speed", self.SpeedSpinBox.value()))
+
     def CreateAndSetLayout(self):
         # Create Layout
         self.Layout = QGridLayout()
@@ -280,6 +298,13 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.InitiativeLayout.setRowStretch(1, 1)
         self.InitiativeLayout.setColumnStretch(0, 1)
         self.Layout.addLayout(self.InitiativeLayout, 1, 1)
+
+        # Speed
+        self.SpeedLayout = QGridLayout()
+        self.SpeedLayout.addWidget(self.SpeedLabel, 0, 0)
+        self.SpeedLayout.addWidget(self.SpeedSpinBox, 1, 0)
+        self.SpeedLayout.setRowStretch(1, 1)
+        self.Layout.addLayout(self.SpeedLayout, 2, 1)
 
         # Set Layout
         self.setLayout(self.Layout)

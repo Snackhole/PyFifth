@@ -618,6 +618,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacterCombatAndFeaturesWidgetInst.DeathSavingThrowsFailureCheckBoxTwo.setChecked(self.PlayerCharacter.Stats["Death Saving Throws"]["Failure 2"])
             self.PlayerCharacterCombatAndFeaturesWidgetInst.DeathSavingThrowsFailureCheckBoxThree.setChecked(self.PlayerCharacter.Stats["Death Saving Throws"]["Failure 3"])
 
+            # Speed
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.SpeedSpinBox.setValue(self.PlayerCharacter.Stats["Speed"])
+
             # Inspiration
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
 

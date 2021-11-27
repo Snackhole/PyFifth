@@ -24,7 +24,7 @@ class Character:
         self.Stats["Temp Health"] = 0
 
         # Speed
-        self.Stats["Speed"] = 0
+        self.Stats["Speed"] = 30
 
         # Concentrating
         self.Stats["Concentrating"] = False
