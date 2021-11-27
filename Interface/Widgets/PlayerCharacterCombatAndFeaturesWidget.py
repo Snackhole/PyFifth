@@ -2,6 +2,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTabWidget
 
 from Interface.Dialogs.EditMaxHPDialog import EditMaxHPDialog
+from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DamageButton import DamageButton
 from Interface.Widgets.EditButton import EditButton
@@ -40,6 +41,9 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Create Speed
         self.CreateSpeed()
+
+        # Create Ability Score Derivatives
+        self.CreateAbilityScoreDerivatives()
 
         # Create and Set Layout
         self.CreateAndSetLayout()
@@ -226,6 +230,17 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.SpeedSpinBox.setValue(30)
         self.SpeedSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Speed", self.SpeedSpinBox.value()))
 
+    def CreateAbilityScoreDerivatives(self):
+        # Ability Score Derivatives Label
+        self.AbilityScoreDerivativesLabel = QLabel("Ability Score Derivatives")
+        self.AbilityScoreDerivativesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.AbilityScoreDerivativesLabel.setStyleSheet(self.SectionLabelStyle)
+
+        # Ability Score Derivative Widgets
+        self.AbilityScoreDerivativeWidgetInst1 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 0)
+        self.AbilityScoreDerivativeWidgetInst2 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 1)
+        self.AbilityScoreDerivativeWidgetInst3 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 2)
+
     def CreateAndSetLayout(self):
         # Create Layout
         self.Layout = QGridLayout()
@@ -311,6 +326,14 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.SpeedLayout.addWidget(self.SpeedSpinBox, 1, 0)
         self.SpeedLayout.setRowStretch(1, 1)
         self.Layout.addLayout(self.SpeedLayout, 2, 1)
+
+        # Ability Score Derivatives
+        self.AbilityScoreDerivativesLayout = QGridLayout()
+        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativesLabel, 0, 0, 1, 3)
+        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst1, 1, 0)
+        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst2, 1, 1)
+        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst3, 1, 2)
+        self.Layout.addLayout(self.AbilityScoreDerivativesLayout, 3, 0, 1, 2)
 
         # Set Layout
         self.setLayout(self.Layout)

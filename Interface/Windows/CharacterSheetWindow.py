@@ -579,6 +579,17 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         # Initiative
         self.PlayerCharacterCombatAndFeaturesWidgetInst.InitiativeSpinBox.setValue(self.DerivedStats["Initiative Modifier"])
 
+        # Ability Score Derivatives
+        for AbilityScoreDerivativeWidget in [self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst1, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst2, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst3]:
+            Ability = self.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][AbilityScoreDerivativeWidget.Index]
+            if Ability == "":
+                AbilityScoreDerivativeWidget.SaveDCLineEdit.setText("N/A")
+                AbilityScoreDerivativeWidget.AttackModifierLineEdit.setText("N/A")
+            else:
+                AbilityScoreDerivativeWidget.SaveDCLineEdit.setText(str(self.DerivedStats[Ability + " Save DC Stat Modifier"]))
+                AbilityScoreDerivativeWidget.AttackModifierLineEdit.setText(("+" if self.DerivedStats[Ability + " Attack Modifier Stat Modifier"] >= 0 else "") + str(self.DerivedStats[Ability + " Attack Modifier Stat Modifier"]))
+                self.SetProficiencyIndicators(AbilityScoreDerivativeWidget.AttackModifierLineEdit, self.PlayerCharacter.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"])
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
@@ -592,6 +603,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         else:
             self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
 
+        # Updating Fields from Player Character
         if self.UpdatingFieldsFromPlayerCharacter:
             # Header
             self.NameLineEdit.setText(self.PlayerCharacter.Stats["Character Name"])
@@ -620,6 +632,10 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
             # Speed
             self.PlayerCharacterCombatAndFeaturesWidgetInst.SpeedSpinBox.setValue(self.PlayerCharacter.Stats["Speed"])
+
+            # Ability Score Derivatives
+            for AbilityScoreDerivativeWidget in [self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst1, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst2, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst3]:
+                AbilityScoreDerivativeWidget.AbilityComboBox.setCurrentText(self.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][AbilityScoreDerivativeWidget.Index])
 
             # Inspiration
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
