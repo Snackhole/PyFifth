@@ -75,10 +75,14 @@ class AbilityScoreDerivativeWidget(QFrame):
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)
 
     def EditSaveDC(self):
-        pass
+        Ability = self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][self.Index]
+        if Ability != "":
+            self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"], Ability + " Save DC Stat Modifier")
 
     def RollAttackModifier(self):
         pass
 
     def EditAttackModifier(self):
-        pass
+        Ability = self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][self.Index]
+        if Ability != "":
+            self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"], Ability + " Attack Modifier Stat Modifier")
