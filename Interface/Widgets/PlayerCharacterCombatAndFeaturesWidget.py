@@ -188,7 +188,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
     def CreateInitiative(self):
         # Initiative Label
-        self.InitiativeLabel = QLabel("Initiative:")
+        self.InitiativeLabel = QLabel("Initiative")
         self.InitiativeLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.InitiativeLabel.setStyleSheet(self.SectionLabelStyle)
 
@@ -212,7 +212,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
     def CreateSpeed(self):
         # Speed Label
-        self.SpeedLabel = QLabel("Speed:")
+        self.SpeedLabel = QLabel("Speed")
         self.SpeedLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.SpeedLabel.setStyleSheet(self.SectionLabelStyle)
 
