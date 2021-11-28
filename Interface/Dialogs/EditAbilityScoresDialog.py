@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox,
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Dialogs.PointBuyAbilityScoresDialog import PointBuyAbilityScoresDialog
 from Interface.Dialogs.RollForAbilityScoresDialog import RollForAbilityScoresDialog
-from Interface.Widgets.EditButton import EditButton
+from Interface.Widgets.IconButtons import EditButton
 
 
 class EditAbilityScoresDialog(QDialog):

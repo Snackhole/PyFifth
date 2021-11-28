@@ -2,8 +2,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QComboBox, QFrame, QGridLayout, QLabel
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
-from Interface.Widgets.EditButton import EditButton
-from Interface.Widgets.RollButton import RollButton
+from Interface.Widgets.IconButtons import EditButton, RollButton
 
 
 class AbilityScoreDerivativeWidget(QFrame):

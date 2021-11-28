@@ -5,8 +5,7 @@ from Interface.Dialogs.AlternateAbilityScoreSkillRollDialog import AlternateAbil
 from Interface.Dialogs.EditAbilityScoresDialog import EditAbilityScoresDialog
 from Interface.Dialogs.EditSkillsDialog import EditSkillsDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
-from Interface.Widgets.EditButton import EditButton
-from Interface.Widgets.RollButton import RollButton
+from Interface.Widgets.IconButtons import EditButton, RollButton
 
 
 class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):

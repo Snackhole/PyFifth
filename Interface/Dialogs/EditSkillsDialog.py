@@ -5,7 +5,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSizePolicy, QMessageBox
 
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
-from Interface.Widgets.EditButton import EditButton
+from Interface.Widgets.IconButtons import EditButton
 
 
 class EditSkillsDialog(QDialog):
