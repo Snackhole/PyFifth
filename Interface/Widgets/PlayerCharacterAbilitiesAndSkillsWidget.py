@@ -45,7 +45,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.AbilitiesAndSavingThrowsLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.AbilitiesAndSavingThrowsLabel.setMargin(self.HeaderLabelMargin)
 
-        self.AbilitiesAndSavingThrowsEditButton = EditButton(lambda: self.EditAbilityScores(), Tooltip="Edit Ability Scores and Saving Throws")
+        self.AbilitiesAndSavingThrowsEditButton = EditButton(self.EditAbilityScores, Tooltip="Edit Ability Scores and Saving Throws")
         self.AbilitiesAndSavingThrowsEditButton.setSizePolicy(self.InputsSizePolicy)
 
         self.AbilitiesAndSavingThrowsHeaderAbilityLabel = QLabel("Ability")
@@ -210,7 +210,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.SkillsLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.SkillsLabel.setMargin(self.HeaderLabelMargin)
 
-        self.SkillsEditButton = EditButton(lambda: self.EditSkills(), Tooltip="Edit Skills")
+        self.SkillsEditButton = EditButton(self.EditSkills, Tooltip="Edit Skills")
         self.SkillsEditButton.setSizePolicy(self.InputsSizePolicy)
 
         self.SkillsHeaderSkillLabel = QLabel("Skill")
