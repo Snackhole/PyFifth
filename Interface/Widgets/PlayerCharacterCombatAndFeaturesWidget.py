@@ -20,7 +20,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.SectionLabelStyle = "QLabel {font-size: 10pt; font-weight: bold;}"
         self.CombatAndFeaturesSpinBoxStyle = "QSpinBox {font-size: 16pt;}"
         self.HPSpinBoxStyle = "QSpinBox {font-size: 16pt;}"
-        self.NegativeCurrentHealthSpinBoxStyle = "QSpinBox {font-size: 16pt; background-color: darkred}"
+        self.NegativeCurrentHealthSpinBoxStyle = "QSpinBox {font-size: 16pt; background-color: darkred;}"
 
         # Header Label Margin
         self.HeaderLabelMargin = 5
