@@ -6,6 +6,7 @@ from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativ
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DamageButton import DamageButton
 from Interface.Widgets.EditButton import EditButton
+from Interface.Widgets.FeaturesTreeWidget import FeaturesTreeWidget
 from Interface.Widgets.HealButton import HealButton
 from Interface.Widgets.RollButton import RollButton
 
@@ -47,6 +48,9 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Create Combat and Features Notes
         self.CreateCombatAndFeaturesNotes()
+
+        # Create Features List
+        self.CreateFeaturesList()
 
         # Create and Set Layout
         self.CreateAndSetLayout()
@@ -235,6 +239,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.SpeedSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.SpeedSpinBox.setButtonSymbols(self.SpeedSpinBox.NoButtons)
         self.SpeedSpinBox.setValue(30)
+        self.SpeedSpinBox.setSuffix(" ft.")
         self.SpeedSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Speed", self.SpeedSpinBox.value()))
 
     def CreateAbilityScoreDerivatives(self):
@@ -253,11 +258,22 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.CombatAndFeaturesNotesLabel = QLabel("Combat and Features Notes")
         self.CombatAndFeaturesNotesLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.CombatAndFeaturesNotesLabel.setStyleSheet(self.SectionLabelStyle)
-        
+
         # Combat and Features Notes Text Edit
         self.CombatAndFeaturesNotesTextEdit = QTextEdit()
         self.CombatAndFeaturesNotesTextEdit.setTabChangesFocus(True)
         self.CombatAndFeaturesNotesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Combat and Features Notes", self.CombatAndFeaturesNotesTextEdit.toPlainText()))
+
+    def CreateFeaturesList(self):
+        # Features Label
+        self.FeaturesLabel = QLabel("Features")
+        self.FeaturesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.FeaturesLabel.setStyleSheet(self.SectionLabelStyle)
+
+        # Features Tree Widget
+        self.FeaturesTreeWidget = FeaturesTreeWidget(self.CharacterWindow)
+
+        # TODO Buttons
 
     def CreateAndSetLayout(self):
         # Create Layout
@@ -347,23 +363,32 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.SpeedLayout.setRowStretch(1, 1)
         self.Layout.addLayout(self.SpeedLayout, 2, 1)
 
-        # Ability Score Derivatives
-        self.AbilityScoreDerivativesLayout = QGridLayout()
-        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativesLabel, 0, 0, 1, 3)
-        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst1, 1, 0)
-        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst2, 1, 1)
-        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst3, 1, 2)
-        self.Layout.addLayout(self.AbilityScoreDerivativesLayout, 3, 0, 1, 2)
-
         # Combat and Features Notes
         self.CombatAndFeaturesNotesLayout = QGridLayout()
         self.CombatAndFeaturesNotesLayout.addWidget(self.CombatAndFeaturesNotesLabel, 0, 0)
         self.CombatAndFeaturesNotesLayout.addWidget(self.CombatAndFeaturesNotesTextEdit, 1, 0)
         self.CombatAndFeaturesNotesLayout.setRowStretch(1, 1)
-        self.Layout.addLayout(self.CombatAndFeaturesNotesLayout, 4, 0, 1, 2)
+        self.Layout.addLayout(self.CombatAndFeaturesNotesLayout, 3, 0)
+
+        # Ability Score Derivatives
+        self.AbilityScoreDerivativesLayout = QGridLayout()
+        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativesLabel, 0, 0)
+        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst1, 1, 0)
+        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst2, 2, 0)
+        self.AbilityScoreDerivativesLayout.addWidget(self.AbilityScoreDerivativeWidgetInst3, 3, 0)
+        self.Layout.addLayout(self.AbilityScoreDerivativesLayout, 3, 1)
+
+        # Features List
+        self.FeaturesLayout = QGridLayout()
+        self.FeaturesLayout.addWidget(self.FeaturesLabel, 0, 0, 1, 2)
+        self.FeaturesLayout.addWidget(self.FeaturesTreeWidget, 1, 0, 5, 1)
+        for Row in range(1, 6):
+            self.FeaturesLayout.setRowStretch(Row, 1)
+        self.Layout.addLayout(self.FeaturesLayout, 0, 2, 5, 1)
 
         # Layout Stretching
-        self.Layout.setRowStretch(4, 1)
+        self.Layout.setRowStretch(3, 1)
+        self.Layout.setColumnStretch(2, 1)
 
         # Set Layout
         self.setLayout(self.Layout)
