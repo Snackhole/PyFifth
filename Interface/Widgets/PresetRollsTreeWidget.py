@@ -2,11 +2,11 @@ from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QHeaderView
 
 
 class PresetRollsTreeWidget(QTreeWidget):
-    def __init__(self, CharacterSheetWindow):
+    def __init__(self, CharacterWindow):
         super().__init__()
 
         # Store Parameters
-        self.CharacterSheetWindow = CharacterSheetWindow
+        self.CharacterWindow = CharacterWindow
 
         # Header Setup
         self.setHeaderHidden(True)
@@ -16,8 +16,8 @@ class PresetRollsTreeWidget(QTreeWidget):
 
     def FillFromPresetRolls(self):
         self.clear()
-        for PresetRollIndex in range(len(self.CharacterSheetWindow.PlayerCharacter.Stats["Dice Roller"].PresetRolls)):
-            self.invisibleRootItem().addChild(PresetRollsWidgetItem(PresetRollIndex, self.CharacterSheetWindow.PlayerCharacter.Stats["Dice Roller"].PresetRolls[PresetRollIndex]))
+        for PresetRollIndex in range(len(self.CharacterWindow.PlayerCharacter.Stats["Dice Roller"].PresetRolls)):
+            self.invisibleRootItem().addChild(PresetRollsWidgetItem(PresetRollIndex, self.CharacterWindow.PlayerCharacter.Stats["Dice Roller"].PresetRolls[PresetRollIndex]))
 
     def SelectIndex(self, Index):
         DestinationIndex = self.model().index(Index, 0)

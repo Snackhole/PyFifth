@@ -2,14 +2,14 @@ from PyQt5.QtWidgets import QPushButton
 
 
 class InspirationButton(QPushButton):
-    def __init__(self, CharacterSheetWindow):
+    def __init__(self, CharacterWindow):
         # Initialize
         super().__init__("Inspiration")
 
         # Store Parameters
-        self.CharacterSheetWindow = CharacterSheetWindow
+        self.CharacterWindow = CharacterWindow
 
         # Configure
         self.setCheckable(True)
         self.setStyleSheet("QPushButton {font-size: 16pt;}\nQPushButton:checked {background-color: darkgreen}")
-        self.clicked.connect(lambda: self.CharacterSheetWindow.UpdateStat("Inspiration", self.isChecked()))
+        self.clicked.connect(lambda: self.CharacterWindow.UpdateStat("Inspiration", self.isChecked()))
