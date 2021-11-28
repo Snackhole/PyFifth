@@ -4,8 +4,8 @@ from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QSizePolicy
 from Interface.Dialogs.EditMaxHPDialog import EditMaxHPDialog
 from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
-from Interface.Widgets.IconButtons import DamageButton, EditButton, HealButton, RollButton
 from Interface.Widgets.FeaturesTreeWidget import FeaturesTreeWidget
+from Interface.Widgets.IconButtons import DamageButton, EditButton, HealButton, RollButton
 
 
 class PlayerCharacterCombatAndFeaturesWidget(QFrame):
