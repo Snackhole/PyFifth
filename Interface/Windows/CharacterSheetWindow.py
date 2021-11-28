@@ -11,9 +11,9 @@ from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Dialogs.EditPresetRollDialog import EditPresetRollDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
-from Interface.Widgets.InspirationButton import InspirationButton
 from Interface.Widgets.PlayerCharacterAbilitiesAndSkillsWidget import PlayerCharacterAbilitiesAndSkillsWidget
 from Interface.Widgets.PlayerCharacterCombatAndFeaturesWidget import PlayerCharacterCombatAndFeaturesWidget
+from Interface.Widgets.ToggleButtons import InspirationButton
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
