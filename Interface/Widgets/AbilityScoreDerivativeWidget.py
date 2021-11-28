@@ -38,7 +38,7 @@ class AbilityScoreDerivativeWidget(QFrame):
         self.SaveDCEditButton.setSizePolicy(self.Parent.InputsSizePolicy)
 
         # Attack Modifier
-        self.AttackModifierLabel = QLabel("Attack Modifier:")
+        self.AttackModifierLabel = QLabel("Attack Mod:")
         self.AttackModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.AttackModifierLineEdit = CenteredLineEdit()
