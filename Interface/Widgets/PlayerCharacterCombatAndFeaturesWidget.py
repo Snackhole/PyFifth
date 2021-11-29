@@ -5,7 +5,7 @@ from Interface.Dialogs.EditMaxHPDialog import EditMaxHPDialog
 from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.FeaturesTreeWidget import FeaturesTreeWidget
-from Interface.Widgets.IconButtons import DamageButton, EditButton, HealButton, RollButton
+from Interface.Widgets.IconButtons import AddButton, DamageButton, DeleteButton, EditButton, HealButton, MoveDownButton, MoveUpButton, RollButton
 
 
 class PlayerCharacterCombatAndFeaturesWidget(QFrame):
@@ -270,7 +270,17 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         # Features Tree Widget
         self.FeaturesTreeWidget = FeaturesTreeWidget(self.CharacterWindow)
 
-        # TODO Buttons
+        # Buttons
+        self.AddFeatureButton = AddButton(self.AddFeature, "Add Feature")
+        self.AddFeatureButton.setSizePolicy(self.InputsSizePolicy)
+        self.EditFeatureButton = EditButton(self.EditFeature, "Edit Feature")
+        self.EditFeatureButton.setSizePolicy(self.InputsSizePolicy)
+        self.DeleteFeatureButton = DeleteButton(self.DeleteFeature, "Delete Feature")
+        self.DeleteFeatureButton.setSizePolicy(self.InputsSizePolicy)
+        self.MoveFeatureUpButton = MoveUpButton(self.MoveFeatureUp, "Move Feature Up")
+        self.MoveFeatureUpButton.setSizePolicy(self.InputsSizePolicy)
+        self.MoveFeatureDownButton = MoveDownButton(self.MoveFeatureDown, "Move Feature Down")
+        self.MoveFeatureDownButton.setSizePolicy(self.InputsSizePolicy)
 
     def CreateAndSetLayout(self):
         # Create Layout
@@ -377,10 +387,14 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Features List
         self.FeaturesLayout = QGridLayout()
-        self.FeaturesLayout.addWidget(self.FeaturesLabel, 0, 0, 1, 2)
-        self.FeaturesLayout.addWidget(self.FeaturesTreeWidget, 1, 0, 5, 1)
-        for Row in range(1, 6):
-            self.FeaturesLayout.setRowStretch(Row, 1)
+        self.FeaturesLayout.addWidget(self.FeaturesLabel, 0, 0, 1, 5)
+        self.FeaturesLayout.addWidget(self.AddFeatureButton, 1, 0)
+        self.FeaturesLayout.addWidget(self.DeleteFeatureButton, 1, 1)
+        self.FeaturesLayout.addWidget(self.EditFeatureButton, 1, 2)
+        self.FeaturesLayout.addWidget(self.MoveFeatureUpButton, 1, 3)
+        self.FeaturesLayout.addWidget(self.MoveFeatureDownButton, 1, 4)
+        self.FeaturesLayout.addWidget(self.FeaturesTreeWidget, 2, 0, 1, 5)
+        self.FeaturesLayout.setRowStretch(2, 1)
         self.Layout.addLayout(self.FeaturesLayout, 0, 2, 5, 1)
 
         # Layout Stretching
@@ -425,3 +439,21 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
     def EditInitiative(self):
         self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Initiative Stat Modifier"], "Initiative Stat Modifier")
+
+    def AddFeature(self):
+        pass
+
+    def EditFeature(self):
+        pass
+
+    def DeleteFeature(self):
+        pass
+
+    def MoveFeature(self, Delta):
+        pass
+
+    def MoveFeatureUp(self):
+        self.MoveFeature(-1)
+
+    def MoveFeatureDown(self):
+        self.MoveFeature(1)
