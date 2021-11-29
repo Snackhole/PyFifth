@@ -14,7 +14,7 @@ if __name__ == "__main__":
         Base64String = GetBase64StringFromFilePath(File)
         FileLine = os.path.basename(File) + ":\n    " + Base64String + "\n\n"
         IconBase64Strings += FileLine
-    
+
     IconBase64Strings = IconBase64Strings.rstrip()
 
     with open("Assets/Icon Base64 Strings.txt", "w") as IconBase64StringsFile:
