@@ -30,6 +30,7 @@ class EditFeatureDialog(QDialog):
         self.NameLineEdit.textChanged.connect(self.UpdateFeature)
         self.DescriptionTextEdit = QTextEdit()
         self.DescriptionTextEdit.setPlaceholderText("Feature Text")
+        self.DescriptionTextEdit.setTabChangesFocus(True)
         self.DescriptionTextEdit.setPlainText(self.Feature["Feature Text"])
         self.DescriptionTextEdit.textChanged.connect(self.UpdateFeature)
 

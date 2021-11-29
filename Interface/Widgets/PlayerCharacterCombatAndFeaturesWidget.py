@@ -270,6 +270,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Features Tree Widget
         self.FeaturesTreeWidget = FeaturesTreeWidget(self.CharacterWindow)
+        self.FeaturesTreeWidget.itemActivated.connect(self.EditFeature)
 
         # Buttons
         self.AddFeatureButton = AddButton(self.AddFeature, "Add Feature")
