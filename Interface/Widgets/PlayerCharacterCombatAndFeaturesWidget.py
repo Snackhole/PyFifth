@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTabWidget, QTextEdit
+from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QMessageBox, QSizePolicy, QGridLayout, QSpinBox, QTabWidget, QTextEdit
 
+from Interface.Dialogs.EditFeatureDialog import EditFeatureDialog
 from Interface.Dialogs.EditMaxHPDialog import EditMaxHPDialog
 from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
@@ -273,10 +274,10 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         # Buttons
         self.AddFeatureButton = AddButton(self.AddFeature, "Add Feature")
         self.AddFeatureButton.setSizePolicy(self.InputsSizePolicy)
-        self.EditFeatureButton = EditButton(self.EditFeature, "Edit Feature")
-        self.EditFeatureButton.setSizePolicy(self.InputsSizePolicy)
         self.DeleteFeatureButton = DeleteButton(self.DeleteFeature, "Delete Feature")
         self.DeleteFeatureButton.setSizePolicy(self.InputsSizePolicy)
+        self.EditFeatureButton = EditButton(self.EditFeature, "Edit Feature")
+        self.EditFeatureButton.setSizePolicy(self.InputsSizePolicy)
         self.MoveFeatureUpButton = MoveUpButton(self.MoveFeatureUp, "Move Feature Up")
         self.MoveFeatureUpButton.setSizePolicy(self.InputsSizePolicy)
         self.MoveFeatureDownButton = MoveDownButton(self.MoveFeatureDown, "Move Feature Down")
@@ -441,19 +442,49 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Initiative Stat Modifier"], "Initiative Stat Modifier")
 
     def AddFeature(self):
-        pass
-
-    def EditFeature(self):
-        pass
+        FeatureIndex = self.CharacterWindow.PlayerCharacter.AddFeature()
+        self.CharacterWindow.UpdateDisplay()
+        EditFeatureDialogInst = EditFeatureDialog(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Features"], FeatureIndex, AddMode=True)
+        if EditFeatureDialogInst.Cancelled:
+            self.CharacterWindow.PlayerCharacter.DeleteLastFeature()
+            self.CharacterWindow.UpdateDisplay()
+        else:
+            self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+            self.FeaturesTreeWidget.SelectIndex(FeatureIndex)
 
     def DeleteFeature(self):
-        pass
+        CurrentSelection = self.FeaturesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this feature?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+                CurrentFeature = CurrentSelection[0]
+                CurrentFeatureIndex = CurrentFeature.Index
+                self.CharacterWindow.PlayerCharacter.DeleteFeature(CurrentFeatureIndex)
+                self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+                FeaturesLength = len(self.CharacterWindow.PlayerCharacter.Stats["Features"])
+                if FeaturesLength > 0:
+                    self.FeaturesTreeWidget.SelectIndex(CurrentFeatureIndex if CurrentFeatureIndex < FeaturesLength else FeaturesLength - 1)
 
-    def MoveFeature(self, Delta):
-        pass
+    def EditFeature(self):
+        CurrentSelection = self.FeaturesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentFeature = CurrentSelection[0]
+            CurrentFeatureIndex = CurrentFeature.Index
+            EditFeatureDialogInst = EditFeatureDialog(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Features"], CurrentFeatureIndex)
+            if EditFeatureDialogInst.UnsavedChanges:
+                self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+                self.FeaturesTreeWidget.SelectIndex(CurrentFeatureIndex)
 
     def MoveFeatureUp(self):
         self.MoveFeature(-1)
 
     def MoveFeatureDown(self):
         self.MoveFeature(1)
+
+    def MoveFeature(self, Delta):
+        CurrentSelection = self.FeaturesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentFeature = CurrentSelection[0]
+            CurrentFeatureIndex = CurrentFeature.Index
+            if self.CharacterWindow.PlayerCharacter.MoveFeature(CurrentFeatureIndex, Delta):
+                self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+                self.FeaturesTreeWidget.SelectIndex(CurrentFeatureIndex + Delta)

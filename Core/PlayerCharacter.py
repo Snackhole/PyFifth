@@ -1,3 +1,4 @@
+import copy
 import math
 from decimal import *
 
@@ -65,6 +66,11 @@ class PlayerCharacter(Character, SerializableMixin):
         self.LevelDerivedValues["18"] = {"Proficiency Bonus": 6, "Experience Needed": 305000}
         self.LevelDerivedValues["19"] = {"Proficiency Bonus": 6, "Experience Needed": 355000}
         self.LevelDerivedValues["20"] = {"Proficiency Bonus": 6, "Experience Needed": "N/A"}
+
+        # Feature Defaults
+        self.FeatureDefaults = {}
+        self.FeatureDefaults["Feature Name"] = "Feature Name"
+        self.FeatureDefaults["Feature Text"] = ""
 
         # Spell Slot Levels
         self.SpellSlotLevels = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"]
@@ -651,27 +657,31 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["Dice Roller"].RollDice(1, 20, self.Stats["Initiative Stat Modifier"], LogPrefix="Initiative:\n")
 
     # Feature Methods
-    def AddFeature(self, FeatureName, FeatureText):
-        NewFeature = {}
-        NewFeature["Feature Name"] = FeatureName
-        NewFeature["Feature Text"] = FeatureText
-        self.Stats["Features"].append(NewFeature)
+    def CreateFeature(self):
+        Feature = copy.deepcopy(self.FeatureDefaults)
+        return Feature
 
-    def EditFeature(self, FeatureIndex, FeatureName, FeatureText):
-        Feature = self.Stats["Features"][FeatureIndex]
-        Feature["Feature Name"] = FeatureName
-        Feature["Feature Text"] = FeatureText
+    def AddFeature(self):
+        NewFeature = self.CreateFeature()
+        self.Stats["Features"].append(NewFeature)
+        FeatureIndex = len(self.Stats["Features"]) - 1
+        return FeatureIndex
 
     def DeleteFeature(self, FeatureIndex):
         del self.Stats["Features"][FeatureIndex]
 
+    def DeleteLastFeature(self):
+        FeatureIndex = len(self.Stats["Features"]) - 1
+        self.DeleteFeature(FeatureIndex)
+
     def MoveFeature(self, FeatureIndex, Delta):
         TargetIndex = FeatureIndex + Delta
         if TargetIndex < 0 or TargetIndex >= len(self.Stats["Features"]):
-            return
+            return False
         SwapTarget = self.Stats["Features"][TargetIndex]
         self.Stats["Features"][TargetIndex] = self.Stats["Features"][FeatureIndex]
         self.Stats["Features"][FeatureIndex] = SwapTarget
+        return True
 
     # Spellcasting Methods
     def CalculateSpellPoints(self):

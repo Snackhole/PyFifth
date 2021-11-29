@@ -592,6 +592,15 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
                 AbilityScoreDerivativeWidget.AttackModifierLineEdit.setText(("+" if self.DerivedStats[Ability + " Attack Modifier Stat Modifier"] >= 0 else "") + str(self.DerivedStats[Ability + " Attack Modifier Stat Modifier"]))
                 self.SetProficiencyIndicators(AbilityScoreDerivativeWidget.AttackModifierLineEdit, self.PlayerCharacter.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"])
 
+        # Features
+        CurrentSelection = self.PlayerCharacterCombatAndFeaturesWidgetInst.FeaturesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentSelectionIndex = CurrentSelection[0].Index
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.FeaturesTreeWidget.FillFromFeatures()
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.FeaturesTreeWidget.SelectIndex(CurrentSelectionIndex)
+        else:
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.FeaturesTreeWidget.FillFromFeatures()
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
