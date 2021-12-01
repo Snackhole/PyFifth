@@ -54,11 +54,11 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.CreateAndSetLayout()
 
     def CreateVitalityTable(self):
-        # Header
-        self.VitalityHeader = QLabel("Vitality")
-        self.VitalityHeader.setStyleSheet(self.SectionLabelStyle)
-        self.VitalityHeader.setAlignment(QtCore.Qt.AlignCenter)
-        self.VitalityHeader.setMargin(self.HeaderLabelMargin)
+        # Header Label
+        self.VitalityLabel = QLabel("Vitality")
+        self.VitalityLabel.setStyleSheet(self.SectionLabelStyle)
+        self.VitalityLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.VitalityLabel.setMargin(self.HeaderLabelMargin)
 
         # Temp HP
         self.TempHPLabel = QLabel("Temp HP:")
@@ -204,6 +204,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.InitiativeLabel = QLabel("Initiative")
         self.InitiativeLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.InitiativeLabel.setStyleSheet(self.SectionLabelStyle)
+        self.InitiativeLabel.setMargin(self.HeaderLabelMargin)
 
         # Initiative Spin Box
         self.InitiativeSpinBox = QSpinBox()
@@ -228,6 +229,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.SpeedLabel = QLabel("Speed")
         self.SpeedLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.SpeedLabel.setStyleSheet(self.SectionLabelStyle)
+        self.SpeedLabel.setMargin(self.HeaderLabelMargin)
 
         # Speed Spin Box
         self.SpeedSpinBox = QSpinBox()
@@ -245,6 +247,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AbilityScoreDerivativesLabel = QLabel("Ability Score Derivatives")
         self.AbilityScoreDerivativesLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.AbilityScoreDerivativesLabel.setStyleSheet(self.SectionLabelStyle)
+        self.AbilityScoreDerivativesLabel.setMargin(self.HeaderLabelMargin)
 
         # Ability Score Derivative Widgets
         self.AbilityScoreDerivativeWidgetInst1 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 0)
@@ -256,6 +259,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.CombatAndFeaturesNotesLabel = QLabel("Combat and Features Notes")
         self.CombatAndFeaturesNotesLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.CombatAndFeaturesNotesLabel.setStyleSheet(self.SectionLabelStyle)
+        self.CombatAndFeaturesNotesLabel.setMargin(self.HeaderLabelMargin)
 
         # Combat and Features Notes Text Edit
         self.CombatAndFeaturesNotesTextEdit = QTextEdit()
@@ -267,6 +271,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.FeaturesLabel = QLabel("Features")
         self.FeaturesLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.FeaturesLabel.setStyleSheet(self.SectionLabelStyle)
+        self.FeaturesLabel.setMargin(self.HeaderLabelMargin)
 
         # Features Tree Widget
         self.FeaturesTreeWidget = FeaturesTreeWidget(self.CharacterWindow)
@@ -291,7 +296,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         # Vitality Table
         self.VitalityLayout = QGridLayout()
 
-        self.VitalityLayout.addWidget(self.VitalityHeader, 0, 0, 1, 2)
+        self.VitalityLayout.addWidget(self.VitalityLabel, 0, 0, 1, 2)
 
         self.HPLayout = QGridLayout()
         self.HPLayout.addWidget(self.TempHPLabel, 0, 0)
