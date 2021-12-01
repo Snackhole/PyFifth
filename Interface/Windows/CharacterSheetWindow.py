@@ -13,6 +13,7 @@ from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Widgets.PlayerCharacterAbilitiesAndSkillsWidget import PlayerCharacterAbilitiesAndSkillsWidget
 from Interface.Widgets.PlayerCharacterCombatAndFeaturesWidget import PlayerCharacterCombatAndFeaturesWidget
+from Interface.Widgets.PlayerCharacterSpellcastingWidget import PlayerCharacterSpellcastingWidget
 from Interface.Widgets.ToggleButtons import InspirationButton
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
@@ -94,8 +95,8 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.StatsTabWidget.addTab(self.PlayerCharacterAbilitiesAndSkillsWidgetInst, "Abilities and Skills")
         self.PlayerCharacterCombatAndFeaturesWidgetInst = PlayerCharacterCombatAndFeaturesWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterCombatAndFeaturesWidgetInst, "Combat and Features")
+        self.PlayerCharacterSpellcastingWidgetInst = PlayerCharacterSpellcastingWidget(self)
         # TODO:  Replace QFrames with widgets
-        self.PlayerCharacterSpellcastingWidgetInst = QFrame()
         self.StatsTabWidget.addTab(self.PlayerCharacterSpellcastingWidgetInst, "Spellcasting")
         self.PlayerCharacterInventoryWidgetInst = QFrame()
         self.StatsTabWidget.addTab(self.PlayerCharacterInventoryWidgetInst, "Inventory")
@@ -580,7 +581,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.PlayerCharacterCombatAndFeaturesWidgetInst.InitiativeSpinBox.setValue(self.DerivedStats["Initiative Modifier"])
 
         # Ability Score Derivatives
-        for AbilityScoreDerivativeWidget in [self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst1, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst2, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst3]:
+        for AbilityScoreDerivativeWidget in [self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst1, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst2, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst3, self.PlayerCharacterSpellcastingWidgetInst.SpellcastingAbilityWidgetInst1, self.PlayerCharacterSpellcastingWidgetInst.SpellcastingAbilityWidgetInst2, self.PlayerCharacterSpellcastingWidgetInst.SpellcastingAbilityWidgetInst3]:
             Ability = self.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][AbilityScoreDerivativeWidget.Index]
             if Ability == "":
                 AbilityScoreDerivativeWidget.SaveDCLineEdit.setText("N/A")
@@ -600,6 +601,8 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacterCombatAndFeaturesWidgetInst.FeaturesTreeWidget.SelectIndex(CurrentSelectionIndex)
         else:
             self.PlayerCharacterCombatAndFeaturesWidgetInst.FeaturesTreeWidget.FillFromFeatures()
+
+        # TODO Spell Points Visibility and Calculation
 
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
@@ -623,11 +626,11 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.ExperienceSpinBox.setValue(self.PlayerCharacter.Stats["Character Experience Earned"])
 
             # Proficiencies
-            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WeaponsProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Weapons Proficiencies"])
-            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ArmorProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Armor Proficiencies"])
-            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ToolsAndInstrumentsProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Tools and Instruments Proficiencies"])
-            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.LanguagesProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Languages Proficiencies"])
-            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.OtherProficiencesTextEdit.setText(self.PlayerCharacter.Stats["Other Proficiencies"])
+            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.WeaponsProficiencesTextEdit.setPlainText(self.PlayerCharacter.Stats["Weapons Proficiencies"])
+            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ArmorProficiencesTextEdit.setPlainText(self.PlayerCharacter.Stats["Armor Proficiencies"])
+            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.ToolsAndInstrumentsProficiencesTextEdit.setPlainText(self.PlayerCharacter.Stats["Tools and Instruments Proficiencies"])
+            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.LanguagesProficiencesTextEdit.setPlainText(self.PlayerCharacter.Stats["Languages Proficiencies"])
+            self.PlayerCharacterAbilitiesAndSkillsWidgetInst.OtherProficiencesTextEdit.setPlainText(self.PlayerCharacter.Stats["Other Proficiencies"])
 
             # Vitality
             self.PlayerCharacterCombatAndFeaturesWidgetInst.TempHPSpinBox.setValue(self.PlayerCharacter.Stats["Temp Health"])
@@ -645,11 +648,37 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacterCombatAndFeaturesWidgetInst.SpeedSpinBox.setValue(self.PlayerCharacter.Stats["Speed"])
 
             # Ability Score Derivatives
-            for AbilityScoreDerivativeWidget in [self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst1, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst2, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst3]:
+            for AbilityScoreDerivativeWidget in [self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst1, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst2, self.PlayerCharacterCombatAndFeaturesWidgetInst.AbilityScoreDerivativeWidgetInst3, self.PlayerCharacterSpellcastingWidgetInst.SpellcastingAbilityWidgetInst1, self.PlayerCharacterSpellcastingWidgetInst.SpellcastingAbilityWidgetInst2, self.PlayerCharacterSpellcastingWidgetInst.SpellcastingAbilityWidgetInst3]:
                 AbilityScoreDerivativeWidget.AbilityComboBox.setCurrentText(self.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][AbilityScoreDerivativeWidget.Index])
 
             # Combat and Features Notes
-            self.PlayerCharacterCombatAndFeaturesWidgetInst.CombatAndFeaturesNotesTextEdit.setText(self.PlayerCharacter.Stats["Combat and Features Notes"])
+            self.PlayerCharacterCombatAndFeaturesWidgetInst.CombatAndFeaturesNotesTextEdit.setPlainText(self.PlayerCharacter.Stats["Combat and Features Notes"])
+
+            # Concentrating
+            self.PlayerCharacterSpellcastingWidgetInst.ConcentratingButton.setChecked(self.PlayerCharacter.Stats["Concentrating"])
+
+            # Spell Notes
+            self.PlayerCharacterSpellcastingWidgetInst.SpellNotesTextEdit.setPlainText(self.PlayerCharacter.Stats["Spell Notes"])
+
+            # Spell Slots
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsTotalSlots1stSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["1st"]["Total Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsTotalSlots2ndSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["2nd"]["Total Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsTotalSlots3rdSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["3rd"]["Total Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsTotalSlots4thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["4th"]["Total Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsTotalSlots5thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["5th"]["Total Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsTotalSlots6thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["6th"]["Total Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsTotalSlots7thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["7th"]["Total Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsTotalSlots8thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["8th"]["Total Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsTotalSlots9thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["9th"]["Total Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots1stSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["1st"]["Used Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots2ndSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["2nd"]["Used Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots3rdSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["3rd"]["Used Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots4thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["4th"]["Used Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots5thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["5th"]["Used Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots6thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["6th"]["Used Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots7thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["7th"]["Used Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots8thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["8th"]["Used Slots"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots9thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["9th"]["Used Slots"])
 
             # Inspiration
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])

@@ -1,0 +1,367 @@
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QFrame, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTextEdit
+
+from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
+from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton, RollButton
+from Interface.Widgets.ToggleButtons import ConcentratingButton
+
+
+class PlayerCharacterSpellcastingWidget(QFrame):
+    def __init__(self, CharacterWindow):
+        # Initialize Frame
+        super().__init__()
+
+        # Store Parameters
+        self.CharacterWindow = CharacterWindow
+
+        # Styles
+        self.SectionLabelStyle = "QLabel {font-size: 10pt; font-weight: bold;}"
+
+        # Header Label Margin
+        self.HeaderLabelMargin = 5
+
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
+        # Create Spellcasting Abilities
+        self.CreateSpellcastingAbilities()
+
+        # Create Concentrating Button
+        self.CreateConcentratingButton()
+
+        # Create Spell Notes
+        self.CreateSpellNotes()
+
+        # Create Spell Slots
+        self.CreateSpellSlots()
+
+        # Create Spell Points
+        self.CreateSpellPoints()
+
+        # Create and Set Layout
+        self.CreateAndSetLayout()
+
+    def CreateSpellcastingAbilities(self):
+        # Spellcasting Abilities Label
+        self.SpellcastingAbilitiesLabel = QLabel("Spellcasting Abilities")
+        self.SpellcastingAbilitiesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellcastingAbilitiesLabel.setStyleSheet(self.SectionLabelStyle)
+        self.SpellcastingAbilitiesLabel.setMargin(self.HeaderLabelMargin)
+
+        # Ability Score Derivative Widgets
+        self.SpellcastingAbilityWidgetInst1 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 3)
+        self.SpellcastingAbilityWidgetInst2 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 4)
+        self.SpellcastingAbilityWidgetInst3 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 5)
+
+    def CreateConcentratingButton(self):
+        self.ConcentratingButton = ConcentratingButton(self.CharacterWindow)
+
+    def CreateSpellNotes(self):
+        # Spell Notes Label
+        self.SpellNotesLabel = QLabel("Spell Notes")
+        self.SpellNotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellNotesLabel.setStyleSheet(self.SectionLabelStyle)
+        self.SpellNotesLabel.setMargin(self.HeaderLabelMargin)
+
+        # Spell Notes Text Edit
+        self.SpellNotesTextEdit = QTextEdit()
+        self.SpellNotesTextEdit.setTabChangesFocus(True)
+        self.SpellNotesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Spell Notes", self.SpellNotesTextEdit.toPlainText()))
+
+    def CreateSpellSlots(self):
+        # Spell Slots Label
+        self.SpellSlotsLabel = QLabel("Spell Slots")
+        self.SpellSlotsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsLabel.setStyleSheet(self.SectionLabelStyle)
+        self.SpellSlotsLabel.setMargin(self.HeaderLabelMargin)
+
+        # Header Labels
+        self.SpellSlotsLevelLabel = QLabel("Level")
+        self.SpellSlotsLevelLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsLevelLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.SpellSlotsLevelLabel.setMargin(5)
+        self.SpellSlotsTotalSlotsLabel = QLabel("Slots")
+        self.SpellSlotsTotalSlotsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsTotalSlotsLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.SpellSlotsTotalSlotsLabel.setMargin(5)
+        self.SpellSlotsUsedSlotsLabel = QLabel("Used")
+        self.SpellSlotsUsedSlotsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsUsedSlotsLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.SpellSlotsUsedSlotsLabel.setMargin(5)
+
+        # Level Labels
+        self.SpellSlots1stLabel = QLabel("1st")
+        self.SpellSlots1stLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlots2ndLabel = QLabel("2nd")
+        self.SpellSlots2ndLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlots3rdLabel = QLabel("3rd")
+        self.SpellSlots3rdLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlots4thLabel = QLabel("4th")
+        self.SpellSlots4thLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlots5thLabel = QLabel("5th")
+        self.SpellSlots5thLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlots6thLabel = QLabel("6th")
+        self.SpellSlots6thLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlots7thLabel = QLabel("7th")
+        self.SpellSlots7thLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlots8thLabel = QLabel("8th")
+        self.SpellSlots8thLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlots9thLabel = QLabel("9th")
+        self.SpellSlots9thLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Total Slots Spin Boxes
+        self.SpellSlotsTotalSlots1stSpinBox = QSpinBox()
+        self.SpellSlotsTotalSlots1stSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsTotalSlots1stSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsTotalSlots1stSpinBox.setButtonSymbols(self.SpellSlotsTotalSlots1stSpinBox.NoButtons)
+        self.SpellSlotsTotalSlots1stSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsTotalSlots1stSpinBox.setValue(0)
+        self.SpellSlotsTotalSlots1stSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "1st", "Total Slots"), self.SpellSlotsTotalSlots1stSpinBox.value()))
+
+        self.SpellSlotsTotalSlots2ndSpinBox = QSpinBox()
+        self.SpellSlotsTotalSlots2ndSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsTotalSlots2ndSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsTotalSlots2ndSpinBox.setButtonSymbols(self.SpellSlotsTotalSlots2ndSpinBox.NoButtons)
+        self.SpellSlotsTotalSlots2ndSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsTotalSlots2ndSpinBox.setValue(0)
+        self.SpellSlotsTotalSlots2ndSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "2nd", "Total Slots"), self.SpellSlotsTotalSlots2ndSpinBox.value()))
+
+        self.SpellSlotsTotalSlots3rdSpinBox = QSpinBox()
+        self.SpellSlotsTotalSlots3rdSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsTotalSlots3rdSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsTotalSlots3rdSpinBox.setButtonSymbols(self.SpellSlotsTotalSlots3rdSpinBox.NoButtons)
+        self.SpellSlotsTotalSlots3rdSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsTotalSlots3rdSpinBox.setValue(0)
+        self.SpellSlotsTotalSlots3rdSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "3rd", "Total Slots"), self.SpellSlotsTotalSlots3rdSpinBox.value()))
+
+        self.SpellSlotsTotalSlots4thSpinBox = QSpinBox()
+        self.SpellSlotsTotalSlots4thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsTotalSlots4thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsTotalSlots4thSpinBox.setButtonSymbols(self.SpellSlotsTotalSlots4thSpinBox.NoButtons)
+        self.SpellSlotsTotalSlots4thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsTotalSlots4thSpinBox.setValue(0)
+        self.SpellSlotsTotalSlots4thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "4th", "Total Slots"), self.SpellSlotsTotalSlots4thSpinBox.value()))
+
+        self.SpellSlotsTotalSlots5thSpinBox = QSpinBox()
+        self.SpellSlotsTotalSlots5thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsTotalSlots5thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsTotalSlots5thSpinBox.setButtonSymbols(self.SpellSlotsTotalSlots5thSpinBox.NoButtons)
+        self.SpellSlotsTotalSlots5thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsTotalSlots5thSpinBox.setValue(0)
+        self.SpellSlotsTotalSlots5thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "5th", "Total Slots"), self.SpellSlotsTotalSlots5thSpinBox.value()))
+
+        self.SpellSlotsTotalSlots6thSpinBox = QSpinBox()
+        self.SpellSlotsTotalSlots6thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsTotalSlots6thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsTotalSlots6thSpinBox.setButtonSymbols(self.SpellSlotsTotalSlots6thSpinBox.NoButtons)
+        self.SpellSlotsTotalSlots6thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsTotalSlots6thSpinBox.setValue(0)
+        self.SpellSlotsTotalSlots6thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "6th", "Total Slots"), self.SpellSlotsTotalSlots6thSpinBox.value()))
+
+        self.SpellSlotsTotalSlots7thSpinBox = QSpinBox()
+        self.SpellSlotsTotalSlots7thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsTotalSlots7thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsTotalSlots7thSpinBox.setButtonSymbols(self.SpellSlotsTotalSlots7thSpinBox.NoButtons)
+        self.SpellSlotsTotalSlots7thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsTotalSlots7thSpinBox.setValue(0)
+        self.SpellSlotsTotalSlots7thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "7th", "Total Slots"), self.SpellSlotsTotalSlots7thSpinBox.value()))
+
+        self.SpellSlotsTotalSlots8thSpinBox = QSpinBox()
+        self.SpellSlotsTotalSlots8thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsTotalSlots8thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsTotalSlots8thSpinBox.setButtonSymbols(self.SpellSlotsTotalSlots8thSpinBox.NoButtons)
+        self.SpellSlotsTotalSlots8thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsTotalSlots8thSpinBox.setValue(0)
+        self.SpellSlotsTotalSlots8thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "8th", "Total Slots"), self.SpellSlotsTotalSlots8thSpinBox.value()))
+
+        self.SpellSlotsTotalSlots9thSpinBox = QSpinBox()
+        self.SpellSlotsTotalSlots9thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsTotalSlots9thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsTotalSlots9thSpinBox.setButtonSymbols(self.SpellSlotsTotalSlots9thSpinBox.NoButtons)
+        self.SpellSlotsTotalSlots9thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsTotalSlots9thSpinBox.setValue(0)
+        self.SpellSlotsTotalSlots9thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "9th", "Total Slots"), self.SpellSlotsTotalSlots9thSpinBox.value()))
+
+        # Used Slots Spin Boxes
+        self.SpellSlotsUsedSlots1stSpinBox = QSpinBox()
+        self.SpellSlotsUsedSlots1stSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsUsedSlots1stSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsUsedSlots1stSpinBox.setButtonSymbols(self.SpellSlotsUsedSlots1stSpinBox.NoButtons)
+        self.SpellSlotsUsedSlots1stSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsUsedSlots1stSpinBox.setValue(0)
+        self.SpellSlotsUsedSlots1stSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "1st", "Used Slots"), self.SpellSlotsUsedSlots1stSpinBox.value()))
+
+        self.SpellSlotsUsedSlots2ndSpinBox = QSpinBox()
+        self.SpellSlotsUsedSlots2ndSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsUsedSlots2ndSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsUsedSlots2ndSpinBox.setButtonSymbols(self.SpellSlotsUsedSlots2ndSpinBox.NoButtons)
+        self.SpellSlotsUsedSlots2ndSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsUsedSlots2ndSpinBox.setValue(0)
+        self.SpellSlotsUsedSlots2ndSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "2nd", "Used Slots"), self.SpellSlotsUsedSlots2ndSpinBox.value()))
+
+        self.SpellSlotsUsedSlots3rdSpinBox = QSpinBox()
+        self.SpellSlotsUsedSlots3rdSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsUsedSlots3rdSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsUsedSlots3rdSpinBox.setButtonSymbols(self.SpellSlotsUsedSlots3rdSpinBox.NoButtons)
+        self.SpellSlotsUsedSlots3rdSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsUsedSlots3rdSpinBox.setValue(0)
+        self.SpellSlotsUsedSlots3rdSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "3rd", "Used Slots"), self.SpellSlotsUsedSlots3rdSpinBox.value()))
+
+        self.SpellSlotsUsedSlots4thSpinBox = QSpinBox()
+        self.SpellSlotsUsedSlots4thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsUsedSlots4thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsUsedSlots4thSpinBox.setButtonSymbols(self.SpellSlotsUsedSlots4thSpinBox.NoButtons)
+        self.SpellSlotsUsedSlots4thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsUsedSlots4thSpinBox.setValue(0)
+        self.SpellSlotsUsedSlots4thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "4th", "Used Slots"), self.SpellSlotsUsedSlots4thSpinBox.value()))
+
+        self.SpellSlotsUsedSlots5thSpinBox = QSpinBox()
+        self.SpellSlotsUsedSlots5thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsUsedSlots5thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsUsedSlots5thSpinBox.setButtonSymbols(self.SpellSlotsUsedSlots5thSpinBox.NoButtons)
+        self.SpellSlotsUsedSlots5thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsUsedSlots5thSpinBox.setValue(0)
+        self.SpellSlotsUsedSlots5thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "5th", "Used Slots"), self.SpellSlotsUsedSlots5thSpinBox.value()))
+
+        self.SpellSlotsUsedSlots6thSpinBox = QSpinBox()
+        self.SpellSlotsUsedSlots6thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsUsedSlots6thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsUsedSlots6thSpinBox.setButtonSymbols(self.SpellSlotsUsedSlots6thSpinBox.NoButtons)
+        self.SpellSlotsUsedSlots6thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsUsedSlots6thSpinBox.setValue(0)
+        self.SpellSlotsUsedSlots6thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "6th", "Used Slots"), self.SpellSlotsUsedSlots6thSpinBox.value()))
+
+        self.SpellSlotsUsedSlots7thSpinBox = QSpinBox()
+        self.SpellSlotsUsedSlots7thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsUsedSlots7thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsUsedSlots7thSpinBox.setButtonSymbols(self.SpellSlotsUsedSlots7thSpinBox.NoButtons)
+        self.SpellSlotsUsedSlots7thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsUsedSlots7thSpinBox.setValue(0)
+        self.SpellSlotsUsedSlots7thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "7th", "Used Slots"), self.SpellSlotsUsedSlots7thSpinBox.value()))
+
+        self.SpellSlotsUsedSlots8thSpinBox = QSpinBox()
+        self.SpellSlotsUsedSlots8thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsUsedSlots8thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsUsedSlots8thSpinBox.setButtonSymbols(self.SpellSlotsUsedSlots8thSpinBox.NoButtons)
+        self.SpellSlotsUsedSlots8thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsUsedSlots8thSpinBox.setValue(0)
+        self.SpellSlotsUsedSlots8thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "8th", "Used Slots"), self.SpellSlotsUsedSlots8thSpinBox.value()))
+
+        self.SpellSlotsUsedSlots9thSpinBox = QSpinBox()
+        self.SpellSlotsUsedSlots9thSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotsUsedSlots9thSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellSlotsUsedSlots9thSpinBox.setButtonSymbols(self.SpellSlotsUsedSlots9thSpinBox.NoButtons)
+        self.SpellSlotsUsedSlots9thSpinBox.setRange(0, 1000000000)
+        self.SpellSlotsUsedSlots9thSpinBox.setValue(0)
+        self.SpellSlotsUsedSlots9thSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Spell Slots", "9th", "Used Slots"), self.SpellSlotsUsedSlots9thSpinBox.value()))
+
+    def CreateSpellPoints(self):
+        # Spell Points Label
+        self.SpellPointsLabel = QLabel("Spell Points")
+        self.SpellPointsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellPointsLabel.setStyleSheet(self.SectionLabelStyle)
+        self.SpellPointsLabel.setMargin(self.HeaderLabelMargin)
+
+        # Spell Points Max
+        self.SpellPointsMaxLabel = QLabel("Max")
+        self.SpellPointsMaxLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellPointsMaxLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.SpellPointsMaxLabel.setMargin(5)
+
+        self.SpellPointsMaxSpinBox = QSpinBox()
+        self.SpellPointsMaxSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellPointsMaxSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellPointsMaxSpinBox.setButtonSymbols(self.SpellPointsMaxSpinBox.NoButtons)
+        self.SpellPointsMaxSpinBox.setRange(0, 1000000000)
+        self.SpellPointsMaxSpinBox.setSpecialValueText("N/A")
+        self.SpellPointsMaxSpinBox.setReadOnly(True)
+
+        self.SpellPointsMaxEditButton = EditButton(lambda: self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Bonus Spell Points Stat Modifier"], "Edit Bonus Spell Points Stat Modifier"))
+        self.SpellPointsMaxEditButton.setSizePolicy(self.InputsSizePolicy)
+
+        # Spell Points Remaining
+        self.SpellPointsRemainingLabel = QLabel("Remaining")
+        self.SpellPointsRemainingLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellPointsRemainingLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.SpellPointsRemainingLabel.setMargin(5)
+
+        self.SpellPointsRemainingSpinBox = QSpinBox()
+        self.SpellPointsRemainingSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellPointsRemainingSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SpellPointsRemainingSpinBox.setButtonSymbols(self.SpellPointsRemainingSpinBox.NoButtons)
+        self.SpellPointsRemainingSpinBox.setRange(0, 1000000000)
+
+    def CreateAndSetLayout(self):
+        # Create Layout
+        self.Layout = QGridLayout()
+
+        # Ability Score Derivatives
+        self.SpellcastingAbilitiesLayout = QGridLayout()
+        self.SpellcastingAbilitiesLayout.addWidget(self.SpellcastingAbilitiesLabel, 0, 0)
+        self.SpellcastingAbilitiesLayout.addWidget(self.SpellcastingAbilityWidgetInst1, 1, 0)
+        self.SpellcastingAbilitiesLayout.addWidget(self.SpellcastingAbilityWidgetInst2, 2, 0)
+        self.SpellcastingAbilitiesLayout.addWidget(self.SpellcastingAbilityWidgetInst3, 3, 0)
+        self.Layout.addLayout(self.SpellcastingAbilitiesLayout, 0, 0, 2, 1)
+
+        # Spell Slots
+        self.SpellSlotsLayout = QGridLayout()
+
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsLabel, 0, 0, 1, 3)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsLevelLabel, 1, 0)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsTotalSlotsLabel, 1, 1)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsUsedSlotsLabel, 1, 2)
+
+        self.SpellSlotsLayout.addWidget(self.SpellSlots1stLabel, 2, 0)
+        self.SpellSlotsLayout.addWidget(self.SpellSlots2ndLabel, 3, 0)
+        self.SpellSlotsLayout.addWidget(self.SpellSlots3rdLabel, 4, 0)
+        self.SpellSlotsLayout.addWidget(self.SpellSlots4thLabel, 5, 0)
+        self.SpellSlotsLayout.addWidget(self.SpellSlots5thLabel, 6, 0)
+        self.SpellSlotsLayout.addWidget(self.SpellSlots6thLabel, 7, 0)
+        self.SpellSlotsLayout.addWidget(self.SpellSlots7thLabel, 8, 0)
+        self.SpellSlotsLayout.addWidget(self.SpellSlots8thLabel, 9, 0)
+        self.SpellSlotsLayout.addWidget(self.SpellSlots9thLabel, 10, 0)
+
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsTotalSlots1stSpinBox, 2, 1)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsTotalSlots2ndSpinBox, 3, 1)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsTotalSlots3rdSpinBox, 4, 1)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsTotalSlots4thSpinBox, 5, 1)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsTotalSlots5thSpinBox, 6, 1)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsTotalSlots6thSpinBox, 7, 1)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsTotalSlots7thSpinBox, 8, 1)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsTotalSlots8thSpinBox, 9, 1)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsTotalSlots9thSpinBox, 10, 1)
+
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsUsedSlots1stSpinBox, 2, 2)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsUsedSlots2ndSpinBox, 3, 2)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsUsedSlots3rdSpinBox, 4, 2)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsUsedSlots4thSpinBox, 5, 2)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsUsedSlots5thSpinBox, 6, 2)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsUsedSlots6thSpinBox, 7, 2)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsUsedSlots7thSpinBox, 8, 2)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsUsedSlots8thSpinBox, 9, 2)
+        self.SpellSlotsLayout.addWidget(self.SpellSlotsUsedSlots9thSpinBox, 10, 2)
+
+        self.Layout.addLayout(self.SpellSlotsLayout, 0, 1)
+
+        self.SpellPointsLayout = QGridLayout()
+        self.SpellPointsLayout.addWidget(self.SpellPointsLabel, 0, 0, 1, 3)
+        self.SpellPointsLayout.addWidget(self.SpellPointsMaxLabel, 1, 0)
+        self.SpellPointsLayout.addWidget(self.SpellPointsMaxSpinBox, 1, 1)
+        self.SpellPointsLayout.addWidget(self.SpellPointsMaxEditButton, 1, 2)
+        self.SpellPointsLayout.addWidget(self.SpellPointsRemainingLabel, 2, 0)
+        self.SpellPointsLayout.addWidget(self.SpellPointsRemainingSpinBox, 2, 1, 1, 2)
+        self.Layout.addLayout(self.SpellPointsLayout, 1, 1)
+
+        # Concentrating Button
+        self.Layout.addWidget(self.ConcentratingButton, 2, 0, 1, 2)
+
+        # Spell Notes
+        self.SpellNotesLayout = QGridLayout()
+        self.SpellNotesLayout.addWidget(self.SpellNotesLabel, 0, 0)
+        self.SpellNotesLayout.addWidget(self.SpellNotesTextEdit, 1, 0)
+        self.SpellNotesLayout.setRowStretch(1, 1)
+        self.Layout.addLayout(self.SpellNotesLayout, 3, 0, 1, 2)
+
+        # Set Layout
+        self.setLayout(self.Layout)
