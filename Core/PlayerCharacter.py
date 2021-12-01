@@ -267,13 +267,13 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["Spell Slots"] = {}
         for SpellSlotLevel in self.SpellSlotLevels:
             self.Stats["Spell Slots"][SpellSlotLevel] = {}
-            self.Stats["Spell Slots"][SpellSlotLevel]["Current"] = 0
-            self.Stats["Spell Slots"][SpellSlotLevel]["Max"] = 0
+            self.Stats["Spell Slots"][SpellSlotLevel]["Used Slots"] = 0
+            self.Stats["Spell Slots"][SpellSlotLevel]["Total Slots"] = 0
 
         # Spell Points
         self.Stats["Spell Points Enabled"] = False
         self.Stats["Current Spell Points"] = 0
-        self.Stats["Spell Points Stat Modifier"] = self.CreateStatModifier()
+        self.Stats["Bonus Spell Points Stat Modifier"] = self.CreateStatModifier()
 
         # Spell List
         self.Stats["Spell List"] = []
@@ -357,6 +357,8 @@ class PlayerCharacter(Character, SerializableMixin):
             if len(Stat) == 2:
                 self.Stats[Stat[0]][Stat[1]] = NewValue
                 return True
+            if len(Stat) == 3:
+                self.Stats[Stat[0]][Stat[1]][Stat[2]] = NewValue
 
         return False
 
@@ -687,8 +689,8 @@ class PlayerCharacter(Character, SerializableMixin):
     def CalculateSpellPoints(self):
         TotalPoints = 0
         for SpellSlotLevel in self.SpellSlotLevels:
-            TotalPoints += self.Stats["Spell Slots"][SpellSlotLevel]["Max"] * self.SpellPointValues[SpellSlotLevel]
-        TotalPoints += self.CalculateStatModifier(self.Stats["Spell Points Stat Modifier"])
+            TotalPoints += self.Stats["Spell Slots"][SpellSlotLevel]["Total Slots"] * self.SpellPointValues[SpellSlotLevel]
+        TotalPoints += self.CalculateStatModifier(self.Stats["Bonus Spell Points Stat Modifier"])
         return TotalPoints
 
     def ExpendSpellPoints(self, SpellSlotLevel, SpellSlotAmount, ManualSpellPointsAmount):
