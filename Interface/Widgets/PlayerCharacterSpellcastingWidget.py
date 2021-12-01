@@ -277,7 +277,7 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         self.SpellPointsMaxSpinBox.setSpecialValueText("N/A")
         self.SpellPointsMaxSpinBox.setReadOnly(True)
 
-        self.SpellPointsMaxEditButton = EditButton(lambda: self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Bonus Spell Points Stat Modifier"], "Edit Bonus Spell Points Stat Modifier"))
+        self.SpellPointsMaxEditButton = EditButton(lambda: self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Bonus Spell Points Stat Modifier"], "Bonus Spell Points Stat Modifier"), "Edit Bonus Spell Points Stat Modifier")
         self.SpellPointsMaxEditButton.setSizePolicy(self.InputsSizePolicy)
 
         # Spell Points Remaining
