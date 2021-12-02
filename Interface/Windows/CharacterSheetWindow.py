@@ -194,6 +194,11 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.ConcentrationCheckPromptEnabledAction.setChecked(True)
         self.ConcentrationCheckPromptEnabledAction.triggered.connect(self.ToggleConcentrationCheckPromptEnabled)
 
+        self.SpellPointsEnabledAction = QAction("Spell Points Enabled")
+        self.SpellPointsEnabledAction.setCheckable(True)
+        self.SpellPointsEnabledAction.setChecked(False)
+        self.SpellPointsEnabledAction.triggered.connect(self.ToggleSpellPointsEnabled)
+
         self.PortraitEnabledAction = QAction("Portrait Enabled")
         self.PortraitEnabledAction.setCheckable(True)
         self.PortraitEnabledAction.setChecked(True)
@@ -242,6 +247,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.CharacterSettingsMenu = self.MenuBar.addMenu("Character Settings")
         self.CharacterSettingsMenu.addAction(self.SpellcastingEnabledAction)
         self.CharacterSettingsMenu.addAction(self.ConcentrationCheckPromptEnabledAction)
+        self.CharacterSettingsMenu.addAction(self.SpellPointsEnabledAction)
         self.CharacterSettingsMenu.addAction(self.PortraitEnabledAction)
         self.CharacterSettingsMenu.addAction(self.LuckyHalflingAction)
         self.CharacterSettingsMenu.addSeparator()
@@ -314,6 +320,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
     def ToggleConcentrationCheckPromptEnabled(self):
         self.UpdateStat("Enable Concentration Check", self.ConcentrationCheckPromptEnabledAction.isChecked())
+
+    def ToggleSpellPointsEnabled(self):
+        self.UpdateStat("Spell Points Enabled", self.SpellPointsEnabledAction.isChecked())
 
     def TogglePortraitEnabled(self):
         self.UpdateStat("Portrait Enabled", self.PortraitEnabledAction.isChecked())
@@ -602,7 +611,13 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         else:
             self.PlayerCharacterCombatAndFeaturesWidgetInst.FeaturesTreeWidget.FillFromFeatures()
 
-        # TODO Spell Points Visibility and Calculation
+        # Spell Points Calculation
+        if self.DerivedStats["Max Spell Points"] is not None:
+            self.PlayerCharacterSpellcastingWidgetInst.SpellPointsMaxSpinBox.setValue(self.DerivedStats["Max Spell Points"])
+            self.PlayerCharacterSpellcastingWidgetInst.SpellPointsMaxSpinBox.setSpecialValueText("")
+        else:
+            self.PlayerCharacterSpellcastingWidgetInst.SpellPointsMaxSpinBox.setValue(0)
+            self.PlayerCharacterSpellcastingWidgetInst.SpellPointsMaxSpinBox.setSpecialValueText("N/A")
 
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
@@ -686,6 +701,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             # Settings
             self.SpellcastingEnabledAction.setChecked(self.PlayerCharacter.Stats["Spellcasting Enabled"])
             self.ConcentrationCheckPromptEnabledAction.setChecked(self.PlayerCharacter.Stats["Enable Concentration Check"])
+            self.SpellPointsEnabledAction.setChecked(self.PlayerCharacter.Stats["Spell Points Enabled"])
             self.PortraitEnabledAction.setChecked(self.PlayerCharacter.Stats["Portrait Enabled"])
             self.LuckyHalflingAction.setChecked(self.PlayerCharacter.Stats["Lucky Halfling"])
 
