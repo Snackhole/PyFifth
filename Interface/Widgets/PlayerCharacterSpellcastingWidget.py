@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QFrame, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTextEdit
 
+from Interface.Dialogs.SpendOrRestoreSpellPointsDialog import SpendOrRestoreSpellPointsDialog
 from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
 from Interface.Widgets.ToggleButtons import ConcentratingButton
@@ -276,7 +277,7 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         self.SpellPointsMaxSpinBox.setSpecialValueText("N/A")
         self.SpellPointsMaxSpinBox.setReadOnly(True)
 
-        self.SpellPointsMaxEditButton = EditButton(lambda: self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Bonus Spell Points Stat Modifier"], "Bonus Spell Points Stat Modifier"), "Edit Bonus Spell Points Stat Modifier")
+        self.SpellPointsMaxEditButton = EditButton(self.EditBonusSpellPointsStatModifier, "Edit Bonus Spell Points Stat Modifier")
         self.SpellPointsMaxEditButton.setSizePolicy(self.InputsSizePolicy)
 
         # Spell Points Remaining
@@ -290,6 +291,13 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         self.SpellPointsRemainingSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.SpellPointsRemainingSpinBox.setButtonSymbols(self.SpellPointsRemainingSpinBox.NoButtons)
         self.SpellPointsRemainingSpinBox.setRange(0, 1000000000)
+        self.SpellPointsRemainingSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Current Spell Points", self.SpellPointsRemainingSpinBox.value()))
+
+        self.SpellPointsSpendButton = DeleteButton(self.SpendSpellPoints, "Spend Spell Points")
+        self.SpellPointsSpendButton.setSizePolicy(self.InputsSizePolicy)
+
+        self.SpellPointsRestoreButton = AddButton(self.RestoreSpellPoints, "Restore Spell Points")
+        self.SpellPointsRestoreButton.setSizePolicy(self.InputsSizePolicy)
 
     def CreateAndSetLayout(self):
         # Create Layout
@@ -344,12 +352,14 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         self.Layout.addLayout(self.SpellSlotsLayout, 0, 1)
 
         self.SpellPointsLayout = QGridLayout()
-        self.SpellPointsLayout.addWidget(self.SpellPointsLabel, 0, 0, 1, 3)
+        self.SpellPointsLayout.addWidget(self.SpellPointsLabel, 0, 0, 1, 4)
         self.SpellPointsLayout.addWidget(self.SpellPointsMaxLabel, 1, 0)
-        self.SpellPointsLayout.addWidget(self.SpellPointsMaxSpinBox, 1, 1)
-        self.SpellPointsLayout.addWidget(self.SpellPointsMaxEditButton, 1, 2)
+        self.SpellPointsLayout.addWidget(self.SpellPointsMaxSpinBox, 1, 1, 1, 2)
+        self.SpellPointsLayout.addWidget(self.SpellPointsMaxEditButton, 1, 3)
         self.SpellPointsLayout.addWidget(self.SpellPointsRemainingLabel, 2, 0)
-        self.SpellPointsLayout.addWidget(self.SpellPointsRemainingSpinBox, 2, 1, 1, 2)
+        self.SpellPointsLayout.addWidget(self.SpellPointsRemainingSpinBox, 2, 1)
+        self.SpellPointsLayout.addWidget(self.SpellPointsSpendButton, 2, 2)
+        self.SpellPointsLayout.addWidget(self.SpellPointsRestoreButton, 2, 3)
         self.Layout.addLayout(self.SpellPointsLayout, 1, 1)
 
         # Concentrating Button
@@ -364,3 +374,34 @@ class PlayerCharacterSpellcastingWidget(QFrame):
 
         # Set Layout
         self.setLayout(self.Layout)
+
+    def EditBonusSpellPointsStatModifier(self):
+        if not self.CharacterWindow.PlayerCharacter.Stats["Spell Points Enabled"]:
+            self.CharacterWindow.DisplayMessageBox("Spell points are not enabled.")
+            return
+
+        self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Bonus Spell Points Stat Modifier"], "Bonus Spell Points Stat Modifier")
+
+    def SpendSpellPoints(self):
+        if not self.CharacterWindow.PlayerCharacter.Stats["Spell Points Enabled"]:
+            self.CharacterWindow.DisplayMessageBox("Spell points are not enabled.")
+            return
+
+        SpendSpellPointsDialogInst = SpendOrRestoreSpellPointsDialog(self.CharacterWindow)
+        if SpendSpellPointsDialogInst.Submitted:
+            self.CharacterWindow.PlayerCharacter.ExpendSpellPoints(SpendSpellPointsDialogInst.SpellSlotLevel, SpendSpellPointsDialogInst.SpellSlotAmount, SpendSpellPointsDialogInst.ManualAmount)
+            self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = True
+            self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+            self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = False
+
+    def RestoreSpellPoints(self):
+        if not self.CharacterWindow.PlayerCharacter.Stats["Spell Points Enabled"]:
+            self.CharacterWindow.DisplayMessageBox("Spell points are not enabled.")
+            return
+
+        RestoreSpellPointsDialogInst = SpendOrRestoreSpellPointsDialog(self.CharacterWindow, RestoreMode=True)
+        if RestoreSpellPointsDialogInst.Submitted:
+            self.CharacterWindow.PlayerCharacter.RestoreSpellPoints(RestoreSpellPointsDialogInst.SpellSlotLevel, RestoreSpellPointsDialogInst.SpellSlotAmount, RestoreSpellPointsDialogInst.ManualAmount)
+            self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = True
+            self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+            self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = False

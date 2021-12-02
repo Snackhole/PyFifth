@@ -695,6 +695,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots8thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["8th"]["Used Slots"])
             self.PlayerCharacterSpellcastingWidgetInst.SpellSlotsUsedSlots9thSpinBox.setValue(self.PlayerCharacter.Stats["Spell Slots"]["9th"]["Used Slots"])
 
+            # Spell Points Remaining
+            self.PlayerCharacterSpellcastingWidgetInst.SpellPointsRemainingSpinBox.setValue(self.PlayerCharacter.Stats["Current Spell Points"])
+
             # Inspiration
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
 
