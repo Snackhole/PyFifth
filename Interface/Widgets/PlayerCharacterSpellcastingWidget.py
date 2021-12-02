@@ -2,8 +2,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QFrame, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTextEdit
 
 from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
-from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
-from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton, RollButton
+from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
 from Interface.Widgets.ToggleButtons import ConcentratingButton
 
 
