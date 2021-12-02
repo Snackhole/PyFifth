@@ -375,18 +375,16 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         # Set Layout
         self.setLayout(self.Layout)
 
-    def EditBonusSpellPointsStatModifier(self):
-        if not self.CharacterWindow.PlayerCharacter.Stats["Spell Points Enabled"]:
-            self.CharacterWindow.DisplayMessageBox("Spell points are not enabled.")
-            return
+    def SetSpellPointsEnabled(self, Enabled):
+        for Widget in [self.SpellPointsLabel, self.SpellPointsMaxLabel, self.SpellPointsMaxSpinBox, self.SpellPointsMaxEditButton, self.SpellPointsRemainingLabel, self.SpellPointsRemainingSpinBox, self.SpellPointsSpendButton, self.SpellPointsRestoreButton]:
+            Widget.setEnabled(Enabled)
+        if not Enabled:
+            self.SpellPointsRemainingSpinBox.setValue(0)
 
+    def EditBonusSpellPointsStatModifier(self):
         self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Bonus Spell Points Stat Modifier"], "Bonus Spell Points Stat Modifier")
 
     def SpendSpellPoints(self):
-        if not self.CharacterWindow.PlayerCharacter.Stats["Spell Points Enabled"]:
-            self.CharacterWindow.DisplayMessageBox("Spell points are not enabled.")
-            return
-
         SpendSpellPointsDialogInst = SpendOrRestoreSpellPointsDialog(self.CharacterWindow)
         if SpendSpellPointsDialogInst.Submitted:
             self.CharacterWindow.PlayerCharacter.ExpendSpellPoints(SpendSpellPointsDialogInst.SpellSlotLevel, SpendSpellPointsDialogInst.SpellSlotAmount, SpendSpellPointsDialogInst.ManualAmount)
@@ -395,10 +393,6 @@ class PlayerCharacterSpellcastingWidget(QFrame):
             self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = False
 
     def RestoreSpellPoints(self):
-        if not self.CharacterWindow.PlayerCharacter.Stats["Spell Points Enabled"]:
-            self.CharacterWindow.DisplayMessageBox("Spell points are not enabled.")
-            return
-
         RestoreSpellPointsDialogInst = SpendOrRestoreSpellPointsDialog(self.CharacterWindow, RestoreMode=True)
         if RestoreSpellPointsDialogInst.Submitted:
             self.CharacterWindow.PlayerCharacter.RestoreSpellPoints(RestoreSpellPointsDialogInst.SpellSlotLevel, RestoreSpellPointsDialogInst.SpellSlotAmount, RestoreSpellPointsDialogInst.ManualAmount)

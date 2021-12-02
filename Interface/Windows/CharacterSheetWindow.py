@@ -503,6 +503,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         # Spellcasting Enabled
         self.StatsTabWidget.setTabVisible(2, self.PlayerCharacter.Stats["Spellcasting Enabled"])
 
+        # Spell Points Enabled
+        self.PlayerCharacterSpellcastingWidgetInst.SetSpellPointsEnabled(self.PlayerCharacter.Stats["Spell Points Enabled"])
+
         # Portrait Enabled
         self.StatsTabWidget.setTabVisible(6, self.PlayerCharacter.Stats["Portrait Enabled"])
 
