@@ -72,6 +72,18 @@ class PlayerCharacter(Character, SerializableMixin):
         self.FeatureDefaults["Feature Name"] = "Feature Name"
         self.FeatureDefaults["Feature Text"] = ""
 
+        # Spell Defaults
+        self.SpellDefaults = {}
+        self.SpellDefaults["Spell Name"] = "Spell Name"
+        self.SpellDefaults["Spell Level"] = ""
+        self.SpellDefaults["Spell School"] = ""
+        self.SpellDefaults["Spell Casting Time"] = ""
+        self.SpellDefaults["Spell Range"] = ""
+        self.SpellDefaults["Spell Components"] = ""
+        self.SpellDefaults["Spell Duration"] = ""
+        self.SpellDefaults["Spell Text"] = ""
+        self.SpellDefaults["Spell Prepared"] = False
+
         # Spell Slot Levels
         self.SpellSlotLevels = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"]
 
@@ -86,6 +98,22 @@ class PlayerCharacter(Character, SerializableMixin):
         self.SpellPointValues["7th"] = 10
         self.SpellPointValues["8th"] = 11
         self.SpellPointValues["9th"] = 13
+
+        # Inventory Item Defaults
+        self.InventoryItemDefaults = {}
+        self.InventoryItemDefaults["Item Name"] = "Item Name"
+        self.InventoryItemDefaults["Item Count"] = 1
+        self.InventoryItemDefaults["Item Unit Weight"] = 0.0
+        self.InventoryItemDefaults["Item Unit Value"] = 0.0
+        self.InventoryItemDefaults["Item Unit Value Denomination"] = "CP"
+        self.InventoryItemDefaults["Item Category Tag"] = ""
+        self.InventoryItemDefaults["Item Rarity"] = ""
+        self.InventoryItemDefaults["Item Description"] = ""
+
+        # Additional Note Defaults
+        self.AdditionalNoteDefaults = {}
+        self.AdditionalNoteDefaults["Note Name"] = "Note Name"
+        self.AdditionalNoteDefaults["Note Text"] = ""
 
         # Coin Values
         self.CoinValues = {}
@@ -716,107 +744,95 @@ class PlayerCharacter(Character, SerializableMixin):
             RestoredPoints += ManualSpellPointsAmount
         self.Stats["Current Spell Points"] = min(MaxSpellPoints, CurrentSpellPoints + RestoredPoints)
 
-    def AddSpell(self, SpellName, SpellSchool, SpellCastingTime, SpellRange, SpellComponents, SpellDuration, SpellText, SpellPrepared):
-        NewSpell = {}
-        NewSpell["Spell Name"] = SpellName
-        NewSpell["Spell School"] = SpellSchool
-        NewSpell["Spell Casting Time"] = SpellCastingTime
-        NewSpell["Spell Range"] = SpellRange
-        NewSpell["Spell Components"] = SpellComponents
-        NewSpell["Spell Duration"] = SpellDuration
-        NewSpell["Spell Text"] = SpellText
-        NewSpell["Spell Prepared"] = SpellPrepared
-        self.Stats["Spell List"].append(NewSpell)
+    def CreateSpell(self):
+        Spell = copy.deepcopy(self.SpellDefaults)
+        return Spell
 
-    def EditSpell(self, SpellIndex, SpellName, SpellSchool, SpellCastingTime, SpellRange, SpellComponents, SpellDuration, SpellText, SpellPrepared):
-        Spell = self.Stats["Spell List"][SpellIndex]
-        Spell["Spell Name"] = SpellName
-        Spell["Spell School"] = SpellSchool
-        Spell["Spell Casting Time"] = SpellCastingTime
-        Spell["Spell Range"] = SpellRange
-        Spell["Spell Components"] = SpellComponents
-        Spell["Spell Duration"] = SpellDuration
-        Spell["Spell Text"] = SpellText
-        Spell["Spell Prepared"] = SpellPrepared
+    def AddSpell(self):
+        NewSpell = self.CreateSpell()
+        self.Stats["Spell List"].append(NewSpell)
+        SpellIndex = len(self.Stats["Spell List"]) - 1
+        return SpellIndex
 
     def DeleteSpell(self, SpellIndex):
         del self.Stats["Spell List"][SpellIndex]
 
+    def DeleteLastSpell(self):
+        SpellIndex = len(self.Stats["Spell List"]) - 1
+        self.DeleteSpell(SpellIndex)
+
     def MoveSpell(self, SpellIndex, Delta):
         TargetIndex = SpellIndex + Delta
         if TargetIndex < 0 or TargetIndex >= len(self.Stats["Spell List"]):
-            return
+            return False
         SwapTarget = self.Stats["Spell List"][TargetIndex]
         self.Stats["Spell List"][TargetIndex] = self.Stats["Spell List"][SpellIndex]
         self.Stats["Spell List"][SpellIndex] = SwapTarget
+        return True
 
     # Inventory Methods
-    def AddInventoryItem(self, ItemName, ItemCount, ItemUnitWeight, ItemUnitValue, ItemUnitValueDenomination, ItemCategoryTag, ItemRarity, ItemDescription):
-        NewItem = {}
-        NewItem["Item Name"] = ItemName
-        NewItem["Item Count"] = ItemCount
-        NewItem["Item Unit Weight"] = ItemUnitWeight
-        NewItem["Item Unit Value"] = ItemUnitValue
-        NewItem["Item Unit Value Denomination"] = ItemUnitValueDenomination
-        NewItem["Item Category Tag"] = ItemCategoryTag
-        NewItem["Item Rarity"] = ItemRarity
-        NewItem["Item Description"] = ItemDescription
-        self.Stats["Inventory"].append(NewItem)
+    def CreateInventoryItem(self):
+        InventoryItem = copy.deepcopy(self.InventoryItemDefaults)
+        return InventoryItem
 
-    def EditInventoryItem(self, ItemIndex, ItemName, ItemCount, ItemUnitWeight, ItemUnitValue, ItemUnitValueDenomination, ItemCategoryTag, ItemRarity, ItemDescription):
-        Item = self.Stats["Inventory"][ItemIndex]
-        Item["Item Name"] = ItemName
-        Item["Item Count"] = ItemCount
-        Item["Item Unit Weight"] = ItemUnitWeight
-        Item["Item Unit Value"] = ItemUnitValue
-        Item["Item Unit Value Denomination"] = ItemUnitValueDenomination
-        Item["Item Category Tag"] = ItemCategoryTag
-        Item["Item Rarity"] = ItemRarity
-        Item["Item Description"] = ItemDescription
+    def AddInventoryItem(self):
+        NewItem = self.CreateInventoryItem()
+        self.Stats["Inventory"].append(NewItem)
+        ItemIndex = len(self.Stats["Inventory"]) - 1
+        return ItemIndex
 
     def DeleteInventoryItem(self, ItemIndex):
         del self.Stats["Inventory"][ItemIndex]
 
+    def DeleteLastInventoryItem(self):
+        ItemIndex = len(self.Stats["Inventory"]) - 1
+        self.DeleteInventoryItem(ItemIndex)
+
     def MoveInventoryItem(self, ItemIndex, Delta):
         TargetIndex = ItemIndex + Delta
         if TargetIndex < 0 or TargetIndex >= len(self.Stats["Inventory"]):
-            return
+            return False
         SwapTarget = self.Stats["Inventory"][TargetIndex]
         self.Stats["Inventory"][TargetIndex] = self.Stats["Inventory"][ItemIndex]
         self.Stats["Inventory"][ItemIndex] = SwapTarget
+        return True
 
     def CalculateItemTotalWeightAndValue(self, ItemIndex):
         Item = self.Stats["Inventory"][ItemIndex]
         Totals = {}
         Totals["Item Total Weight"] = Decimal(Item["Item Count"]) * Decimal(Item["Item Unit Weight"])
         Totals["Item Total Value"] = Decimal(Item["Item Count"]) * Decimal(Item["Item Unit Value"]) * Decimal(self.CoinValues[Item["Item Unit Value Denomination"]])
+        return Totals
 
     def AlterCoinCounts(self, AlteredCounts):
-        for Denomination, Count in AlteredCounts.items():
-            self.Stats["Coins"][Denomination] = Count
+        self.Stats["Coins"].update(AlteredCounts)
 
     # Additional Notes Methods
-    def AddNote(self, NoteName, NoteText):
-        NewNote = {}
-        NewNote["Note Name"] = NoteName
-        NewNote["Note Text"] = NoteText
-        self.Stats["Additional Notes"].append(NewNote)
+    def CreateAdditionalNote(self):
+        AdditionalNote = copy.deepcopy(self.AdditionalNoteDefaults)
+        return AdditionalNote
 
-    def EditNote(self, NoteIndex, NoteName, NoteText):
-        Note = self.Stats["Additional Notes"][NoteIndex]
-        Note["Note Name"] = NoteName
-        Note["Note Text"] = NoteText
+    def AddAdditionalNote(self):
+        NewAdditionalNote = self.CreateAdditionalNote
+        self.Stats["Additional Notes"].append(NewAdditionalNote)
+        AdditionalNoteIndex = len(self.Stats["Additional Notes"]) - 1
+        return AdditionalNoteIndex
 
-    def DeleteNote(self, NoteIndex):
+    def DeleteAdditionalNote(self, NoteIndex):
         del self.Stats["Additional Notes"][NoteIndex]
+
+    def DeleteLastAdditionalNote(self):
+        AdditionalNoteIndex = len(self.Stats["Additional Notes"]) - 1
+        self.DeleteAdditionalNote(AdditionalNoteIndex)
 
     def MoveNote(self, NoteIndex, Delta):
         TargetIndex = NoteIndex + Delta
         if TargetIndex < 0 or TargetIndex >= len(self.Stats["Additional Notes"]):
-            return
+            return False
         SwapTarget = self.Stats["Additional Notes"][TargetIndex]
         self.Stats["Additional Notes"][TargetIndex] = self.Stats["Additional Notes"][NoteIndex]
         self.Stats["Additional Notes"][NoteIndex] = SwapTarget
+        return True
 
     # Serialization Methods
     def SetState(self, NewState):
