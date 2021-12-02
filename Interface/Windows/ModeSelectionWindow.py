@@ -2,7 +2,7 @@ import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QPushButton, QGridLayout, QComboBox, QLabel, QInputDialog
+from PyQt5.QtWidgets import QPushButton, QGridLayout, QComboBox, QLabel, QInputDialog, QSizePolicy
 
 from Interface.Windows.Window import Window
 
@@ -17,11 +17,15 @@ class ModeSelectionWindow(Window):
     def CreateInterface(self):
         super().LoadTheme()
 
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
         # Mode Label
         self.ModeLabel = QLabel("PyFifth Mode:")
 
         # Mode Combo Box
         self.ModeComboBox = QComboBox()
+        self.ModeComboBox.setSizePolicy(self.InputsSizePolicy)
         self.ModeComboBox.addItem("Character Sheet")
         self.ModeComboBox.setEditable(False)
 
@@ -37,6 +41,8 @@ class ModeSelectionWindow(Window):
         self.Layout.addWidget(self.ModeComboBox, 0, 1)
         self.Layout.addWidget(self.OpenButton, 1, 0, 1, 2)
         self.Layout.addWidget(self.SetThemeButton, 2, 0, 1, 2)
+        self.Layout.setRowStretch(0, 1)
+        self.Layout.setColumnStretch(1, 1)
         self.Frame.setLayout(self.Layout)
 
     def UpdateWindowTitle(self):

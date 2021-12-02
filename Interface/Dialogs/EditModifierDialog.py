@@ -1,7 +1,7 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QCheckBox, QDialog, QDoubleSpinBox, QGridLayout, QLabel, QMessageBox, QPushButton, QSpinBox
+from PyQt5.QtWidgets import QCheckBox, QDialog, QDoubleSpinBox, QGridLayout, QLabel, QMessageBox, QPushButton, QSizePolicy, QSpinBox
 
 
 class EditModifierDialog(QDialog):
@@ -16,6 +16,9 @@ class EditModifierDialog(QDialog):
         self.StatModifierOriginalState = copy.deepcopy(self.StatModifier)
         self.UnsavedChanges = False
         self.Cancelled = False
+
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Prompt Label
         self.PromptLabel = QLabel("Edit " + StatModifierDescription + ":")
@@ -66,6 +69,7 @@ class EditModifierDialog(QDialog):
         self.StrengthMultiplierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.StrengthMultiplierSpinBox = QDoubleSpinBox()
+        self.StrengthMultiplierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.StrengthMultiplierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.StrengthMultiplierSpinBox.setButtonSymbols(self.StrengthMultiplierSpinBox.NoButtons)
         self.StrengthMultiplierSpinBox.setRange(-1000000000.0, 1000000000.0)
@@ -77,6 +81,7 @@ class EditModifierDialog(QDialog):
         self.StrengthMultiplierRoundUpCheckBox.stateChanged.connect(self.UpdateStatModifier)
 
         self.StrengthMinSpinBox = QSpinBox()
+        self.StrengthMinSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.StrengthMinSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.StrengthMinSpinBox.setButtonSymbols(self.StrengthMinSpinBox.NoButtons)
         self.StrengthMinSpinBox.setRange(-1, 1000000000)
@@ -85,6 +90,7 @@ class EditModifierDialog(QDialog):
         self.StrengthMinSpinBox.valueChanged.connect(self.UpdateStatModifier)
 
         self.StrengthMaxSpinBox = QSpinBox()
+        self.StrengthMaxSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.StrengthMaxSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.StrengthMaxSpinBox.setButtonSymbols(self.StrengthMaxSpinBox.NoButtons)
         self.StrengthMaxSpinBox.setRange(-1, 1000000000)
@@ -99,6 +105,7 @@ class EditModifierDialog(QDialog):
         self.DexterityMultiplierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.DexterityMultiplierSpinBox = QDoubleSpinBox()
+        self.DexterityMultiplierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DexterityMultiplierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.DexterityMultiplierSpinBox.setButtonSymbols(self.DexterityMultiplierSpinBox.NoButtons)
         self.DexterityMultiplierSpinBox.setRange(-1000000000.0, 1000000000.0)
@@ -110,6 +117,7 @@ class EditModifierDialog(QDialog):
         self.DexterityMultiplierRoundUpCheckBox.stateChanged.connect(self.UpdateStatModifier)
 
         self.DexterityMinSpinBox = QSpinBox()
+        self.DexterityMinSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DexterityMinSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.DexterityMinSpinBox.setButtonSymbols(self.DexterityMinSpinBox.NoButtons)
         self.DexterityMinSpinBox.setRange(-1, 1000000000)
@@ -118,6 +126,7 @@ class EditModifierDialog(QDialog):
         self.DexterityMinSpinBox.valueChanged.connect(self.UpdateStatModifier)
 
         self.DexterityMaxSpinBox = QSpinBox()
+        self.DexterityMaxSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DexterityMaxSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.DexterityMaxSpinBox.setButtonSymbols(self.DexterityMaxSpinBox.NoButtons)
         self.DexterityMaxSpinBox.setRange(-1, 1000000000)
@@ -132,6 +141,7 @@ class EditModifierDialog(QDialog):
         self.ConstitutionMultiplierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.ConstitutionMultiplierSpinBox = QDoubleSpinBox()
+        self.ConstitutionMultiplierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionMultiplierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.ConstitutionMultiplierSpinBox.setButtonSymbols(self.ConstitutionMultiplierSpinBox.NoButtons)
         self.ConstitutionMultiplierSpinBox.setRange(-1000000000.0, 1000000000.0)
@@ -143,6 +153,7 @@ class EditModifierDialog(QDialog):
         self.ConstitutionMultiplierRoundUpCheckBox.stateChanged.connect(self.UpdateStatModifier)
 
         self.ConstitutionMinSpinBox = QSpinBox()
+        self.ConstitutionMinSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionMinSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.ConstitutionMinSpinBox.setButtonSymbols(self.ConstitutionMinSpinBox.NoButtons)
         self.ConstitutionMinSpinBox.setRange(-1, 1000000000)
@@ -151,6 +162,7 @@ class EditModifierDialog(QDialog):
         self.ConstitutionMinSpinBox.valueChanged.connect(self.UpdateStatModifier)
 
         self.ConstitutionMaxSpinBox = QSpinBox()
+        self.ConstitutionMaxSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionMaxSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.ConstitutionMaxSpinBox.setButtonSymbols(self.ConstitutionMaxSpinBox.NoButtons)
         self.ConstitutionMaxSpinBox.setRange(-1, 1000000000)
@@ -165,6 +177,7 @@ class EditModifierDialog(QDialog):
         self.IntelligenceMultiplierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.IntelligenceMultiplierSpinBox = QDoubleSpinBox()
+        self.IntelligenceMultiplierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceMultiplierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.IntelligenceMultiplierSpinBox.setButtonSymbols(self.IntelligenceMultiplierSpinBox.NoButtons)
         self.IntelligenceMultiplierSpinBox.setRange(-1000000000.0, 1000000000.0)
@@ -176,6 +189,7 @@ class EditModifierDialog(QDialog):
         self.IntelligenceMultiplierRoundUpCheckBox.stateChanged.connect(self.UpdateStatModifier)
 
         self.IntelligenceMinSpinBox = QSpinBox()
+        self.IntelligenceMinSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceMinSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.IntelligenceMinSpinBox.setButtonSymbols(self.IntelligenceMinSpinBox.NoButtons)
         self.IntelligenceMinSpinBox.setRange(-1, 1000000000)
@@ -184,6 +198,7 @@ class EditModifierDialog(QDialog):
         self.IntelligenceMinSpinBox.valueChanged.connect(self.UpdateStatModifier)
 
         self.IntelligenceMaxSpinBox = QSpinBox()
+        self.IntelligenceMaxSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceMaxSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.IntelligenceMaxSpinBox.setButtonSymbols(self.IntelligenceMaxSpinBox.NoButtons)
         self.IntelligenceMaxSpinBox.setRange(-1, 1000000000)
@@ -198,6 +213,7 @@ class EditModifierDialog(QDialog):
         self.WisdomMultiplierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.WisdomMultiplierSpinBox = QDoubleSpinBox()
+        self.WisdomMultiplierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WisdomMultiplierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.WisdomMultiplierSpinBox.setButtonSymbols(self.WisdomMultiplierSpinBox.NoButtons)
         self.WisdomMultiplierSpinBox.setRange(-1000000000.0, 1000000000.0)
@@ -209,6 +225,7 @@ class EditModifierDialog(QDialog):
         self.WisdomMultiplierRoundUpCheckBox.stateChanged.connect(self.UpdateStatModifier)
 
         self.WisdomMinSpinBox = QSpinBox()
+        self.WisdomMinSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WisdomMinSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.WisdomMinSpinBox.setButtonSymbols(self.WisdomMinSpinBox.NoButtons)
         self.WisdomMinSpinBox.setRange(-1, 1000000000)
@@ -217,6 +234,7 @@ class EditModifierDialog(QDialog):
         self.WisdomMinSpinBox.valueChanged.connect(self.UpdateStatModifier)
 
         self.WisdomMaxSpinBox = QSpinBox()
+        self.WisdomMaxSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WisdomMaxSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.WisdomMaxSpinBox.setButtonSymbols(self.WisdomMaxSpinBox.NoButtons)
         self.WisdomMaxSpinBox.setRange(-1, 1000000000)
@@ -231,6 +249,7 @@ class EditModifierDialog(QDialog):
         self.CharismaMultiplierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.CharismaMultiplierSpinBox = QDoubleSpinBox()
+        self.CharismaMultiplierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CharismaMultiplierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.CharismaMultiplierSpinBox.setButtonSymbols(self.CharismaMultiplierSpinBox.NoButtons)
         self.CharismaMultiplierSpinBox.setRange(-1000000000.0, 1000000000.0)
@@ -242,6 +261,7 @@ class EditModifierDialog(QDialog):
         self.CharismaMultiplierRoundUpCheckBox.stateChanged.connect(self.UpdateStatModifier)
 
         self.CharismaMinSpinBox = QSpinBox()
+        self.CharismaMinSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CharismaMinSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.CharismaMinSpinBox.setButtonSymbols(self.CharismaMinSpinBox.NoButtons)
         self.CharismaMinSpinBox.setRange(-1, 1000000000)
@@ -250,6 +270,7 @@ class EditModifierDialog(QDialog):
         self.CharismaMinSpinBox.valueChanged.connect(self.UpdateStatModifier)
 
         self.CharismaMaxSpinBox = QSpinBox()
+        self.CharismaMaxSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CharismaMaxSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.CharismaMaxSpinBox.setButtonSymbols(self.CharismaMaxSpinBox.NoButtons)
         self.CharismaMaxSpinBox.setRange(-1, 1000000000)
@@ -264,6 +285,7 @@ class EditModifierDialog(QDialog):
         self.ProficiencyMultiplierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.ProficiencyMultiplierSpinBox = QDoubleSpinBox()
+        self.ProficiencyMultiplierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ProficiencyMultiplierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.ProficiencyMultiplierSpinBox.setButtonSymbols(self.ProficiencyMultiplierSpinBox.NoButtons)
         self.ProficiencyMultiplierSpinBox.setRange(-1000000000.0, 1000000000.0)
@@ -275,6 +297,7 @@ class EditModifierDialog(QDialog):
         self.ProficiencyMultiplierRoundUpCheckBox.stateChanged.connect(self.UpdateStatModifier)
 
         self.ProficiencyMinSpinBox = QSpinBox()
+        self.ProficiencyMinSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ProficiencyMinSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.ProficiencyMinSpinBox.setButtonSymbols(self.ProficiencyMinSpinBox.NoButtons)
         self.ProficiencyMinSpinBox.setRange(-1, 1000000000)
@@ -283,6 +306,7 @@ class EditModifierDialog(QDialog):
         self.ProficiencyMinSpinBox.valueChanged.connect(self.UpdateStatModifier)
 
         self.ProficiencyMaxSpinBox = QSpinBox()
+        self.ProficiencyMaxSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ProficiencyMaxSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.ProficiencyMaxSpinBox.setButtonSymbols(self.ProficiencyMaxSpinBox.NoButtons)
         self.ProficiencyMaxSpinBox.setRange(-1, 1000000000)
@@ -298,6 +322,7 @@ class EditModifierDialog(QDialog):
             self.LevelMultiplierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
             self.LevelMultiplierSpinBox = QDoubleSpinBox()
+            self.LevelMultiplierSpinBox.setSizePolicy(self.InputsSizePolicy)
             self.LevelMultiplierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
             self.LevelMultiplierSpinBox.setButtonSymbols(self.LevelMultiplierSpinBox.NoButtons)
             self.LevelMultiplierSpinBox.setRange(-1000000000.0, 1000000000.0)
@@ -309,6 +334,7 @@ class EditModifierDialog(QDialog):
             self.LevelMultiplierRoundUpCheckBox.stateChanged.connect(self.UpdateStatModifier)
 
             self.LevelMinSpinBox = QSpinBox()
+            self.LevelMinSpinBox.setSizePolicy(self.InputsSizePolicy)
             self.LevelMinSpinBox.setAlignment(QtCore.Qt.AlignCenter)
             self.LevelMinSpinBox.setButtonSymbols(self.LevelMinSpinBox.NoButtons)
             self.LevelMinSpinBox.setRange(-1, 1000000000)
@@ -317,6 +343,7 @@ class EditModifierDialog(QDialog):
             self.LevelMinSpinBox.valueChanged.connect(self.UpdateStatModifier)
 
             self.LevelMaxSpinBox = QSpinBox()
+            self.LevelMaxSpinBox.setSizePolicy(self.InputsSizePolicy)
             self.LevelMaxSpinBox.setAlignment(QtCore.Qt.AlignCenter)
             self.LevelMaxSpinBox.setButtonSymbols(self.LevelMaxSpinBox.NoButtons)
             self.LevelMaxSpinBox.setRange(-1, 1000000000)
@@ -332,6 +359,7 @@ class EditModifierDialog(QDialog):
         self.ManualModifierLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.ManualModifierLabel.setMargin(5)
         self.ManualModifierSpinBox = QSpinBox()
+        self.ManualModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ManualModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.ManualModifierSpinBox.setButtonSymbols(self.ManualModifierSpinBox.NoButtons)
         self.ManualModifierSpinBox.setRange(-1000000000, 1000000000)
@@ -360,6 +388,10 @@ class EditModifierDialog(QDialog):
             self.MultipliersLayout.addWidget(RowWidgets[2], Row, 2, QtCore.Qt.AlignCenter)
             self.MultipliersLayout.addWidget(RowWidgets[3], Row, 3)
             self.MultipliersLayout.addWidget(RowWidgets[4], Row, 4)
+        for Row in range(1, len(self.MultipliersList)):
+            self.MultipliersLayout.setRowStretch(Row, 1)
+        for Column in [1, 3, 4]:
+            self.MultipliersLayout.setColumnStretch(Column, 1)
         self.Layout.addLayout(self.MultipliersLayout, 3, 0, 1, 2)
 
         self.Layout.addWidget(self.ManualModifierLabel, 4, 0, 1, 2)
@@ -367,6 +399,8 @@ class EditModifierDialog(QDialog):
 
         self.Layout.addWidget(self.DoneButton, 6, 0)
         self.Layout.addWidget(self.CancelButton, 6, 1)
+
+        self.Layout.setRowStretch(3, 1)
 
         self.setLayout(self.Layout)
 

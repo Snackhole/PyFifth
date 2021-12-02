@@ -342,6 +342,8 @@ class EditMaxHPDialog(QDialog):
         self.MaxHPGainedAtEachLevelLayout.addWidget(self.MaxHPGainedAt20thLevelSpinBox, 5, 7)
         for Row in range(1, 6):
             self.MaxHPGainedAtEachLevelLayout.setRowStretch(Row, 1)
+        for Column in [1, 3, 5, 7]:
+            self.MaxHPGainedAtEachLevelLayout.setColumnStretch(Column, 1)
         self.Layout.addLayout(self.MaxHPGainedAtEachLevelLayout, 1, 0, 1, 2)
 
         self.Layout.addWidget(self.BonusMaxHPPerLevelLabel, 2, 0)

@@ -1,7 +1,7 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QComboBox, QDialog, QPushButton, QGridLayout, QLabel
+from PyQt5.QtWidgets import QComboBox, QDialog, QPushButton, QGridLayout, QLabel, QSizePolicy
 
 
 class AlternateAbilityScoreSkillRollDialog(QDialog):
@@ -21,6 +21,9 @@ class AlternateAbilityScoreSkillRollDialog(QDialog):
         self.AbilityScoreAbbreviations["Wisdom"] = "WIS"
         self.AbilityScoreAbbreviations["Charisma"] = "CHA"
 
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
         # Prompt Label
         self.PromptLabel = QLabel("Roll a skill with an alternative ability score:")
         self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
@@ -28,6 +31,7 @@ class AlternateAbilityScoreSkillRollDialog(QDialog):
         # Skills
         self.SkillsLabel = QLabel("Skill:")
         self.SkillsComboBox = QComboBox()
+        self.SkillsComboBox.setSizePolicy(self.InputsSizePolicy)
         self.SkillsComboBox.setEditable(False)
         self.SkillsComboBox.addItems(self.CharacterWindow.PlayerCharacter.Skills)
         self.SkillsComboBox.currentTextChanged.connect(self.UpdateAbilityScoresComboBox)
@@ -35,6 +39,7 @@ class AlternateAbilityScoreSkillRollDialog(QDialog):
         # Ability Scores
         self.AbilityScoresLabel = QLabel("Ability Score:")
         self.AbilityScoresComboBox = QComboBox()
+        self.AbilityScoresComboBox.setSizePolicy(self.InputsSizePolicy)
         self.AbilityScoresComboBox.setEditable(False)
 
         # Buttons
@@ -54,6 +59,9 @@ class AlternateAbilityScoreSkillRollDialog(QDialog):
         self.ButtonsLayout.addWidget(self.RollButton, 0, 0)
         self.ButtonsLayout.addWidget(self.CancelButton, 0, 1)
         self.Layout.addLayout(self.ButtonsLayout, 3, 0, 1, 2)
+        for Row in [1, 2]:
+            self.Layout.setRowStretch(Row, 1)
+        self.Layout.setColumnStretch(1, 1)
         self.setLayout(self.Layout)
 
         # Set Window Title and Icon
