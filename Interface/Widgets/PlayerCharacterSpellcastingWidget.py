@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QFrame, QLabel, QSizePolicy, QGridLayout, QSpinBox, 
 from Interface.Dialogs.SpendOrRestoreSpellPointsDialog import SpendOrRestoreSpellPointsDialog
 from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
+from Interface.Widgets.SpellListTreeWidget import SpellListTreeWidget
 from Interface.Widgets.ToggleButtons import ConcentratingButton
 
 
@@ -38,6 +39,9 @@ class PlayerCharacterSpellcastingWidget(QFrame):
 
         # Create Spell Points
         self.CreateSpellPoints()
+
+        # Create Spell List
+        self.CreateSpellList()
 
         # Create and Set Layout
         self.CreateAndSetLayout()
@@ -299,6 +303,29 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         self.SpellPointsRestoreButton = AddButton(self.RestoreSpellPoints, "Restore Spell Points")
         self.SpellPointsRestoreButton.setSizePolicy(self.InputsSizePolicy)
 
+    def CreateSpellList(self):
+        # Spell List Label
+        self.SpellListLabel = QLabel("Spell List")
+        self.SpellListLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellListLabel.setStyleSheet(self.SectionLabelStyle)
+        self.SpellListLabel.setMargin(self.HeaderLabelMargin)
+
+        # Spells Tree Widget
+        self.SpellListTreeWidget = SpellListTreeWidget(self.CharacterWindow)
+        self.SpellListTreeWidget.itemActivated.connect(self.EditSpell)
+
+        # Buttons
+        self.AddSpellButton = AddButton(self.AddSpell, "Add Spell")
+        self.AddSpellButton.setSizePolicy(self.InputsSizePolicy)
+        self.DeleteSpellButton = DeleteButton(self.DeleteSpell, "Delete Spell")
+        self.DeleteSpellButton.setSizePolicy(self.InputsSizePolicy)
+        self.EditSpellButton = EditButton(self.EditSpell, "Edit Spell")
+        self.EditSpellButton.setSizePolicy(self.InputsSizePolicy)
+        self.MoveSpellUpButton = MoveUpButton(self.MoveSpellUp, "Move Spell Up")
+        self.MoveSpellUpButton.setSizePolicy(self.InputsSizePolicy)
+        self.MoveSpellDownButton = MoveDownButton(self.MoveSpellDown, "Move Spell Down")
+        self.MoveSpellDownButton.setSizePolicy(self.InputsSizePolicy)
+
     def CreateAndSetLayout(self):
         # Create Layout
         self.Layout = QGridLayout()
@@ -372,6 +399,22 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         self.SpellNotesLayout.setRowStretch(1, 1)
         self.Layout.addLayout(self.SpellNotesLayout, 3, 0, 1, 2)
 
+        # Spell List
+        self.SpellListLayout = QGridLayout()
+        self.SpellListLayout.addWidget(self.SpellListLabel, 0, 0, 1, 5)
+        self.SpellListLayout.addWidget(self.AddSpellButton, 1, 0)
+        self.SpellListLayout.addWidget(self.DeleteSpellButton, 1, 1)
+        self.SpellListLayout.addWidget(self.EditSpellButton, 1, 2)
+        self.SpellListLayout.addWidget(self.MoveSpellUpButton, 1, 3)
+        self.SpellListLayout.addWidget(self.MoveSpellDownButton, 1, 4)
+        self.SpellListLayout.addWidget(self.SpellListTreeWidget, 2, 0, 1, 5)
+        self.SpellListLayout.setRowStretch(2, 1)
+        self.Layout.addLayout(self.SpellListLayout, 0, 2, 4, 1)
+
+        # Layout Stretching
+        self.Layout.setRowStretch(3, 1)
+        self.Layout.setColumnStretch(2, 1)
+
         # Set Layout
         self.setLayout(self.Layout)
 
@@ -399,3 +442,18 @@ class PlayerCharacterSpellcastingWidget(QFrame):
             self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = True
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)
             self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = False
+
+    def AddSpell(self):
+        pass
+
+    def DeleteSpell(self):
+        pass
+
+    def EditSpell(self):
+        pass
+
+    def MoveSpellUp(self):
+        pass
+
+    def MoveSpellDown(self):
+        pass
