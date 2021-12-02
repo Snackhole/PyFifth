@@ -30,6 +30,7 @@ class SpendOrRestoreSpellPointsDialog(QDialog):
         self.SpellSlotLevelLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.SpellSlotLevelComboBox = QComboBox()
+        self.SpellSlotLevelComboBox.setSizePolicy(self.InputsSizePolicy)
         self.SpellSlotLevelComboBox.addItems(self.SpellLevels)
         self.SpellSlotLevelComboBox.setEditable(False)
 
@@ -73,6 +74,9 @@ class SpendOrRestoreSpellPointsDialog(QDialog):
         self.ButtonsLayout.addWidget(self.SubmitButton, 0, 0)
         self.ButtonsLayout.addWidget(self.CancelButton, 0, 1)
         self.Layout.addLayout(self.ButtonsLayout, 4, 0, 1, 2)
+        for Row in [1, 2, 3]:
+            self.Layout.setRowStretch(Row, 1)
+        self.Layout.setColumnStretch(1, 1)
         self.setLayout(self.Layout)
 
         # Set Window Title and Icon
