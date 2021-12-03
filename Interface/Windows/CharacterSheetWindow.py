@@ -622,6 +622,15 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacterSpellcastingWidgetInst.SpellPointsMaxSpinBox.setValue(0)
             self.PlayerCharacterSpellcastingWidgetInst.SpellPointsMaxSpinBox.setSpecialValueText("N/A")
 
+        # Spell List
+        CurrentSelection = self.PlayerCharacterSpellcastingWidgetInst.SpellListTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentSelectionIndex = CurrentSelection[0].Index
+            self.PlayerCharacterSpellcastingWidgetInst.SpellListTreeWidget.FillFromSpellList()
+            self.PlayerCharacterSpellcastingWidgetInst.SpellListTreeWidget.SelectIndex(CurrentSelectionIndex)
+        else:
+            self.PlayerCharacterSpellcastingWidgetInst.SpellListTreeWidget.FillFromSpellList()
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
