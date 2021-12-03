@@ -27,3 +27,17 @@ class ConcentratingButton(QPushButton):
         self.setCheckable(True)
         self.setStyleSheet("QPushButton {font-size: 16pt;}\nQPushButton:checked {background-color: darkgreen;}")
         self.clicked.connect(lambda: self.CharacterWindow.UpdateStat("Concentrating", self.isChecked()))
+
+
+class PreparedButton(QPushButton):
+    def __init__(self, Slot):
+        # Initialize
+        super().__init__("Prepared")
+
+        # Store Parameters
+        self.Slot = Slot
+
+        # Configure
+        self.setCheckable(True)
+        self.setStyleSheet("QPushButton {font-size: 16pt;}\nQPushButton:checked {background-color: darkgreen;}")
+        self.clicked.connect(self.Slot)
