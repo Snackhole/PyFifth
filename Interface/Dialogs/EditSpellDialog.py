@@ -176,7 +176,6 @@ class EditSpellDialog(QDialog):
             self.close()
 
     def Cancel(self):
-        print(self.ComponentsTextEdit.height())
         self.Spell.update(self.SpellOriginalState)
         self.UnsavedChanges = False
         self.Cancelled = True
