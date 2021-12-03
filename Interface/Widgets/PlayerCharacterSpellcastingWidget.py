@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTextEdit
+from PyQt5.QtWidgets import QFrame, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTextEdit, QMessageBox
 
+from Interface.Dialogs.EditSpellDialog import EditSpellDialog
 from Interface.Dialogs.SpendOrRestoreSpellPointsDialog import SpendOrRestoreSpellPointsDialog
 from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
@@ -444,16 +445,49 @@ class PlayerCharacterSpellcastingWidget(QFrame):
             self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = False
 
     def AddSpell(self):
-        pass
+        SpellIndex = self.CharacterWindow.PlayerCharacter.AddSpell()
+        self.CharacterWindow.UpdateDisplay()
+        EditSpellDialogInst = EditSpellDialog(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Spell List"], SpellIndex, AddMode=True)
+        if EditSpellDialogInst.Cancelled:
+            self.CharacterWindow.PlayerCharacter.DeleteLastSpell()
+            self.CharacterWindow.UpdateDisplay()
+        else:
+            self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+            self.SpellListTreeWidget.SelectIndex(SpellIndex)
 
     def DeleteSpell(self):
-        pass
+        CurrentSelection = self.SpellListTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this spell?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+                CurrentSpell = CurrentSelection[0]
+                CurrentSpellIndex = CurrentSpell.Index
+                self.CharacterWindow.PlayerCharacter.DeleteSpell(CurrentSpellIndex)
+                self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+                SpellListLength = len(self.CharacterWindow.PlayerCharacter.Stats["Spell List"])
+                if SpellListLength > 0:
+                    self.SpellListTreeWidget.SelectIndex(CurrentSpellIndex if CurrentSpellIndex < SpellListLength else SpellListLength - 1)
 
     def EditSpell(self):
-        pass
+        CurrentSelection = self.SpellListTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentSpell = CurrentSelection[0]
+            CurrentSpellIndex = CurrentSpell.Index
+            EditSpellDialogInst = EditSpellDialog(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Spell List"], CurrentSpellIndex)
+            if EditSpellDialogInst.UnsavedChanges:
+                self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+                self.SpellListTreeWidget.SelectIndex(CurrentSpellIndex)
 
     def MoveSpellUp(self):
-        pass
+        self.MoveSpell(-1)
 
     def MoveSpellDown(self):
-        pass
+        self.MoveSpell(1)
+
+    def MoveSpell(self, Delta):
+        CurrentSelection = self.SpellListTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentSpell = CurrentSelection[0]
+            CurrentSpellIndex = CurrentSpell.Index
+            if self.CharacterWindow.PlayerCharacter.MoveSpell(CurrentSpellIndex, Delta):
+                self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+                self.SpellListTreeWidget.SelectIndex(CurrentSpellIndex + Delta)
