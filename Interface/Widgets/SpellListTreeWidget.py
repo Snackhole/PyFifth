@@ -35,12 +35,9 @@ class SpellListWidgetItem(QTreeWidgetItem):
         self.Index = Index
         self.Spell = Spell
 
+        # Variables
+        self.Text = ("(P) " if self.Spell["Spell Prepared"] else "" + self.Spell["Spell Level"]) + self.Spell["Spell Name"] + ("; " + self.Spell["Spell Level"] if self.Spell["Spell Level"] != "" else "")
+
         # Set Text
-        self.setText(0, self.Spell["Spell Name"])
-        self.setToolTip(0, self.Spell["Spell Name"])
-
-        # Set Check State
-        self.setCheckState(self.Spell["Spell Prepared"])
-
-        # Check State Read Only
-        self.setFlags(QtCore.Qt.ItemIsSelectable)
+        self.setText(0, self.Text)
+        self.setToolTip(0, self.Text)
