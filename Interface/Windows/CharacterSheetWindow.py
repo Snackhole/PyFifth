@@ -184,6 +184,33 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.QuitAction = QAction("Quit")
         self.QuitAction.triggered.connect(self.close)
 
+        self.ViewPreviousTabAction = QAction("Previous Tab")
+        self.ViewPreviousTabAction.triggered.connect(self.ViewPreviousTab)
+
+        self.ViewNextTabAction = QAction("Next Tab")
+        self.ViewNextTabAction.triggered.connect(self.ViewNextTab)
+
+        self.ViewAbilitiesAndSkillsTabAction = QAction("Abilities and Skills Tab")
+        self.ViewAbilitiesAndSkillsTabAction.triggered.connect(lambda: self.ViewTab(0))
+
+        self.ViewCombatAndFeaturesTabAction = QAction("Combat and Features Tab")
+        self.ViewCombatAndFeaturesTabAction.triggered.connect(lambda: self.ViewTab(1))
+
+        self.ViewSpellcastingTabAction = QAction("Spellcasting Tab")
+        self.ViewSpellcastingTabAction.triggered.connect(lambda: self.ViewTab(2))
+
+        self.ViewInventoryTabAction = QAction("Inventory Tab")
+        self.ViewInventoryTabAction.triggered.connect(lambda: self.ViewTab(3))
+
+        self.ViewNotesTabAction = QAction("Notes Tab")
+        self.ViewNotesTabAction.triggered.connect(lambda: self.ViewTab(4))
+
+        self.ViewPersonalityAndBackstoryTabAction = QAction("Personality and Backstory Tab")
+        self.ViewPersonalityAndBackstoryTabAction.triggered.connect(lambda: self.ViewTab(5))
+
+        self.ViewPortraitTabAction = QAction("Portrait Tab")
+        self.ViewPortraitTabAction.triggered.connect(lambda: self.ViewTab(6))
+
         self.SpellcastingEnabledAction = QAction("Spellcasting Enabled")
         self.SpellcastingEnabledAction.setCheckable(True)
         self.SpellcastingEnabledAction.setChecked(True)
@@ -244,6 +271,17 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction(self.QuitAction)
 
+        self.ViewMenu = self.MenuBar.addMenu("View")
+        self.ViewMenu.addAction(self.ViewPreviousTabAction)
+        self.ViewMenu.addAction(self.ViewNextTabAction)
+        self.ViewMenu.addAction(self.ViewAbilitiesAndSkillsTabAction)
+        self.ViewMenu.addAction(self.ViewCombatAndFeaturesTabAction)
+        self.ViewMenu.addAction(self.ViewSpellcastingTabAction)
+        self.ViewMenu.addAction(self.ViewInventoryTabAction)
+        self.ViewMenu.addAction(self.ViewNotesTabAction)
+        self.ViewMenu.addAction(self.ViewPersonalityAndBackstoryTabAction)
+        self.ViewMenu.addAction(self.ViewPortraitTabAction)
+
         self.CharacterSettingsMenu = self.MenuBar.addMenu("Character Settings")
         self.CharacterSettingsMenu.addAction(self.SpellcastingEnabledAction)
         self.CharacterSettingsMenu.addAction(self.ConcentrationCheckPromptEnabledAction)
@@ -269,6 +307,15 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.DefaultKeybindings["SaveAction"] = "Ctrl+S"
         self.DefaultKeybindings["SaveAsAction"] = "Ctrl+Shift+S"
         self.DefaultKeybindings["QuitAction"] = "Ctrl+Q"
+        self.DefaultKeybindings["ViewPreviousTabAction"] = "Ctrl+Shift+Tab"
+        self.DefaultKeybindings["ViewNextTabAction"] = "Ctrl+Tab"
+        self.DefaultKeybindings["ViewAbilitiesAndSkillsTabAction"] = "Ctrl+1"
+        self.DefaultKeybindings["ViewCombatAndFeaturesTabAction"] = "Ctrl+2"
+        self.DefaultKeybindings["ViewSpellcastingTabAction"] = "Ctrl+3"
+        self.DefaultKeybindings["ViewInventoryTabAction"] = "Ctrl+4"
+        self.DefaultKeybindings["ViewNotesTabAction"] = "Ctrl+5"
+        self.DefaultKeybindings["ViewPersonalityAndBackstoryTabAction"] = "Ctrl+6"
+        self.DefaultKeybindings["ViewPortraitTabAction"] = "Ctrl+7"
         self.DefaultKeybindings["RollAction"] = "Ctrl+R"
         self.DefaultKeybindings["RollPresetRollAction"] = "Ctrl+Shift+R"
         self.DefaultKeybindings["AverageRollAction"] = "Ctrl+Alt+R"
@@ -437,6 +484,36 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacter.Stats["Dice Roller"].ClearLog()
             self.UpdateUnsavedChangesFlag(True)
 
+    # View Methods
+    def ViewTab(self, Index):
+        self.StatsTabWidget.setCurrentIndex(Index)
+
+    def ViewPreviousTab(self):
+        CurrentIndex = self.StatsTabWidget.currentIndex()
+        LastIndex = self.StatsTabWidget.count() - 1
+        if CurrentIndex == 0:
+            TargetIndex = LastIndex
+        else:
+            TargetIndex = CurrentIndex - 1
+        if TargetIndex == 2 and not self.PlayerCharacter.Stats["Spellcasting Enabled"]:
+            TargetIndex = 1
+        if TargetIndex == 6 and not self.PlayerCharacter.Stats["Portrait Enabled"]:
+            TargetIndex = 5
+        self.ViewTab(TargetIndex)
+
+    def ViewNextTab(self):
+        CurrentIndex = self.StatsTabWidget.currentIndex()
+        LastIndex = self.StatsTabWidget.count() - 1
+        if CurrentIndex == LastIndex:
+            TargetIndex = 0
+        else:
+            TargetIndex = CurrentIndex + 1
+        if TargetIndex == 2 and not self.PlayerCharacter.Stats["Spellcasting Enabled"]:
+            TargetIndex = 3
+        if TargetIndex == 6 and not self.PlayerCharacter.Stats["Portrait Enabled"]:
+            TargetIndex = 0
+        self.ViewTab(TargetIndex)
+
     # Save and Open Methods
     def NewActionTriggered(self):
         if self.New(self.PlayerCharacter):
@@ -502,12 +579,14 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
         # Spellcasting Enabled
         self.StatsTabWidget.setTabVisible(2, self.PlayerCharacter.Stats["Spellcasting Enabled"])
+        self.ViewSpellcastingTabAction.setEnabled(self.PlayerCharacter.Stats["Spellcasting Enabled"])
 
         # Spell Points Enabled
         self.PlayerCharacterSpellcastingWidgetInst.SetSpellPointsEnabled(self.PlayerCharacter.Stats["Spell Points Enabled"])
 
         # Portrait Enabled
         self.StatsTabWidget.setTabVisible(6, self.PlayerCharacter.Stats["Portrait Enabled"])
+        self.ViewPortraitTabAction.setEnabled(self.PlayerCharacter.Stats["Portrait Enabled"])
 
         # Abilities and Saving Throws
         self.PlayerCharacterAbilitiesAndSkillsWidgetInst.StrengthTotalLineEdit.setText(str(self.DerivedStats["Strength Total Score"]))
