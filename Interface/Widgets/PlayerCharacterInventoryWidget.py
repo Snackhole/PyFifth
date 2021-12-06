@@ -33,6 +33,9 @@ class PlayerCharacterInventoryWidget(QFrame):
         # Create Coins
         self.CreateCoins()
 
+        # Create Food and Water
+        self.CreateFoodAndWater()
+
         # Create and Set Layout
         self.CreateAndSetLayout()
 
@@ -232,6 +235,67 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.CoinLoadSpinBox.setRange(0, 1000000000)
         self.CoinLoadSpinBox.setReadOnly(True)
 
+    def CreateFoodAndWater(self):
+        # Food and Water Label
+        self.FoodAndWaterLabel = QLabel("Food and Water")
+        self.FoodAndWaterLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.FoodAndWaterLabel.setStyleSheet(self.SectionLabelStyle)
+        self.FoodAndWaterLabel.setMargin(self.HeaderLabelMargin)
+
+        # Header Labels
+        self.FoodAndWaterLoadLabel = QLabel("Load (lbs.)")
+        self.FoodAndWaterLoadLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.FoodAndWaterLoadLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.FoodAndWaterLoadLabel.setMargin(5)
+        self.FoodAndWaterDaysLabel = QLabel("Days")
+        self.FoodAndWaterDaysLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.FoodAndWaterDaysLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.FoodAndWaterDaysLabel.setMargin(5)
+
+        # Tags Labels
+        self.FoodLabel = QLabel("Food")
+        self.FoodLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.FoodLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.FoodLabel.setMargin(5)
+        self.WaterLabel = QLabel("Water")
+        self.WaterLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.WaterLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.WaterLabel.setMargin(5)
+
+        # Loads Spin Boxes
+        self.FoodLoadSpinBox = QDoubleSpinBox()
+        self.FoodLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.FoodLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.FoodLoadSpinBox.setButtonSymbols(self.FoodLoadSpinBox.NoButtons)
+        self.FoodLoadSpinBox.setRange(0, 1000000000)
+        self.FoodLoadSpinBox.setReadOnly(True)
+        self.WaterLoadSpinBox = QDoubleSpinBox()
+        self.WaterLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.WaterLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.WaterLoadSpinBox.setButtonSymbols(self.WaterLoadSpinBox.NoButtons)
+        self.WaterLoadSpinBox.setRange(0, 1000000000)
+        self.WaterLoadSpinBox.setReadOnly(True)
+
+        # Days Spin Boxes
+        self.FoodDaysSpinBox = QDoubleSpinBox()
+        self.FoodDaysSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.FoodDaysSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.FoodDaysSpinBox.setButtonSymbols(self.FoodDaysSpinBox.NoButtons)
+        self.FoodDaysSpinBox.setRange(0, 1000000000)
+        self.FoodDaysSpinBox.setReadOnly(True)
+        self.WaterDaysSpinBox = QDoubleSpinBox()
+        self.WaterDaysSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.WaterDaysSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.WaterDaysSpinBox.setButtonSymbols(self.WaterDaysSpinBox.NoButtons)
+        self.WaterDaysSpinBox.setRange(0, 1000000000)
+        self.WaterDaysSpinBox.setReadOnly(True)
+
+        # Days Buttons
+        self.FoodDaysEditButton = EditButton(self.EditFoodConsumptionRate, "Edit Food Consumption Rate")
+        self.FoodDaysEditButton.setSizePolicy(self.InputsSizePolicy)
+        self.WaterDaysEditButton = EditButton(self.EditWaterConsumptionRate, "Edit Water Consumption Rate")
+        self.WaterDaysEditButton.setSizePolicy(self.InputsSizePolicy)
+
     def CreateAndSetLayout(self):
         # Create Layout
         self.Layout = QGridLayout()
@@ -297,6 +361,23 @@ class PlayerCharacterInventoryWidget(QFrame):
             self.CoinsLayout.setRowStretch(Row, 1)
         self.Layout.addLayout(self.CoinsLayout, 0, 2)
 
+        # Food and Water
+        self.FoodAndWaterLayout = QGridLayout()
+        self.FoodAndWaterLayout.addWidget(self.FoodAndWaterLabel, 0, 0, 1, 4)
+        self.FoodAndWaterLayout.addWidget(self.FoodAndWaterLoadLabel, 1, 1)
+        self.FoodAndWaterLayout.addWidget(self.FoodAndWaterDaysLabel, 1, 2, 1, 2)
+        self.FoodAndWaterLayout.addWidget(self.FoodLabel, 2, 0)
+        self.FoodAndWaterLayout.addWidget(self.FoodLoadSpinBox, 2, 1)
+        self.FoodAndWaterLayout.addWidget(self.FoodDaysSpinBox, 2, 2)
+        self.FoodAndWaterLayout.addWidget(self.FoodDaysEditButton, 2, 3)
+        self.FoodAndWaterLayout.addWidget(self.WaterLabel, 3, 0)
+        self.FoodAndWaterLayout.addWidget(self.WaterLoadSpinBox, 3, 1)
+        self.FoodAndWaterLayout.addWidget(self.WaterDaysSpinBox, 3, 2)
+        self.FoodAndWaterLayout.addWidget(self.WaterDaysEditButton, 3, 3)
+        for Row in range(2, 4):
+            self.FoodAndWaterLayout.setRowStretch(Row, 1)
+        self.Layout.addLayout(self.FoodAndWaterLayout, 0, 3)
+
         # Layout Stretch
         self.Layout.setColumnStretch(0, 1)
         self.Layout.setRowStretch(1, 1)
@@ -307,8 +388,15 @@ class PlayerCharacterInventoryWidget(QFrame):
     def EditBonusCarryingCapacityStatModifier(self):
         self.CharacterWindow.EditStatModifier(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Bonus Carrying Capacity Stat Modifier"], "Bonus Carrying Capacity Stat Modifier")
 
+    # TODO dialogs for buttons
     def GainCoins(self):
         pass
 
     def SpendCoins(self):
+        pass
+
+    def EditFoodConsumptionRate(self):
+        pass
+
+    def EditWaterConsumptionRate(self):
         pass

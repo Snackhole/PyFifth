@@ -730,6 +730,12 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.PlayerCharacterInventoryWidgetInst.CoinValueSpinBox.setValue(self.DerivedStats["Value of Coins"])
         self.PlayerCharacterInventoryWidgetInst.CoinLoadSpinBox.setValue(self.DerivedStats["Load of Coins"])
 
+        # Food and Water
+        self.PlayerCharacterInventoryWidgetInst.FoodLoadSpinBox.setValue(self.DerivedStats["Item Loads"]["Food"])
+        self.PlayerCharacterInventoryWidgetInst.FoodDaysSpinBox.setValue(self.DerivedStats["Days of Food"])
+        self.PlayerCharacterInventoryWidgetInst.WaterLoadSpinBox.setValue(self.DerivedStats["Item Loads"]["Water"])
+        self.PlayerCharacterInventoryWidgetInst.WaterDaysSpinBox.setValue(self.DerivedStats["Days of Water"])
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
