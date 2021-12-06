@@ -10,10 +10,10 @@ class SpellListTreeWidget(QTreeWidget):
         self.CharacterWindow = CharacterWindow
 
         # Header Setup
-        self.setHeaderHidden(True)
         self.setRootIsDecorated(False)
-        self.header().setStretchLastSection(False)
         self.header().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.setColumnCount(3)
+        self.setHeaderLabels(["Prep.", "Name", "Level"])
 
     def FillFromSpellList(self):
         self.clear()
@@ -36,8 +36,15 @@ class SpellListWidgetItem(QTreeWidgetItem):
         self.Spell = Spell
 
         # Variables
-        self.Text = ("(P) " if self.Spell["Spell Prepared"] else "" + self.Spell["Spell Level"]) + self.Spell["Spell Name"] + ("; " + self.Spell["Spell Level"] if self.Spell["Spell Level"] != "" else "")
+        self.PreparedText = "\u2713" if self.Spell["Spell Prepared"] else ""
+        self.NameText = self.Spell["Spell Name"]
+        self.LevelText = self.Spell["Spell Level"] if self.Spell["Spell Level"] != "" else ""
 
         # Set Text
-        self.setText(0, self.Text)
-        self.setToolTip(0, self.Text)
+        self.setText(0, self.PreparedText)
+        self.setTextAlignment(0, QtCore.Qt.AlignCenter)
+        self.setToolTip(0, self.PreparedText)
+        self.setText(1, self.NameText)
+        self.setToolTip(1, self.NameText)
+        self.setText(2, self.LevelText)
+        self.setToolTip(2, self.LevelText)
