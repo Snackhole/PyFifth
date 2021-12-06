@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDoubleSpinBox, QFrame, QGridLayout, QInputDialog, QLabel, QSizePolicy, QSpinBox
 
+from Interface.Dialogs.GainCoinsDialog import GainCoinsDialog
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton
 
 
@@ -388,10 +389,16 @@ class PlayerCharacterInventoryWidget(QFrame):
     def EditBonusCarryingCapacityStatModifier(self):
         self.CharacterWindow.EditStatModifier(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Bonus Carrying Capacity Stat Modifier"], "Bonus Carrying Capacity Stat Modifier")
 
-    # TODO dialogs for buttons
     def GainCoins(self):
-        pass
+        GainCoinsDialogInst = GainCoinsDialog(self.CharacterWindow)
+        if GainCoinsDialogInst.Submitted:
+            self.CPSpinBox.setValue(self.CharacterWindow.PlayerCharacter.Stats["Coins"]["CP"] + GainCoinsDialogInst.GainedCoins["CP"])
+            self.SPSpinBox.setValue(self.CharacterWindow.PlayerCharacter.Stats["Coins"]["SP"] + GainCoinsDialogInst.GainedCoins["SP"])
+            self.EPSpinBox.setValue(self.CharacterWindow.PlayerCharacter.Stats["Coins"]["EP"] + GainCoinsDialogInst.GainedCoins["EP"])
+            self.GPSpinBox.setValue(self.CharacterWindow.PlayerCharacter.Stats["Coins"]["GP"] + GainCoinsDialogInst.GainedCoins["GP"])
+            self.PPSpinBox.setValue(self.CharacterWindow.PlayerCharacter.Stats["Coins"]["PP"] + GainCoinsDialogInst.GainedCoins["PP"])
 
+    # TODO dialog for spending coins
     def SpendCoins(self):
         pass
 
