@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDoubleSpinBox, QFrame, QGridLayout, QLabel, QSizePolicy, QSpinBox
+from PyQt5.QtWidgets import QDoubleSpinBox, QFrame, QGridLayout, QInputDialog, QLabel, QSizePolicy, QSpinBox
 
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton
 
@@ -291,9 +291,9 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.WaterDaysSpinBox.setReadOnly(True)
 
         # Days Buttons
-        self.FoodDaysEditButton = EditButton(self.EditFoodConsumptionRate, "Edit Food Consumption Rate")
+        self.FoodDaysEditButton = EditButton(lambda: self.EditConsumptionRate("Food"), "Edit Food Consumption Rate")
         self.FoodDaysEditButton.setSizePolicy(self.InputsSizePolicy)
-        self.WaterDaysEditButton = EditButton(self.EditWaterConsumptionRate, "Edit Water Consumption Rate")
+        self.WaterDaysEditButton = EditButton(lambda: self.EditConsumptionRate("Water"), "Edit Water Consumption Rate")
         self.WaterDaysEditButton.setSizePolicy(self.InputsSizePolicy)
 
     def CreateAndSetLayout(self):
@@ -395,8 +395,7 @@ class PlayerCharacterInventoryWidget(QFrame):
     def SpendCoins(self):
         pass
 
-    def EditFoodConsumptionRate(self):
-        pass
-
-    def EditWaterConsumptionRate(self):
-        pass
+    def EditConsumptionRate(self, Consumed):
+        ConsumedRate, OK = QInputDialog.getDouble(self.CharacterWindow, "Edit " + Consumed + " Consumption Rate", Consumed + " consumption rate:", self.CharacterWindow.PlayerCharacter.Stats[Consumed + " Consumption Rate"], 0, 1000000000)
+        if OK:
+            self.CharacterWindow.UpdateStat(Consumed + " Consumption Rate", ConsumedRate)

@@ -406,8 +406,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
     def SetCritMinimumActionTriggered(self):
         CritMin, OK = QInputDialog.getInt(self, "Set Crit Minimum", "Set crit minimum to:", self.PlayerCharacter.Stats["Crit Minimum"], 1, 20)
         if OK:
-            self.PlayerCharacter.Stats["Crit Minimum"] = CritMin
-            self.UpdateUnsavedChangesFlag(True)
+            self.UpdateStat("Crit Minimum", CritMin)
 
     def AddPresetRoll(self):
         PresetRollIndex = self.PlayerCharacter.Stats["Dice Roller"].AddPresetRoll()
