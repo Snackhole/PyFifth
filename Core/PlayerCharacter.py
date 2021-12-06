@@ -307,7 +307,7 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["Spell List"] = []
 
         # Carrying Capacity
-        self.Stats["Carrying Capacity Stat Modifier"] = self.CreateStatModifier()
+        self.Stats["Bonus Carrying Capacity Stat Modifier"] = self.CreateStatModifier()
 
         # Inventory
         self.Stats["Inventory"] = []
@@ -467,7 +467,7 @@ class PlayerCharacter(Character, SerializableMixin):
             DerivedStats["Max Spell Points"] = None
 
         # Carrying Capacity
-        DerivedStats["Carrying Capacity"] = (15 * DerivedStats["Strength Total Score"]) + self.CalculateStatModifier(self.Stats["Carrying Capacity Stat Modifier"])
+        DerivedStats["Carrying Capacity"] = (15 * DerivedStats["Strength Total Score"]) + self.CalculateStatModifier(self.Stats["Bonus Carrying Capacity Stat Modifier"])
 
         # Coin Counts
         CPCount = Decimal(self.Stats["Coins"]["CP"])

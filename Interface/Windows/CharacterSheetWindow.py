@@ -13,6 +13,7 @@ from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Widgets.PlayerCharacterAbilitiesAndSkillsWidget import PlayerCharacterAbilitiesAndSkillsWidget
 from Interface.Widgets.PlayerCharacterCombatAndFeaturesWidget import PlayerCharacterCombatAndFeaturesWidget
+from Interface.Widgets.PlayerCharacterInventoryWidget import PlayerCharacterInventoryWidget
 from Interface.Widgets.PlayerCharacterSpellcastingWidget import PlayerCharacterSpellcastingWidget
 from Interface.Widgets.ToggleButtons import InspirationButton
 from Interface.Windows.Window import Window
@@ -96,10 +97,10 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.PlayerCharacterCombatAndFeaturesWidgetInst = PlayerCharacterCombatAndFeaturesWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterCombatAndFeaturesWidgetInst, "Combat and Features")
         self.PlayerCharacterSpellcastingWidgetInst = PlayerCharacterSpellcastingWidget(self)
-        # TODO:  Replace QFrames with widgets
         self.StatsTabWidget.addTab(self.PlayerCharacterSpellcastingWidgetInst, "Spellcasting")
-        self.PlayerCharacterInventoryWidgetInst = QFrame()
+        self.PlayerCharacterInventoryWidgetInst = PlayerCharacterInventoryWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterInventoryWidgetInst, "Inventory")
+        # TODO:  Replace QFrames with widgets
         self.PlayerCharacterNotesWidgetInst = QFrame()
         self.StatsTabWidget.addTab(self.PlayerCharacterNotesWidgetInst, "Notes")
         self.PlayerCharacterPersonalityAndBackstoryWidgetInst = QFrame()
@@ -709,6 +710,23 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacterSpellcastingWidgetInst.SpellListTreeWidget.SelectIndex(CurrentSelectionIndex)
         else:
             self.PlayerCharacterSpellcastingWidgetInst.SpellListTreeWidget.FillFromSpellList()
+
+        # Carrying Capacity
+        self.PlayerCharacterInventoryWidgetInst.CarryingCapacitySpinBox.setValue(self.DerivedStats["Carrying Capacity"])
+
+        # Loads and Values
+        self.PlayerCharacterInventoryWidgetInst.TotalLoadSpinBox.setValue(self.DerivedStats["Item Loads"]["Total"])
+        self.PlayerCharacterInventoryWidgetInst.GearLoadSpinBox.setValue(self.DerivedStats["Item Loads"]["Gear"])
+        self.PlayerCharacterInventoryWidgetInst.TreasureLoadSpinBox.setValue(self.DerivedStats["Item Loads"]["Treasure"])
+        self.PlayerCharacterInventoryWidgetInst.MiscLoadSpinBox.setValue(self.DerivedStats["Item Loads"]["Misc."])
+        self.PlayerCharacterInventoryWidgetInst.TotalValueSpinBox.setValue(self.DerivedStats["Item Values"]["Total"])
+        self.PlayerCharacterInventoryWidgetInst.GearValueSpinBox.setValue(self.DerivedStats["Item Values"]["Gear"])
+        self.PlayerCharacterInventoryWidgetInst.TreasureValueSpinBox.setValue(self.DerivedStats["Item Values"]["Treasure"])
+        self.PlayerCharacterInventoryWidgetInst.MiscValueSpinBox.setValue(self.DerivedStats["Item Values"]["Misc."])
+        if self.DerivedStats["Item Loads"]["Total"] > self.DerivedStats["Carrying Capacity"]:
+            self.PlayerCharacterInventoryWidgetInst.TotalLoadSpinBox.setStyleSheet(self.PlayerCharacterInventoryWidgetInst.TotalLoadsEncumberedStyle)
+        else:
+            self.PlayerCharacterInventoryWidgetInst.TotalLoadSpinBox.setStyleSheet(self.PlayerCharacterInventoryWidgetInst.TotalLoadsStyle)
 
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
