@@ -727,6 +727,8 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacterInventoryWidgetInst.TotalLoadSpinBox.setStyleSheet(self.PlayerCharacterInventoryWidgetInst.TotalLoadsEncumberedStyle)
         else:
             self.PlayerCharacterInventoryWidgetInst.TotalLoadSpinBox.setStyleSheet(self.PlayerCharacterInventoryWidgetInst.TotalLoadsStyle)
+        self.PlayerCharacterInventoryWidgetInst.CoinValueSpinBox.setValue(self.DerivedStats["Value of Coins"])
+        self.PlayerCharacterInventoryWidgetInst.CoinLoadSpinBox.setValue(self.DerivedStats["Load of Coins"])
 
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
@@ -806,6 +808,13 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
             # Spell Points Remaining
             self.PlayerCharacterSpellcastingWidgetInst.SpellPointsRemainingSpinBox.setValue(self.PlayerCharacter.Stats["Current Spell Points"])
+
+            # Coins
+            self.PlayerCharacterInventoryWidgetInst.CPSpinBox.setValue(self.PlayerCharacter.Stats["Coins"]["CP"])
+            self.PlayerCharacterInventoryWidgetInst.SPSpinBox.setValue(self.PlayerCharacter.Stats["Coins"]["SP"])
+            self.PlayerCharacterInventoryWidgetInst.EPSpinBox.setValue(self.PlayerCharacter.Stats["Coins"]["EP"])
+            self.PlayerCharacterInventoryWidgetInst.GPSpinBox.setValue(self.PlayerCharacter.Stats["Coins"]["GP"])
+            self.PlayerCharacterInventoryWidgetInst.PPSpinBox.setValue(self.PlayerCharacter.Stats["Coins"]["PP"])
 
             # Inspiration
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])

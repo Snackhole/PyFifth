@@ -124,7 +124,7 @@ class PlayerCharacter(Character, SerializableMixin):
         self.CoinValues["PP"] = Decimal(10)
 
         # Weight Per Coin
-        self.WeightPerCoin = Decimal(0.02)
+        self.LoadPerCoin = Decimal(0.02)
 
         # Coin Values in CP
         self.CoinValuesInCP = {}
@@ -487,8 +487,8 @@ class PlayerCharacter(Character, SerializableMixin):
         DerivedStats["Value of Coins"] = CoinValue.quantize(Decimal("0.01"))
 
         # Coin Weight
-        CoinWeight = TotalCoinCount * self.WeightPerCoin
-        DerivedStats["Weight of Coins"] = CoinWeight.quantize(Decimal("0.01"))
+        CoinLoad = TotalCoinCount * self.LoadPerCoin
+        DerivedStats["Load of Coins"] = CoinLoad.quantize(Decimal("0.01"))
 
         # Loads and Values
         Loads = {}
@@ -510,8 +510,8 @@ class PlayerCharacter(Character, SerializableMixin):
         Values[""] = Decimal(0)
 
         # Add Coins to Loads and Values
-        Loads["Total"] += CoinWeight
-        Loads["Treasure"] += CoinWeight
+        Loads["Total"] += CoinLoad
+        Loads["Treasure"] += CoinLoad
         Values["Total"] += CoinValue
         Values["Treasure"] += CoinValue
 
