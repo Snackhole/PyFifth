@@ -312,7 +312,7 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         self.SpellListLabel.setStyleSheet(self.SectionLabelStyle)
         self.SpellListLabel.setMargin(self.HeaderLabelMargin)
 
-        # Spells Tree Widget
+        # Spell List Tree Widget
         self.SpellListTreeWidget = SpellListTreeWidget(self.CharacterWindow)
         self.SpellListTreeWidget.itemActivated.connect(self.EditSpell)
 
