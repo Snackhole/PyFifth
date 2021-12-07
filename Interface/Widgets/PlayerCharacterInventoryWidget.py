@@ -399,7 +399,6 @@ class PlayerCharacterInventoryWidget(QFrame):
             self.GPSpinBox.setValue(self.CharacterWindow.PlayerCharacter.Stats["Coins"]["GP"] + GainCoinsDialogInst.GainedCoins["GP"])
             self.PPSpinBox.setValue(self.CharacterWindow.PlayerCharacter.Stats["Coins"]["PP"] + GainCoinsDialogInst.GainedCoins["PP"])
 
-    # TODO dialog for spending coins
     def SpendCoins(self):
         SpendCoinsDialogInst = SpendCoinsDialog(self.CharacterWindow)
         if SpendCoinsDialogInst.Submitted:
