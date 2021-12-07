@@ -106,7 +106,8 @@ class PlayerCharacter(Character, SerializableMixin):
         self.InventoryItemDefaults["Item Unit Weight"] = 0.0
         self.InventoryItemDefaults["Item Unit Value"] = 0.0
         self.InventoryItemDefaults["Item Unit Value Denomination"] = "CP"
-        self.InventoryItemDefaults["Item Category Tag"] = ""
+        self.InventoryItemDefaults["Item Tag"] = ""
+        self.InventoryItemDefaults["Item Category"] = ""
         self.InventoryItemDefaults["Item Rarity"] = ""
         self.InventoryItemDefaults["Item Description"] = ""
 
@@ -519,7 +520,7 @@ class PlayerCharacter(Character, SerializableMixin):
         for ItemIndex in range(0, len(self.Stats["Inventory"])):
             # Per-Item Variables
             Item = self.Stats["Inventory"][ItemIndex]
-            Tag = Item["Item Category Tag"]
+            Tag = Item["Item Tag"]
 
             # Total Weight and Value
             TotalWeightAndValue = self.CalculateItemTotalWeightAndValue(ItemIndex)

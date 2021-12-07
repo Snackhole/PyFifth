@@ -20,7 +20,7 @@ class InventoryTreeWidget(QTreeWidget):
     def FillFromInventory(self):
         self.clear()
         for ItemIndex in range(len(self.CharacterWindow.PlayerCharacter.Stats["Inventory"])):
-            self.invisibleRootItem().addChild(InventoryWidgetItem(ItemIndex, self.CharacterWindow.PlayerCharacter.Stats["Inventory"][ItemIndex]))
+            self.invisibleRootItem().addChild(InventoryWidgetItem(self.CharacterWindow, ItemIndex, self.CharacterWindow.PlayerCharacter.Stats["Inventory"][ItemIndex]))
 
     def SelectIndex(self, Index):
         DestinationIndex = self.model().index(Index, 0)
@@ -30,10 +30,11 @@ class InventoryTreeWidget(QTreeWidget):
 
 
 class InventoryWidgetItem(QTreeWidgetItem):
-    def __init__(self, Index, Item):
+    def __init__(self, CharacterWindow, Index, Item):
         super().__init__()
 
         # Store Parameters
+        self.CharacterWindow = CharacterWindow
         self.Index = Index
         self.Item = Item
 
@@ -44,13 +45,13 @@ class InventoryWidgetItem(QTreeWidgetItem):
         self.UnitValueText = str(Item["Item Unit Value"]) + " " + Item["Item Unit Value Denomination"]
         self.TotalWeightText = str(self.CharacterWindow.PlayerCharacter.CalculateItemTotalWeightAndValue(self.Index)["Item Total Weight"].quantize(Decimal("0.01"))) + " lbs."
         self.TotalValueText = str(self.CharacterWindow.PlayerCharacter.CalculateItemTotalWeightAndValue(self.Index)["Item Total Value"].quantize(Decimal("0.01"))) + " GP"
-        self.TagText = Item["Item Category Tag"]
-        self.ColumnVariables = [self.NameText, self.CountText, self.UnitWeightText, self.UnitValueText, self.TotalWeightText, self.TotalValueText, self.TagText]
+        self.TagText = Item["Item Tag"]
+        self.ColumnTextList = [self.NameText, self.CountText, self.UnitWeightText, self.UnitValueText, self.TotalWeightText, self.TotalValueText, self.TagText]
 
         # Set Text
-        for Index in range(len(self.ColumnVariables)):
-            self.setText(Index, self.ColumnVariables[Index])
-            self.setToolTip(Index, self.ColumnVariables[Index])
+        for Index in range(len(self.ColumnTextList)):
+            self.setText(Index, self.ColumnTextList[Index])
+            self.setToolTip(Index, self.ColumnTextList[Index])
 
         # Set Alignment
         for Index in range(1, 6):
