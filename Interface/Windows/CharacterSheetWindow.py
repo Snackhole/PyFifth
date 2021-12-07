@@ -422,7 +422,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
     def DeletePresetRoll(self):
         CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
-            if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
                 CurrentPresetRoll = CurrentSelection[0]
                 CurrentPresetRollIndex = CurrentPresetRoll.Index
                 self.PlayerCharacter.Stats["Dice Roller"].DeletePresetRoll(CurrentPresetRollIndex)
@@ -475,12 +475,12 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.UpdateUnsavedChangesFlag(True)
 
     def RemoveLastLogEntryActionTriggered(self):
-        if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+        if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
             self.PlayerCharacter.Stats["Dice Roller"].RemoveLastLogEntry()
             self.UpdateUnsavedChangesFlag(True)
 
     def ClearLogActionTriggered(self):
-        if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+        if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
             self.PlayerCharacter.Stats["Dice Roller"].ClearLog()
             self.UpdateUnsavedChangesFlag(True)
 

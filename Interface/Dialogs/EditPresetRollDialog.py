@@ -148,7 +148,7 @@ class EditPresetRollDialog(QDialog):
     def DeleteResultMessage(self):
         CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
-            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this result message?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this result message?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
                 CurrentResultMessage = CurrentSelection[0]
                 CurrentResultMessageIndex = CurrentResultMessage.Index
                 self.DiceRoller.DeleteResultMessage(self.PresetRollIndex, CurrentResultMessageIndex)

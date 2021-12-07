@@ -458,7 +458,7 @@ class PlayerCharacterSpellcastingWidget(QFrame):
     def DeleteSpell(self):
         CurrentSelection = self.SpellListTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
-            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this spell?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this spell?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
                 CurrentSpell = CurrentSelection[0]
                 CurrentSpellIndex = CurrentSpell.Index
                 self.CharacterWindow.PlayerCharacter.DeleteSpell(CurrentSpellIndex)

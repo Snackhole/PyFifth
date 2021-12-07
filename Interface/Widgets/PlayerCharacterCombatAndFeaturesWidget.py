@@ -461,7 +461,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
     def DeleteFeature(self):
         CurrentSelection = self.FeaturesTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
-            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this feature?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this feature?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
                 CurrentFeature = CurrentSelection[0]
                 CurrentFeatureIndex = CurrentFeature.Index
                 self.CharacterWindow.PlayerCharacter.DeleteFeature(CurrentFeatureIndex)
