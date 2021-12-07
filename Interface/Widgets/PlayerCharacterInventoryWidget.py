@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDoubleSpinBox, QFrame, QGridLayout, QInputDialog, QLabel, QSizePolicy, QSpinBox
+from PyQt5.QtWidgets import QDoubleSpinBox, QFrame, QGridLayout, QInputDialog, QLabel, QMessageBox, QSizePolicy, QSpinBox
 
+from Interface.Dialogs.EditItemDialog import EditItemDialog
 from Interface.Dialogs.GainCoinsDialog import GainCoinsDialog
 from Interface.Dialogs.SpendCoinsDialog import SpendCoinsDialog
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
@@ -467,20 +468,50 @@ class PlayerCharacterInventoryWidget(QFrame):
         if OK:
             self.CharacterWindow.UpdateStat(Consumed + " Consumption Rate", ConsumedRate)
 
-    def EditItem(self):
-        pass
-
     def AddItem(self):
-        pass
+        ItemIndex = self.CharacterWindow.PlayerCharacter.AddInventoryItem()
+        self.CharacterWindow.UpdateDisplay()
+        EditItemDialogInst = EditItemDialog(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Inventory"], ItemIndex, AddMode=True)
+        if EditItemDialogInst.Cancelled:
+            self.CharacterWindow.PlayerCharacter.DeleteLastInventoryItem()
+            self.CharacterWindow.UpdateDisplay()
+        else:
+            self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+            self.InventoryTreeWidget.SelectIndex(ItemIndex)
 
     def DeleteItem(self):
-        pass
+        CurrentSelection = self.InventoryTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this item?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+                CurrentItem = CurrentSelection[0]
+                CurrentItemIndex = CurrentItem.Index
+                self.CharacterWindow.PlayerCharacter.DeleteInventoryItem(CurrentItemIndex)
+                self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+                InventoryLength = len(self.CharacterWindow.PlayerCharacter.Stats["Inventory"])
+                if InventoryLength > 0:
+                    self.InventoryTreeWidget.SelectIndex(CurrentItemIndex if CurrentItemIndex < InventoryLength else InventoryLength - 1)
 
     def EditItem(self):
-        pass
+        CurrentSelection = self.InventoryTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentItem = CurrentSelection[0]
+            CurrentItemIndex = CurrentItem.Index
+            EditItemDialogInst = EditItemDialog(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Inventory"], CurrentItemIndex)
+            if EditItemDialogInst.UnsavedChanges:
+                self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+                self.InventoryTreeWidget.SelectIndex(CurrentItemIndex)
 
     def MoveItemUp(self):
-        pass
+        self.MoveItem(-1)
 
     def MoveItemDown(self):
-        pass
+        self.MoveItem(1)
+
+    def MoveItem(self, Delta):
+        CurrentSelection = self.InventoryTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentItem = CurrentSelection[0]
+            CurrentItemIndex = CurrentItem.Index
+            if self.CharacterWindow.PlayerCharacter.MoveInventoryItem(CurrentItemIndex, Delta):
+                self.CharacterWindow.UpdateUnsavedChangesFlag(True)
+                self.InventoryTreeWidget.SelectIndex(CurrentItemIndex + Delta)
