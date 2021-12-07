@@ -737,6 +737,15 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.PlayerCharacterInventoryWidgetInst.WaterLoadSpinBox.setValue(self.DerivedStats["Item Loads"]["Water"])
         self.PlayerCharacterInventoryWidgetInst.WaterDaysSpinBox.setValue(self.DerivedStats["Days of Water"])
 
+        # Inventory
+        CurrentSelection = self.PlayerCharacterInventoryWidgetInst.InventoryTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentSelectionIndex = CurrentSelection[0].Index
+            self.PlayerCharacterInventoryWidgetInst.InventoryTreeWidget.FillFromInventory()
+            self.PlayerCharacterInventoryWidgetInst.InventoryTreeWidget.SelectIndex(CurrentSelectionIndex)
+        else:
+            self.PlayerCharacterInventoryWidgetInst.InventoryTreeWidget.FillFromInventory()
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)

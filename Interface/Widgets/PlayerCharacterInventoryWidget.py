@@ -3,7 +3,8 @@ from PyQt5.QtWidgets import QDoubleSpinBox, QFrame, QGridLayout, QInputDialog, Q
 
 from Interface.Dialogs.GainCoinsDialog import GainCoinsDialog
 from Interface.Dialogs.SpendCoinsDialog import SpendCoinsDialog
-from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton
+from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
+from Interface.Widgets.InventoryTreeWidget import InventoryTreeWidget
 
 
 class PlayerCharacterInventoryWidget(QFrame):
@@ -37,6 +38,9 @@ class PlayerCharacterInventoryWidget(QFrame):
 
         # Create Food and Water
         self.CreateFoodAndWater()
+
+        # Create Inventory
+        self.CreateInventory()
 
         # Create and Set Layout
         self.CreateAndSetLayout()
@@ -313,6 +317,29 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.WaterDaysEditButton = EditButton(lambda: self.EditConsumptionRate("Water"), "Edit Water Consumption Rate")
         self.WaterDaysEditButton.setSizePolicy(self.InputsSizePolicy)
 
+    def CreateInventory(self):
+        # Inventory Label
+        self.InventoryLabel = QLabel("Inventory")
+        self.InventoryLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.InventoryLabel.setStyleSheet(self.SectionLabelStyle)
+        self.InventoryLabel.setMargin(self.HeaderLabelMargin)
+
+        # Inventory Tree Widget
+        self.InventoryTreeWidget = InventoryTreeWidget(self.CharacterWindow)
+        self.InventoryTreeWidget.itemActivated.connect(self.EditItem)
+
+        # Buttons
+        self.AddItemButton = AddButton(self.AddItem, "Add Item")
+        self.AddItemButton.setSizePolicy(self.InputsSizePolicy)
+        self.DeleteItemButton = DeleteButton(self.DeleteItem, "Delete Item")
+        self.DeleteItemButton.setSizePolicy(self.InputsSizePolicy)
+        self.EditItemButton = EditButton(self.EditItem, "Edit Item")
+        self.EditItemButton.setSizePolicy(self.InputsSizePolicy)
+        self.MoveItemUpButton = MoveUpButton(self.MoveItemUp, "Move Item Up")
+        self.MoveItemUpButton.setSizePolicy(self.InputsSizePolicy)
+        self.MoveItemDownButton = MoveDownButton(self.MoveItemDown, "Move Item Down")
+        self.MoveItemDownButton.setSizePolicy(self.InputsSizePolicy)
+
     def CreateAndSetLayout(self):
         # Create Layout
         self.Layout = QGridLayout()
@@ -395,6 +422,18 @@ class PlayerCharacterInventoryWidget(QFrame):
             self.FoodAndWaterLayout.setRowStretch(Row, 1)
         self.Layout.addLayout(self.FoodAndWaterLayout, 0, 3)
 
+        # Inventory
+        self.InventoryLayout = QGridLayout()
+        self.InventoryLayout.addWidget(self.InventoryLabel, 0, 0, 1, 5)
+        self.InventoryLayout.addWidget(self.AddItemButton, 1, 0)
+        self.InventoryLayout.addWidget(self.DeleteItemButton, 1, 1)
+        self.InventoryLayout.addWidget(self.EditItemButton, 1, 2)
+        self.InventoryLayout.addWidget(self.MoveItemUpButton, 1, 3)
+        self.InventoryLayout.addWidget(self.MoveItemDownButton, 1, 4)
+        self.InventoryLayout.addWidget(self.InventoryTreeWidget, 2, 0, 1, 5)
+        self.InventoryLayout.setRowStretch(2, 1)
+        self.Layout.addLayout(self.InventoryLayout, 1, 0, 1, 4)
+
         # Layout Stretch
         self.Layout.setColumnStretch(0, 1)
         self.Layout.setRowStretch(1, 1)
@@ -427,3 +466,21 @@ class PlayerCharacterInventoryWidget(QFrame):
         ConsumedRate, OK = QInputDialog.getDouble(self.CharacterWindow, "Edit " + Consumed + " Consumption Rate", Consumed + " consumption rate:", self.CharacterWindow.PlayerCharacter.Stats[Consumed + " Consumption Rate"], 0, 1000000000)
         if OK:
             self.CharacterWindow.UpdateStat(Consumed + " Consumption Rate", ConsumedRate)
+
+    def EditItem(self):
+        pass
+
+    def AddItem(self):
+        pass
+
+    def DeleteItem(self):
+        pass
+
+    def EditItem(self):
+        pass
+
+    def MoveItemUp(self):
+        pass
+
+    def MoveItemDown(self):
+        pass
