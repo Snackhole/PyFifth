@@ -41,6 +41,7 @@ class RollForAbilityScoresDialog(QDialog):
             SpinBox.setSpecialValueText("Not Rolled")
             SpinBox.setValue(0)
             SpinBox.setReadOnly(True)
+            SpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
             SpinBox.setMinimumWidth(70)
 
         # Dialog Buttons

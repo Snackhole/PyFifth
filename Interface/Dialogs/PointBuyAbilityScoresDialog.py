@@ -103,6 +103,7 @@ class PointBuyAbilityScoresDialog(QDialog):
         self.PointsRemainingSpinBox.setRange(-27, 27)
         self.PointsRemainingSpinBox.setValue(27)
         self.PointsRemainingSpinBox.setReadOnly(True)
+        self.PointsRemainingSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # Point Costs Label
         self.PointCostsLabel = QLabel("Min Score:  8\nMax Score:  15\n\nCosts:\n8:  0\n9:  1\n10:  2\n11:  3\n12:  4\n13:  5\n14:  7\n15:  9")

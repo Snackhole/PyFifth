@@ -77,6 +77,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.ProficiencyBonusLabel = QLabel("Proficiency Bonus:")
         self.ProficiencyBonusLineEdit = CenteredLineEdit()
         self.ProficiencyBonusLineEdit.setReadOnly(True)
+        self.ProficiencyBonusLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.ExperienceLabel = QLabel("Exp.:")
         self.ExperienceSpinBox = QSpinBox()
@@ -88,6 +89,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.NeededExperienceLabel = QLabel("Needed Exp.:")
         self.NeededExperienceLineEdit = CenteredLineEdit()
         self.NeededExperienceLineEdit.setReadOnly(True)
+        self.NeededExperienceLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # Stats Tab Widget
         self.StatsTabWidget = QTabWidget()

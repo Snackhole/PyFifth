@@ -139,6 +139,7 @@ class EditAbilityScoresDialog(QDialog):
         self.StrengthTotalSpinBox.setRange(1, 1000000000)
         self.StrengthTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Strength"))
         self.StrengthTotalSpinBox.setReadOnly(True)
+        self.StrengthTotalSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.StrengthAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Strength Stat Modifier"), Tooltip="Edit Strength Ability Check Modifier")
         self.StrengthAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
@@ -200,6 +201,7 @@ class EditAbilityScoresDialog(QDialog):
         self.DexterityTotalSpinBox.setRange(1, 1000000000)
         self.DexterityTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Dexterity"))
         self.DexterityTotalSpinBox.setReadOnly(True)
+        self.DexterityTotalSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.DexterityAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Dexterity Stat Modifier"), Tooltip="Edit Dexterity Ability Check Modifier")
         self.DexterityAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
@@ -261,6 +263,7 @@ class EditAbilityScoresDialog(QDialog):
         self.ConstitutionTotalSpinBox.setRange(1, 1000000000)
         self.ConstitutionTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Constitution"))
         self.ConstitutionTotalSpinBox.setReadOnly(True)
+        self.ConstitutionTotalSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.ConstitutionAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Constitution Stat Modifier"), Tooltip="Edit Constitution Ability Check Modifier")
         self.ConstitutionAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
@@ -322,6 +325,7 @@ class EditAbilityScoresDialog(QDialog):
         self.IntelligenceTotalSpinBox.setRange(1, 1000000000)
         self.IntelligenceTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Intelligence"))
         self.IntelligenceTotalSpinBox.setReadOnly(True)
+        self.IntelligenceTotalSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.IntelligenceAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Intelligence Stat Modifier"), Tooltip="Edit Intelligence Ability Check Modifier")
         self.IntelligenceAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
@@ -383,6 +387,7 @@ class EditAbilityScoresDialog(QDialog):
         self.WisdomTotalSpinBox.setRange(1, 1000000000)
         self.WisdomTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Wisdom"))
         self.WisdomTotalSpinBox.setReadOnly(True)
+        self.WisdomTotalSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.WisdomAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Wisdom Stat Modifier"), Tooltip="Edit Wisdom Ability Check Modifier")
         self.WisdomAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)
@@ -444,6 +449,7 @@ class EditAbilityScoresDialog(QDialog):
         self.CharismaTotalSpinBox.setRange(1, 1000000000)
         self.CharismaTotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore("Charisma"))
         self.CharismaTotalSpinBox.setReadOnly(True)
+        self.CharismaTotalSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.CharismaAbilityCheckModifierButton = EditButton(lambda: self.EditModifier("Charisma Stat Modifier"), Tooltip="Edit Charisma Ability Check Modifier")
         self.CharismaAbilityCheckModifierButton.setSizePolicy(self.InputsSizePolicy)

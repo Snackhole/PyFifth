@@ -56,6 +56,7 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.CarryingCapacitySpinBox.setButtonSymbols(self.CarryingCapacitySpinBox.NoButtons)
         self.CarryingCapacitySpinBox.setRange(0, 1000000000)
         self.CarryingCapacitySpinBox.setReadOnly(True)
+        self.CarryingCapacitySpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # Carrying Capacity Edit Button
         self.CarryingCapacityEditButton = EditButton(self.EditBonusCarryingCapacityStatModifier, "Edit Bonus Carrying Capacity Stat Modifier")
@@ -103,24 +104,28 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.TotalLoadSpinBox.setButtonSymbols(self.TotalLoadSpinBox.NoButtons)
         self.TotalLoadSpinBox.setRange(0, 1000000000)
         self.TotalLoadSpinBox.setReadOnly(True)
+        self.TotalLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
         self.GearLoadSpinBox = QDoubleSpinBox()
         self.GearLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.GearLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.GearLoadSpinBox.setButtonSymbols(self.GearLoadSpinBox.NoButtons)
         self.GearLoadSpinBox.setRange(0, 1000000000)
         self.GearLoadSpinBox.setReadOnly(True)
+        self.GearLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
         self.TreasureLoadSpinBox = QDoubleSpinBox()
         self.TreasureLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.TreasureLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.TreasureLoadSpinBox.setButtonSymbols(self.TreasureLoadSpinBox.NoButtons)
         self.TreasureLoadSpinBox.setRange(0, 1000000000)
         self.TreasureLoadSpinBox.setReadOnly(True)
+        self.TreasureLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
         self.MiscLoadSpinBox = QDoubleSpinBox()
         self.MiscLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.MiscLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.MiscLoadSpinBox.setButtonSymbols(self.MiscLoadSpinBox.NoButtons)
         self.MiscLoadSpinBox.setRange(0, 1000000000)
         self.MiscLoadSpinBox.setReadOnly(True)
+        self.MiscLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # Values Spin Boxes
         self.TotalValueSpinBox = QDoubleSpinBox()
@@ -129,24 +134,28 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.TotalValueSpinBox.setButtonSymbols(self.TotalValueSpinBox.NoButtons)
         self.TotalValueSpinBox.setRange(0, 1000000000)
         self.TotalValueSpinBox.setReadOnly(True)
+        self.TotalValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
         self.GearValueSpinBox = QDoubleSpinBox()
         self.GearValueSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.GearValueSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.GearValueSpinBox.setButtonSymbols(self.GearValueSpinBox.NoButtons)
         self.GearValueSpinBox.setRange(0, 1000000000)
         self.GearValueSpinBox.setReadOnly(True)
+        self.GearValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
         self.TreasureValueSpinBox = QDoubleSpinBox()
         self.TreasureValueSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.TreasureValueSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.TreasureValueSpinBox.setButtonSymbols(self.TreasureValueSpinBox.NoButtons)
         self.TreasureValueSpinBox.setRange(0, 1000000000)
         self.TreasureValueSpinBox.setReadOnly(True)
+        self.TreasureValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
         self.MiscValueSpinBox = QDoubleSpinBox()
         self.MiscValueSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.MiscValueSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.MiscValueSpinBox.setButtonSymbols(self.MiscValueSpinBox.NoButtons)
         self.MiscValueSpinBox.setRange(0, 1000000000)
         self.MiscValueSpinBox.setReadOnly(True)
+        self.MiscValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
     def CreateCoins(self):
         # Coins Label
@@ -224,6 +233,7 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.CoinValueSpinBox.setButtonSymbols(self.CoinValueSpinBox.NoButtons)
         self.CoinValueSpinBox.setRange(0, 1000000000)
         self.CoinValueSpinBox.setReadOnly(True)
+        self.CoinValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # Coin Load
         self.CoinLoadLabel = QLabel("Coin Load (lbs.)")
@@ -236,6 +246,7 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.CoinLoadSpinBox.setButtonSymbols(self.CoinLoadSpinBox.NoButtons)
         self.CoinLoadSpinBox.setRange(0, 1000000000)
         self.CoinLoadSpinBox.setReadOnly(True)
+        self.CoinLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
     def CreateFoodAndWater(self):
         # Food and Water Label
@@ -271,12 +282,14 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.FoodLoadSpinBox.setButtonSymbols(self.FoodLoadSpinBox.NoButtons)
         self.FoodLoadSpinBox.setRange(0, 1000000000)
         self.FoodLoadSpinBox.setReadOnly(True)
+        self.FoodLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
         self.WaterLoadSpinBox = QDoubleSpinBox()
         self.WaterLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.WaterLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WaterLoadSpinBox.setButtonSymbols(self.WaterLoadSpinBox.NoButtons)
         self.WaterLoadSpinBox.setRange(0, 1000000000)
         self.WaterLoadSpinBox.setReadOnly(True)
+        self.WaterLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # Days Spin Boxes
         self.FoodDaysSpinBox = QDoubleSpinBox()
@@ -285,12 +298,14 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.FoodDaysSpinBox.setButtonSymbols(self.FoodDaysSpinBox.NoButtons)
         self.FoodDaysSpinBox.setRange(0, 1000000000)
         self.FoodDaysSpinBox.setReadOnly(True)
+        self.FoodDaysSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
         self.WaterDaysSpinBox = QDoubleSpinBox()
         self.WaterDaysSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.WaterDaysSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WaterDaysSpinBox.setButtonSymbols(self.WaterDaysSpinBox.NoButtons)
         self.WaterDaysSpinBox.setRange(0, 1000000000)
         self.WaterDaysSpinBox.setReadOnly(True)
+        self.WaterDaysSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # Days Buttons
         self.FoodDaysEditButton = EditButton(lambda: self.EditConsumptionRate("Food"), "Edit Food Consumption Rate")

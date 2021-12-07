@@ -98,6 +98,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.MaxHPSpinBox.setButtonSymbols(self.MaxHPSpinBox.NoButtons)
         self.MaxHPSpinBox.setValue(0)
         self.MaxHPSpinBox.setReadOnly(True)
+        self.MaxHPSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # HP Buttons
         self.DamageButton = DamageButton(self.Damage)
@@ -172,6 +173,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AC1SpinBox.setButtonSymbols(self.AC1SpinBox.NoButtons)
         self.AC1SpinBox.setValue(0)
         self.AC1SpinBox.setReadOnly(True)
+        self.AC1SpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.AC2SpinBox = QSpinBox()
         self.AC2SpinBox.setRange(0, 1000000000)
@@ -181,6 +183,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AC2SpinBox.setButtonSymbols(self.AC2SpinBox.NoButtons)
         self.AC2SpinBox.setValue(0)
         self.AC2SpinBox.setReadOnly(True)
+        self.AC2SpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.AC3SpinBox = QSpinBox()
         self.AC3SpinBox.setRange(0, 1000000000)
@@ -190,6 +193,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AC3SpinBox.setButtonSymbols(self.AC3SpinBox.NoButtons)
         self.AC3SpinBox.setValue(0)
         self.AC3SpinBox.setReadOnly(True)
+        self.AC3SpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # AC Edit Buttons
         self.AC1EditButton = EditButton(lambda: self.EditAC("1"), "Edit AC Stat Modifier 1")
@@ -215,6 +219,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.InitiativeSpinBox.setButtonSymbols(self.InitiativeSpinBox.NoButtons)
         self.InitiativeSpinBox.setValue(0)
         self.InitiativeSpinBox.setReadOnly(True)
+        self.InitiativeSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # Initiative Roll Button
         self.InitiativeRollButton = RollButton(self.RollInitiative, "Roll Initiative")

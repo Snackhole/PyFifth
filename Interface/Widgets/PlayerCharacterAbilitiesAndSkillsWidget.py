@@ -73,11 +73,13 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.StrengthTotalLineEdit.setMinimumWidth(100)
         self.StrengthTotalLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.StrengthTotalLineEdit.setReadOnly(True)
+        self.StrengthTotalLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.StrengthModifierLineEdit = CenteredLineEdit()
         self.StrengthModifierLineEdit.setStyleSheet(self.AbilityScoreStyle)
         self.StrengthModifierLineEdit.setMinimumWidth(100)
         self.StrengthModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.StrengthModifierLineEdit.setReadOnly(True)
+        self.StrengthModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.StrengthModifierRollButton = RollButton(lambda: self.Roll("Strength Ability Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Strength Stat Modifier"]), Tooltip="Roll Strength Ability Check")
         self.StrengthModifierRollButton.setSizePolicy(self.InputsSizePolicy)
         self.StrengthSavingThrowLineEdit = CenteredLineEdit()
@@ -85,6 +87,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.StrengthSavingThrowLineEdit.setMinimumWidth(100)
         self.StrengthSavingThrowLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.StrengthSavingThrowLineEdit.setReadOnly(True)
+        self.StrengthSavingThrowLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.StrengthSavingThrowRollButton = RollButton(lambda: self.Roll("Strength Saving Throw:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Strength Save Stat Modifier"]), Tooltip="Roll Strength Saving Throw")
         self.StrengthSavingThrowRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -96,11 +99,13 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.DexterityTotalLineEdit.setMinimumWidth(100)
         self.DexterityTotalLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.DexterityTotalLineEdit.setReadOnly(True)
+        self.DexterityTotalLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.DexterityModifierLineEdit = CenteredLineEdit()
         self.DexterityModifierLineEdit.setStyleSheet(self.AbilityScoreStyle)
         self.DexterityModifierLineEdit.setMinimumWidth(100)
         self.DexterityModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.DexterityModifierLineEdit.setReadOnly(True)
+        self.DexterityModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.DexterityModifierRollButton = RollButton(lambda: self.Roll("Dexterity Ability Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Dexterity Stat Modifier"]), Tooltip="Roll Dexterity Ability Check")
         self.DexterityModifierRollButton.setSizePolicy(self.InputsSizePolicy)
         self.DexteritySavingThrowLineEdit = CenteredLineEdit()
@@ -108,6 +113,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.DexteritySavingThrowLineEdit.setMinimumWidth(100)
         self.DexteritySavingThrowLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.DexteritySavingThrowLineEdit.setReadOnly(True)
+        self.DexteritySavingThrowLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.DexteritySavingThrowRollButton = RollButton(lambda: self.Roll("Dexterity Saving Throw:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Dexterity Save Stat Modifier"]), Tooltip="Roll Dexterity Saving Throw")
         self.DexteritySavingThrowRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -119,11 +125,13 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.ConstitutionTotalLineEdit.setMinimumWidth(100)
         self.ConstitutionTotalLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionTotalLineEdit.setReadOnly(True)
+        self.ConstitutionTotalLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.ConstitutionModifierLineEdit = CenteredLineEdit()
         self.ConstitutionModifierLineEdit.setStyleSheet(self.AbilityScoreStyle)
         self.ConstitutionModifierLineEdit.setMinimumWidth(100)
         self.ConstitutionModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionModifierLineEdit.setReadOnly(True)
+        self.ConstitutionModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.ConstitutionModifierRollButton = RollButton(lambda: self.Roll("Constitution Ability Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Constitution Stat Modifier"]), Tooltip="Roll Constitution Ability Check")
         self.ConstitutionModifierRollButton.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionSavingThrowLineEdit = CenteredLineEdit()
@@ -131,6 +139,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.ConstitutionSavingThrowLineEdit.setMinimumWidth(100)
         self.ConstitutionSavingThrowLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionSavingThrowLineEdit.setReadOnly(True)
+        self.ConstitutionSavingThrowLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.ConstitutionSavingThrowRollButton = RollButton(lambda: self.Roll("Constitution Saving Throw:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Constitution Save Stat Modifier"]), Tooltip="Roll Constitution Saving Throw")
         self.ConstitutionSavingThrowRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -142,11 +151,13 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.IntelligenceTotalLineEdit.setMinimumWidth(100)
         self.IntelligenceTotalLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceTotalLineEdit.setReadOnly(True)
+        self.IntelligenceTotalLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.IntelligenceModifierLineEdit = CenteredLineEdit()
         self.IntelligenceModifierLineEdit.setStyleSheet(self.AbilityScoreStyle)
         self.IntelligenceModifierLineEdit.setMinimumWidth(100)
         self.IntelligenceModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceModifierLineEdit.setReadOnly(True)
+        self.IntelligenceModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.IntelligenceModifierRollButton = RollButton(lambda: self.Roll("Intelligence Ability Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Intelligence Stat Modifier"]), Tooltip="Roll Intelligence Ability Check")
         self.IntelligenceModifierRollButton.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceSavingThrowLineEdit = CenteredLineEdit()
@@ -154,6 +165,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.IntelligenceSavingThrowLineEdit.setMinimumWidth(100)
         self.IntelligenceSavingThrowLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceSavingThrowLineEdit.setReadOnly(True)
+        self.IntelligenceSavingThrowLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.IntelligenceSavingThrowRollButton = RollButton(lambda: self.Roll("Intelligence Saving Throw:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Intelligence Save Stat Modifier"]), Tooltip="Roll Intelligence Saving Throw")
         self.IntelligenceSavingThrowRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -165,11 +177,13 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.WisdomTotalLineEdit.setMinimumWidth(100)
         self.WisdomTotalLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.WisdomTotalLineEdit.setReadOnly(True)
+        self.WisdomTotalLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.WisdomModifierLineEdit = CenteredLineEdit()
         self.WisdomModifierLineEdit.setStyleSheet(self.AbilityScoreStyle)
         self.WisdomModifierLineEdit.setMinimumWidth(100)
         self.WisdomModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.WisdomModifierLineEdit.setReadOnly(True)
+        self.WisdomModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.WisdomModifierRollButton = RollButton(lambda: self.Roll("Wisdom Ability Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Wisdom Stat Modifier"]), Tooltip="Roll Wisdom Ability Check")
         self.WisdomModifierRollButton.setSizePolicy(self.InputsSizePolicy)
         self.WisdomSavingThrowLineEdit = CenteredLineEdit()
@@ -177,6 +191,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.WisdomSavingThrowLineEdit.setMinimumWidth(100)
         self.WisdomSavingThrowLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.WisdomSavingThrowLineEdit.setReadOnly(True)
+        self.WisdomSavingThrowLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.WisdomSavingThrowRollButton = RollButton(lambda: self.Roll("Wisdom Saving Throw:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Wisdom Save Stat Modifier"]), Tooltip="Roll Wisdom Saving Throw")
         self.WisdomSavingThrowRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -188,11 +203,13 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.CharismaTotalLineEdit.setMinimumWidth(100)
         self.CharismaTotalLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.CharismaTotalLineEdit.setReadOnly(True)
+        self.CharismaTotalLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.CharismaModifierLineEdit = CenteredLineEdit()
         self.CharismaModifierLineEdit.setStyleSheet(self.AbilityScoreStyle)
         self.CharismaModifierLineEdit.setMinimumWidth(100)
         self.CharismaModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.CharismaModifierLineEdit.setReadOnly(True)
+        self.CharismaModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.CharismaModifierRollButton = RollButton(lambda: self.Roll("Charisma Ability Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Charisma Stat Modifier"]), Tooltip="Roll Charisma Ability Check")
         self.CharismaModifierRollButton.setSizePolicy(self.InputsSizePolicy)
         self.CharismaSavingThrowLineEdit = CenteredLineEdit()
@@ -200,6 +217,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.CharismaSavingThrowLineEdit.setMinimumWidth(100)
         self.CharismaSavingThrowLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.CharismaSavingThrowLineEdit.setReadOnly(True)
+        self.CharismaSavingThrowLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.CharismaSavingThrowRollButton = RollButton(lambda: self.Roll("Charisma Saving Throw:\n", self.CharacterWindow.PlayerCharacter.Stats["Ability Scores"]["Charisma Save Stat Modifier"]), Tooltip="Roll Charisma Saving Throw")
         self.CharismaSavingThrowRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -229,6 +247,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.AcrobaticsModifierLineEdit.setMinimumWidth(75)
         self.AcrobaticsModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.AcrobaticsModifierLineEdit.setReadOnly(True)
+        self.AcrobaticsModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.AcrobaticsModifierRollButton = RollButton(lambda: self.Roll("Acrobatics (DEX) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Acrobatics Stat Modifier"]), Tooltip="Roll Acrobatics (DEX) Check")
         self.AcrobaticsModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -239,6 +258,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.AnimalHandlingModifierLineEdit.setMinimumWidth(75)
         self.AnimalHandlingModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.AnimalHandlingModifierLineEdit.setReadOnly(True)
+        self.AnimalHandlingModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.AnimalHandlingModifierRollButton = RollButton(lambda: self.Roll("Animal Handling (WIS) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Animal Handling Stat Modifier"]), Tooltip="Roll Animal Handling (WIS) Check")
         self.AnimalHandlingModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -249,6 +269,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.ArcanaModifierLineEdit.setMinimumWidth(75)
         self.ArcanaModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.ArcanaModifierLineEdit.setReadOnly(True)
+        self.ArcanaModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.ArcanaModifierRollButton = RollButton(lambda: self.Roll("Arcana (INT) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Arcana Stat Modifier"]), Tooltip="Roll Arcana (INT) Check")
         self.ArcanaModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -259,6 +280,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.AthleticsModifierLineEdit.setMinimumWidth(75)
         self.AthleticsModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.AthleticsModifierLineEdit.setReadOnly(True)
+        self.AthleticsModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.AthleticsModifierRollButton = RollButton(lambda: self.Roll("Athletics (STR) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Athletics Stat Modifier"]), Tooltip="Roll Athletics (STR) Check")
         self.AthleticsModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -269,6 +291,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.DeceptionModifierLineEdit.setMinimumWidth(75)
         self.DeceptionModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.DeceptionModifierLineEdit.setReadOnly(True)
+        self.DeceptionModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.DeceptionModifierRollButton = RollButton(lambda: self.Roll("Deception (CHA) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Deception Stat Modifier"]), Tooltip="Roll Deception (CHA) Check")
         self.DeceptionModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -279,6 +302,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.HistoryModifierLineEdit.setMinimumWidth(75)
         self.HistoryModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.HistoryModifierLineEdit.setReadOnly(True)
+        self.HistoryModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.HistoryModifierRollButton = RollButton(lambda: self.Roll("History (INT) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["History Stat Modifier"]), Tooltip="Roll History (INT) Check")
         self.HistoryModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -289,6 +313,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.InsightModifierLineEdit.setMinimumWidth(75)
         self.InsightModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.InsightModifierLineEdit.setReadOnly(True)
+        self.InsightModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.InsightModifierRollButton = RollButton(lambda: self.Roll("Insight (WIS) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Insight Stat Modifier"]), Tooltip="Roll Insight (WIS) Check")
         self.InsightModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -299,6 +324,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.IntimidationModifierLineEdit.setMinimumWidth(75)
         self.IntimidationModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.IntimidationModifierLineEdit.setReadOnly(True)
+        self.IntimidationModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.IntimidationModifierRollButton = RollButton(lambda: self.Roll("Intimidation (CHA) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Intimidation Stat Modifier"]), Tooltip="Roll Intimidation (CHA) Check")
         self.IntimidationModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -309,6 +335,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.InvestigationModifierLineEdit.setMinimumWidth(75)
         self.InvestigationModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.InvestigationModifierLineEdit.setReadOnly(True)
+        self.InvestigationModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.InvestigationModifierRollButton = RollButton(lambda: self.Roll("Investigation (INT) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Investigation Stat Modifier"]), Tooltip="Roll Investigation (INT) Check")
         self.InvestigationModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -319,6 +346,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.MedicineModifierLineEdit.setMinimumWidth(75)
         self.MedicineModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.MedicineModifierLineEdit.setReadOnly(True)
+        self.MedicineModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.MedicineModifierRollButton = RollButton(lambda: self.Roll("Medicine (WIS) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Medicine Stat Modifier"]), Tooltip="Roll Medicine (WIS) Check")
         self.MedicineModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -329,6 +357,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.NatureModifierLineEdit.setMinimumWidth(75)
         self.NatureModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.NatureModifierLineEdit.setReadOnly(True)
+        self.NatureModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.NatureModifierRollButton = RollButton(lambda: self.Roll("Nature (INT) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Nature Stat Modifier"]), Tooltip="Roll Nature (INT) Check")
         self.NatureModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -339,6 +368,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.PerceptionModifierLineEdit.setMinimumWidth(75)
         self.PerceptionModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.PerceptionModifierLineEdit.setReadOnly(True)
+        self.PerceptionModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.PerceptionModifierRollButton = RollButton(lambda: self.Roll("Perception (WIS) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Perception Stat Modifier"]), Tooltip="Roll Perception (WIS) Check")
         self.PerceptionModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -349,6 +379,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.PerformanceModifierLineEdit.setMinimumWidth(75)
         self.PerformanceModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.PerformanceModifierLineEdit.setReadOnly(True)
+        self.PerformanceModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.PerformanceModifierRollButton = RollButton(lambda: self.Roll("Performance (CHA) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Performance Stat Modifier"]), Tooltip="Roll Performance (CHA) Check")
         self.PerformanceModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -359,6 +390,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.PersuasionModifierLineEdit.setMinimumWidth(75)
         self.PersuasionModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.PersuasionModifierLineEdit.setReadOnly(True)
+        self.PersuasionModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.PersuasionModifierRollButton = RollButton(lambda: self.Roll("Persuasion (CHA) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Persuasion Stat Modifier"]), Tooltip="Roll Persuasion (CHA) Check")
         self.PersuasionModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -369,6 +401,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.ReligionModifierLineEdit.setMinimumWidth(75)
         self.ReligionModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.ReligionModifierLineEdit.setReadOnly(True)
+        self.ReligionModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.ReligionModifierRollButton = RollButton(lambda: self.Roll("Religion (INT) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Religion Stat Modifier"]), Tooltip="Roll Religion (INT) Check")
         self.ReligionModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -379,6 +412,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.SleightOfHandModifierLineEdit.setMinimumWidth(75)
         self.SleightOfHandModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.SleightOfHandModifierLineEdit.setReadOnly(True)
+        self.SleightOfHandModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.SleightOfHandModifierRollButton = RollButton(lambda: self.Roll("Sleight of Hand (DEX) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Sleight of Hand Stat Modifier"]), Tooltip="Roll Sleight of Hand (DEX) Check")
         self.SleightOfHandModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -389,6 +423,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.StealthModifierLineEdit.setMinimumWidth(75)
         self.StealthModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.StealthModifierLineEdit.setReadOnly(True)
+        self.StealthModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.StealthModifierRollButton = RollButton(lambda: self.Roll("Stealth (DEX) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Stealth Stat Modifier"]), Tooltip="Roll Stealth (DEX) Check")
         self.StealthModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -399,6 +434,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.SurvivalModifierLineEdit.setMinimumWidth(75)
         self.SurvivalModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.SurvivalModifierLineEdit.setReadOnly(True)
+        self.SurvivalModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
         self.SurvivalModifierRollButton = RollButton(lambda: self.Roll("Survival (WIS) Check:\n", self.CharacterWindow.PlayerCharacter.Stats["Skills"]["Survival Stat Modifier"]), Tooltip="Roll Survival (WIS) Check")
         self.SurvivalModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
@@ -428,6 +464,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.PassivePerceptionLineEdit.setMinimumWidth(75)
         self.PassivePerceptionLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.PassivePerceptionLineEdit.setReadOnly(True)
+        self.PassivePerceptionLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
 
         # Passive Investigation
         self.PassiveInvestigationLabel = QLabel("Investigation")
@@ -436,6 +473,7 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.PassiveInvestigationLineEdit.setMinimumWidth(75)
         self.PassiveInvestigationLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.PassiveInvestigationLineEdit.setReadOnly(True)
+        self.PassiveInvestigationLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
 
     def CreateProficiencyInputs(self):
         # Header

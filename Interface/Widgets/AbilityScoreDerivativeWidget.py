@@ -32,6 +32,7 @@ class AbilityScoreDerivativeWidget(QFrame):
         self.SaveDCLineEdit.setSizePolicy(self.Parent.InputsSizePolicy)
         self.SaveDCLineEdit.setText("N/A")
         self.SaveDCLineEdit.setReadOnly(True)
+        self.SaveDCLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.SaveDCEditButton = EditButton(self.EditSaveDC, "Edit Save DC")
         self.SaveDCEditButton.setSizePolicy(self.Parent.InputsSizePolicy)
@@ -44,6 +45,7 @@ class AbilityScoreDerivativeWidget(QFrame):
         self.AttackModifierLineEdit.setSizePolicy(self.Parent.InputsSizePolicy)
         self.AttackModifierLineEdit.setText("N/A")
         self.AttackModifierLineEdit.setReadOnly(True)
+        self.AttackModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.AttackModifierRollButton = RollButton(self.RollAttackModifier, "Roll Attack Modifier")
         self.AttackModifierRollButton.setSizePolicy(self.Parent.InputsSizePolicy)

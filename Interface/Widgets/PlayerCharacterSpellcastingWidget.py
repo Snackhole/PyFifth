@@ -281,6 +281,7 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         self.SpellPointsMaxSpinBox.setRange(0, 1000000000)
         self.SpellPointsMaxSpinBox.setSpecialValueText("N/A")
         self.SpellPointsMaxSpinBox.setReadOnly(True)
+        self.SpellPointsMaxSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.SpellPointsMaxEditButton = EditButton(self.EditBonusSpellPointsStatModifier, "Edit Bonus Spell Points Stat Modifier")
         self.SpellPointsMaxEditButton.setSizePolicy(self.InputsSizePolicy)
