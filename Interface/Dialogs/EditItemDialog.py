@@ -25,21 +25,18 @@ class EditItemDialog(QDialog):
 
         # Item Name
         self.ItemNameLabel = QLabel("Name:")
-        self.ItemNameLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.ItemNameLineEdit = QLineEdit()
         self.ItemNameLineEdit.setText(self.Item["Item Name"])
         self.ItemNameLineEdit.textChanged.connect(self.UpdateItem)
 
         # Item Category
         self.ItemCategoryLabel = QLabel("Category:")
-        self.ItemCategoryLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.ItemCategoryLineEdit = QLineEdit()
         self.ItemCategoryLineEdit.setText(self.Item["Item Category"])
         self.ItemCategoryLineEdit.textChanged.connect(self.UpdateItem)
 
         # Item Rarity
         self.ItemRarityLabel = QLabel("Rarity:")
-        self.ItemRarityLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.ItemRarityLineEdit = QLineEdit()
         self.ItemRarityLineEdit.setText(self.Item["Item Rarity"])
         self.ItemRarityLineEdit.textChanged.connect(self.UpdateItem)
@@ -125,6 +122,8 @@ class EditItemDialog(QDialog):
         self.ItemCalculationInputsLayout.addWidget(self.ItemUnitValueSpinBox, 1, 2)
         self.ItemCalculationInputsLayout.addWidget(self.ItemUnitValueDenominationComboBox, 1, 3)
         self.ItemCalculationInputsLayout.addWidget(self.ItemTagComboBox, 1, 4)
+        for Column in range(3):
+            self.ItemCalculationInputsLayout.setColumnStretch(Column, 1)
         self.ItemInputsLayout.addLayout(self.ItemCalculationInputsLayout, 3, 0, 1, 2)
         self.ItemInputsLayout.addWidget(self.ItemDescriptionLabel, 4, 0, 1, 2)
         self.ItemInputsLayout.addWidget(self.ItemDescriptionTextEdit, 5, 0, 1, 2)
