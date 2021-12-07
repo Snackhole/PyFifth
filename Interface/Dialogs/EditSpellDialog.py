@@ -5,8 +5,6 @@ from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QMessageBox, QPushButton
 
 from Interface.Widgets.ToggleButtons import PreparedButton
 
-# self.SpellDefaults["Spell Prepared"] = False
-
 
 class EditSpellDialog(QDialog):
     def __init__(self, CharacterWindow, SpellList, SpellIndex, AddMode=False):
