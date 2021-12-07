@@ -2,6 +2,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDoubleSpinBox, QFrame, QGridLayout, QInputDialog, QLabel, QSizePolicy, QSpinBox
 
 from Interface.Dialogs.GainCoinsDialog import GainCoinsDialog
+from Interface.Dialogs.SpendCoinsDialog import SpendCoinsDialog
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton
 
 
@@ -400,7 +401,13 @@ class PlayerCharacterInventoryWidget(QFrame):
 
     # TODO dialog for spending coins
     def SpendCoins(self):
-        pass
+        SpendCoinsDialogInst = SpendCoinsDialog(self.CharacterWindow)
+        if SpendCoinsDialogInst.Submitted:
+            self.CPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["CP"])
+            self.SPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["SP"])
+            self.EPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["EP"])
+            self.GPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["GP"])
+            self.PPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["PP"])
 
     def EditConsumptionRate(self, Consumed):
         ConsumedRate, OK = QInputDialog.getDouble(self.CharacterWindow, "Edit " + Consumed + " Consumption Rate", Consumed + " consumption rate:", self.CharacterWindow.PlayerCharacter.Stats[Consumed + " Consumption Rate"], 0, 1000000000)
