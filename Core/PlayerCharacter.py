@@ -814,7 +814,7 @@ class PlayerCharacter(Character, SerializableMixin):
         return AdditionalNote
 
     def AddAdditionalNote(self):
-        NewAdditionalNote = self.CreateAdditionalNote
+        NewAdditionalNote = self.CreateAdditionalNote()
         self.Stats["Additional Notes"].append(NewAdditionalNote)
         AdditionalNoteIndex = len(self.Stats["Additional Notes"]) - 1
         return AdditionalNoteIndex
@@ -826,7 +826,7 @@ class PlayerCharacter(Character, SerializableMixin):
         AdditionalNoteIndex = len(self.Stats["Additional Notes"]) - 1
         self.DeleteAdditionalNote(AdditionalNoteIndex)
 
-    def MoveNote(self, NoteIndex, Delta):
+    def MoveAdditionalNote(self, NoteIndex, Delta):
         TargetIndex = NoteIndex + Delta
         if TargetIndex < 0 or TargetIndex >= len(self.Stats["Additional Notes"]):
             return False

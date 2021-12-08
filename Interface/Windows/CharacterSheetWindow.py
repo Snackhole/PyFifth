@@ -14,6 +14,7 @@ from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Widgets.PlayerCharacterAbilitiesAndSkillsWidget import PlayerCharacterAbilitiesAndSkillsWidget
 from Interface.Widgets.PlayerCharacterCombatAndFeaturesWidget import PlayerCharacterCombatAndFeaturesWidget
 from Interface.Widgets.PlayerCharacterInventoryWidget import PlayerCharacterInventoryWidget
+from Interface.Widgets.PlayerCharacterNotesWidget import PlayerCharacterNotesWidget
 from Interface.Widgets.PlayerCharacterSpellcastingWidget import PlayerCharacterSpellcastingWidget
 from Interface.Widgets.ToggleButtons import InspirationButton
 from Interface.Windows.Window import Window
@@ -102,9 +103,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.StatsTabWidget.addTab(self.PlayerCharacterSpellcastingWidgetInst, "Spellcasting")
         self.PlayerCharacterInventoryWidgetInst = PlayerCharacterInventoryWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterInventoryWidgetInst, "Inventory")
-        # TODO:  Replace QFrames with widgets
-        self.PlayerCharacterNotesWidgetInst = QFrame()
+        self.PlayerCharacterNotesWidgetInst = PlayerCharacterNotesWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterNotesWidgetInst, "Notes")
+        # TODO:  Replace QFrames with widgets
         self.PlayerCharacterPersonalityAndBackstoryWidgetInst = QFrame()
         self.StatsTabWidget.addTab(self.PlayerCharacterPersonalityAndBackstoryWidgetInst, "Personality and Backstory")
         self.PlayerCharacterPortraitWidgetInst = QFrame()
@@ -746,6 +747,15 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         else:
             self.PlayerCharacterInventoryWidgetInst.InventoryTreeWidget.FillFromInventory()
 
+        # Additional Notes
+        CurrentSelection = self.PlayerCharacterNotesWidgetInst.AdditionalNotesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentSelectionIndex = CurrentSelection[0].Index
+            self.PlayerCharacterNotesWidgetInst.AdditionalNotesTreeWidget.FillFromAdditionalNotes()
+            self.PlayerCharacterNotesWidgetInst.AdditionalNotesTreeWidget.SelectIndex(CurrentSelectionIndex)
+        else:
+            self.PlayerCharacterNotesWidgetInst.AdditionalNotesTreeWidget.FillFromAdditionalNotes()
+
         # Results Log
         ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
         self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
@@ -831,6 +841,10 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.PlayerCharacterInventoryWidgetInst.EPSpinBox.setValue(self.PlayerCharacter.Stats["Coins"]["EP"])
             self.PlayerCharacterInventoryWidgetInst.GPSpinBox.setValue(self.PlayerCharacter.Stats["Coins"]["GP"])
             self.PlayerCharacterInventoryWidgetInst.PPSpinBox.setValue(self.PlayerCharacter.Stats["Coins"]["PP"])
+
+            # Notes
+            self.PlayerCharacterNotesWidgetInst.NotesTextEdit1.setPlainText(self.PlayerCharacter.Stats["Notes 1"])
+            self.PlayerCharacterNotesWidgetInst.NotesTextEdit2.setPlainText(self.PlayerCharacter.Stats["Notes 2"])
 
             # Inspiration
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
