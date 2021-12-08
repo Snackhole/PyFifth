@@ -32,6 +32,9 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         # Create Vitality Table
         self.CreateVitalityTable()
 
+        # Create Combat and Features Notes
+        self.CreateCombatAndFeaturesNotes()
+
         # Create AC Tabs
         self.CreateACTabs()
 
@@ -43,9 +46,6 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Create Ability Score Derivatives
         self.CreateAbilityScoreDerivatives()
-
-        # Create Combat and Features Notes
-        self.CreateCombatAndFeaturesNotes()
 
         # Create Features List
         self.CreateFeaturesList()
@@ -298,7 +298,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         # Create Layout
         self.Layout = QGridLayout()
 
-        # Vitality Table
+        # Vitality
         self.VitalityLayout = QGridLayout()
 
         self.VitalityLayout.addWidget(self.VitalityLabel, 0, 0, 1, 2)
@@ -346,6 +346,13 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         self.Layout.addLayout(self.VitalityLayout, 0, 0, 3, 1)
 
+        # Combat and Features Notes
+        self.CombatAndFeaturesNotesLayout = QGridLayout()
+        self.CombatAndFeaturesNotesLayout.addWidget(self.CombatAndFeaturesNotesLabel, 0, 0)
+        self.CombatAndFeaturesNotesLayout.addWidget(self.CombatAndFeaturesNotesTextEdit, 1, 0)
+        self.CombatAndFeaturesNotesLayout.setRowStretch(1, 1)
+        self.Layout.addLayout(self.CombatAndFeaturesNotesLayout, 3, 0)
+
         # AC Tab Widget
         self.AC1Layout = QGridLayout()
         self.AC1Layout.addWidget(self.AC1SpinBox, 0, 0)
@@ -381,13 +388,6 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.SpeedLayout.addWidget(self.SpeedSpinBox, 1, 0)
         self.SpeedLayout.setRowStretch(1, 1)
         self.Layout.addLayout(self.SpeedLayout, 2, 1)
-
-        # Combat and Features Notes
-        self.CombatAndFeaturesNotesLayout = QGridLayout()
-        self.CombatAndFeaturesNotesLayout.addWidget(self.CombatAndFeaturesNotesLabel, 0, 0)
-        self.CombatAndFeaturesNotesLayout.addWidget(self.CombatAndFeaturesNotesTextEdit, 1, 0)
-        self.CombatAndFeaturesNotesLayout.setRowStretch(1, 1)
-        self.Layout.addLayout(self.CombatAndFeaturesNotesLayout, 3, 0)
 
         # Ability Score Derivatives
         self.AbilityScoreDerivativesLayout = QGridLayout()
