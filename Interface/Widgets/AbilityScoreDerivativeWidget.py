@@ -1,25 +1,27 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QComboBox, QFrame, QGridLayout, QLabel
+from PyQt5.QtWidgets import QComboBox, QFrame, QGridLayout, QLabel, QSizePolicy
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.IconButtons import EditButton, RollButton
 
 
 class AbilityScoreDerivativeWidget(QFrame):
-    def __init__(self, Parent, CharacterWindow, Index):
-        super().__init__(parent=Parent)
+    def __init__(self, CharacterWindow, Index):
+        super().__init__()
 
         # Store Parameters
-        self.Parent = Parent
         self.CharacterWindow = CharacterWindow
         self.Index = Index
+
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Ability
         self.AbilityLabel = QLabel("Ability:")
         self.AbilityLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.AbilityComboBox = QComboBox()
-        self.AbilityComboBox.setSizePolicy(self.Parent.InputsSizePolicy)
+        self.AbilityComboBox.setSizePolicy(self.InputsSizePolicy)
         self.AbilityComboBox.setEditable(False)
         self.AbilityComboBox.addItems(["", "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"])
         self.AbilityComboBox.currentTextChanged.connect(self.UpdateAbility)
@@ -29,29 +31,29 @@ class AbilityScoreDerivativeWidget(QFrame):
         self.SaveDCLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.SaveDCLineEdit = CenteredLineEdit()
-        self.SaveDCLineEdit.setSizePolicy(self.Parent.InputsSizePolicy)
+        self.SaveDCLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.SaveDCLineEdit.setText("N/A")
         self.SaveDCLineEdit.setReadOnly(True)
         self.SaveDCLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.SaveDCEditButton = EditButton(self.EditSaveDC, "Edit Save DC")
-        self.SaveDCEditButton.setSizePolicy(self.Parent.InputsSizePolicy)
+        self.SaveDCEditButton.setSizePolicy(self.InputsSizePolicy)
 
         # Attack Modifier
         self.AttackModifierLabel = QLabel("Attack Mod:")
         self.AttackModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         self.AttackModifierLineEdit = CenteredLineEdit()
-        self.AttackModifierLineEdit.setSizePolicy(self.Parent.InputsSizePolicy)
+        self.AttackModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.AttackModifierLineEdit.setText("N/A")
         self.AttackModifierLineEdit.setReadOnly(True)
         self.AttackModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.AttackModifierRollButton = RollButton(self.RollAttackModifier, "Roll Attack Modifier")
-        self.AttackModifierRollButton.setSizePolicy(self.Parent.InputsSizePolicy)
+        self.AttackModifierRollButton.setSizePolicy(self.InputsSizePolicy)
 
         self.AttackModifierEditButton = EditButton(self.EditAttackModifier, "Edit Attack Modifier")
-        self.AttackModifierEditButton.setSizePolicy(self.Parent.InputsSizePolicy)
+        self.AttackModifierEditButton.setSizePolicy(self.InputsSizePolicy)
 
         # Layout
         self.Layout = QGridLayout()

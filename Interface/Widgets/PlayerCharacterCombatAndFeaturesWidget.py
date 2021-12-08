@@ -255,9 +255,9 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.AbilityScoreDerivativesLabel.setMargin(self.HeaderLabelMargin)
 
         # Ability Score Derivative Widgets
-        self.AbilityScoreDerivativeWidgetInst1 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 0)
-        self.AbilityScoreDerivativeWidgetInst2 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 1)
-        self.AbilityScoreDerivativeWidgetInst3 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 2)
+        self.AbilityScoreDerivativeWidgetInst1 = AbilityScoreDerivativeWidget(self.CharacterWindow, 0)
+        self.AbilityScoreDerivativeWidgetInst2 = AbilityScoreDerivativeWidget(self.CharacterWindow, 1)
+        self.AbilityScoreDerivativeWidgetInst3 = AbilityScoreDerivativeWidget(self.CharacterWindow, 2)
 
     def CreateCombatAndFeaturesNotes(self):
         # Combat and Features Notes Label

@@ -55,9 +55,9 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         self.SpellcastingAbilitiesLabel.setMargin(self.HeaderLabelMargin)
 
         # Ability Score Derivative Widgets
-        self.SpellcastingAbilityWidgetInst1 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 3)
-        self.SpellcastingAbilityWidgetInst2 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 4)
-        self.SpellcastingAbilityWidgetInst3 = AbilityScoreDerivativeWidget(self, self.CharacterWindow, 5)
+        self.SpellcastingAbilityWidgetInst1 = AbilityScoreDerivativeWidget(self.CharacterWindow, 3)
+        self.SpellcastingAbilityWidgetInst2 = AbilityScoreDerivativeWidget(self.CharacterWindow, 4)
+        self.SpellcastingAbilityWidgetInst3 = AbilityScoreDerivativeWidget(self.CharacterWindow, 5)
 
     def CreateConcentratingButton(self):
         self.ConcentratingButton = ConcentratingButton(self.CharacterWindow)
