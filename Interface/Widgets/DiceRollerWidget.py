@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QSizePolicy, QSpinBox, QLabel, QPushButton, QTextEdit
+from PyQt5.QtWidgets import QFrame, QGridLayout, QSizePolicy, QSpinBox, QLabel, QTextEdit
 
 from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
 from Interface.Widgets.IconButtons import AddButton, CopyButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton, RollButton
@@ -18,7 +18,6 @@ class DiceRollerWidget(QFrame):
         self.RollLabelStyle = "QLabel {font-size: 16pt;}"
         self.SectionLabelStyle = "QLabel {font-size: 10pt; font-weight: bold;}"
         self.SpinBoxStyle = "QSpinBox {font-size: 16pt;}"
-        self.ButtonStyle = "QPushButton {font-size: 16pt;}"
 
         # Inputs Size Policy
         self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
