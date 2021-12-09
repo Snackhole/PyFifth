@@ -15,6 +15,7 @@ from Interface.Widgets.PlayerCharacterAbilitiesAndSkillsWidget import PlayerChar
 from Interface.Widgets.PlayerCharacterCombatAndFeaturesWidget import PlayerCharacterCombatAndFeaturesWidget
 from Interface.Widgets.PlayerCharacterInventoryWidget import PlayerCharacterInventoryWidget
 from Interface.Widgets.PlayerCharacterNotesWidget import PlayerCharacterNotesWidget
+from Interface.Widgets.PlayerCharacterPersonalityAndBackstoryWidget import PlayerCharacterPersonalityAndBackstoryWidget
 from Interface.Widgets.PlayerCharacterSpellcastingWidget import PlayerCharacterSpellcastingWidget
 from Interface.Widgets.ToggleButtons import InspirationButton
 from Interface.Windows.Window import Window
@@ -105,9 +106,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.StatsTabWidget.addTab(self.PlayerCharacterInventoryWidgetInst, "Inventory")
         self.PlayerCharacterNotesWidgetInst = PlayerCharacterNotesWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterNotesWidgetInst, "Notes")
-        # TODO:  Replace QFrames with widgets
-        self.PlayerCharacterPersonalityAndBackstoryWidgetInst = QFrame()
+        self.PlayerCharacterPersonalityAndBackstoryWidgetInst = PlayerCharacterPersonalityAndBackstoryWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterPersonalityAndBackstoryWidgetInst, "Personality and Backstory")
+        # TODO:  Replace QFrames with widgets
         self.PlayerCharacterPortraitWidgetInst = QFrame()
         self.StatsTabWidget.addTab(self.PlayerCharacterPortraitWidgetInst, "Portrait")
 
@@ -845,6 +846,18 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             # Notes
             self.PlayerCharacterNotesWidgetInst.NotesTextEdit1.setPlainText(self.PlayerCharacter.Stats["Notes 1"])
             self.PlayerCharacterNotesWidgetInst.NotesTextEdit2.setPlainText(self.PlayerCharacter.Stats["Notes 2"])
+
+            # Personality and Backstory
+            self.PlayerCharacterPersonalityAndBackstoryWidgetInst.RaceLineEdit.setText(self.PlayerCharacter.Stats["Character Race"])
+            self.PlayerCharacterPersonalityAndBackstoryWidgetInst.BackgroundLineEdit.setText(self.PlayerCharacter.Stats["Character Background"])
+            self.PlayerCharacterPersonalityAndBackstoryWidgetInst.AlignmentLineEdit.setText(self.PlayerCharacter.Stats["Character Alignment"])
+            self.PlayerCharacterPersonalityAndBackstoryWidgetInst.AgeLineEdit.setText(self.PlayerCharacter.Stats["Character Age"])
+            self.PlayerCharacterPersonalityAndBackstoryWidgetInst.PhysicalAppearanceTextEdit.setPlainText(self.PlayerCharacter.Stats["Character Physical Appearance"])
+            self.PlayerCharacterPersonalityAndBackstoryWidgetInst.PersonalityTraitsTextEdit.setPlainText(self.PlayerCharacter.Stats["Character Personality Traits"])
+            self.PlayerCharacterPersonalityAndBackstoryWidgetInst.IdealsTextEdit.setPlainText(self.PlayerCharacter.Stats["Character Ideals"])
+            self.PlayerCharacterPersonalityAndBackstoryWidgetInst.BondsTextEdit.setPlainText(self.PlayerCharacter.Stats["Character Bonds"])
+            self.PlayerCharacterPersonalityAndBackstoryWidgetInst.FlawsTextEdit.setPlainText(self.PlayerCharacter.Stats["Character Flaws"])
+            self.PlayerCharacterPersonalityAndBackstoryWidgetInst.BackstoryTextEdit.setPlainText(self.PlayerCharacter.Stats["Character Backstory"])
 
             # Inspiration
             self.InspirationButton.setChecked(self.PlayerCharacter.Stats["Inspiration"])
