@@ -1,7 +1,9 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QMessageBox, QPushButton, QGridLayout, QTextEdit
+from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox, QPushButton, QGridLayout, QTextEdit
+
+from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 
 
 class EditFeatureDialog(QDialog):
@@ -24,7 +26,7 @@ class EditFeatureDialog(QDialog):
         self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Feature Inputs
-        self.NameLineEdit = QLineEdit()
+        self.NameLineEdit = CenteredLineEdit()
         self.NameLineEdit.setPlaceholderText("Feature Name")
         self.NameLineEdit.setText(self.Feature["Feature Name"])
         self.NameLineEdit.textChanged.connect(self.UpdateFeature)

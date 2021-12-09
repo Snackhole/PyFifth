@@ -1,7 +1,9 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QMessageBox, QPushButton, QGridLayout, QTextEdit
+from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox, QPushButton, QGridLayout, QTextEdit
+
+from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 
 
 class EditAdditionalNoteDialog(QDialog):
@@ -24,7 +26,7 @@ class EditAdditionalNoteDialog(QDialog):
         self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Note Inputs
-        self.NoteNameLineEdit = QLineEdit()
+        self.NoteNameLineEdit = CenteredLineEdit()
         self.NoteNameLineEdit.setPlaceholderText("Note Name")
         self.NoteNameLineEdit.setText(self.AdditionalNote["Note Name"])
         self.NoteNameLineEdit.textChanged.connect(self.UpdateNote)
