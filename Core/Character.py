@@ -1,7 +1,7 @@
 import math
 import os
 
-from Core.Base64Converters import GetBase64StringFromFilePath, WriteFileFromBase64String
+from Core.Base64Converters import GetBase64StringFromFilePath, GetBinaryFromBase64String, WriteFileFromBase64String
 
 
 class Character:
@@ -88,6 +88,12 @@ class Character:
     def SetPortrait(self, PortraitFilePath):
         self.Stats["Portrait"] = GetBase64StringFromFilePath(PortraitFilePath)
         self.Stats["Portrait File Extension"] = os.path.splitext(PortraitFilePath)[1]
+
+    def GetPortraitBinary(self):
+        if self.Stats["Portrait"] is not None:
+            return GetBinaryFromBase64String(self.Stats["Portrait"])
+        else:
+            return None
 
     def ExportPortrait(self, ExportFilePath):
         WriteFileFromBase64String(self.Stats["Portrait"], ExportFilePath)
