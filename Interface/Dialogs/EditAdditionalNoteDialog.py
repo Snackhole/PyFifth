@@ -1,9 +1,10 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox, QPushButton, QGridLayout, QTextEdit
+from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox, QPushButton, QGridLayout
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
 
 class EditAdditionalNoteDialog(QDialog):
@@ -30,11 +31,10 @@ class EditAdditionalNoteDialog(QDialog):
         self.NoteNameLineEdit.setPlaceholderText("Note Name")
         self.NoteNameLineEdit.setText(self.AdditionalNote["Note Name"])
         self.NoteNameLineEdit.textChanged.connect(self.UpdateNote)
-        self.NoteTextTextEdit = QTextEdit()
+        self.NoteTextTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateNote)
         self.NoteTextTextEdit.setPlaceholderText("Note Text")
         self.NoteTextTextEdit.setTabChangesFocus(True)
         self.NoteTextTextEdit.setPlainText(self.AdditionalNote["Note Text"])
-        self.NoteTextTextEdit.textChanged.connect(self.UpdateNote)
 
         # Buttons
         self.DoneButton = QPushButton("Done")

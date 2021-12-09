@@ -1,9 +1,10 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox, QPushButton, QGridLayout, QTextEdit
+from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox, QPushButton, QGridLayout
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
 
 class EditFeatureDialog(QDialog):
@@ -30,11 +31,10 @@ class EditFeatureDialog(QDialog):
         self.NameLineEdit.setPlaceholderText("Feature Name")
         self.NameLineEdit.setText(self.Feature["Feature Name"])
         self.NameLineEdit.textChanged.connect(self.UpdateFeature)
-        self.DescriptionTextEdit = QTextEdit()
+        self.DescriptionTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateFeature)
         self.DescriptionTextEdit.setPlaceholderText("Feature Text")
         self.DescriptionTextEdit.setTabChangesFocus(True)
         self.DescriptionTextEdit.setPlainText(self.Feature["Feature Text"])
-        self.DescriptionTextEdit.textChanged.connect(self.UpdateFeature)
 
         # Buttons
         self.DoneButton = QPushButton("Done")

@@ -1,7 +1,8 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QSizePolicy, QTextEdit
+from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QSizePolicy
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
 
 class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
@@ -65,54 +66,48 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
         self.PhysicalAppearanceLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.PhysicalAppearanceLabel.setStyleSheet(self.SectionLabelStyle)
         self.PhysicalAppearanceLabel.setMargin(self.HeaderLabelMargin)
-        self.PhysicalAppearanceTextEdit = QTextEdit()
+        self.PhysicalAppearanceTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Physical Appearance", self.PhysicalAppearanceTextEdit.toPlainText()))
         self.PhysicalAppearanceTextEdit.setTabChangesFocus(True)
-        self.PhysicalAppearanceTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Character Physical Appearance", self.PhysicalAppearanceTextEdit.toPlainText()))
 
         # Personality Traits
         self.PersonalityTraitsLabel = QLabel("Personality Traits")
         self.PersonalityTraitsLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.PersonalityTraitsLabel.setStyleSheet(self.SectionLabelStyle)
         self.PersonalityTraitsLabel.setMargin(self.HeaderLabelMargin)
-        self.PersonalityTraitsTextEdit = QTextEdit()
+        self.PersonalityTraitsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Personality Traits", self.PersonalityTraitsTextEdit.toPlainText()))
         self.PersonalityTraitsTextEdit.setTabChangesFocus(True)
-        self.PersonalityTraitsTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Character Personality Traits", self.PersonalityTraitsTextEdit.toPlainText()))
 
         # Bonds
         self.BondsLabel = QLabel("Bonds")
         self.BondsLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.BondsLabel.setStyleSheet(self.SectionLabelStyle)
         self.BondsLabel.setMargin(self.HeaderLabelMargin)
-        self.BondsTextEdit = QTextEdit()
+        self.BondsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Bonds", self.BondsTextEdit.toPlainText()))
         self.BondsTextEdit.setTabChangesFocus(True)
-        self.BondsTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Character Bonds", self.BondsTextEdit.toPlainText()))
 
         # Ideals
         self.IdealsLabel = QLabel("Ideals")
         self.IdealsLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.IdealsLabel.setStyleSheet(self.SectionLabelStyle)
         self.IdealsLabel.setMargin(self.HeaderLabelMargin)
-        self.IdealsTextEdit = QTextEdit()
+        self.IdealsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Ideals", self.IdealsTextEdit.toPlainText()))
         self.IdealsTextEdit.setTabChangesFocus(True)
-        self.IdealsTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Character Ideals", self.IdealsTextEdit.toPlainText()))
 
         # Flaws
         self.FlawsLabel = QLabel("Flaws")
         self.FlawsLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.FlawsLabel.setStyleSheet(self.SectionLabelStyle)
         self.FlawsLabel.setMargin(self.HeaderLabelMargin)
-        self.FlawsTextEdit = QTextEdit()
+        self.FlawsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Flaws", self.FlawsTextEdit.toPlainText()))
         self.FlawsTextEdit.setTabChangesFocus(True)
-        self.FlawsTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Character Flaws", self.FlawsTextEdit.toPlainText()))
 
         # Backstory
         self.BackstoryLabel = QLabel("Backstory")
         self.BackstoryLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.BackstoryLabel.setStyleSheet(self.SectionLabelStyle)
         self.BackstoryLabel.setMargin(self.HeaderLabelMargin)
-        self.BackstoryTextEdit = QTextEdit()
+        self.BackstoryTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Backstory", self.BackstoryTextEdit.toPlainText()))
         self.BackstoryTextEdit.setTabChangesFocus(True)
-        self.BackstoryTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Character Backstory", self.BackstoryTextEdit.toPlainText()))
 
     def CreateAndSetLayout(self):
         # Create Layout

@@ -1,12 +1,13 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox, QSizePolicy, QTextEdit, QMessageBox
+from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox, QSizePolicy, QMessageBox
 
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Dialogs.PointBuyAbilityScoresDialog import PointBuyAbilityScoresDialog
 from Interface.Dialogs.RollForAbilityScoresDialog import RollForAbilityScoresDialog
 from Interface.Widgets.IconButtons import EditButton
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
 
 class EditAbilityScoresDialog(QDialog):
@@ -474,10 +475,9 @@ class EditAbilityScoresDialog(QDialog):
         self.AbilityScoreNotesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.AbilityScoreNotesLabel.setMargin(5)
 
-        self.AbilityScoreNotesTextEdit = QTextEdit()
+        self.AbilityScoreNotesTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateAbilityScoreNotes)
         self.AbilityScoreNotesTextEdit.setTabChangesFocus(True)
         self.AbilityScoreNotesTextEdit.setPlainText(self.AbilityScores["Ability Score Notes"])
-        self.AbilityScoreNotesTextEdit.textChanged.connect(self.UpdateAbilityScoreNotes)
 
         # Dialog Buttons
         self.DoneButton = QPushButton("Done")

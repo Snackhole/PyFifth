@@ -1,9 +1,10 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QTextEdit, QSizePolicy, QMessageBox
+from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QSizePolicy, QMessageBox
 from Interface.Dialogs.EditAdditionalNoteDialog import EditAdditionalNoteDialog
 
 from Interface.Widgets.AdditionalNotesTreeWidget import AdditionalNotesTreeWidget
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
 
 class PlayerCharacterNotesWidget(QFrame):
@@ -33,12 +34,10 @@ class PlayerCharacterNotesWidget(QFrame):
         self.CreateAndSetLayout()
 
     def CreateNotes(self):
-        self.NotesTextEdit1 = QTextEdit()
+        self.NotesTextEdit1 = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Notes 1", self.NotesTextEdit1.toPlainText()))
         self.NotesTextEdit1.setTabChangesFocus(True)
-        self.NotesTextEdit1.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Notes 1", self.NotesTextEdit1.toPlainText()))
-        self.NotesTextEdit2 = QTextEdit()
+        self.NotesTextEdit2 = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Notes 2", self.NotesTextEdit2.toPlainText()))
         self.NotesTextEdit2.setTabChangesFocus(True)
-        self.NotesTextEdit2.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Notes 2", self.NotesTextEdit2.toPlainText()))
 
     def CreateAdditionalNotes(self):
         # Additional Notes Label

@@ -1,8 +1,9 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QMessageBox, QPushButton, QGridLayout, QTextEdit
+from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QMessageBox, QPushButton, QGridLayout
 
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 from Interface.Widgets.ToggleButtons import PreparedButton
 
 
@@ -51,46 +52,36 @@ class EditSpellDialog(QDialog):
         # Spell Casting Time
         self.CastingTimeLabel = QLabel("Casting Time:")
         self.CastingTimeLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.CastingTimeTextEdit = QTextEdit()
+        self.CastingTimeTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateSpell, InitialContent=self.Spell["Spell Casting Time"])
         self.CastingTimeTextEdit.setMaximumHeight(self.SmallTextEditMaxHeight)
         self.CastingTimeTextEdit.setTabChangesFocus(True)
-        self.CastingTimeTextEdit.setPlainText(self.Spell["Spell Casting Time"])
-        self.CastingTimeTextEdit.textChanged.connect(self.UpdateSpell)
 
         # Spell Range
         self.RangeLabel = QLabel("Range:")
         self.RangeLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.RangeTextEdit = QTextEdit()
+        self.RangeTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateSpell, InitialContent=self.Spell["Spell Range"])
         self.RangeTextEdit.setMaximumHeight(self.SmallTextEditMaxHeight)
         self.RangeTextEdit.setTabChangesFocus(True)
-        self.RangeTextEdit.setPlainText(self.Spell["Spell Range"])
-        self.RangeTextEdit.textChanged.connect(self.UpdateSpell)
 
         # Spell Components
         self.ComponentsLabel = QLabel("Components:")
         self.ComponentsLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.ComponentsTextEdit = QTextEdit()
+        self.ComponentsTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateSpell, InitialContent=self.Spell["Spell Components"])
         self.ComponentsTextEdit.setMaximumHeight(self.SmallTextEditMaxHeight)
         self.ComponentsTextEdit.setTabChangesFocus(True)
-        self.ComponentsTextEdit.setPlainText(self.Spell["Spell Components"])
-        self.ComponentsTextEdit.textChanged.connect(self.UpdateSpell)
 
         # Spell Duration
         self.DurationLabel = QLabel("Duration:")
         self.DurationLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.DurationTextEdit = QTextEdit()
+        self.DurationTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateSpell, InitialContent=self.Spell["Spell Duration"])
         self.DurationTextEdit.setMaximumHeight(self.SmallTextEditMaxHeight)
         self.DurationTextEdit.setTabChangesFocus(True)
-        self.DurationTextEdit.setPlainText(self.Spell["Spell Duration"])
-        self.DurationTextEdit.textChanged.connect(self.UpdateSpell)
 
         # Spell Description
         self.DescriptionLabel = QLabel("Description:")
         self.DescriptionLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.DescriptionTextEdit = QTextEdit()
+        self.DescriptionTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateSpell, InitialContent=self.Spell["Spell Text"])
         self.DescriptionTextEdit.setTabChangesFocus(True)
-        self.DescriptionTextEdit.setPlainText(self.Spell["Spell Text"])
-        self.DescriptionTextEdit.textChanged.connect(self.UpdateSpell)
 
         # Prepared
         self.PreparedButton = PreparedButton(self.UpdateSpell)

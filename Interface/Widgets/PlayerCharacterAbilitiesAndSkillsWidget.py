@@ -1,11 +1,12 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QPushButton, QSizePolicy, QTextEdit
+from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QPushButton, QSizePolicy
 
 from Interface.Dialogs.AlternateAbilityScoreSkillRollDialog import AlternateAbilityScoreSkillRollDialog
 from Interface.Dialogs.EditAbilityScoresDialog import EditAbilityScoresDialog
 from Interface.Dialogs.EditSkillsDialog import EditSkillsDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.IconButtons import EditButton, RollButton
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
 
 class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
@@ -487,45 +488,40 @@ class PlayerCharacterAbilitiesAndSkillsWidget(QFrame):
         self.WeaponsProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.WeaponsProficienciesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.WeaponsProficienciesLabel.setMargin(5)
-        self.WeaponsProficiencesTextEdit = QTextEdit()
+        self.WeaponsProficiencesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Weapons Proficiencies", self.WeaponsProficiencesTextEdit.toPlainText()))
         self.WeaponsProficiencesTextEdit.setTabChangesFocus(True)
-        self.WeaponsProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Weapons Proficiencies", self.WeaponsProficiencesTextEdit.toPlainText()))
 
         # Armor Proficiencies
         self.ArmorProficienciesLabel = QLabel("Armor")
         self.ArmorProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.ArmorProficienciesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.ArmorProficienciesLabel.setMargin(5)
-        self.ArmorProficiencesTextEdit = QTextEdit()
+        self.ArmorProficiencesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Armor Proficiencies", self.ArmorProficiencesTextEdit.toPlainText()))
         self.ArmorProficiencesTextEdit.setTabChangesFocus(True)
-        self.ArmorProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Armor Proficiencies", self.ArmorProficiencesTextEdit.toPlainText()))
 
         # Tools and Instruments Proficiencies
         self.ToolsAndInstrumentsProficienciesLabel = QLabel("Tools and Instruments")
         self.ToolsAndInstrumentsProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.ToolsAndInstrumentsProficienciesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.ToolsAndInstrumentsProficienciesLabel.setMargin(5)
-        self.ToolsAndInstrumentsProficiencesTextEdit = QTextEdit()
+        self.ToolsAndInstrumentsProficiencesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Tools and Instruments Proficiencies", self.ToolsAndInstrumentsProficiencesTextEdit.toPlainText()))
         self.ToolsAndInstrumentsProficiencesTextEdit.setTabChangesFocus(True)
-        self.ToolsAndInstrumentsProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Tools and Instruments Proficiencies", self.ToolsAndInstrumentsProficiencesTextEdit.toPlainText()))
 
         # Languages Proficiencies
         self.LanguagesProficienciesLabel = QLabel("Languages")
         self.LanguagesProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.LanguagesProficienciesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.LanguagesProficienciesLabel.setMargin(5)
-        self.LanguagesProficiencesTextEdit = QTextEdit()
+        self.LanguagesProficiencesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Languages Proficiencies", self.LanguagesProficiencesTextEdit.toPlainText()))
         self.LanguagesProficiencesTextEdit.setTabChangesFocus(True)
-        self.LanguagesProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Languages Proficiencies", self.LanguagesProficiencesTextEdit.toPlainText()))
 
         # Other Proficiencies
         self.OtherProficienciesLabel = QLabel("Other")
         self.OtherProficienciesLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.OtherProficienciesLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
         self.OtherProficienciesLabel.setMargin(5)
-        self.OtherProficiencesTextEdit = QTextEdit()
+        self.OtherProficiencesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Other Proficiencies", self.OtherProficiencesTextEdit.toPlainText()))
         self.OtherProficiencesTextEdit.setTabChangesFocus(True)
-        self.OtherProficiencesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Other Proficiencies", self.OtherProficiencesTextEdit.toPlainText()))
 
     def CreateAndSetLayout(self):
         # Create Layout

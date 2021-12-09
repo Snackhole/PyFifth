@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QMessageBox, QSizePolicy, QGridLayout, QSpinBox, QTabWidget, QTextEdit
+from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QMessageBox, QSizePolicy, QGridLayout, QSpinBox, QTabWidget
 
 from Interface.Dialogs.EditFeatureDialog import EditFeatureDialog
 from Interface.Dialogs.EditMaxHPDialog import EditMaxHPDialog
@@ -7,6 +7,7 @@ from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativ
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.FeaturesTreeWidget import FeaturesTreeWidget
 from Interface.Widgets.IconButtons import AddButton, DamageButton, DeleteButton, EditButton, HealButton, MoveDownButton, MoveUpButton, RollButton
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
 
 class PlayerCharacterCombatAndFeaturesWidget(QFrame):
@@ -267,9 +268,8 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.CombatAndFeaturesNotesLabel.setMargin(self.HeaderLabelMargin)
 
         # Combat and Features Notes Text Edit
-        self.CombatAndFeaturesNotesTextEdit = QTextEdit()
+        self.CombatAndFeaturesNotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Combat and Features Notes", self.CombatAndFeaturesNotesTextEdit.toPlainText()))
         self.CombatAndFeaturesNotesTextEdit.setTabChangesFocus(True)
-        self.CombatAndFeaturesNotesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Combat and Features Notes", self.CombatAndFeaturesNotesTextEdit.toPlainText()))
 
     def CreateFeaturesList(self):
         # Features Label

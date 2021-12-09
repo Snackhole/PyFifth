@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QTextEdit
 
 
 class IndentingTextEdit(QTextEdit):
-    def __init__(self, TextChangedSlot=None):
+    def __init__(self, TextChangedSlot=None, InitialContent=""):
         # Initialize Text Edit
         super().__init__()
 
@@ -17,10 +17,16 @@ class IndentingTextEdit(QTextEdit):
         self.IndentWidth = 10
         self.document().setIndentWidth(self.IndentWidth)
 
-        # Connect Text Changed Slot
-        self.textChanged.connect(self.TextChanged)
+        # Set Initial Content
+        self.setPlainText(InitialContent)
 
-    def TextChanged(self):
+        # Connect Text Changed Slot
+        self.textChanged.connect(self.Indent)
+
+        # Initial Indent
+        self.Indent(SkipTextChangedSlot=True)
+
+    def Indent(self, SkipTextChangedSlot=False):
         if self.UpdatingBlockFormat:
             return
 
@@ -43,5 +49,5 @@ class IndentingTextEdit(QTextEdit):
             self.UpdatingBlockFormat = False
 
         # Call Text Changed Slot
-        if self.TextChangedSlot is not None:
+        if self.TextChangedSlot is not None and not SkipTextChangedSlot:
             self.TextChangedSlot()

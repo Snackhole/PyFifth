@@ -1,7 +1,9 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QComboBox, QDialog, QDoubleSpinBox, QLabel, QLineEdit, QMessageBox, QPushButton, QGridLayout, QSpinBox, QTextEdit
+from PyQt5.QtWidgets import QComboBox, QDialog, QDoubleSpinBox, QLabel, QLineEdit, QMessageBox, QPushButton, QGridLayout, QSpinBox
+
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
 
 class EditItemDialog(QDialog):
@@ -89,10 +91,9 @@ class EditItemDialog(QDialog):
         # Item Description
         self.ItemDescriptionLabel = QLabel("Description:")
         self.ItemDescriptionLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.ItemDescriptionTextEdit = QTextEdit()
+        self.ItemDescriptionTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateItem)
         self.ItemDescriptionTextEdit.setTabChangesFocus(True)
         self.ItemDescriptionTextEdit.setPlainText(self.Item["Item Description"])
-        self.ItemDescriptionTextEdit.textChanged.connect(self.UpdateItem)
 
         # Buttons
         self.DoneButton = QPushButton("Done")

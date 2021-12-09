@@ -1,10 +1,11 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QLabel, QSizePolicy, QGridLayout, QSpinBox, QTextEdit, QMessageBox
+from PyQt5.QtWidgets import QFrame, QLabel, QSizePolicy, QGridLayout, QSpinBox, QMessageBox
 
 from Interface.Dialogs.EditSpellDialog import EditSpellDialog
 from Interface.Dialogs.SpendOrRestoreSpellPointsDialog import SpendOrRestoreSpellPointsDialog
 from Interface.Widgets.AbilityScoreDerivativeWidget import AbilityScoreDerivativeWidget
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 from Interface.Widgets.SpellListTreeWidget import SpellListTreeWidget
 from Interface.Widgets.ToggleButtons import ConcentratingButton
 
@@ -70,9 +71,8 @@ class PlayerCharacterSpellcastingWidget(QFrame):
         self.SpellNotesLabel.setMargin(self.HeaderLabelMargin)
 
         # Spell Notes Text Edit
-        self.SpellNotesTextEdit = QTextEdit()
+        self.SpellNotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Spell Notes", self.SpellNotesTextEdit.toPlainText()))
         self.SpellNotesTextEdit.setTabChangesFocus(True)
-        self.SpellNotesTextEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Spell Notes", self.SpellNotesTextEdit.toPlainText()))
 
     def CreateSpellSlots(self):
         # Spell Slots Label
