@@ -27,6 +27,7 @@ class ModeSelectionWindow(Window):
         self.ModeComboBox = QComboBox()
         self.ModeComboBox.setSizePolicy(self.InputsSizePolicy)
         self.ModeComboBox.addItem("Character Sheet")
+        self.ModeComboBox.addItem("Coin Calculator")
         self.ModeComboBox.setEditable(False)
 
         # Buttons

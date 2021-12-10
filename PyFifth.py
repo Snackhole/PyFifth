@@ -9,6 +9,7 @@ if sys.path[0] != AbsoluteDirectoryPath:
 
 from PyQt5.QtWidgets import QApplication
 
+from Interface.Widgets.CoinCalculatorWidget import CoinCalculatorWidget
 from Interface.Windows.ModeSelectionWindow import ModeSelectionWindow
 from Interface.Windows.CharacterSheetWindow import CharacterSheetWindow
 from Build import BuildVariables
@@ -32,6 +33,7 @@ def StartApp():
         # Modes Dictionary
         Modes = {}
         Modes["Character Sheet"] = CharacterSheetWindow
+        Modes["Coin Calculator"] = CoinCalculatorWidget
 
         # Create Mode Window
         ModeWindowInst = Modes[Mode](ScriptName, AbsoluteDirectoryPath, AppInst)
