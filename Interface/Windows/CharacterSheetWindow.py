@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QFrame, QGridLayout, QInputDialog, QLabel, QSpinBox,
 
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
+from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Dialogs.EditPresetRollDialog import EditPresetRollDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
@@ -189,6 +190,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.QuitAction = QAction("Quit")
         self.QuitAction.triggered.connect(self.close)
 
+        self.CoinCalculatorAction = QAction("Coin Calculator")
+        self.CoinCalculatorAction.triggered.connect(self.ShowCoinCalculator)
+
         self.ViewPreviousTabAction = QAction("Previous Tab")
         self.ViewPreviousTabAction.triggered.connect(self.ViewPreviousTab)
 
@@ -277,6 +281,8 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.FileMenu.addAction(self.QuitAction)
 
         self.ViewMenu = self.MenuBar.addMenu("View")
+        self.ViewMenu.addAction(self.CoinCalculatorAction)
+        self.ViewMenu.addSeparator()
         self.ViewMenu.addAction(self.ViewPreviousTabAction)
         self.ViewMenu.addAction(self.ViewNextTabAction)
         self.ViewMenu.addAction(self.ViewAbilitiesAndSkillsTabAction)
@@ -489,6 +495,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.UpdateUnsavedChangesFlag(True)
 
     # View Methods
+    def ShowCoinCalculator(self):
+        CoinCalculatorDialog(self)
+
     def ViewTab(self, Index):
         self.StatsTabWidget.setCurrentIndex(Index)
 
