@@ -19,6 +19,9 @@ class DiceRollerWidget(QFrame):
         self.SectionLabelStyle = "QLabel {font-size: 10pt; font-weight: bold;}"
         self.SpinBoxStyle = "QSpinBox {font-size: 16pt;}"
 
+        # Header Label Margin
+        self.HeaderLabelMargin = 5
+
         # Inputs Size Policy
         self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
@@ -78,6 +81,7 @@ class DiceRollerWidget(QFrame):
         self.PresetRollsLabel = QLabel("Preset Rolls")
         self.PresetRollsLabel.setStyleSheet(self.SectionLabelStyle)
         self.PresetRollsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PresetRollsLabel.setMargin(self.HeaderLabelMargin)
 
         # Preset Rolls Tree Widget
         self.PresetRollsTreeWidget = PresetRollsTreeWidget(self.CharacterWindow)
@@ -109,6 +113,7 @@ class DiceRollerWidget(QFrame):
         self.ResultsLogLabel = QLabel("Results Log")
         self.ResultsLogLabel.setStyleSheet(self.SectionLabelStyle)
         self.ResultsLogLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ResultsLogLabel.setMargin(self.HeaderLabelMargin)
 
         # Results Log Text Edit
         self.ResultsLogTextEdit = QTextEdit()
