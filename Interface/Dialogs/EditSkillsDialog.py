@@ -49,6 +49,8 @@ class EditSkillsDialog(QDialog):
         # Dialog Buttons
         self.DoneButton = QPushButton("Done")
         self.DoneButton.clicked.connect(self.Done)
+        self.DoneButton.setDefault(True)
+        self.DoneButton.setAutoDefault(True)
         self.SetToDefaultButton = QPushButton("Set to Default")
         self.SetToDefaultButton.clicked.connect(self.SetToDefault)
         self.CancelButton = QPushButton("Cancel")

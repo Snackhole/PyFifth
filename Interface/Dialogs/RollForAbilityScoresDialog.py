@@ -47,6 +47,8 @@ class RollForAbilityScoresDialog(QDialog):
         # Dialog Buttons
         self.DoneButton = QPushButton("Done")
         self.DoneButton.clicked.connect(self.Done)
+        self.DoneButton.setDefault(True)
+        self.DoneButton.setAutoDefault(True)
         self.CancelButton = QPushButton("Cancel")
         self.CancelButton.clicked.connect(self.Cancel)
 
