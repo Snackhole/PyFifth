@@ -449,7 +449,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.TabWidget.setTabVisible(1, self.NonPlayerCharacter.Stats["Portrait Enabled"])
         self.SwitchTabAction.setEnabled(self.NonPlayerCharacter.Stats["Portrait Enabled"])
 
-        # TODO
+        # TODO once HPSpinBox is showing in stats tab
         # # Set Negative Current HP Indicator
         # Style = self.NonPlayerCharacterCombatAndFeaturesWidgetInst.HPSpinBoxStyle if self.NonPlayerCharacter.Stats["Current Health"] >= 0 else self.NonPlayerCharacterCombatAndFeaturesWidgetInst.NegativeCurrentHealthSpinBoxStyle
         # self.NonPlayerCharacterCombatAndFeaturesWidgetInst.CurrentHPSpinBox.setStyleSheet(Style)
@@ -470,7 +470,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         else:
             self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
 
-        # TODO
+        # TODO fields from stats tab
         # Updating Fields from Non-Player Character
         if self.UpdatingFieldsFromNonPlayerCharacter:
             # Header
