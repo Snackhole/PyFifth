@@ -3,12 +3,13 @@ import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QAction, QInputDialog, QMessageBox, QGridLayout
+from PyQt5.QtWidgets import QAction, QFrame, QInputDialog, QLabel, QMessageBox, QGridLayout, QTabWidget
 
 from Core.DiceRoller import DiceRoller
 from Core.NonPlayerCharacter import NonPlayerCharacter
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
 from Interface.Dialogs.EditPresetRollDialog import EditPresetRollDialog
+from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
@@ -46,11 +47,67 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
     def CreateInterface(self):
         super().LoadTheme()
 
+        # Header
+        self.NameLabel = QLabel("Name:")
+        self.NameLineEdit = CenteredLineEdit()
+        self.NameLineEdit.textChanged.connect(lambda: self.UpdateStat("NPC Name", self.NameLineEdit.text()))
+
+        self.SizeLabel = QLabel("Size:")
+        self.SizeLineEdit = CenteredLineEdit()
+        self.SizeLineEdit.textChanged.connect(lambda: self.UpdateStat("Size", self.SizeLineEdit.text()))
+
+        self.TypeAndTagsLabel = QLabel("Type and Tags:")
+        self.TypeAndTagsLineEdit = CenteredLineEdit()
+        self.TypeAndTagsLineEdit.textChanged.connect(lambda: self.UpdateStat("Type and Tags", self.TypeAndTagsLineEdit.text()))
+
+        self.AlignmentLabel = QLabel("Alignment:")
+        self.AlignmentLineEdit = CenteredLineEdit()
+        self.AlignmentLineEdit.textChanged.connect(lambda: self.UpdateStat("Alignment", self.AlignmentLineEdit.text()))
+
+        self.ProficiencyBonusLabel = QLabel("Proficiency Bonus:")
+        self.ProficiencyBonusLineEdit = CenteredLineEdit()
+        self.ProficiencyBonusLineEdit.setReadOnly(True)
+        self.ProficiencyBonusLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
+
+        # Tab Widget
+        self.TabWidget = QTabWidget()
+        self.TabWidget.setUsesScrollButtons(False)
+        self.NonPlayerCharacterStatsWidgetInst = QFrame()
+        self.TabWidget.addTab(self.NonPlayerCharacterStatsWidgetInst, "Stats")
+        self.NonPlayerCharacterPortraitWidgetInst = QFrame()
+        self.TabWidget.addTab(self.NonPlayerCharacterPortraitWidgetInst, "Portrait")
+
         # Dice Roller
         self.DiceRollerWidget = DiceRollerWidget(self)
 
         # Create and Set Layout
         self.Layout = QGridLayout()
+
+        self.HeaderFrame = QFrame()
+        self.HeaderFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.HeaderLayout = QGridLayout()
+        self.HeaderLayout.addWidget(self.NameLabel, 0, 0)
+        self.HeaderLayout.addWidget(self.NameLineEdit, 0, 1)
+        self.HeaderLayout.addWidget(self.SizeLabel, 0, 2)
+        self.HeaderLayout.addWidget(self.SizeLineEdit, 0, 3)
+        self.HeaderLayout.addWidget(self.TypeAndTagsLabel, 0, 4)
+        self.HeaderLayout.addWidget(self.TypeAndTagsLineEdit, 0, 5)
+        self.HeaderLayout.addWidget(self.AlignmentLabel, 0, 6)
+        self.HeaderLayout.addWidget(self.AlignmentLineEdit, 0, 7)
+        self.HeaderLayout.addWidget(self.ProficiencyBonusLabel, 0, 8)
+        self.HeaderLayout.addWidget(self.ProficiencyBonusLineEdit, 0, 9)
+        self.HeaderLayout.setColumnStretch(1, 2)
+        for Column in [3, 5, 7]:
+            self.HeaderLayout.setColumnStretch(Column, 1)
+        self.HeaderFrame.setLayout(self.HeaderLayout)
+        self.Layout.addWidget(self.HeaderFrame, 0, 0, 1, 2)
+
+        self.StatsFrame = QFrame()
+        self.StatsFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.StatsLayout = QGridLayout()
+        self.StatsLayout.addWidget(self.TabWidget, 0, 0)
+        self.StatsFrame.setLayout(self.StatsLayout)
+        self.Layout.addWidget(self.StatsFrame, 1, 0)
 
         self.Layout.addWidget(self.DiceRollerWidget, 1, 1)
 
@@ -377,10 +434,9 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         # Update Derived Stats
         self.DerivedStats = self.NonPlayerCharacter.GetDerivedStats()
 
-        # TODO
-        # # Proficiency Bonus
-        # ProficiencyBonusText = "+" + str(self.DerivedStats["Proficiency Bonus"])
-        # self.ProficiencyBonusLineEdit.setText(ProficiencyBonusText)
+        # Proficiency Bonus
+        ProficiencyBonusText = "+" + str(self.DerivedStats["Proficiency Bonus"])
+        self.ProficiencyBonusLineEdit.setText(ProficiencyBonusText)
 
         # TODO
         # # Portrait Enabled
@@ -411,7 +467,11 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         # TODO
         # Updating Fields from Non-Player Character
         if self.UpdatingFieldsFromNonPlayerCharacter:
-            pass
+            # Header
+            self.NameLineEdit.setText(self.NonPlayerCharacter.Stats["NPC Name"])
+            self.SizeLineEdit.setText(self.NonPlayerCharacter.Stats["Size"])
+            self.TypeAndTagsLineEdit.setText(self.NonPlayerCharacter.Stats["Type and Tags"])
+            self.AlignmentLineEdit.setText(self.NonPlayerCharacter.Stats["Alignment"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
