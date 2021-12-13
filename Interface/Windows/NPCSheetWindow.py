@@ -12,6 +12,7 @@ from Interface.Dialogs.EditPresetRollDialog import EditPresetRollDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.CharacterPortraitWidget import CharacterPortraitWidget
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
+from Interface.Widgets.NonPlayerCharacterStatsWidget import NonPlayerCharacterStatsWidget
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -73,7 +74,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         # Tab Widget
         self.TabWidget = QTabWidget()
         self.TabWidget.setUsesScrollButtons(False)
-        self.NonPlayerCharacterStatsWidgetInst = QFrame()
+        self.NonPlayerCharacterStatsWidgetInst = NonPlayerCharacterStatsWidget(self)
         self.TabWidget.addTab(self.NonPlayerCharacterStatsWidgetInst, "Stats")
         self.NonPlayerCharacterPortraitWidgetInst = CharacterPortraitWidget(self)
         self.TabWidget.addTab(self.NonPlayerCharacterPortraitWidgetInst, "Portrait")
@@ -110,7 +111,12 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.StatsFrame.setLayout(self.StatsLayout)
         self.Layout.addWidget(self.StatsFrame, 1, 0)
 
-        self.Layout.addWidget(self.DiceRollerWidget, 1, 1)
+        self.DiceRollerFrame = QFrame()
+        self.DiceRollerFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.DiceRollerLayout = QGridLayout()
+        self.DiceRollerLayout.addWidget(self.DiceRollerWidget, 0, 0)
+        self.DiceRollerFrame.setLayout(self.DiceRollerLayout)
+        self.Layout.addWidget(self.DiceRollerFrame, 1, 1)
 
         self.Frame.setLayout(self.Layout)
 
@@ -219,6 +225,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.DefaultKeybindings["SaveAction"] = "Ctrl+S"
         self.DefaultKeybindings["SaveAsAction"] = "Ctrl+Shift+S"
         self.DefaultKeybindings["QuitAction"] = "Ctrl+Q"
+        self.DefaultKeybindings["SwitchTabAction"] = "Ctrl+Tab"
         self.DefaultKeybindings["RollAction"] = "Ctrl+R"
         self.DefaultKeybindings["RollPresetRollAction"] = "Ctrl+Shift+R"
         self.DefaultKeybindings["AverageRollAction"] = "Ctrl+Alt+R"
@@ -376,9 +383,8 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
     def ShowCoinCalculator(self):
         CoinCalculatorDialog(self)
 
-    # TODO
     def SwitchTab(self):
-        pass
+        self.TabWidget.setCurrentIndex(0 if self.TabWidget.currentIndex() == 1 else 1)
 
     # Save and Open Methods
     def NewActionTriggered(self):
@@ -441,6 +447,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
 
         # Portrait Enabled
         self.TabWidget.setTabVisible(1, self.NonPlayerCharacter.Stats["Portrait Enabled"])
+        self.SwitchTabAction.setEnabled(self.NonPlayerCharacter.Stats["Portrait Enabled"])
 
         # TODO
         # # Set Negative Current HP Indicator
