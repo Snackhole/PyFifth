@@ -16,8 +16,9 @@ class PresetRollsTreeWidget(QTreeWidget):
 
     def FillFromPresetRolls(self):
         self.clear()
-        for PresetRollIndex in range(len(self.CharacterWindow.PlayerCharacter.Stats["Dice Roller"].PresetRolls)):
-            self.invisibleRootItem().addChild(PresetRollsWidgetItem(PresetRollIndex, self.CharacterWindow.PlayerCharacter.Stats["Dice Roller"].PresetRolls[PresetRollIndex]))
+        Character = self.CharacterWindow.GetCharacter()
+        for PresetRollIndex in range(len(Character.Stats["Dice Roller"].PresetRolls)):
+            self.invisibleRootItem().addChild(PresetRollsWidgetItem(PresetRollIndex, Character.Stats["Dice Roller"].PresetRolls[PresetRollIndex]))
 
     def SelectIndex(self, Index):
         DestinationIndex = self.model().index(Index, 0)

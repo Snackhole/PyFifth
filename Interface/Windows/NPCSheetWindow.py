@@ -3,10 +3,13 @@ import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QAction, QMessageBox, QGridLayout
+from PyQt5.QtWidgets import QAction, QInputDialog, QMessageBox, QGridLayout
 
 from Core.DiceRoller import DiceRoller
 from Core.NonPlayerCharacter import NonPlayerCharacter
+from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
+from Interface.Dialogs.EditPresetRollDialog import EditPresetRollDialog
+from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -43,8 +46,13 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
     def CreateInterface(self):
         super().LoadTheme()
 
+        # Dice Roller
+        self.DiceRollerWidget = DiceRollerWidget(self)
+
         # Create and Set Layout
         self.Layout = QGridLayout()
+
+        self.Layout.addWidget(self.DiceRollerWidget, 1, 1)
 
         self.Frame.setLayout(self.Layout)
 
@@ -81,43 +89,37 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.QuitAction = QAction("Quit")
         self.QuitAction.triggered.connect(self.close)
 
-        # TODO
-        # self.CoinCalculatorAction = QAction("Coin Calculator")
-        # self.CoinCalculatorAction.triggered.connect(self.ShowCoinCalculator)
+        self.CoinCalculatorAction = QAction("Coin Calculator")
+        self.CoinCalculatorAction.triggered.connect(self.ShowCoinCalculator)
 
-        # TODO
-        # self.PortraitEnabledAction = QAction("Portrait Enabled")
-        # self.PortraitEnabledAction.setCheckable(True)
-        # self.PortraitEnabledAction.setChecked(True)
-        # self.PortraitEnabledAction.triggered.connect(self.TogglePortraitEnabled)
+        self.SwitchTabAction = QAction("Switch Tab")
+        self.SwitchTabAction.triggered.connect(self.SwitchTab)
 
-        # TODO
-        # self.SetCritMinimumAction = QAction("Set Crit Minimum")
-        # self.SetCritMinimumAction.triggered.connect(self.SetCritMinimumActionTriggered)
+        self.PortraitEnabledAction = QAction("Portrait Enabled")
+        self.PortraitEnabledAction.setCheckable(True)
+        self.PortraitEnabledAction.setChecked(True)
+        self.PortraitEnabledAction.triggered.connect(self.TogglePortraitEnabled)
 
-        # TODO
-        # self.RollAction = QAction("Roll")
-        # self.RollAction.triggered.connect(self.RollActionTriggered)
+        self.SetCritMinimumAction = QAction("Set Crit Minimum")
+        self.SetCritMinimumAction.triggered.connect(self.SetCritMinimumActionTriggered)
 
-        # TODO
-        # self.RollPresetRollAction = QAction("Roll Preset Roll")
-        # self.RollPresetRollAction.triggered.connect(self.RollPresetRollActionTriggered)
+        self.RollAction = QAction("Roll")
+        self.RollAction.triggered.connect(self.RollActionTriggered)
 
-        # TODO
-        # self.AverageRollAction = QAction("Average Roll")
-        # self.AverageRollAction.triggered.connect(self.AverageRollActionTriggered)
+        self.RollPresetRollAction = QAction("Roll Preset Roll")
+        self.RollPresetRollAction.triggered.connect(self.RollPresetRollActionTriggered)
 
-        # TODO
-        # self.AddLogEntryAction = QAction("Add Log Entry")
-        # self.AddLogEntryAction.triggered.connect(self.AddLogEntryActionTriggered)
+        self.AverageRollAction = QAction("Average Roll")
+        self.AverageRollAction.triggered.connect(self.AverageRollActionTriggered)
 
-        # TODO
-        # self.RemoveLastLogEntryAction = QAction("Remove Last Log Entry")
-        # self.RemoveLastLogEntryAction.triggered.connect(self.RemoveLastLogEntryActionTriggered)
+        self.AddLogEntryAction = QAction("Add Log Entry")
+        self.AddLogEntryAction.triggered.connect(self.AddLogEntryActionTriggered)
 
-        # TODO
-        # self.ClearLogAction = QAction("Clear Log")
-        # self.ClearLogAction.triggered.connect(self.ClearLogActionTriggered)
+        self.RemoveLastLogEntryAction = QAction("Remove Last Log Entry")
+        self.RemoveLastLogEntryAction.triggered.connect(self.RemoveLastLogEntryActionTriggered)
+
+        self.ClearLogAction = QAction("Clear Log")
+        self.ClearLogAction.triggered.connect(self.ClearLogActionTriggered)
 
     def CreateMenuBar(self):
         self.MenuBar = self.menuBar()
@@ -133,25 +135,24 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction(self.QuitAction)
 
-        # TODO
-        # self.ViewMenu = self.MenuBar.addMenu("View")
-        # self.ViewMenu.addAction(self.CoinCalculatorAction)
+        self.ViewMenu = self.MenuBar.addMenu("View")
+        self.ViewMenu.addAction(self.CoinCalculatorAction)
+        self.ViewMenu.addSeparator()
+        self.ViewMenu.addAction(self.SwitchTabAction)
 
-        # TODO
-        # self.NPCSettingsMenu = self.MenuBar.addMenu("NPC Settings")
-        # self.NPCSettingsMenu.addAction(self.PortraitEnabledAction)
-        # self.NPCSettingsMenu.addSeparator()
-        # self.NPCSettingsMenu.addAction(self.SetCritMinimumAction)
+        self.NPCSettingsMenu = self.MenuBar.addMenu("NPC Settings")
+        self.NPCSettingsMenu.addAction(self.PortraitEnabledAction)
+        self.NPCSettingsMenu.addSeparator()
+        self.NPCSettingsMenu.addAction(self.SetCritMinimumAction)
 
-        # TODO
-        # self.RollerMenu = self.MenuBar.addMenu("Roller")
-        # self.RollerMenu.addAction(self.RollAction)
-        # self.RollerMenu.addAction(self.RollPresetRollAction)
-        # self.RollerMenu.addAction(self.AverageRollAction)
-        # self.RollerMenu.addSeparator()
-        # self.RollerMenu.addAction(self.AddLogEntryAction)
-        # self.RollerMenu.addAction(self.RemoveLastLogEntryAction)
-        # self.RollerMenu.addAction(self.ClearLogAction)
+        self.RollerMenu = self.MenuBar.addMenu("Roller")
+        self.RollerMenu.addAction(self.RollAction)
+        self.RollerMenu.addAction(self.RollPresetRollAction)
+        self.RollerMenu.addAction(self.AverageRollAction)
+        self.RollerMenu.addSeparator()
+        self.RollerMenu.addAction(self.AddLogEntryAction)
+        self.RollerMenu.addAction(self.RemoveLastLogEntryAction)
+        self.RollerMenu.addAction(self.ClearLogAction)
 
     def CreateKeybindings(self):
         self.DefaultKeybindings = {}
@@ -160,11 +161,9 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.DefaultKeybindings["SaveAction"] = "Ctrl+S"
         self.DefaultKeybindings["SaveAsAction"] = "Ctrl+Shift+S"
         self.DefaultKeybindings["QuitAction"] = "Ctrl+Q"
-
-        # TODO
-        # self.DefaultKeybindings["RollAction"] = "Ctrl+R"
-        # self.DefaultKeybindings["RollPresetRollAction"] = "Ctrl+Shift+R"
-        # self.DefaultKeybindings["AverageRollAction"] = "Ctrl+Alt+R"
+        self.DefaultKeybindings["RollAction"] = "Ctrl+R"
+        self.DefaultKeybindings["RollPresetRollAction"] = "Ctrl+Shift+R"
+        self.DefaultKeybindings["AverageRollAction"] = "Ctrl+Alt+R"
 
     def LoadConfigs(self):
         # Keybindings
@@ -196,6 +195,132 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
 
         # Gzip Mode
         self.SaveGzipMode()
+
+    # Non-Player Character Methods
+    def GetCharacter(self):
+        return self.NonPlayerCharacter
+
+    def UpdateStat(self, Stat, NewValue):
+        if not self.UpdatingFieldsFromNonPlayerCharacter:
+            self.NonPlayerCharacter.UpdateStat(Stat, NewValue)
+            self.UpdateUnsavedChangesFlag(True)
+
+    def TogglePortraitEnabled(self):
+        self.UpdateStat("Portrait Enabled", self.PortraitEnabledAction.isChecked())
+
+    # Roller Methods
+    def RollActionTriggered(self):
+        DiceNumber = self.DiceRollerWidget.DiceNumberSpinBox.value()
+        DieType = self.DiceRollerWidget.DieTypeSpinBox.value()
+        Modifier = self.DiceRollerWidget.ModifierSpinBox.value()
+        self.NonPlayerCharacter.Stats["Dice Roller"].RollDice(DiceNumber, DieType, Modifier)
+        self.UpdateUnsavedChangesFlag(True)
+
+    def RollPresetRollActionTriggered(self):
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetRoll = CurrentSelection[0]
+            CurrentPresetRollIndex = CurrentPresetRoll.Index
+            self.NonPlayerCharacter.Stats["Dice Roller"].RollPresetRoll(CurrentPresetRollIndex)
+            self.UpdateUnsavedChangesFlag(True)
+            self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentPresetRollIndex)
+
+    def AverageRollActionTriggered(self):
+        DiceNumber = self.DiceRollerWidget.DiceNumberSpinBox.value()
+        DieType = self.DiceRollerWidget.DieTypeSpinBox.value()
+        Modifier = self.DiceRollerWidget.ModifierSpinBox.value()
+        AverageResult = self.NonPlayerCharacter.Stats["Dice Roller"].AverageRoll(DiceNumber, DieType, Modifier)
+        AverageResultText = "The average result of " + str(DiceNumber) + "d" + str(DieType) + ("+" if Modifier >= 0 else "") + str(Modifier) + " is:\n\n" + str(AverageResult)
+        self.DisplayMessageBox(AverageResultText)
+
+    def SetCritMinimumActionTriggered(self):
+        CritMin, OK = QInputDialog.getInt(self, "Set Crit Minimum", "Set crit minimum to:", self.NonPlayerCharacter.Stats["Crit Minimum"], 1, 20)
+        if OK:
+            self.UpdateStat("Crit Minimum", CritMin)
+
+    def AddPresetRoll(self):
+        PresetRollIndex = self.NonPlayerCharacter.Stats["Dice Roller"].AddPresetRoll()
+        self.UpdateDisplay()
+        EditPresetRollDialogInst = EditPresetRollDialog(self, self.NonPlayerCharacter.Stats["Dice Roller"], PresetRollIndex, AddMode=True)
+        if EditPresetRollDialogInst.Cancelled:
+            self.NonPlayerCharacter.Stats["Dice Roller"].DeleteLastPresetRoll()
+            self.UpdateDisplay()
+        else:
+            self.UpdateUnsavedChangesFlag(True)
+            self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(PresetRollIndex)
+
+    def DeletePresetRoll(self):
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+                CurrentPresetRoll = CurrentSelection[0]
+                CurrentPresetRollIndex = CurrentPresetRoll.Index
+                self.NonPlayerCharacter.Stats["Dice Roller"].DeletePresetRoll(CurrentPresetRollIndex)
+                self.UpdateUnsavedChangesFlag(True)
+                PresetRollsLength = len(self.NonPlayerCharacter.Stats["Dice Roller"].PresetRolls)
+                if PresetRollsLength > 0:
+                    self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentPresetRollIndex if CurrentPresetRollIndex < PresetRollsLength else PresetRollsLength - 1)
+
+    def EditPresetRoll(self):
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetRoll = CurrentSelection[0]
+            CurrentPresetRollIndex = CurrentPresetRoll.Index
+            EditPresetRollDialogInst = EditPresetRollDialog(self, self.NonPlayerCharacter.Stats["Dice Roller"], CurrentPresetRollIndex)
+            if EditPresetRollDialogInst.UnsavedChanges:
+                self.UpdateUnsavedChangesFlag(True)
+                self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentPresetRollIndex)
+
+    def CopyPresetRoll(self):
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetRoll = CurrentSelection[0]
+            CurrentPresetRollIndex = CurrentPresetRoll.Index
+            NewPresetRollIndex = self.NonPlayerCharacter.Stats["Dice Roller"].CopyPresetRoll(CurrentPresetRollIndex)
+            self.UpdateUnsavedChangesFlag(True)
+            self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(NewPresetRollIndex)
+
+    def MovePresetRollUp(self):
+        self.MovePresetRoll(-1)
+
+    def MovePresetRollDown(self):
+        self.MovePresetRoll(1)
+
+    def MovePresetRoll(self, Delta):
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetRoll = CurrentSelection[0]
+            CurrentPresetRollIndex = CurrentPresetRoll.Index
+            if self.NonPlayerCharacter.Stats["Dice Roller"].MovePresetRoll(CurrentPresetRollIndex, Delta):
+                self.UpdateUnsavedChangesFlag(True)
+                self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentPresetRollIndex + Delta)
+
+    def AddLogEntryActionTriggered(self):
+        LogText, OK = QInputDialog.getText(self, "Add Log Entry", "Add text to log:")
+        if OK:
+            if LogText == "":
+                self.DisplayMessageBox("Log entries cannot be blank.")
+                return
+            self.NonPlayerCharacter.Stats["Dice Roller"].AddLogEntry(LogText)
+            self.UpdateUnsavedChangesFlag(True)
+
+    def RemoveLastLogEntryActionTriggered(self):
+        if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            self.NonPlayerCharacter.Stats["Dice Roller"].RemoveLastLogEntry()
+            self.UpdateUnsavedChangesFlag(True)
+
+    def ClearLogActionTriggered(self):
+        if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            self.NonPlayerCharacter.Stats["Dice Roller"].ClearLog()
+            self.UpdateUnsavedChangesFlag(True)
+
+    # View Methods
+    def ShowCoinCalculator(self):
+        CoinCalculatorDialog(self)
+
+    # TODO
+    def SwitchTab(self):
+        pass
 
     # Save and Open Methods
     def NewActionTriggered(self):
@@ -259,32 +384,29 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
 
         # TODO
         # # Portrait Enabled
-        # self.StatsTabWidget.setTabVisible(6, self.PlayerCharacter.Stats["Portrait Enabled"])
-        # self.ViewPortraitTabAction.setEnabled(self.PlayerCharacter.Stats["Portrait Enabled"])
+        # self.StatsTabWidget.setTabVisible(6, self.NonPlayerCharacter.Stats["Portrait Enabled"])
 
         # TODO
         # # Set Negative Current HP Indicator
-        # Style = self.PlayerCharacterCombatAndFeaturesWidgetInst.HPSpinBoxStyle if self.PlayerCharacter.Stats["Current Health"] >= 0 else self.PlayerCharacterCombatAndFeaturesWidgetInst.NegativeCurrentHealthSpinBoxStyle
-        # self.PlayerCharacterCombatAndFeaturesWidgetInst.CurrentHPSpinBox.setStyleSheet(Style)
+        # Style = self.NonPlayerCharacterCombatAndFeaturesWidgetInst.HPSpinBoxStyle if self.NonPlayerCharacter.Stats["Current Health"] >= 0 else self.NonPlayerCharacterCombatAndFeaturesWidgetInst.NegativeCurrentHealthSpinBoxStyle
+        # self.NonPlayerCharacterCombatAndFeaturesWidgetInst.CurrentHPSpinBox.setStyleSheet(Style)
 
         # TODO
         # # Portrait
-        # self.PlayerCharacterPortraitWidgetInst.UpdateDisplay()
+        # self.NonPlayerCharacterPortraitWidgetInst.UpdateDisplay()
 
-        # TODO
-        # # Results Log
-        # ResultsLogString = self.PlayerCharacter.Stats["Dice Roller"].CreateLogText()
-        # self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
+        # Results Log
+        ResultsLogString = self.NonPlayerCharacter.Stats["Dice Roller"].CreateLogText()
+        self.DiceRollerWidget.ResultsLogTextEdit.setPlainText(ResultsLogString)
 
-        # TODO
-        # # Preset Rolls
-        # CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
-        # if len(CurrentSelection) > 0:
-        #     CurrentSelectionIndex = CurrentSelection[0].Index
-        #     self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
-        #     self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentSelectionIndex)
-        # else:
-        #     self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
+        # Preset Rolls
+        CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentSelectionIndex = CurrentSelection[0].Index
+            self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
+            self.DiceRollerWidget.PresetRollsTreeWidget.SelectIndex(CurrentSelectionIndex)
+        else:
+            self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
 
         # TODO
         # Updating Fields from Non-Player Character

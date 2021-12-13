@@ -363,6 +363,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.SaveGzipMode()
 
     # Player Character Methods
+    def GetCharacter(self):
+        return self.PlayerCharacter
+
     def UpdateStat(self, Stat, NewValue):
         if not self.UpdatingFieldsFromPlayerCharacter:
             self.PlayerCharacter.UpdateStat(Stat, NewValue)

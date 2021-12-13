@@ -179,10 +179,6 @@ class NonPlayerCharacter(Character, SerializableMixin):
         StatModifier["Proficiency Multiplier Round Up"] = False
         StatModifier["Proficiency Min"] = None
         StatModifier["Proficiency Max"] = None
-        StatModifier["CR Multiplier"] = 0
-        StatModifier["CR Multiplier Round Up"] = False
-        StatModifier["CR Min"] = None
-        StatModifier["CR Max"] = None
         StatModifier["Manual Modifier"] = 0
         return StatModifier
 
@@ -201,18 +197,6 @@ class NonPlayerCharacter(Character, SerializableMixin):
             if StatModifier[Ability + " Min"] is not None:
                 AbilityMod = max(AbilityMod, StatModifier[Ability + " Min"])
             CalculatedModifier += AbilityMod
-
-        # CR Modifier
-        CRMod = self.Stats["CR"] * StatModifier["CR Multiplier"]
-        if StatModifier["CR Multiplier Round Up"]:
-            CRMod = math.ceil(CRMod)
-        else:
-            CRMod = math.floor(CRMod)
-        if StatModifier["CR Max"] is not None:
-            CRMod = min(CRMod, StatModifier["CR Max"])
-        if StatModifier["CR Min"] is not None:
-            CRMod = max(CRMod, StatModifier["CR Min"])
-        CalculatedModifier += CRMod
 
         # Proficiency Modifier
         ProficiencyMod = self.CalculateProficiencyBonus() * StatModifier["Proficiency Multiplier"]
