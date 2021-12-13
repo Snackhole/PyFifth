@@ -164,6 +164,8 @@ class NonPlayerCharacter(Character, SerializableMixin):
         # Proficiency
         DerivedStats["Proficiency Bonus"] = self.CalculateProficiencyBonus()
 
+        return DerivedStats
+
     # Stat Calculation Methods
     def CalculateProficiencyBonus(self):
         return self.ProficiencyBonusByCR[self.Stats["CR"]]
