@@ -138,12 +138,14 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         for Column in [1, 3]:
             self.HeaderLayout.setColumnStretch(Column, 1)
         self.HeaderFrame.setLayout(self.HeaderLayout)
+        self.Layout.addWidget(self.HeaderFrame, 0, 0, 1, 2)
 
         self.StatsFrame = QFrame()
         self.StatsFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
         self.StatsLayout = QGridLayout()
         self.StatsLayout.addWidget(self.StatsTabWidget, 0, 0)
         self.StatsFrame.setLayout(self.StatsLayout)
+        self.Layout.addWidget(self.StatsFrame, 1, 0)
 
         self.DiceRollerFrame = QFrame()
         self.DiceRollerFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
@@ -151,10 +153,8 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.DiceRollerLayout.addWidget(self.DiceRollerWidget, 0, 0)
         self.DiceRollerLayout.addWidget(self.InspirationButton, 1, 0)
         self.DiceRollerFrame.setLayout(self.DiceRollerLayout)
-
-        self.Layout.addWidget(self.HeaderFrame, 0, 0, 1, 2)
-        self.Layout.addWidget(self.StatsFrame, 1, 0)
         self.Layout.addWidget(self.DiceRollerFrame, 1, 1)
+
         self.Frame.setLayout(self.Layout)
 
         # Create Actions
