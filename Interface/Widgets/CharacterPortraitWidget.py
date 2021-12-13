@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QFileDialog, QFrame, QGridLayout, QLabel, QMessageBo
 from Interface.Widgets.IconButtons import AddButton, CopyButton, DeleteButton
 
 
-class PlayerCharacterPortraitWidget(QFrame):
+class CharacterPortraitWidget(QFrame):
     def __init__(self, CharacterWindow):
         # Initialize Frame
         super().__init__()
@@ -55,11 +55,12 @@ class PlayerCharacterPortraitWidget(QFrame):
         self.setLayout(self.Layout)
 
     def UpdateDisplay(self):
-        if not self.CharacterWindow.PlayerCharacter.Stats["Portrait Enabled"]:
+        Character = self.CharacterWindow.GetCharacter()
+        if not Character.Stats["Portrait Enabled"]:
             self.PortraitDisplay.clear()
             self.PortraitDisplay.resize(QtCore.QSize(0, 0))
             return
-        PortraitBinary = self.CharacterWindow.PlayerCharacter.GetPortraitBinary()
+        PortraitBinary = Character.GetPortraitBinary()
         if PortraitBinary is not None:
             PortraitPixmap = QPixmap()
             PortraitPixmap.loadFromData(PortraitBinary)
@@ -70,23 +71,26 @@ class PlayerCharacterPortraitWidget(QFrame):
             self.PortraitDisplay.resize(QtCore.QSize(0, 0))
 
     def AddPortrait(self):
-        if self.CharacterWindow.PlayerCharacter.Stats["Portrait"] is not None:
+        Character = self.CharacterWindow.GetCharacter()
+        if Character.Stats["Portrait"] is not None:
             if self.CharacterWindow.DisplayMessageBox("Are you sure you want to replace the current portrait?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self) == QMessageBox.No:
                 return
         ImageFilePath = QFileDialog.getOpenFileName(parent=self, caption="Add Portrait", filter="Images (*.jpg *.jpeg *.png *.gif *.bmp)")[0]
         if ImageFilePath != "":
-            self.CharacterWindow.PlayerCharacter.SetPortrait(ImageFilePath)
+            Character.SetPortrait(ImageFilePath)
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)
 
     def ExportPortrait(self):
-        FileExtension = self.CharacterWindow.PlayerCharacter.Stats["Portrait File Extension"]
+        Character = self.CharacterWindow.GetCharacter()
+        FileExtension = Character.Stats["Portrait File Extension"]
         ExportFilePath = QFileDialog.getSaveFileName(parent=self, caption="Export Portrait", filter=self.ExportFilters[FileExtension])[0]
         if ExportFilePath != "":
             if not ExportFilePath.endswith(FileExtension):
                 ExportFilePath += FileExtension
-            self.CharacterWindow.PlayerCharacter.ExportPortrait(ExportFilePath)
+            Character.ExportPortrait(ExportFilePath)
 
     def ClearPortrait(self):
         if self.CharacterWindow.DisplayMessageBox("Are you sure you want to clear the portrait?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self) == QMessageBox.Yes:
-            self.CharacterWindow.PlayerCharacter.DeletePortrait()
+            Character = self.CharacterWindow.GetCharacter()
+            Character.DeletePortrait()
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)

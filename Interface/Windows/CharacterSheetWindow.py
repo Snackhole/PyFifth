@@ -11,13 +11,13 @@ from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Dialogs.EditPresetRollDialog import EditPresetRollDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.CharacterPortraitWidget import CharacterPortraitWidget
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Widgets.PlayerCharacterAbilitiesAndSkillsWidget import PlayerCharacterAbilitiesAndSkillsWidget
 from Interface.Widgets.PlayerCharacterCombatAndFeaturesWidget import PlayerCharacterCombatAndFeaturesWidget
 from Interface.Widgets.PlayerCharacterInventoryWidget import PlayerCharacterInventoryWidget
 from Interface.Widgets.PlayerCharacterNotesWidget import PlayerCharacterNotesWidget
 from Interface.Widgets.PlayerCharacterPersonalityAndBackstoryWidget import PlayerCharacterPersonalityAndBackstoryWidget
-from Interface.Widgets.PlayerCharacterPortraitWidget import PlayerCharacterPortraitWidget
 from Interface.Widgets.PlayerCharacterSpellcastingWidget import PlayerCharacterSpellcastingWidget
 from Interface.Widgets.ToggleButtons import InspirationButton
 from Interface.Windows.Window import Window
@@ -110,7 +110,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.StatsTabWidget.addTab(self.PlayerCharacterNotesWidgetInst, "Notes")
         self.PlayerCharacterPersonalityAndBackstoryWidgetInst = PlayerCharacterPersonalityAndBackstoryWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterPersonalityAndBackstoryWidgetInst, "Personality and Backstory")
-        self.PlayerCharacterPortraitWidgetInst = PlayerCharacterPortraitWidget(self)
+        self.PlayerCharacterPortraitWidgetInst = CharacterPortraitWidget(self)
         self.StatsTabWidget.addTab(self.PlayerCharacterPortraitWidgetInst, "Portrait")
 
         # Dice Roller

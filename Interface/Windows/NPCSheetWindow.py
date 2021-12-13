@@ -10,6 +10,7 @@ from Core.NonPlayerCharacter import NonPlayerCharacter
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
 from Interface.Dialogs.EditPresetRollDialog import EditPresetRollDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.CharacterPortraitWidget import CharacterPortraitWidget
 from Interface.Widgets.DiceRollerWidget import DiceRollerWidget
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
@@ -74,7 +75,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.TabWidget.setUsesScrollButtons(False)
         self.NonPlayerCharacterStatsWidgetInst = QFrame()
         self.TabWidget.addTab(self.NonPlayerCharacterStatsWidgetInst, "Stats")
-        self.NonPlayerCharacterPortraitWidgetInst = QFrame()
+        self.NonPlayerCharacterPortraitWidgetInst = CharacterPortraitWidget(self)
         self.TabWidget.addTab(self.NonPlayerCharacterPortraitWidgetInst, "Portrait")
 
         # Dice Roller
@@ -438,18 +439,16 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         ProficiencyBonusText = "+" + str(self.DerivedStats["Proficiency Bonus"])
         self.ProficiencyBonusLineEdit.setText(ProficiencyBonusText)
 
-        # TODO
-        # # Portrait Enabled
-        # self.StatsTabWidget.setTabVisible(6, self.NonPlayerCharacter.Stats["Portrait Enabled"])
+        # Portrait Enabled
+        self.TabWidget.setTabVisible(1, self.NonPlayerCharacter.Stats["Portrait Enabled"])
 
         # TODO
         # # Set Negative Current HP Indicator
         # Style = self.NonPlayerCharacterCombatAndFeaturesWidgetInst.HPSpinBoxStyle if self.NonPlayerCharacter.Stats["Current Health"] >= 0 else self.NonPlayerCharacterCombatAndFeaturesWidgetInst.NegativeCurrentHealthSpinBoxStyle
         # self.NonPlayerCharacterCombatAndFeaturesWidgetInst.CurrentHPSpinBox.setStyleSheet(Style)
 
-        # TODO
-        # # Portrait
-        # self.NonPlayerCharacterPortraitWidgetInst.UpdateDisplay()
+        # Portrait
+        self.NonPlayerCharacterPortraitWidgetInst.UpdateDisplay()
 
         # Results Log
         ResultsLogString = self.NonPlayerCharacter.Stats["Dice Roller"].CreateLogText()
