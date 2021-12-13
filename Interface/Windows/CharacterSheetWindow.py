@@ -333,7 +333,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
     def LoadConfigs(self):
         # Keybindings
-        KeybindingsFile = self.GetResourcePath("Configs/Keybindings.cfg")
+        KeybindingsFile = self.GetResourcePath("Configs/PCKeybindings.cfg")
         if os.path.isfile(KeybindingsFile):
             with open(KeybindingsFile, "r") as ConfigFile:
                 self.Keybindings = json.loads(ConfigFile.read())
@@ -353,7 +353,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
     def SaveConfigs(self):
         # Keybindings
-        with open(self.GetResourcePath("Configs/Keybindings.cfg"), "w") as ConfigFile:
+        with open(self.GetResourcePath("Configs/PCKeybindings.cfg"), "w") as ConfigFile:
             ConfigFile.write(json.dumps(self.Keybindings, indent=2))
 
         # Last Opened Directory
