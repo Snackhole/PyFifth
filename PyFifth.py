@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import QApplication
 
 from Interface.Widgets.CoinCalculatorWidget import CoinCalculatorWidget
 from Interface.Windows.ModeSelectionWindow import ModeSelectionWindow
+from Interface.Windows.NPCSheetWindow import NPCSheetWindow
 from Interface.Windows.CharacterSheetWindow import CharacterSheetWindow
 from Build import BuildVariables
 
@@ -33,6 +34,7 @@ def StartApp():
         # Modes Dictionary
         Modes = {}
         Modes["Character Sheet"] = CharacterSheetWindow
+        Modes["NPC Sheet"] = NPCSheetWindow
         Modes["Coin Calculator"] = CoinCalculatorWidget
 
         # Create Mode Window
