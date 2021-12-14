@@ -352,6 +352,9 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             getattr(self, Action).setShortcut(Keybinding)
 
     def SaveConfigs(self):
+        if not os.path.isdir(self.GetResourcePath("Configs")):
+            os.mkdir(self.GetResourcePath("Configs"))
+
         # Keybindings
         with open(self.GetResourcePath("Configs/PCKeybindings.cfg"), "w") as ConfigFile:
             ConfigFile.write(json.dumps(self.Keybindings, indent=2))

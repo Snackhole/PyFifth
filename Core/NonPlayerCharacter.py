@@ -7,7 +7,7 @@ from SaveAndLoad.JSONSerializer import SerializableMixin
 
 class NonPlayerCharacter(Character, SerializableMixin):
     def __init__(self):
-        # Initialize NPC and SerializableMixin
+        # Initialize Character and SerializableMixin
         super().__init__()
 
         # Create Static Values
