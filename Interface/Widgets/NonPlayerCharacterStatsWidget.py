@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QComboBox, QFrame, QGridLayout, QInputDialog, QLabel
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.IconButtons import DamageButton, HealButton
 from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
+from Interface.Widgets.ToggleButtons import ConcentratingButton
 
 
 class NonPlayerCharacterStatsWidget(QFrame):
@@ -34,6 +35,9 @@ class NonPlayerCharacterStatsWidget(QFrame):
 
         # Create Miscellaneous String Inputs
         self.CreateMiscStringInputs()
+
+        # Create Concentrating Button
+        self.CreateConcentratingButton()
 
         # Create and Set Layout
         self.CreateAndSetLayout()
@@ -316,6 +320,9 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.NotesTextEdit.setTabChangesFocus(True)
         self.NotesTextEdit.setMinimumWidth(550)
 
+    def CreateConcentratingButton(self):
+        self.ConcentratingButton = ConcentratingButton(self.CharacterWindow)
+
     def CreateAndSetLayout(self):
         # Create Layout
         self.Layout = QGridLayout()
@@ -433,6 +440,9 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.NotesLayout.addWidget(self.NotesLabel, 0, 0)
         self.NotesLayout.addWidget(self.NotesTextEdit, 1, 0)
         self.Layout.addLayout(self.NotesLayout, 7, 2)
+
+        # Concentrating Button
+        self.Layout.addWidget(self.ConcentratingButton, 8, 0, 1, 3)
 
         # Layout Stretching
         for Column in range(1, 3):

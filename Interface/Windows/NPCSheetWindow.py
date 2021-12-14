@@ -159,6 +159,11 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.SwitchTabAction = QAction("Switch Tab")
         self.SwitchTabAction.triggered.connect(self.SwitchTab)
 
+        self.ConcentrationCheckPromptEnabledAction = QAction("Concentration Check Prompt Enabled")
+        self.ConcentrationCheckPromptEnabledAction.setCheckable(True)
+        self.ConcentrationCheckPromptEnabledAction.setChecked(True)
+        self.ConcentrationCheckPromptEnabledAction.triggered.connect(self.ToggleConcentrationCheckPromptEnabled)
+
         self.PortraitEnabledAction = QAction("Portrait Enabled")
         self.PortraitEnabledAction.setCheckable(True)
         self.PortraitEnabledAction.setChecked(True)
@@ -205,6 +210,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.ViewMenu.addAction(self.SwitchTabAction)
 
         self.NPCSettingsMenu = self.MenuBar.addMenu("NPC Settings")
+        self.NPCSettingsMenu.addAction(self.ConcentrationCheckPromptEnabledAction)
         self.NPCSettingsMenu.addAction(self.PortraitEnabledAction)
         self.NPCSettingsMenu.addSeparator()
         self.NPCSettingsMenu.addAction(self.SetCritMinimumAction)
@@ -269,6 +275,9 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         if not self.UpdatingFieldsFromNonPlayerCharacter:
             self.NonPlayerCharacter.UpdateStat(Stat, NewValue)
             self.UpdateUnsavedChangesFlag(True)
+
+    def ToggleConcentrationCheckPromptEnabled(self):
+        self.UpdateStat("Enable Concentration Check", self.ConcentrationCheckPromptEnabledAction.isChecked())
 
     def TogglePortraitEnabled(self):
         self.UpdateStat("Portrait Enabled", self.PortraitEnabledAction.isChecked())
@@ -531,6 +540,13 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
 
             # Notes
             self.NonPlayerCharacterStatsWidgetInst.NotesTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Notes"])
+
+            # Concentrating
+            self.NonPlayerCharacterStatsWidgetInst.ConcentratingButton.setChecked(self.NonPlayerCharacter.Stats["Concentrating"])
+
+            # Settings
+            self.ConcentrationCheckPromptEnabledAction.setChecked(self.NonPlayerCharacter.Stats["Enable Concentration Check"])
+            self.PortraitEnabledAction.setChecked(self.NonPlayerCharacter.Stats["Portrait Enabled"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
