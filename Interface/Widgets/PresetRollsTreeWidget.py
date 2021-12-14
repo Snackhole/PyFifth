@@ -18,7 +18,7 @@ class PresetRollsTreeWidget(QTreeWidget):
         self.clear()
         Character = self.CharacterWindow.GetCharacter()
         for PresetRollIndex in range(len(Character.Stats["Dice Roller"].PresetRolls)):
-            self.invisibleRootItem().addChild(PresetRollsWidgetItem(PresetRollIndex, Character.Stats["Dice Roller"].PresetRolls[PresetRollIndex]))
+            self.invisibleRootItem().addChild(PresetRollsWidgetItem(PresetRollIndex, Character.Stats["Dice Roller"].PresetRolls[PresetRollIndex], Character))
 
     def SelectIndex(self, Index):
         DestinationIndex = self.model().index(Index, 0)
@@ -28,13 +28,19 @@ class PresetRollsTreeWidget(QTreeWidget):
 
 
 class PresetRollsWidgetItem(QTreeWidgetItem):
-    def __init__(self, Index, PresetRoll):
+    def __init__(self, Index, PresetRoll, Character):
         super().__init__()
 
         # Store Parameters
         self.Index = Index
         self.PresetRoll = PresetRoll
+        self.Character = Character
+
+        # Variables
+        self.Modifier = self.Character.CalculateStatModifier(self.PresetRoll["Modifier"])
+        self.Sign = "" if self.Modifier < 0 else "+"
+        self.ModifierString = self.Sign + str(self.Modifier)
 
         # Set Text
-        self.setText(0, self.PresetRoll["Name"])
-        self.setToolTip(0, self.PresetRoll["Name"])
+        self.setText(0, self.PresetRoll["Name"] + " (" + str(self.PresetRoll["Dice Number"]) + "d" + str(self.PresetRoll["Die Type"]) + self.ModifierString + ")")
+        self.setToolTip(0, self.PresetRoll["Name"] + " (" + str(self.PresetRoll["Dice Number"]) + "d" + str(self.PresetRoll["Die Type"]) + self.ModifierString + ")")
