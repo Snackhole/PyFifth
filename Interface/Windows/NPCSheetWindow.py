@@ -472,7 +472,6 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         else:
             self.DiceRollerWidget.PresetRollsTreeWidget.FillFromPresetRolls()
 
-        # TODO fields from stats tab
         # Updating Fields from Non-Player Character
         if self.UpdatingFieldsFromNonPlayerCharacter:
             # Header
@@ -493,6 +492,45 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
             self.NonPlayerCharacterStatsWidgetInst.IntelligenceModifierSpinBox.setValue(self.NonPlayerCharacter.Stats["Ability Score Modifiers"]["Intelligence"])
             self.NonPlayerCharacterStatsWidgetInst.WisdomModifierSpinBox.setValue(self.NonPlayerCharacter.Stats["Ability Score Modifiers"]["Wisdom"])
             self.NonPlayerCharacterStatsWidgetInst.CharismaModifierSpinBox.setValue(self.NonPlayerCharacter.Stats["Ability Score Modifiers"]["Charisma"])
+
+            # AC
+            self.NonPlayerCharacterStatsWidgetInst.ACLineEdit.setText(self.NonPlayerCharacter.Stats["AC"])
+
+            # Speed
+            self.NonPlayerCharacterStatsWidgetInst.SpeedLineEdit.setText(self.NonPlayerCharacter.Stats["Speed"])
+
+            # CR
+            self.NonPlayerCharacterStatsWidgetInst.CRComboBox.setCurrentText(self.NonPlayerCharacter.Stats["CR"])
+
+            # Experience
+            self.NonPlayerCharacterStatsWidgetInst.ExperienceLineEdit.setText(self.NonPlayerCharacter.Stats["Experience"])
+
+            # Skills, Senses, and Languages
+            self.NonPlayerCharacterStatsWidgetInst.SkillsSensesAndLanguagesTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Skills, Senses, and Languages"])
+
+            # Special Traits
+            self.NonPlayerCharacterStatsWidgetInst.SpecialTraitsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Special Traits"])
+
+            # Actions
+            self.NonPlayerCharacterStatsWidgetInst.ActionsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Actions"])
+
+            # Saving Throws
+            self.NonPlayerCharacterStatsWidgetInst.SavingThrowsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Saving Throws"])
+
+            # Vulnerabilities, Resistances, and Immunities
+            self.NonPlayerCharacterStatsWidgetInst.VulnerabilitiesResistancesAndImmunitiesTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Vulnerabilities, Resistances, and Immunities"])
+
+            # Inventory
+            self.NonPlayerCharacterStatsWidgetInst.InventoryTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Inventory"])
+
+            # Reactions
+            self.NonPlayerCharacterStatsWidgetInst.ReactionsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Reactions"])
+
+            # Legendary Actions and Lair Actions
+            self.NonPlayerCharacterStatsWidgetInst.LegendaryActionsAndLairActionsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Legendary Actions and Lair Actions"])
+
+            # Notes
+            self.NonPlayerCharacterStatsWidgetInst.NotesTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Notes"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""

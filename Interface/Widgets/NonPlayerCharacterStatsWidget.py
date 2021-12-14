@@ -1,7 +1,9 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QInputDialog, QLabel, QSizePolicy, QSpinBox
+from PyQt5.QtWidgets import QComboBox, QFrame, QGridLayout, QInputDialog, QLabel, QSizePolicy, QSpinBox
 
+from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.IconButtons import DamageButton, HealButton
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
 
 class NonPlayerCharacterStatsWidget(QFrame):
@@ -187,7 +189,132 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.AbilityScoreModifierSpinBoxesList = [(self.StrengthModifierSpinBox, "Strength"), (self.DexterityModifierSpinBox, "Dexterity"), (self.ConstitutionModifierSpinBox, "Constitution"), (self.IntelligenceModifierSpinBox, "Intelligence"), (self.WisdomModifierSpinBox, "Wisdom"), (self.CharismaModifierSpinBox, "Charisma")]
 
     def CreateMiscStringInputs(self):
-        pass
+        # AC
+        self.ACLabel = QLabel("AC")
+        self.ACLabel.setStyleSheet(self.SectionLabelStyle)
+        self.ACLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ACLabel.setMargin(self.HeaderLabelMargin)
+
+        self.ACLineEdit = CenteredLineEdit()
+        self.ACLineEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("AC", self.ACLineEdit.text()))
+
+        # Speed
+        self.SpeedLabel = QLabel("Speed")
+        self.SpeedLabel.setStyleSheet(self.SectionLabelStyle)
+        self.SpeedLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpeedLabel.setMargin(self.HeaderLabelMargin)
+
+        self.SpeedLineEdit = CenteredLineEdit()
+        self.SpeedLineEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Speed", self.SpeedLineEdit.text()))
+
+        # CR
+        self.CRLabel = QLabel("CR")
+        self.CRLabel.setStyleSheet(self.SectionLabelStyle)
+        self.CRLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CRLabel.setMargin(self.HeaderLabelMargin)
+
+        self.CRComboBox = QComboBox()
+        self.CRComboBox.addItems(["0", "1/8", "1/4", "1/2", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"])
+        self.CRComboBox.setEditable(False)
+        self.CRComboBox.currentTextChanged.connect(lambda: self.CharacterWindow.UpdateStat("CR", self.CRComboBox.currentText()))
+
+        # Experience
+        self.ExperienceLabel = QLabel("Experience")
+        self.ExperienceLabel.setStyleSheet(self.SectionLabelStyle)
+        self.ExperienceLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ExperienceLabel.setMargin(self.HeaderLabelMargin)
+
+        self.ExperienceLineEdit = CenteredLineEdit()
+        self.ExperienceLineEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Experience", self.ExperienceLineEdit.text()))
+
+        # Skills, Senses, and Languages
+        self.SkillsSensesAndLanguagesLabel = QLabel("Skills, Senses, and Languages")
+        self.SkillsSensesAndLanguagesLabel.setStyleSheet(self.SectionLabelStyle)
+        self.SkillsSensesAndLanguagesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SkillsSensesAndLanguagesLabel.setMargin(self.HeaderLabelMargin)
+
+        self.SkillsSensesAndLanguagesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Skills, Senses, and Languages", self.SkillsSensesAndLanguagesTextEdit.toPlainText()))
+        self.SkillsSensesAndLanguagesTextEdit.setTabChangesFocus(True)
+
+        # Special Traits
+        self.SpecialTraitsLabel = QLabel("Special Traits")
+        self.SpecialTraitsLabel.setStyleSheet(self.SectionLabelStyle)
+        self.SpecialTraitsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpecialTraitsLabel.setMargin(self.HeaderLabelMargin)
+
+        self.SpecialTraitsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Special Traits", self.SpecialTraitsTextEdit.toPlainText()))
+        self.SpecialTraitsTextEdit.setTabChangesFocus(True)
+        self.SpecialTraitsTextEdit.setMinimumWidth(550)
+
+        # Actions
+        self.ActionsLabel = QLabel("Actions")
+        self.ActionsLabel.setStyleSheet(self.SectionLabelStyle)
+        self.ActionsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ActionsLabel.setMargin(self.HeaderLabelMargin)
+
+        self.ActionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Actions", self.ActionsTextEdit.toPlainText()))
+        self.ActionsTextEdit.setTabChangesFocus(True)
+        self.ActionsTextEdit.setMinimumWidth(550)
+
+        # Saving Throws
+        self.SavingThrowsLabel = QLabel("Saving Throws")
+        self.SavingThrowsLabel.setStyleSheet(self.SectionLabelStyle)
+        self.SavingThrowsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SavingThrowsLabel.setMargin(self.HeaderLabelMargin)
+
+        self.SavingThrowsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Saving Throws", self.SavingThrowsTextEdit.toPlainText()))
+        self.SavingThrowsTextEdit.setTabChangesFocus(True)
+        self.SavingThrowsTextEdit.setMinimumWidth(550)
+
+        # Vulnerabilities, Resistances, and Immunities
+        self.VulnerabilitiesResistancesAndImmunitiesLabel = QLabel("Vulnerabilities, Resistances, and Immunities")
+        self.VulnerabilitiesResistancesAndImmunitiesLabel.setStyleSheet(self.SectionLabelStyle)
+        self.VulnerabilitiesResistancesAndImmunitiesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.VulnerabilitiesResistancesAndImmunitiesLabel.setMargin(self.HeaderLabelMargin)
+
+        self.VulnerabilitiesResistancesAndImmunitiesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Vulnerabilities, Resistances, and Immunities", self.VulnerabilitiesResistancesAndImmunitiesTextEdit.toPlainText()))
+        self.VulnerabilitiesResistancesAndImmunitiesTextEdit.setTabChangesFocus(True)
+        self.VulnerabilitiesResistancesAndImmunitiesTextEdit.setMinimumWidth(550)
+
+        # Inventory
+        self.InventoryLabel = QLabel("Inventory")
+        self.InventoryLabel.setStyleSheet(self.SectionLabelStyle)
+        self.InventoryLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.InventoryLabel.setMargin(self.HeaderLabelMargin)
+
+        self.InventoryTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Inventory", self.InventoryTextEdit.toPlainText()))
+        self.InventoryTextEdit.setTabChangesFocus(True)
+        self.InventoryTextEdit.setMinimumWidth(550)
+
+        # Reactions
+        self.ReactionsLabel = QLabel("Reactions")
+        self.ReactionsLabel.setStyleSheet(self.SectionLabelStyle)
+        self.ReactionsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ReactionsLabel.setMargin(self.HeaderLabelMargin)
+
+        self.ReactionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Reactions", self.ReactionsTextEdit.toPlainText()))
+        self.ReactionsTextEdit.setTabChangesFocus(True)
+        self.ReactionsTextEdit.setMinimumWidth(550)
+
+        # Legendary Actions and Lair Actions
+        self.LegendaryActionsAndLairActionsLabel = QLabel("Legendary Actions and Lair Actions")
+        self.LegendaryActionsAndLairActionsLabel.setStyleSheet(self.SectionLabelStyle)
+        self.LegendaryActionsAndLairActionsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.LegendaryActionsAndLairActionsLabel.setMargin(self.HeaderLabelMargin)
+
+        self.LegendaryActionsAndLairActionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Legendary Actions and Lair Actions", self.LegendaryActionsAndLairActionsTextEdit.toPlainText()))
+        self.LegendaryActionsAndLairActionsTextEdit.setTabChangesFocus(True)
+        self.LegendaryActionsAndLairActionsTextEdit.setMinimumWidth(550)
+
+        # Notes
+        self.NotesLabel = QLabel("Notes")
+        self.NotesLabel.setStyleSheet(self.SectionLabelStyle)
+        self.NotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.NotesLabel.setMargin(self.HeaderLabelMargin)
+
+        self.NotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Notes", self.NotesTextEdit.toPlainText()))
+        self.NotesTextEdit.setTabChangesFocus(True)
+        self.NotesTextEdit.setMinimumWidth(550)
 
     def CreateAndSetLayout(self):
         # Create Layout
@@ -228,6 +355,90 @@ class NonPlayerCharacterStatsWidget(QFrame):
         for Row in [2, 4]:
             self.AbilityScoreModifiersLayout.setRowStretch(Row, 1)
         self.Layout.addLayout(self.AbilityScoreModifiersLayout, 0, 1)
+
+        # AC
+        self.ACLayout = QGridLayout()
+        self.ACLayout.addWidget(self.ACLabel, 0, 0)
+        self.ACLayout.addWidget(self.ACLineEdit, 1, 0)
+        self.Layout.addLayout(self.ACLayout, 1, 0)
+
+        # Speed
+        self.SpeedLayout = QGridLayout()
+        self.SpeedLayout.addWidget(self.SpeedLabel, 0, 0)
+        self.SpeedLayout.addWidget(self.SpeedLineEdit, 1, 0)
+        self.Layout.addLayout(self.SpeedLayout, 2, 0)
+
+        # CR
+        self.CRLayout = QGridLayout()
+        self.CRLayout.addWidget(self.CRLabel, 0, 0)
+        self.CRLayout.addWidget(self.CRComboBox, 1, 0)
+        self.Layout.addLayout(self.CRLayout, 3, 0)
+
+        # Experience
+        self.ExperienceLayout = QGridLayout()
+        self.ExperienceLayout.addWidget(self.ExperienceLabel, 0, 0)
+        self.ExperienceLayout.addWidget(self.ExperienceLineEdit, 1, 0)
+        self.Layout.addLayout(self.ExperienceLayout, 4, 0)
+
+        # Skills, Senses, and Languages
+        self.SkillsSensesAndLanguagesLayout = QGridLayout()
+        self.SkillsSensesAndLanguagesLayout.addWidget(self.SkillsSensesAndLanguagesLabel, 0, 0)
+        self.SkillsSensesAndLanguagesLayout.addWidget(self.SkillsSensesAndLanguagesTextEdit, 1, 0)
+        self.Layout.addLayout(self.SkillsSensesAndLanguagesLayout, 1, 1, 4, 1)
+
+        # Special Traits
+        self.SpecialTraitsLayout = QGridLayout()
+        self.SpecialTraitsLayout.addWidget(self.SpecialTraitsLabel, 0, 0)
+        self.SpecialTraitsLayout.addWidget(self.SpecialTraitsTextEdit, 1, 0)
+        self.Layout.addLayout(self.SpecialTraitsLayout, 0, 2)
+
+        # Actions
+        self.ActionsLayout = QGridLayout()
+        self.ActionsLayout.addWidget(self.ActionsLabel, 0, 0)
+        self.ActionsLayout.addWidget(self.ActionsTextEdit, 1, 0)
+        self.Layout.addLayout(self.ActionsLayout, 1, 2, 4, 1)
+
+        # Saving Throws
+        self.SavingThrowsLayout = QGridLayout()
+        self.SavingThrowsLayout.addWidget(self.SavingThrowsLabel, 0, 0)
+        self.SavingThrowsLayout.addWidget(self.SavingThrowsTextEdit, 1, 0)
+        self.Layout.addLayout(self.SavingThrowsLayout, 5, 0, 1, 2)
+
+        # Vulnerabilities, Resistances, and Immunities
+        self.VulnerabilitiesResistancesAndImmunitiesLayout = QGridLayout()
+        self.VulnerabilitiesResistancesAndImmunitiesLayout.addWidget(self.VulnerabilitiesResistancesAndImmunitiesLabel, 0, 0)
+        self.VulnerabilitiesResistancesAndImmunitiesLayout.addWidget(self.VulnerabilitiesResistancesAndImmunitiesTextEdit, 1, 0)
+        self.Layout.addLayout(self.VulnerabilitiesResistancesAndImmunitiesLayout, 6, 0, 1, 2)
+
+        # Inventory
+        self.InventoryLayout = QGridLayout()
+        self.InventoryLayout.addWidget(self.InventoryLabel, 0, 0)
+        self.InventoryLayout.addWidget(self.InventoryTextEdit, 1, 0)
+        self.Layout.addLayout(self.InventoryLayout, 7, 0, 1, 2)
+
+        # Reactions
+        self.ReactionsLayout = QGridLayout()
+        self.ReactionsLayout.addWidget(self.ReactionsLabel, 0, 0)
+        self.ReactionsLayout.addWidget(self.ReactionsTextEdit, 1, 0)
+        self.Layout.addLayout(self.ReactionsLayout, 5, 2)
+
+        # Legendary Actions and Lair Actions
+        self.LegendaryActionsAndLairActionsLayout = QGridLayout()
+        self.LegendaryActionsAndLairActionsLayout.addWidget(self.LegendaryActionsAndLairActionsLabel, 0, 0)
+        self.LegendaryActionsAndLairActionsLayout.addWidget(self.LegendaryActionsAndLairActionsTextEdit, 1, 0)
+        self.Layout.addLayout(self.LegendaryActionsAndLairActionsLayout, 6, 2)
+
+        # Notes
+        self.NotesLayout = QGridLayout()
+        self.NotesLayout.addWidget(self.NotesLabel, 0, 0)
+        self.NotesLayout.addWidget(self.NotesTextEdit, 1, 0)
+        self.Layout.addLayout(self.NotesLayout, 7, 2)
+
+        # Layout Stretching
+        for Column in range(1, 3):
+            self.Layout.setColumnStretch(Column, 1)
+        for Row in range(5, 8):
+            self.Layout.setRowStretch(Row, 1)
 
         # Set Layout
         self.setLayout(self.Layout)

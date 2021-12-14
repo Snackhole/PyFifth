@@ -79,6 +79,9 @@ class NonPlayerCharacter(Character, SerializableMixin):
         # AC
         self.Stats["AC"] = ""
 
+        # Speed
+        self.Stats["Speed"] = ""
+
         # CR
         self.Stats["CR"] = "0"
 
