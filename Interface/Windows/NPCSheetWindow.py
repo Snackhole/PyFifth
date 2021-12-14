@@ -449,10 +449,9 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.TabWidget.setTabVisible(1, self.NonPlayerCharacter.Stats["Portrait Enabled"])
         self.SwitchTabAction.setEnabled(self.NonPlayerCharacter.Stats["Portrait Enabled"])
 
-        # TODO once HPSpinBox is showing in stats tab
-        # # Set Negative Current HP Indicator
-        # Style = self.NonPlayerCharacterCombatAndFeaturesWidgetInst.HPSpinBoxStyle if self.NonPlayerCharacter.Stats["Current Health"] >= 0 else self.NonPlayerCharacterCombatAndFeaturesWidgetInst.NegativeCurrentHealthSpinBoxStyle
-        # self.NonPlayerCharacterCombatAndFeaturesWidgetInst.CurrentHPSpinBox.setStyleSheet(Style)
+        # Set Negative Current HP Indicator
+        Style = self.NonPlayerCharacterStatsWidgetInst.HPSpinBoxStyle if self.NonPlayerCharacter.Stats["Current Health"] >= 0 else self.NonPlayerCharacterStatsWidgetInst.NegativeCurrentHealthSpinBoxStyle
+        self.NonPlayerCharacterStatsWidgetInst.CurrentHPSpinBox.setStyleSheet(Style)
 
         # Portrait
         self.NonPlayerCharacterPortraitWidgetInst.UpdateDisplay()
@@ -478,6 +477,11 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
             self.SizeLineEdit.setText(self.NonPlayerCharacter.Stats["Size"])
             self.TypeAndTagsLineEdit.setText(self.NonPlayerCharacter.Stats["Type and Tags"])
             self.AlignmentLineEdit.setText(self.NonPlayerCharacter.Stats["Alignment"])
+
+            # Vitality
+            self.NonPlayerCharacterStatsWidgetInst.TempHPSpinBox.setValue(self.NonPlayerCharacter.Stats["Temp Health"])
+            self.NonPlayerCharacterStatsWidgetInst.CurrentHPSpinBox.setValue(self.NonPlayerCharacter.Stats["Current Health"])
+            self.NonPlayerCharacterStatsWidgetInst.MaxHPSpinBox.setValue(self.NonPlayerCharacter.Stats["Max Health"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""

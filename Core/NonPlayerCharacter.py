@@ -73,6 +73,9 @@ class NonPlayerCharacter(Character, SerializableMixin):
         # Alignment
         self.Stats["Alignment"] = ""
 
+        # Max Health
+        self.Stats["Max Health"] = 1
+
         # AC
         self.Stats["AC"] = ""
 
@@ -134,6 +137,7 @@ class NonPlayerCharacter(Character, SerializableMixin):
             "Size",
             "Type and Tags",
             "Alignment",
+            "Max Health",
             "AC",
             "CR",
             "Experience",
