@@ -453,6 +453,9 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         Style = self.NonPlayerCharacterStatsWidgetInst.HPSpinBoxStyle if self.NonPlayerCharacter.Stats["Current Health"] >= 0 else self.NonPlayerCharacterStatsWidgetInst.NegativeCurrentHealthSpinBoxStyle
         self.NonPlayerCharacterStatsWidgetInst.CurrentHPSpinBox.setStyleSheet(Style)
 
+        # Update Ability Score Modifier Signs
+        self.NonPlayerCharacterStatsWidgetInst.UpdateAbilityScoreModifierSigns()
+
         # Portrait
         self.NonPlayerCharacterPortraitWidgetInst.UpdateDisplay()
 
@@ -482,6 +485,14 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
             self.NonPlayerCharacterStatsWidgetInst.TempHPSpinBox.setValue(self.NonPlayerCharacter.Stats["Temp Health"])
             self.NonPlayerCharacterStatsWidgetInst.CurrentHPSpinBox.setValue(self.NonPlayerCharacter.Stats["Current Health"])
             self.NonPlayerCharacterStatsWidgetInst.MaxHPSpinBox.setValue(self.NonPlayerCharacter.Stats["Max Health"])
+
+            # Ability Score Modifiers
+            self.NonPlayerCharacterStatsWidgetInst.StrengthModifierSpinBox.setValue(self.NonPlayerCharacter.Stats["Ability Score Modifiers"]["Strength"])
+            self.NonPlayerCharacterStatsWidgetInst.DexterityModifierSpinBox.setValue(self.NonPlayerCharacter.Stats["Ability Score Modifiers"]["Dexterity"])
+            self.NonPlayerCharacterStatsWidgetInst.ConstitutionModifierSpinBox.setValue(self.NonPlayerCharacter.Stats["Ability Score Modifiers"]["Constitution"])
+            self.NonPlayerCharacterStatsWidgetInst.IntelligenceModifierSpinBox.setValue(self.NonPlayerCharacter.Stats["Ability Score Modifiers"]["Intelligence"])
+            self.NonPlayerCharacterStatsWidgetInst.WisdomModifierSpinBox.setValue(self.NonPlayerCharacter.Stats["Ability Score Modifiers"]["Wisdom"])
+            self.NonPlayerCharacterStatsWidgetInst.CharismaModifierSpinBox.setValue(self.NonPlayerCharacter.Stats["Ability Score Modifiers"]["Charisma"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
