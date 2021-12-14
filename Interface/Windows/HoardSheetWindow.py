@@ -2,10 +2,11 @@ import copy
 import json
 import os
 
-from PyQt5.QtWidgets import QAction, QGridLayout, QMessageBox
+from PyQt5.QtWidgets import QAction, QFrame, QGridLayout, QLabel, QMessageBox
 
 from Core.Hoard import Hoard
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
+from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -39,8 +40,43 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
     def CreateInterface(self):
         super().LoadTheme()
 
+        # Header
+        self.NameOrOwnersLabel = QLabel("Name or Owners:")
+        self.NameOrOwnersLineEdit = CenteredLineEdit()
+        self.NameOrOwnersLineEdit.textChanged.connect(lambda: self.UpdateData("Name or Owners", self.NameOrOwnersLineEdit.text()))
+
+        self.LocationLabel = QLabel("Location:")
+        self.LocationLineEdit = CenteredLineEdit()
+        self.LocationLineEdit.textChanged.connect(lambda: self.UpdateData("Location", self.LocationLineEdit.text()))
+
+        self.StorageCostsLabel = QLabel("Storage Costs:")
+        self.StorageCostsLineEdit = CenteredLineEdit()
+        self.StorageCostsLineEdit.textChanged.connect(lambda: self.UpdateData("Storage Costs", self.StorageCostsLineEdit.text()))
+
         # Create and Set Layout
         self.Layout = QGridLayout()
+
+        self.HeaderFrame = QFrame()
+        self.HeaderFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.HeaderLayout = QGridLayout()
+        self.HeaderLayout.addWidget(self.NameOrOwnersLabel, 0, 0)
+        self.HeaderLayout.addWidget(self.NameOrOwnersLineEdit, 0, 1)
+        self.HeaderLayout.addWidget(self.LocationLabel, 0, 2)
+        self.HeaderLayout.addWidget(self.LocationLineEdit, 0, 3)
+        self.HeaderLayout.addWidget(self.StorageCostsLabel, 0, 4)
+        self.HeaderLayout.addWidget(self.StorageCostsLineEdit, 0, 5)
+        for Column in [1, 3, 5]:
+            self.HeaderLayout.setColumnStretch(Column, 1)
+        self.HeaderFrame.setLayout(self.HeaderLayout)
+        self.Layout.addWidget(self.HeaderFrame, 0, 0)
+
+        self.HoardFrame = QFrame()
+        self.HoardFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.HoardLayout = QGridLayout()
+        self.HoardFrame.setLayout(self.HoardLayout)
+        self.Layout.addWidget(self.HoardFrame, 1, 0)
+
+        self.Layout.setRowStretch(1, 1)
 
         self.Frame.setLayout(self.Layout)
 
@@ -138,8 +174,11 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         # Gzip Mode
         self.SaveGzipMode()
 
-    # TODO
     # Hoard Methods
+    def UpdateData(self, Data, NewValue):
+        if not self.UpdatingFieldsFromHoard:
+            self.Hoard.UpdateData(Data, NewValue)
+            self.UpdateUnsavedChangesFlag(True)
 
     # View Methods
     def ShowCoinCalculator(self):
@@ -199,7 +238,9 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
 
         # Updating Fields from Hoard
         if self.UpdatingFieldsFromHoard:
-            pass
+            self.NameOrOwnersLineEdit.setText(self.Hoard.HoardData["Name or Owners"])
+            self.LocationLineEdit.setText(self.Hoard.HoardData["Location"])
+            self.StorageCostsLineEdit.setText(self.Hoard.HoardData["Storage Costs"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
