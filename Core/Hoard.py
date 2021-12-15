@@ -1,4 +1,5 @@
 from decimal import Decimal
+import copy
 
 from SaveAndLoad.JSONSerializer import SerializableMixin
 
@@ -125,7 +126,33 @@ class Hoard(SerializableMixin):
 
         return DerivedData
 
-    # Hoard Calculation Methods
+    # Inventory Methods
+    def CreateInventoryItem(self):
+        InventoryItem = copy.deepcopy(self.InventoryItemDefaults)
+        return InventoryItem
+
+    def AddInventoryItem(self):
+        NewItem = self.CreateInventoryItem()
+        self.HoardData["Inventory"].append(NewItem)
+        ItemIndex = len(self.HoardData["Inventory"]) - 1
+        return ItemIndex
+
+    def DeleteInventoryItem(self, ItemIndex):
+        del self.HoardData["Inventory"][ItemIndex]
+
+    def DeleteLastInventoryItem(self):
+        ItemIndex = len(self.HoardData["Inventory"]) - 1
+        self.DeleteInventoryItem(ItemIndex)
+
+    def MoveInventoryItem(self, ItemIndex, Delta):
+        TargetIndex = ItemIndex + Delta
+        if TargetIndex < 0 or TargetIndex >= len(self.HoardData["Inventory"]):
+            return False
+        SwapTarget = self.HoardData["Inventory"][TargetIndex]
+        self.HoardData["Inventory"][TargetIndex] = self.HoardData["Inventory"][ItemIndex]
+        self.HoardData["Inventory"][ItemIndex] = SwapTarget
+        return True
+
     def CalculateItemTotalLoadAndValue(self, ItemIndex):
         Item = self.HoardData["Inventory"][ItemIndex]
         Totals = {}

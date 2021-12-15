@@ -454,16 +454,34 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         pass
 
     def DeleteItem(self):
-        pass
+        CurrentSelection = self.InventoryTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            if self.DisplayMessageBox("Are you sure you want to delete this item?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+                CurrentItem = CurrentSelection[0]
+                CurrentItemIndex = CurrentItem.Index
+                self.Hoard.DeleteInventoryItem(CurrentItemIndex)
+                self.UpdateUnsavedChangesFlag(True)
+                InventoryLength = len(self.Hoard.HoardData["Inventory"])
+                if InventoryLength > 0:
+                    self.InventoryTreeWidget.SelectIndex(CurrentItemIndex if CurrentItemIndex < InventoryLength else InventoryLength - 1)
 
     def EditItem(self):
         pass
 
     def MoveItemUp(self):
-        pass
+        self.MoveItem(-1)
 
     def MoveItemDown(self):
-        pass
+        self.MoveItem(1)
+
+    def MoveItem(self, Delta):
+        CurrentSelection = self.InventoryTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentItem = CurrentSelection[0]
+            CurrentItemIndex = CurrentItem.Index
+            if self.Hoard.MoveInventoryItem(CurrentItemIndex, Delta):
+                self.UpdateUnsavedChangesFlag(True)
+                self.InventoryTreeWidget.SelectIndex(CurrentItemIndex + Delta)
 
     # View Methods
     def ShowCoinCalculator(self):
