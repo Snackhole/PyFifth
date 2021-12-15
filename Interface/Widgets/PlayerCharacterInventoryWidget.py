@@ -5,7 +5,7 @@ from Interface.Dialogs.EditItemDialog import EditItemDialog
 from Interface.Dialogs.GainCoinsDialog import GainCoinsDialog
 from Interface.Dialogs.SpendCoinsDialog import SpendCoinsDialog
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
-from Interface.Widgets.InventoryTreeWidget import InventoryTreeWidget
+from Interface.Widgets.PlayerCharacterInventoryTreeWidget import PlayerCharacterInventoryTreeWidget
 
 
 class PlayerCharacterInventoryWidget(QFrame):
@@ -326,7 +326,7 @@ class PlayerCharacterInventoryWidget(QFrame):
         self.InventoryLabel.setMargin(self.HeaderLabelMargin)
 
         # Inventory Tree Widget
-        self.InventoryTreeWidget = InventoryTreeWidget(self.CharacterWindow)
+        self.InventoryTreeWidget = PlayerCharacterInventoryTreeWidget(self.CharacterWindow)
         self.InventoryTreeWidget.itemActivated.connect(self.EditItem)
 
         # Buttons

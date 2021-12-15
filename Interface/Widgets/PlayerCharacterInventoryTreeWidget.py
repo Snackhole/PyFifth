@@ -4,7 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QHeaderView
 
 
-class InventoryTreeWidget(QTreeWidget):
+class PlayerCharacterInventoryTreeWidget(QTreeWidget):
     def __init__(self, CharacterWindow):
         super().__init__()
 
@@ -20,7 +20,7 @@ class InventoryTreeWidget(QTreeWidget):
     def FillFromInventory(self):
         self.clear()
         for ItemIndex in range(len(self.CharacterWindow.PlayerCharacter.Stats["Inventory"])):
-            self.invisibleRootItem().addChild(InventoryWidgetItem(self.CharacterWindow, ItemIndex, self.CharacterWindow.PlayerCharacter.Stats["Inventory"][ItemIndex]))
+            self.invisibleRootItem().addChild(PlayerCharacterInventoryWidgetItem(self.CharacterWindow, ItemIndex, self.CharacterWindow.PlayerCharacter.Stats["Inventory"][ItemIndex]))
 
     def SelectIndex(self, Index):
         DestinationIndex = self.model().index(Index, 0)
@@ -29,7 +29,7 @@ class InventoryTreeWidget(QTreeWidget):
         self.horizontalScrollBar().setValue(0)
 
 
-class InventoryWidgetItem(QTreeWidgetItem):
+class PlayerCharacterInventoryWidgetItem(QTreeWidgetItem):
     def __init__(self, CharacterWindow, Index, Item):
         super().__init__()
 
