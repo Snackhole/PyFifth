@@ -10,7 +10,8 @@ from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
 from Interface.Dialogs.GainCoinsDialog import GainCoinsDialog
 from Interface.Dialogs.SpendCoinsDialog import SpendCoinsDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
-from Interface.Widgets.IconButtons import AddButton, DeleteButton
+from Interface.Widgets.HoardInventoryTreeWidget import HoardInventoryTreeWidget
+from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
 from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
@@ -226,6 +227,23 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.NotesLabel.setMargin(self.HeaderLabelMargin)
 
         self.NotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Notes", self.NotesTextEdit.toPlainText()))
+        self.NotesTextEdit.setMinimumHeight(200)
+
+        # Inventory
+        self.InventoryLabel = QLabel("Inventory")
+        self.InventoryLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.InventoryLabel.setStyleSheet(self.SectionLabelStyle)
+        self.InventoryLabel.setMargin(self.HeaderLabelMargin)
+
+        self.InventoryTreeWidget = HoardInventoryTreeWidget(self)
+        self.InventoryTreeWidget.itemActivated.connect(self.EditItem)
+        self.InventoryTreeWidget.setMinimumWidth(600)
+
+        self.AddItemButton = AddButton(self.AddItem, "Add Item")
+        self.DeleteItemButton = DeleteButton(self.DeleteItem, "Delete Item")
+        self.EditItemButton = EditButton(self.EditItem, "Edit Item")
+        self.MoveItemUpButton = MoveUpButton(self.MoveItemUp, "Move Item Up")
+        self.MoveItemDownButton = MoveDownButton(self.MoveItemDown, "Move Item Down")
 
         # Create and Set Layout
         self.Layout = QGridLayout()
@@ -285,6 +303,18 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.NotesLayout.addWidget(self.NotesLabel, 0, 0)
         self.NotesLayout.addWidget(self.NotesTextEdit, 1, 0)
         self.HoardLayout.addLayout(self.NotesLayout, 2, 0)
+
+        self.InventoryLayout = QGridLayout()
+        self.InventoryLayout.addWidget(self.InventoryLabel, 0, 0, 1, 5)
+        self.InventoryLayout.addWidget(self.AddItemButton, 1, 0)
+        self.InventoryLayout.addWidget(self.DeleteItemButton, 1, 1)
+        self.InventoryLayout.addWidget(self.EditItemButton, 1, 2)
+        self.InventoryLayout.addWidget(self.MoveItemUpButton, 1, 3)
+        self.InventoryLayout.addWidget(self.MoveItemDownButton, 1, 4)
+        self.InventoryLayout.addWidget(self.InventoryTreeWidget, 2, 0, 1, 5)
+        self.HoardLayout.addLayout(self.InventoryLayout, 0, 1, 3, 1)
+
+        self.HoardLayout.setColumnStretch(1, 1)
 
         self.HoardFrame.setLayout(self.HoardLayout)
         self.Layout.addWidget(self.HoardFrame, 1, 0)
@@ -420,6 +450,21 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         CurrentCoinCounts["PP"] = self.Hoard.HoardData["Coins"]["PP"]
         return CurrentCoinCounts
 
+    def AddItem(self):
+        pass
+
+    def DeleteItem(self):
+        pass
+
+    def EditItem(self):
+        pass
+
+    def MoveItemUp(self):
+        pass
+
+    def MoveItemDown(self):
+        pass
+
     # View Methods
     def ShowCoinCalculator(self):
         CoinCalculatorDialog(self)
@@ -486,6 +531,9 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.ItemsLoadSpinBox.setValue(self.DerivedData["Load of Inventory"])
         self.TotalValueSpinBox.setValue(self.DerivedData["Total Value"])
         self.TotalLoadSpinBox.setValue(self.DerivedData["Total Load"])
+
+        # Inventory
+        self.InventoryTreeWidget.FillFromInventory()
 
         # Updating Fields from Hoard
         if self.UpdatingFieldsFromHoard:
