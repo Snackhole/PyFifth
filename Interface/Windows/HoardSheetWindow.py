@@ -3,7 +3,7 @@ import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QAction, QFrame, QGridLayout, QLabel, QMessageBox, QSizePolicy, QSpinBox
+from PyQt5.QtWidgets import QAction, QDoubleSpinBox, QFrame, QGridLayout, QLabel, QMessageBox, QSizePolicy, QSpinBox
 
 from Core.Hoard import Hoard
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
@@ -43,6 +43,9 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
 
         # Create Hoard
         self.Hoard = Hoard()
+
+        # Derived Data
+        self.DerivedData = self.Hoard.GetDerivedData()
 
         # Load Configs
         self.LoadConfigs()
@@ -136,6 +139,85 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.GainCoinsButton = AddButton(self.GainCoins, "Gain Coins")
         self.SpendCoinsButton = DeleteButton(self.SpendCoins, "Spend Coins")
 
+        # Hoard Stats
+        self.HoardStatsLabel = QLabel("Hoard Stats")
+        self.HoardStatsLabel.setStyleSheet(self.SectionLabelStyle)
+        self.HoardStatsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.HoardStatsLabel.setMargin(self.HeaderLabelMargin)
+
+        self.ValueColumnLabel = QLabel("Value")
+        self.ValueColumnLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ValueColumnLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.ValueColumnLabel.setMargin(5)
+
+        self.LoadColumnLabel = QLabel("Load (lbs.)")
+        self.LoadColumnLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.LoadColumnLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.LoadColumnLabel.setMargin(5)
+
+        self.CoinsRowLabel = QLabel("Coins")
+        self.CoinsRowLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CoinsRowLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.CoinsRowLabel.setMargin(5)
+
+        self.ItemsRowLabel = QLabel("Items")
+        self.ItemsRowLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ItemsRowLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.ItemsRowLabel.setMargin(5)
+
+        self.TotalRowLabel = QLabel("Total")
+        self.TotalRowLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.TotalRowLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.TotalRowLabel.setMargin(5)
+
+        self.CoinValueSpinBox = QDoubleSpinBox()
+        self.CoinValueSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CoinValueSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.CoinValueSpinBox.setButtonSymbols(self.CoinValueSpinBox.NoButtons)
+        self.CoinValueSpinBox.setRange(0, 1000000000)
+        self.CoinValueSpinBox.setReadOnly(True)
+        self.CoinValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+
+        self.CoinLoadSpinBox = QDoubleSpinBox()
+        self.CoinLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CoinLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.CoinLoadSpinBox.setButtonSymbols(self.CoinLoadSpinBox.NoButtons)
+        self.CoinLoadSpinBox.setRange(0, 1000000000)
+        self.CoinLoadSpinBox.setReadOnly(True)
+        self.CoinLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+
+        self.ItemsValueSpinBox = QDoubleSpinBox()
+        self.ItemsValueSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ItemsValueSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.ItemsValueSpinBox.setButtonSymbols(self.ItemsValueSpinBox.NoButtons)
+        self.ItemsValueSpinBox.setRange(0, 1000000000)
+        self.ItemsValueSpinBox.setReadOnly(True)
+        self.ItemsValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+
+        self.ItemsLoadSpinBox = QDoubleSpinBox()
+        self.ItemsLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ItemsLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.ItemsLoadSpinBox.setButtonSymbols(self.ItemsLoadSpinBox.NoButtons)
+        self.ItemsLoadSpinBox.setRange(0, 1000000000)
+        self.ItemsLoadSpinBox.setReadOnly(True)
+        self.ItemsLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+
+        self.TotalValueSpinBox = QDoubleSpinBox()
+        self.TotalValueSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.TotalValueSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.TotalValueSpinBox.setButtonSymbols(self.TotalValueSpinBox.NoButtons)
+        self.TotalValueSpinBox.setRange(0, 1000000000)
+        self.TotalValueSpinBox.setReadOnly(True)
+        self.TotalValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+
+        self.TotalLoadSpinBox = QDoubleSpinBox()
+        self.TotalLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.TotalLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.TotalLoadSpinBox.setButtonSymbols(self.TotalLoadSpinBox.NoButtons)
+        self.TotalLoadSpinBox.setRange(0, 1000000000)
+        self.TotalLoadSpinBox.setReadOnly(True)
+        self.TotalLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+
         # Create and Set Layout
         self.Layout = QGridLayout()
 
@@ -156,6 +238,7 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.HoardFrame = QFrame()
         self.HoardFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
         self.HoardLayout = QGridLayout()
+
         self.CoinsLayout = QGridLayout()
         self.CoinsLayout.addWidget(self.CoinsLabel, 0, 0, 1, 5)
         self.CoinsLayout.addWidget(self.CPLabel, 1, 0)
@@ -173,6 +256,22 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.CoinButtonsLayout.addWidget(self.SpendCoinsButton, 0, 1)
         self.CoinsLayout.addLayout(self.CoinButtonsLayout, 3, 0, 1, 5)
         self.HoardLayout.addLayout(self.CoinsLayout, 0, 0)
+
+        self.HoardStatsLayout = QGridLayout()
+        self.HoardStatsLayout.addWidget(self.HoardStatsLabel, 0, 0, 1, 3)
+        self.HoardStatsLayout.addWidget(self.ValueColumnLabel, 1, 1)
+        self.HoardStatsLayout.addWidget(self.LoadColumnLabel, 1, 2)
+        self.HoardStatsLayout.addWidget(self.CoinsRowLabel, 2, 0)
+        self.HoardStatsLayout.addWidget(self.CoinValueSpinBox, 2, 1)
+        self.HoardStatsLayout.addWidget(self.CoinLoadSpinBox, 2, 2)
+        self.HoardStatsLayout.addWidget(self.ItemsRowLabel, 3, 0)
+        self.HoardStatsLayout.addWidget(self.ItemsValueSpinBox, 3, 1)
+        self.HoardStatsLayout.addWidget(self.ItemsLoadSpinBox, 3, 2)
+        self.HoardStatsLayout.addWidget(self.TotalRowLabel, 4, 0)
+        self.HoardStatsLayout.addWidget(self.TotalValueSpinBox, 4, 1)
+        self.HoardStatsLayout.addWidget(self.TotalLoadSpinBox, 4, 2)
+        self.HoardLayout.addLayout(self.HoardStatsLayout, 1, 0)
+
         self.HoardFrame.setLayout(self.HoardLayout)
         self.Layout.addWidget(self.HoardFrame, 1, 0)
 
@@ -362,6 +461,17 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
    # Display Update Methods
     def UpdateDisplay(self):
         self.UpdateWindowTitle()
+
+        # Update Derived Data
+        self.DerivedData = self.Hoard.GetDerivedData()
+
+        # Hoard Stats
+        self.CoinValueSpinBox.setValue(self.DerivedData["Value of Coins"])
+        self.CoinLoadSpinBox.setValue(self.DerivedData["Load of Coins"])
+        self.ItemsValueSpinBox.setValue(self.DerivedData["Value of Inventory"])
+        self.ItemsLoadSpinBox.setValue(self.DerivedData["Load of Inventory"])
+        self.TotalValueSpinBox.setValue(self.DerivedData["Total Value"])
+        self.TotalLoadSpinBox.setValue(self.DerivedData["Total Load"])
 
         # Updating Fields from Hoard
         if self.UpdatingFieldsFromHoard:
