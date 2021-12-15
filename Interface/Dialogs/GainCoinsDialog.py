@@ -3,11 +3,11 @@ from PyQt5.QtWidgets import QDialog, QGridLayout, QSizePolicy, QPushButton, QSpi
 
 
 class GainCoinsDialog(QDialog):
-    def __init__(self, CharacterWindow):
-        super().__init__(parent=CharacterWindow)
+    def __init__(self, ParentWindow):
+        super().__init__(parent=ParentWindow)
 
         # Store Parameters
-        self.CharacterWindow = CharacterWindow
+        self.ParentWindow = ParentWindow
 
         # Variables
         self.GainedCoins = {}
@@ -103,8 +103,11 @@ class GainCoinsDialog(QDialog):
         self.setLayout(self.Layout)
 
         # Set Window Title and Icon
-        self.setWindowTitle(self.CharacterWindow.ScriptName)
-        self.setWindowIcon(self.CharacterWindow.WindowIcon)
+        self.setWindowTitle(self.ParentWindow.ScriptName)
+        self.setWindowIcon(self.ParentWindow.WindowIcon)
+
+        # Select CP Spin Box
+        self.CPSpinBox.selectAll()
 
         # Execute Dialog
         self.exec_()

@@ -5,11 +5,11 @@ from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 
 
 class SpendCoinsDialog(QDialog):
-    def __init__(self, CharacterWindow):
-        super().__init__(parent=CharacterWindow)
+    def __init__(self, ParentWindow):
+        super().__init__(parent=ParentWindow)
 
         # Store Parameters
-        self.CharacterWindow = CharacterWindow
+        self.ParentWindow = ParentWindow
 
         # Variables
         self.CPValues = {}
@@ -24,12 +24,7 @@ class SpendCoinsDialog(QDialog):
         self.SpentCoins["EP"] = 0
         self.SpentCoins["GP"] = 0
         self.SpentCoins["PP"] = 0
-        self.RemainingCoins = {}
-        self.RemainingCoins["CP"] = self.CharacterWindow.PlayerCharacter.Stats["Coins"]["CP"]
-        self.RemainingCoins["SP"] = self.CharacterWindow.PlayerCharacter.Stats["Coins"]["SP"]
-        self.RemainingCoins["EP"] = self.CharacterWindow.PlayerCharacter.Stats["Coins"]["EP"]
-        self.RemainingCoins["GP"] = self.CharacterWindow.PlayerCharacter.Stats["Coins"]["GP"]
-        self.RemainingCoins["PP"] = self.CharacterWindow.PlayerCharacter.Stats["Coins"]["PP"]
+        self.RemainingCoins = self.ParentWindow.GetCurrentCoinCounts()
         self.OriginalRemainingCoinsCPValue = self.GetCPValueOfCoins(self.RemainingCoins)
         self.Submitted = False
 
@@ -318,11 +313,14 @@ class SpendCoinsDialog(QDialog):
         self.setLayout(self.Layout)
 
         # Set Window Title and Icon
-        self.setWindowTitle(self.CharacterWindow.ScriptName)
-        self.setWindowIcon(self.CharacterWindow.WindowIcon)
+        self.setWindowTitle(self.ParentWindow.ScriptName)
+        self.setWindowIcon(self.ParentWindow.WindowIcon)
 
         # Update Display
         self.Update()
+
+        # Select Spent CP Spin Box
+        self.SpentCPSpinBox.selectAll()
 
         # Execute Dialog
         self.exec_()
@@ -347,7 +345,7 @@ class SpendCoinsDialog(QDialog):
         CPValueAfterSpending = self.OriginalRemainingCoinsCPValue - SpentCoinsCPValue
         if CPValueAfterSpending != RemainingCoinsCPValue:
             if Alert:
-                self.CharacterWindow.DisplayMessageBox("The value of your coins after spending must be equal to the value of your remaining coins.", Icon=QMessageBox.Warning, Parent=self)
+                self.ParentWindow.DisplayMessageBox("The value of your coins after spending must be equal to the value of your remaining coins.", Icon=QMessageBox.Warning, Parent=self)
             return False
         return True
 

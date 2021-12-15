@@ -2,11 +2,15 @@ import copy
 import json
 import os
 
-from PyQt5.QtWidgets import QAction, QFrame, QGridLayout, QLabel, QMessageBox
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QAction, QFrame, QGridLayout, QLabel, QMessageBox, QSizePolicy, QSpinBox
 
 from Core.Hoard import Hoard
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
+from Interface.Dialogs.GainCoinsDialog import GainCoinsDialog
+from Interface.Dialogs.SpendCoinsDialog import SpendCoinsDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.IconButtons import AddButton, DeleteButton
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -21,6 +25,15 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
 
         # Variables
         self.UpdatingFieldsFromHoard = False
+
+        # Styles
+        self.SectionLabelStyle = "QLabel {font-size: 10pt; font-weight: bold;}"
+
+        # Header Label Margin
+        self.HeaderLabelMargin = 5
+
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Initialize Window
         super().__init__(ScriptName, AbsoluteDirectoryPath, AppInst)
@@ -53,6 +66,76 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.StorageCostsLineEdit = CenteredLineEdit()
         self.StorageCostsLineEdit.textChanged.connect(lambda: self.UpdateData("Storage Costs", self.StorageCostsLineEdit.text()))
 
+        # Coins
+        self.CoinsLabel = QLabel("Coins")
+        self.CoinsLabel.setStyleSheet(self.SectionLabelStyle)
+        self.CoinsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CoinsLabel.setMargin(self.HeaderLabelMargin)
+
+        # CP
+        self.CPLabel = QLabel("CP")
+        self.CPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CPLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.CPLabel.setMargin(5)
+        self.CPSpinBox = QSpinBox()
+        self.CPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CPSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.CPSpinBox.setButtonSymbols(self.CPSpinBox.NoButtons)
+        self.CPSpinBox.setRange(0, 1000000000)
+        self.CPSpinBox.valueChanged.connect(lambda: self.UpdateData(("Coins", "CP"), self.CPSpinBox.value()))
+
+        # SP
+        self.SPLabel = QLabel("SP")
+        self.SPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SPLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.SPLabel.setMargin(5)
+        self.SPSpinBox = QSpinBox()
+        self.SPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SPSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.SPSpinBox.setButtonSymbols(self.SPSpinBox.NoButtons)
+        self.SPSpinBox.setRange(0, 1000000000)
+        self.SPSpinBox.valueChanged.connect(lambda: self.UpdateData(("Coins", "SP"), self.SPSpinBox.value()))
+
+        # EP
+        self.EPLabel = QLabel("EP")
+        self.EPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.EPLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.EPLabel.setMargin(5)
+        self.EPSpinBox = QSpinBox()
+        self.EPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.EPSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.EPSpinBox.setButtonSymbols(self.EPSpinBox.NoButtons)
+        self.EPSpinBox.setRange(0, 1000000000)
+        self.EPSpinBox.valueChanged.connect(lambda: self.UpdateData(("Coins", "EP"), self.EPSpinBox.value()))
+
+        # GP
+        self.GPLabel = QLabel("GP")
+        self.GPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.GPLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.GPLabel.setMargin(5)
+        self.GPSpinBox = QSpinBox()
+        self.GPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.GPSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.GPSpinBox.setButtonSymbols(self.GPSpinBox.NoButtons)
+        self.GPSpinBox.setRange(0, 1000000000)
+        self.GPSpinBox.valueChanged.connect(lambda: self.UpdateData(("Coins", "GP"), self.GPSpinBox.value()))
+
+        # PP
+        self.PPLabel = QLabel("PP")
+        self.PPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PPLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.PPLabel.setMargin(5)
+        self.PPSpinBox = QSpinBox()
+        self.PPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.PPSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.PPSpinBox.setButtonSymbols(self.PPSpinBox.NoButtons)
+        self.PPSpinBox.setRange(0, 1000000000)
+        self.PPSpinBox.valueChanged.connect(lambda: self.UpdateData(("Coins", "PP"), self.PPSpinBox.value()))
+
+        # Coins Buttons
+        self.GainCoinsButton = AddButton(self.GainCoins, "Gain Coins")
+        self.SpendCoinsButton = DeleteButton(self.SpendCoins, "Spend Coins")
+
         # Create and Set Layout
         self.Layout = QGridLayout()
 
@@ -73,6 +156,23 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.HoardFrame = QFrame()
         self.HoardFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
         self.HoardLayout = QGridLayout()
+        self.CoinsLayout = QGridLayout()
+        self.CoinsLayout.addWidget(self.CoinsLabel, 0, 0, 1, 5)
+        self.CoinsLayout.addWidget(self.CPLabel, 1, 0)
+        self.CoinsLayout.addWidget(self.CPSpinBox, 2, 0)
+        self.CoinsLayout.addWidget(self.SPLabel, 1, 1)
+        self.CoinsLayout.addWidget(self.SPSpinBox, 2, 1)
+        self.CoinsLayout.addWidget(self.EPLabel, 1, 2)
+        self.CoinsLayout.addWidget(self.EPSpinBox, 2, 2)
+        self.CoinsLayout.addWidget(self.GPLabel, 1, 3)
+        self.CoinsLayout.addWidget(self.GPSpinBox, 2, 3)
+        self.CoinsLayout.addWidget(self.PPLabel, 1, 4)
+        self.CoinsLayout.addWidget(self.PPSpinBox, 2, 4)
+        self.CoinButtonsLayout = QGridLayout()
+        self.CoinButtonsLayout.addWidget(self.GainCoinsButton, 0, 0)
+        self.CoinButtonsLayout.addWidget(self.SpendCoinsButton, 0, 1)
+        self.CoinsLayout.addLayout(self.CoinButtonsLayout, 3, 0, 1, 5)
+        self.HoardLayout.addLayout(self.CoinsLayout, 0, 0)
         self.HoardFrame.setLayout(self.HoardLayout)
         self.Layout.addWidget(self.HoardFrame, 1, 0)
 
@@ -180,6 +280,33 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
             self.Hoard.UpdateData(Data, NewValue)
             self.UpdateUnsavedChangesFlag(True)
 
+    def GainCoins(self):
+        GainCoinsDialogInst = GainCoinsDialog(self)
+        if GainCoinsDialogInst.Submitted:
+            self.CPSpinBox.setValue(self.Hoard.HoardData["Coins"]["CP"] + GainCoinsDialogInst.GainedCoins["CP"])
+            self.SPSpinBox.setValue(self.Hoard.HoardData["Coins"]["SP"] + GainCoinsDialogInst.GainedCoins["SP"])
+            self.EPSpinBox.setValue(self.Hoard.HoardData["Coins"]["EP"] + GainCoinsDialogInst.GainedCoins["EP"])
+            self.GPSpinBox.setValue(self.Hoard.HoardData["Coins"]["GP"] + GainCoinsDialogInst.GainedCoins["GP"])
+            self.PPSpinBox.setValue(self.Hoard.HoardData["Coins"]["PP"] + GainCoinsDialogInst.GainedCoins["PP"])
+
+    def SpendCoins(self):
+        SpendCoinsDialogInst = SpendCoinsDialog(self)
+        if SpendCoinsDialogInst.Submitted:
+            self.CPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["CP"])
+            self.SPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["SP"])
+            self.EPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["EP"])
+            self.GPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["GP"])
+            self.PPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["PP"])
+
+    def GetCurrentCoinCounts(self):
+        CurrentCoinCounts = {}
+        CurrentCoinCounts["CP"] = self.Hoard.HoardData["Coins"]["CP"]
+        CurrentCoinCounts["SP"] = self.Hoard.HoardData["Coins"]["SP"]
+        CurrentCoinCounts["EP"] = self.Hoard.HoardData["Coins"]["EP"]
+        CurrentCoinCounts["GP"] = self.Hoard.HoardData["Coins"]["GP"]
+        CurrentCoinCounts["PP"] = self.Hoard.HoardData["Coins"]["PP"]
+        return CurrentCoinCounts
+
     # View Methods
     def ShowCoinCalculator(self):
         CoinCalculatorDialog(self)
@@ -238,9 +365,17 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
 
         # Updating Fields from Hoard
         if self.UpdatingFieldsFromHoard:
+            # Header
             self.NameOrOwnersLineEdit.setText(self.Hoard.HoardData["Name or Owners"])
             self.LocationLineEdit.setText(self.Hoard.HoardData["Location"])
             self.StorageCostsLineEdit.setText(self.Hoard.HoardData["Storage Costs"])
+
+            # Coins
+            self.CPSpinBox.setValue(self.Hoard.HoardData["Coins"]["CP"])
+            self.SPSpinBox.setValue(self.Hoard.HoardData["Coins"]["SP"])
+            self.EPSpinBox.setValue(self.Hoard.HoardData["Coins"]["EP"])
+            self.GPSpinBox.setValue(self.Hoard.HoardData["Coins"]["GP"])
+            self.PPSpinBox.setValue(self.Hoard.HoardData["Coins"]["PP"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""

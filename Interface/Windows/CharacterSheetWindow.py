@@ -394,6 +394,15 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
     def ToggleLuckyHalfling(self):
         self.UpdateStat("Lucky Halfling", self.LuckyHalflingAction.isChecked())
 
+    def GetCurrentCoinCounts(self):
+        CurrentCoinCounts = {}
+        CurrentCoinCounts["CP"] = self.PlayerCharacter.Stats["Coins"]["CP"]
+        CurrentCoinCounts["SP"] = self.PlayerCharacter.Stats["Coins"]["SP"]
+        CurrentCoinCounts["EP"] = self.PlayerCharacter.Stats["Coins"]["EP"]
+        CurrentCoinCounts["GP"] = self.PlayerCharacter.Stats["Coins"]["GP"]
+        CurrentCoinCounts["PP"] = self.PlayerCharacter.Stats["Coins"]["PP"]
+        return CurrentCoinCounts
+
     # Roller Methods
     def RollActionTriggered(self):
         DiceNumber = self.DiceRollerWidget.DiceNumberSpinBox.value()
