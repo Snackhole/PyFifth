@@ -11,6 +11,7 @@ from Interface.Dialogs.GainCoinsDialog import GainCoinsDialog
 from Interface.Dialogs.SpendCoinsDialog import SpendCoinsDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.IconButtons import AddButton, DeleteButton
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -218,6 +219,14 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.TotalLoadSpinBox.setReadOnly(True)
         self.TotalLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
 
+        # Notes
+        self.NotesLabel = QLabel("Notes")
+        self.NotesLabel.setStyleSheet(self.SectionLabelStyle)
+        self.NotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.NotesLabel.setMargin(self.HeaderLabelMargin)
+
+        self.NotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Notes", self.NotesTextEdit.toPlainText()))
+
         # Create and Set Layout
         self.Layout = QGridLayout()
 
@@ -271,6 +280,11 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.HoardStatsLayout.addWidget(self.TotalValueSpinBox, 4, 1)
         self.HoardStatsLayout.addWidget(self.TotalLoadSpinBox, 4, 2)
         self.HoardLayout.addLayout(self.HoardStatsLayout, 1, 0)
+
+        self.NotesLayout = QGridLayout()
+        self.NotesLayout.addWidget(self.NotesLabel, 0, 0)
+        self.NotesLayout.addWidget(self.NotesTextEdit, 1, 0)
+        self.HoardLayout.addLayout(self.NotesLayout, 2, 0)
 
         self.HoardFrame.setLayout(self.HoardLayout)
         self.Layout.addWidget(self.HoardFrame, 1, 0)
@@ -486,6 +500,9 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
             self.EPSpinBox.setValue(self.Hoard.HoardData["Coins"]["EP"])
             self.GPSpinBox.setValue(self.Hoard.HoardData["Coins"]["GP"])
             self.PPSpinBox.setValue(self.Hoard.HoardData["Coins"]["PP"])
+
+            # Notes
+            self.NotesTextEdit.setPlainText(self.Hoard.HoardData["Notes"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
