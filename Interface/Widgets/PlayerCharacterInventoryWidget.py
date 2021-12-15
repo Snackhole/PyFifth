@@ -1,8 +1,8 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QDoubleSpinBox, QFrame, QGridLayout, QInputDialog, QLabel, QMessageBox, QSizePolicy, QSpinBox
 
-from Interface.Dialogs.EditItemDialog import EditItemDialog
 from Interface.Dialogs.GainCoinsDialog import GainCoinsDialog
+from Interface.Dialogs.PlayerCharacterEditItemDialog import PlayerCharacterEditItemDialog
 from Interface.Dialogs.SpendCoinsDialog import SpendCoinsDialog
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton
 from Interface.Widgets.PlayerCharacterInventoryTreeWidget import PlayerCharacterInventoryTreeWidget
@@ -471,7 +471,7 @@ class PlayerCharacterInventoryWidget(QFrame):
     def AddItem(self):
         ItemIndex = self.CharacterWindow.PlayerCharacter.AddInventoryItem()
         self.CharacterWindow.UpdateDisplay()
-        EditItemDialogInst = EditItemDialog(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Inventory"], ItemIndex, AddMode=True)
+        EditItemDialogInst = PlayerCharacterEditItemDialog(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Inventory"], ItemIndex, AddMode=True)
         if EditItemDialogInst.Cancelled:
             self.CharacterWindow.PlayerCharacter.DeleteLastInventoryItem()
             self.CharacterWindow.UpdateDisplay()
@@ -496,7 +496,7 @@ class PlayerCharacterInventoryWidget(QFrame):
         if len(CurrentSelection) > 0:
             CurrentItem = CurrentSelection[0]
             CurrentItemIndex = CurrentItem.Index
-            EditItemDialogInst = EditItemDialog(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Inventory"], CurrentItemIndex)
+            EditItemDialogInst = PlayerCharacterEditItemDialog(self.CharacterWindow, self.CharacterWindow.PlayerCharacter.Stats["Inventory"], CurrentItemIndex)
             if EditItemDialogInst.UnsavedChanges:
                 self.CharacterWindow.UpdateUnsavedChangesFlag(True)
                 self.InventoryTreeWidget.SelectIndex(CurrentItemIndex)

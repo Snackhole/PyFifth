@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QComboBox, QDialog, QDoubleSpinBox, QLabel, QLineEdi
 from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
 
-class EditItemDialog(QDialog):
+class PlayerCharacterEditItemDialog(QDialog):
     def __init__(self, CharacterWindow, Inventory, ItemIndex, AddMode=False):
         super().__init__(parent=CharacterWindow)
 
