@@ -17,14 +17,20 @@ class ModeSelectionWindow(Window):
     def CreateInterface(self):
         super().LoadTheme()
 
+        # Styles
+        self.ModeLabelStyle = "QLabel {font-size: 16pt;}"
+        self.ModeComboBoxStyle = "QComboBox {font-size: 16pt;}"
+
         # Inputs Size Policy
         self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Mode Label
         self.ModeLabel = QLabel("PyFifth Mode:")
+        self.ModeLabel.setStyleSheet(self.ModeLabelStyle)
 
         # Mode Combo Box
         self.ModeComboBox = QComboBox()
+        self.ModeComboBox.setStyleSheet(self.ModeComboBoxStyle)
         self.ModeComboBox.setSizePolicy(self.InputsSizePolicy)
         self.ModeComboBox.addItem("Character Sheet")
         self.ModeComboBox.addItem("NPC Sheet")
