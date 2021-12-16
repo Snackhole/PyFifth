@@ -49,10 +49,10 @@ class PlayerCharacterInventoryWidgetItem(QTreeWidgetItem):
         self.ColumnTextList = [self.NameText, self.CountText, self.UnitWeightText, self.UnitValueText, self.TotalWeightText, self.TotalValueText, self.TagText]
 
         # Set Text
-        for Index in range(len(self.ColumnTextList)):
-            self.setText(Index, self.ColumnTextList[Index])
-            self.setToolTip(Index, self.ColumnTextList[Index])
+        for Column in range(len(self.ColumnTextList)):
+            self.setText(Column, self.ColumnTextList[Column])
+            self.setToolTip(Column, self.ColumnTextList[Column])
 
         # Set Alignment
-        for Index in range(1, 6):
-            self.setTextAlignment(Index, QtCore.Qt.AlignCenter)
+        for Column in range(len(self.ColumnTextList) - 1):
+            self.setTextAlignment(Column, QtCore.Qt.AlignCenter)

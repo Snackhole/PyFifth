@@ -39,12 +39,13 @@ class SpellListWidgetItem(QTreeWidgetItem):
         self.PreparedText = "\u2713" if self.Spell["Spell Prepared"] else ""
         self.NameText = self.Spell["Spell Name"]
         self.LevelText = self.Spell["Spell Level"] if self.Spell["Spell Level"] != "" else ""
+        self.ColumnTextList = [self.PreparedText, self.NameText, self.LevelText]
 
         # Set Text
-        self.setText(0, self.PreparedText)
-        self.setTextAlignment(0, QtCore.Qt.AlignCenter)
-        self.setToolTip(0, self.PreparedText)
-        self.setText(1, self.NameText)
-        self.setToolTip(1, self.NameText)
-        self.setText(2, self.LevelText)
-        self.setToolTip(2, self.LevelText)
+        for Column in range(len(self.ColumnTextList)):
+            self.setText(Column, self.ColumnTextList[Column])
+            self.setToolTip(Column, self.ColumnTextList[Column])
+
+        # Set Alignment
+        for Column in range(len(self.ColumnTextList) - 1):
+            self.setTextAlignment(Column, QtCore.Qt.AlignCenter)
