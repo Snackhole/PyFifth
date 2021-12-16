@@ -1,4 +1,5 @@
 from PyQt5 import QtCore
+from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QHeaderView
 
 
@@ -45,11 +46,15 @@ class InitiativeOrderWidgetItem(QTreeWidgetItem):
         self.NotesText = Entry["Notes"]
         self.ColumnTextList = [self.InitiativeText, self.TiePriorityText, self.CreatureNameText, self.ConditionsText, self.LocationText, self.NotesText]
 
-        # Set Text
-        for Index in range(len(self.ColumnTextList)):
-            self.setText(Index, self.ColumnTextList[Index])
-            self.setToolTip(Index, self.ColumnTextList[Index])
+        # Set Text and Background Color
+        for Column in range(len(self.ColumnTextList)):
+            self.setText(Column, self.ColumnTextList[Column])
+            self.setToolTip(Column, self.ColumnTextList[Column])
+            if Entry["Turn Taken"] and Entry["Alive"]:
+                self.setBackground(Column, QColor("darkblue"))
+            elif not Entry["Alive"]:
+                self.setBackground(Column, QColor("darkred"))
 
         # Set Alignment
-        for Index in range(len(self.ColumnTextList) - 2):
-            self.setTextAlignment(Index, QtCore.Qt.AlignCenter)
+        for Column in range(len(self.ColumnTextList) - 1):
+            self.setTextAlignment(Column, QtCore.Qt.AlignCenter)
