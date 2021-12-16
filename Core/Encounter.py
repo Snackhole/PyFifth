@@ -70,6 +70,11 @@ class Encounter(SerializableMixin):
         EntryIndex = len(self.EncounterData["Initiative Order"]) - 1
         self.DeleteInitiativeEntry(EntryIndex)
 
+    def CopyInitiativeEntry(self, EntryIndex):
+        self.EncounterData["Initiative Order"].append(copy.deepcopy(self.EncounterData["Initiative Order"][EntryIndex]))
+        NewInitiativeEntryIndex = len(self.EncounterData["Initiative Order"]) - 1
+        return NewInitiativeEntryIndex
+
     def SortInitiativeOrder(self):
         self.EncounterData["Initiative Order"].sort(key=lambda Entry: (Entry["Initiative"], -1 * Entry["Tie Priority"]), reverse=True)
 

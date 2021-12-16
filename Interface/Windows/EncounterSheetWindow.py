@@ -9,7 +9,7 @@ from Core.Encounter import Encounter
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
 from Interface.Dialogs.EditInitiativeEntryDialog import EditInitiativeEntryDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
-from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, SortButton
+from Interface.Widgets.IconButtons import AddButton, CopyButton, DeleteButton, EditButton, SortButton
 from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 from Interface.Widgets.InitiativeOrderTreeWidget import InitiativeOrderTreeWidget
 from Interface.Windows.Window import Window
@@ -118,6 +118,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.AddEntryButton = AddButton(self.AddEntry, "Add Entry")
         self.DeleteEntryButton = DeleteButton(self.DeleteEntry, "Delete Entry")
         self.EditEntryButton = EditButton(self.EditEntry, "Edit Entry")
+        self.CopyEntryButton = CopyButton(self.CopyEntry, "Copy Entry")
         self.SortInitiativeButton = SortButton(self.SortInitiative, "Sort Initiative")
 
         # Create and Set Layout
@@ -160,7 +161,8 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.IconButtonsLayout.addWidget(self.AddEntryButton, 0, 0)
         self.IconButtonsLayout.addWidget(self.DeleteEntryButton, 0, 1)
         self.IconButtonsLayout.addWidget(self.EditEntryButton, 0, 2)
-        self.IconButtonsLayout.addWidget(self.SortInitiativeButton, 0, 3)
+        self.IconButtonsLayout.addWidget(self.CopyEntryButton, 0, 3)
+        self.IconButtonsLayout.addWidget(self.SortInitiativeButton, 0, 4)
         self.InitiativeOrderLayout.addLayout(self.IconButtonsLayout, 2, 1)
         self.InitiativeOrderLayout.addWidget(self.InitiativeOrderTreeWidget, 3, 0, 1, 2)
         self.InitiativeOrderLayout.setRowStretch(3, 1)
@@ -326,6 +328,16 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
             if EditInitiativeEntryDialogInst.UnsavedChanges:
                 self.UpdateUnsavedChangesFlag(True)
                 self.InitiativeOrderTreeWidget.SelectIndex(CurrentEntryIndex)
+
+    def CopyEntry(self):
+        CurrentSelection = self.InitiativeOrderTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentEntry = CurrentSelection[0]
+            CurrentEntryIndex = CurrentEntry.Index
+            NewEntryIndex = self.Encounter.CopyInitiativeEntry(CurrentEntryIndex)
+            self.UnsavedChanges = True
+            self.UpdateDisplay()
+            self.InitiativeOrderTreeWidget.SelectIndex(NewEntryIndex)
 
     def SortInitiative(self):
         self.Encounter.SortInitiativeOrder()
