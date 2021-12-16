@@ -28,6 +28,7 @@ class ModeSelectionWindow(Window):
         self.ModeComboBox.setSizePolicy(self.InputsSizePolicy)
         self.ModeComboBox.addItem("Character Sheet")
         self.ModeComboBox.addItem("NPC Sheet")
+        self.ModeComboBox.addItem("Encounter Sheet")
         self.ModeComboBox.addItem("Hoard Sheet")
         self.ModeComboBox.addItem("Coin Calculator")
         self.ModeComboBox.setEditable(False)

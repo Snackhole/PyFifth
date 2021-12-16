@@ -10,6 +10,7 @@ if sys.path[0] != AbsoluteDirectoryPath:
 from PyQt5.QtWidgets import QApplication
 
 from Interface.Widgets.CoinCalculatorWidget import CoinCalculatorWidget
+from Interface.Windows.EncounterSheetWindow import EncounterSheetWindow
 from Interface.Windows.HoardSheetWindow import HoardSheetWindow
 from Interface.Windows.ModeSelectionWindow import ModeSelectionWindow
 from Interface.Windows.NPCSheetWindow import NPCSheetWindow
@@ -36,6 +37,7 @@ def StartApp():
         Modes = {}
         Modes["Character Sheet"] = CharacterSheetWindow
         Modes["NPC Sheet"] = NPCSheetWindow
+        Modes["Encounter Sheet"] = EncounterSheetWindow
         Modes["Hoard Sheet"] = HoardSheetWindow
         Modes["Coin Calculator"] = CoinCalculatorWidget
 
