@@ -12,8 +12,8 @@ class Hoard(SerializableMixin):
         # Create Static Values
         self.CreateStaticValues()
 
-        # Create Inventory
-        self.CreateInventory()
+        # Create Hoard Data
+        self.CreateHoardData()
 
     def CreateStaticValues(self):
         # Inventory Item Defaults
@@ -46,7 +46,7 @@ class Hoard(SerializableMixin):
         self.CoinValuesInCP["GPValueInCP"] = Decimal(100)
         self.CoinValuesInCP["PPValueInCP"] = Decimal(1000)
 
-    def CreateInventory(self):
+    def CreateHoardData(self):
         self.HoardData = {}
         self.HoardData["Name or Owners"] = ""
         self.HoardData["Location"] = ""
