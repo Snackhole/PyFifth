@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QHeaderView, QTreeWidget, QTreeWidgetItem
 
 
@@ -45,3 +46,12 @@ class HoardInventoryTreeWidgetItem(QTreeWidgetItem):
         self.TotalWeightText = str(self.HoardWindow.Hoard.CalculateItemTotalLoadAndValue(self.Index)["Item Total Load"].quantize(Decimal("0.01"))) + " lbs."
         self.TotalValueText = str(self.HoardWindow.Hoard.CalculateItemTotalLoadAndValue(self.Index)["Item Total Value"].quantize(Decimal("0.01"))) + " GP"
         self.ColumnTextList = [self.NameText, self.CountText, self.UnitWeightText, self.UnitValueText, self.TotalWeightText, self.TotalValueText]
+
+        # Set Text
+        for Index in range(len(self.ColumnTextList)):
+            self.setText(Index, self.ColumnTextList[Index])
+            self.setToolTip(Index, self.ColumnTextList[Index])
+
+        # Set Alignment
+        for Index in range(1, 5):
+            self.setTextAlignment(Index, QtCore.Qt.AlignCenter)

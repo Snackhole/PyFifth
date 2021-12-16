@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QAction, QDoubleSpinBox, QFrame, QGridLayout, QLabel
 from Core.Hoard import Hoard
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
 from Interface.Dialogs.GainCoinsDialog import GainCoinsDialog
+from Interface.Dialogs.HoardEditItemDialog import HoardEditItemDialog
 from Interface.Dialogs.SpendCoinsDialog import SpendCoinsDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.HoardInventoryTreeWidget import HoardInventoryTreeWidget
@@ -228,6 +229,7 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
 
         self.NotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Notes", self.NotesTextEdit.toPlainText()))
         self.NotesTextEdit.setMinimumHeight(200)
+        self.NotesTextEdit.setTabChangesFocus(True)
 
         # Inventory
         self.InventoryLabel = QLabel("Inventory")
@@ -451,7 +453,15 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         return CurrentCoinCounts
 
     def AddItem(self):
-        pass
+        ItemIndex = self.Hoard.AddInventoryItem()
+        self.UpdateDisplay()
+        EditItemDialogInst = HoardEditItemDialog(self, self.Hoard.HoardData["Inventory"], ItemIndex, AddMode=True)
+        if EditItemDialogInst.Cancelled:
+            self.Hoard.DeleteLastInventoryItem()
+            self.UpdateDisplay()
+        else:
+            self.UpdateUnsavedChangesFlag(True)
+            self.InventoryTreeWidget.SelectIndex(ItemIndex)
 
     def DeleteItem(self):
         CurrentSelection = self.InventoryTreeWidget.selectedItems()
@@ -466,7 +476,14 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
                     self.InventoryTreeWidget.SelectIndex(CurrentItemIndex if CurrentItemIndex < InventoryLength else InventoryLength - 1)
 
     def EditItem(self):
-        pass
+        CurrentSelection = self.InventoryTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentItem = CurrentSelection[0]
+            CurrentItemIndex = CurrentItem.Index
+            EditItemDialogInst = HoardEditItemDialog(self, self.Hoard.HoardData["Inventory"], CurrentItemIndex)
+            if EditItemDialogInst.UnsavedChanges:
+                self.UpdateUnsavedChangesFlag(True)
+                self.InventoryTreeWidget.SelectIndex(CurrentItemIndex)
 
     def MoveItemUp(self):
         self.MoveItem(-1)
