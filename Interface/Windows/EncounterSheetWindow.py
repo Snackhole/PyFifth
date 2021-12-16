@@ -28,6 +28,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
 
         # Styles
         self.SectionLabelStyle = "QLabel {font-size: 10pt; font-weight: bold;}"
+        self.RoundSpinBoxStyle = "QSpinBox {font-size: 16pt;}"
 
         # Header Label Margin
         self.HeaderLabelMargin = 5
@@ -94,6 +95,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.RoundLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.RoundSpinBox = QSpinBox()
         self.RoundSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.RoundSpinBox.setStyleSheet(self.RoundSpinBoxStyle)
         self.RoundSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.RoundSpinBox.setButtonSymbols(self.RoundSpinBox.NoButtons)
         self.RoundSpinBox.setRange(1, 1000000000)
@@ -146,7 +148,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.InitiativeOrderLayout.addWidget(self.InitiativeOrderLabel, 0, 0, 1, 2)
         self.RoundLayout = QGridLayout()
         self.RoundLayout.addWidget(self.RoundLabel, 0, 0)
-        self.RoundLayout.addWidget(self.RoundSpinBox, 1, 0)
+        self.RoundLayout.addWidget(self.RoundSpinBox, 0, 1)
         self.InitiativeOrderLayout.addLayout(self.RoundLayout, 1, 0, 2, 1)
         self.TextButtonsLayout = QGridLayout()
         self.TextButtonsLayout.addWidget(self.NewRoundButton, 0, 0)
@@ -161,6 +163,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.InitiativeOrderLayout.addLayout(self.IconButtonsLayout, 2, 1)
         self.InitiativeOrderLayout.addWidget(self.InitiativeOrderTreeWidget, 3, 0, 1, 2)
         self.InitiativeOrderLayout.setRowStretch(3, 1)
+        self.InitiativeOrderLayout.setColumnStretch(1, 1)
         self.InitiativeOrderFrame.setLayout(self.InitiativeOrderLayout)
         self.Layout.addWidget(self.InitiativeOrderFrame, 1, 0)
 
