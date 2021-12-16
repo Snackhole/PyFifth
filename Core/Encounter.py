@@ -78,6 +78,25 @@ class Encounter(SerializableMixin):
     def SortInitiativeOrder(self):
         self.EncounterData["Initiative Order"].sort(key=lambda Entry: (Entry["Initiative"], -1 * Entry["Tie Priority"]), reverse=True)
 
+    def NewRound(self):
+        self.SortInitiativeOrder()
+        self.EncounterData["Round"] += 1
+        self.ClearTurns()
+
+    def NextTurn(self):
+        self.SortInitiativeOrder()
+        for Entry in self.EncounterData["Initiative Order"]:
+            if Entry["Turn Taken"]:
+                continue
+            else:
+                Entry["Turn Taken"] = True
+                if Entry["Alive"]:
+                    break
+
+    def ClearTurns(self):
+        for Entry in self.EncounterData["Initiative Order"]:
+            Entry["Turn Taken"] = False
+
     # Serialization Methods
     def SetState(self, NewState):
         self.EncounterData = NewState["Encounter Data"]

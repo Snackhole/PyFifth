@@ -339,13 +339,20 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.UpdateUnsavedChangesFlag(True)
 
     def NewRound(self):
-        pass
+        if self.DisplayMessageBox("Start a new round and clear all turns taken?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self) == QMessageBox.Yes:
+            self.Encounter.NewRound()
+            self.UpdatingFieldsFromEncounter = True
+            self.UpdateUnsavedChangesFlag(True)
+            self.UpdatingFieldsFromEncounter = False
 
     def NextTurn(self):
-        pass
+        self.Encounter.NextTurn()
+        self.UpdateUnsavedChangesFlag(True)
 
     def ClearTurns(self):
-        pass
+        if self.DisplayMessageBox("Clear all turns taken?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self) == QMessageBox.Yes:
+            self.Encounter.ClearTurns()
+            self.UpdateUnsavedChangesFlag(True)
 
     # View Methods
     def ShowCoinCalculator(self):
