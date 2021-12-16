@@ -35,6 +35,7 @@ class Encounter(SerializableMixin):
         self.EncounterData["Encounter Description"] = ""
         self.EncounterData["Encounter Rewards"] = ""
         self.EncounterData["Encounter Notes"] = ""
+        self.EncounterData["Round"] = 1
         self.EncounterData["Initiative Order"] = []
         self.EncounterData["Dice Roller"] = DiceRoller()
 
@@ -45,7 +46,8 @@ class Encounter(SerializableMixin):
             "Encounter Experience",
             "Encounter Description",
             "Encounter Rewards",
-            "Encounter Notes"
+            "Encounter Notes",
+            "Round"
         ]:
             self.EncounterData[Data] = NewValue
             return True
