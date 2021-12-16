@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QAction, QFrame, QGridLayout, QLabel, QMessageBox, Q
 
 from Core.Encounter import Encounter
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
+from Interface.Dialogs.EditInitiativeEntryDialog import EditInitiativeEntryDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, SortButton
 from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
@@ -294,16 +295,41 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
             self.UpdateUnsavedChangesFlag(True)
 
     def AddEntry(self):
-        pass
+        EntryIndex = self.Encounter.AddInitiativeEntry()
+        self.UpdateDisplay()
+        EditInitiativeEntryDialogInst = EditInitiativeEntryDialog(self, self.Encounter.EncounterData["Initiative Order"], EntryIndex, AddMode=True)
+        if EditInitiativeEntryDialogInst.Cancelled:
+            self.Encounter.DeleteLastInitiativeEntry()
+            self.UpdateDisplay()
+        else:
+            self.UpdateUnsavedChangesFlag(True)
+            self.InitiativeOrderTreeWidget.SelectIndex(EntryIndex)
 
     def DeleteEntry(self):
-        pass
+        CurrentSelection = self.InitiativeOrderTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            if self.DisplayMessageBox("Are you sure you want to delete this entry?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+                CurrentEntry = CurrentSelection[0]
+                CurrentEntryIndex = CurrentEntry.Index
+                self.Encounter.DeleteInitiativeEntry(CurrentEntryIndex)
+                self.UpdateUnsavedChangesFlag(True)
+                InitiativeOrderLength = len(self.Encounter.EncounterData["Initiative Order"])
+                if InitiativeOrderLength > 0:
+                    self.InitiativeOrderTreeWidget.SelectIndex(CurrentEntryIndex if CurrentEntryIndex < InitiativeOrderLength else InitiativeOrderLength - 1)
 
     def EditEntry(self):
-        pass
+        CurrentSelection = self.InitiativeOrderTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentEntry = CurrentSelection[0]
+            CurrentEntryIndex = CurrentEntry.Index
+            EditInitiativeEntryDialogInst = EditInitiativeEntryDialog(self, self.Encounter.EncounterData["Initiative Order"], CurrentEntryIndex)
+            if EditInitiativeEntryDialogInst.UnsavedChanges:
+                self.UpdateUnsavedChangesFlag(True)
+                self.InitiativeOrderTreeWidget.SelectIndex(CurrentEntryIndex)
 
     def SortInitiative(self):
-        pass
+        self.Encounter.SortInitiativeOrder()
+        self.UpdateUnsavedChangesFlag(True)
 
     def NewRound(self):
         pass

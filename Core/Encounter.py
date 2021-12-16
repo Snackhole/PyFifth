@@ -71,7 +71,7 @@ class Encounter(SerializableMixin):
         self.DeleteInitiativeEntry(EntryIndex)
 
     def SortInitiativeOrder(self):
-        self.EncounterData["Initiative Order"].sort(key=lambda x: x["Initiative"], reverse=True)
+        self.EncounterData["Initiative Order"].sort(key=lambda Entry: (Entry["Initiative"], -1 * Entry["Tie Priority"]), reverse=True)
 
     # Serialization Methods
     def SetState(self, NewState):
