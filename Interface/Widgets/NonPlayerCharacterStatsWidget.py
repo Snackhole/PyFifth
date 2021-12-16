@@ -111,6 +111,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.StrengthModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.StrengthModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.StrengthModifierSpinBox.setButtonSymbols(self.StrengthModifierSpinBox.NoButtons)
+        self.StrengthModifierSpinBox.setMaximumWidth(75)
         self.StrengthModifierSpinBox.setValue(0)
         self.StrengthModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Strength"), self.StrengthModifierSpinBox.value()))
 
@@ -126,6 +127,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.DexterityModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.DexterityModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DexterityModifierSpinBox.setButtonSymbols(self.DexterityModifierSpinBox.NoButtons)
+        self.DexterityModifierSpinBox.setMaximumWidth(75)
         self.DexterityModifierSpinBox.setValue(0)
         self.DexterityModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Dexterity"), self.DexterityModifierSpinBox.value()))
 
@@ -141,6 +143,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.ConstitutionModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.ConstitutionModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ConstitutionModifierSpinBox.setButtonSymbols(self.ConstitutionModifierSpinBox.NoButtons)
+        self.ConstitutionModifierSpinBox.setMaximumWidth(75)
         self.ConstitutionModifierSpinBox.setValue(0)
         self.ConstitutionModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Constitution"), self.ConstitutionModifierSpinBox.value()))
 
@@ -156,6 +159,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.IntelligenceModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.IntelligenceModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.IntelligenceModifierSpinBox.setButtonSymbols(self.IntelligenceModifierSpinBox.NoButtons)
+        self.IntelligenceModifierSpinBox.setMaximumWidth(75)
         self.IntelligenceModifierSpinBox.setValue(0)
         self.IntelligenceModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Intelligence"), self.IntelligenceModifierSpinBox.value()))
 
@@ -171,6 +175,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.WisdomModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.WisdomModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.WisdomModifierSpinBox.setButtonSymbols(self.WisdomModifierSpinBox.NoButtons)
+        self.WisdomModifierSpinBox.setMaximumWidth(75)
         self.WisdomModifierSpinBox.setValue(0)
         self.WisdomModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Wisdom"), self.WisdomModifierSpinBox.value()))
 
@@ -186,6 +191,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.CharismaModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.CharismaModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.CharismaModifierSpinBox.setButtonSymbols(self.CharismaModifierSpinBox.NoButtons)
+        self.CharismaModifierSpinBox.setMaximumWidth(75)
         self.CharismaModifierSpinBox.setValue(0)
         self.CharismaModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Charisma"), self.CharismaModifierSpinBox.value()))
 
@@ -248,7 +254,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
 
         self.SpecialTraitsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Special Traits", self.SpecialTraitsTextEdit.toPlainText()))
         self.SpecialTraitsTextEdit.setTabChangesFocus(True)
-        self.SpecialTraitsTextEdit.setMinimumWidth(550)
+        self.SpecialTraitsTextEdit.setMinimumWidth(380)
 
         # Actions
         self.ActionsLabel = QLabel("Actions")
@@ -258,7 +264,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
 
         self.ActionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Actions", self.ActionsTextEdit.toPlainText()))
         self.ActionsTextEdit.setTabChangesFocus(True)
-        self.ActionsTextEdit.setMinimumWidth(550)
+        self.ActionsTextEdit.setMinimumWidth(380)
 
         # Saving Throws
         self.SavingThrowsLabel = QLabel("Saving Throws")
@@ -268,7 +274,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
 
         self.SavingThrowsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Saving Throws", self.SavingThrowsTextEdit.toPlainText()))
         self.SavingThrowsTextEdit.setTabChangesFocus(True)
-        self.SavingThrowsTextEdit.setMinimumWidth(550)
+        self.SavingThrowsTextEdit.setMinimumWidth(380)
 
         # Vulnerabilities, Resistances, and Immunities
         self.VulnerabilitiesResistancesAndImmunitiesLabel = QLabel("Vulnerabilities, Resistances, and Immunities")
@@ -278,7 +284,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
 
         self.VulnerabilitiesResistancesAndImmunitiesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Vulnerabilities, Resistances, and Immunities", self.VulnerabilitiesResistancesAndImmunitiesTextEdit.toPlainText()))
         self.VulnerabilitiesResistancesAndImmunitiesTextEdit.setTabChangesFocus(True)
-        self.VulnerabilitiesResistancesAndImmunitiesTextEdit.setMinimumWidth(550)
+        self.VulnerabilitiesResistancesAndImmunitiesTextEdit.setMinimumWidth(380)
 
         # Inventory
         self.InventoryLabel = QLabel("Inventory")
@@ -288,7 +294,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
 
         self.InventoryTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Inventory", self.InventoryTextEdit.toPlainText()))
         self.InventoryTextEdit.setTabChangesFocus(True)
-        self.InventoryTextEdit.setMinimumWidth(550)
+        self.InventoryTextEdit.setMinimumWidth(380)
 
         # Reactions
         self.ReactionsLabel = QLabel("Reactions")
@@ -298,7 +304,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
 
         self.ReactionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Reactions", self.ReactionsTextEdit.toPlainText()))
         self.ReactionsTextEdit.setTabChangesFocus(True)
-        self.ReactionsTextEdit.setMinimumWidth(550)
+        self.ReactionsTextEdit.setMinimumWidth(380)
 
         # Legendary Actions and Lair Actions
         self.LegendaryActionsAndLairActionsLabel = QLabel("Legendary Actions and Lair Actions")
@@ -308,7 +314,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
 
         self.LegendaryActionsAndLairActionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Legendary Actions and Lair Actions", self.LegendaryActionsAndLairActionsTextEdit.toPlainText()))
         self.LegendaryActionsAndLairActionsTextEdit.setTabChangesFocus(True)
-        self.LegendaryActionsAndLairActionsTextEdit.setMinimumWidth(550)
+        self.LegendaryActionsAndLairActionsTextEdit.setMinimumWidth(380)
 
         # Notes
         self.NotesLabel = QLabel("Notes")
@@ -318,7 +324,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
 
         self.NotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Notes", self.NotesTextEdit.toPlainText()))
         self.NotesTextEdit.setTabChangesFocus(True)
-        self.NotesTextEdit.setMinimumWidth(550)
+        self.NotesTextEdit.setMinimumWidth(380)
 
     def CreateConcentratingButton(self):
         self.ConcentratingButton = ConcentratingButton(self.CharacterWindow)
