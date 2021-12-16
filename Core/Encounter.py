@@ -1,6 +1,5 @@
 import copy
 
-from Core.DiceRoller import DiceRoller
 from SaveAndLoad.JSONSerializer import SerializableMixin
 
 
@@ -37,7 +36,6 @@ class Encounter(SerializableMixin):
         self.EncounterData["Encounter Notes"] = ""
         self.EncounterData["Round"] = 1
         self.EncounterData["Initiative Order"] = []
-        self.EncounterData["Dice Roller"] = DiceRoller()
 
     def UpdateData(self, Data, NewValue):
         if Data in [
