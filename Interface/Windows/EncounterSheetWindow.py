@@ -2,11 +2,14 @@ import copy
 import json
 import os
 
-from PyQt5.QtWidgets import QAction, QGridLayout, QMessageBox
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QAction, QFrame, QGridLayout, QLabel, QMessageBox
 
 from Core.DiceRoller import DiceRoller
 from Core.Encounter import Encounter
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
+from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -46,8 +49,56 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
     def CreateInterface(self):
         super().LoadTheme()
 
+        # Header
+        self.NameLabel = QLabel("Encounter Name:")
+        self.NameLineEdit = CenteredLineEdit()
+        self.NameLineEdit.textChanged.connect(lambda: self.UpdateData("Encounter Name", self.NameLineEdit.text()))
+
+        self.CRLabel = QLabel("CR:")
+        self.CRLineEdit = CenteredLineEdit()
+        self.CRLineEdit.textChanged.connect(lambda: self.UpdateData("Encounter CR", self.CRLineEdit.text()))
+
+        self.ExperienceLabel = QLabel("Experience:")
+        self.ExperienceLineEdit = CenteredLineEdit()
+        self.ExperienceLineEdit.textChanged.connect(lambda: self.UpdateData("Encounter Experience", self.ExperienceLineEdit.text()))
+
+        self.DescriptionLabel = QLabel("Description:")
+        self.DescriptionLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.DescriptionTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Encounter Description", self.DescriptionTextEdit.toPlainText()))
+        self.DescriptionTextEdit.setTabChangesFocus(True)
+
+        self.RewardsLabel = QLabel("Rewards:")
+        self.RewardsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.RewardsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Encounter Rewards", self.RewardsTextEdit.toPlainText()))
+        self.RewardsTextEdit.setTabChangesFocus(True)
+
+        self.NotesLabel = QLabel("Notes:")
+        self.NotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.NotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Encounter Notes", self.NotesTextEdit.toPlainText()))
+        self.NotesTextEdit.setTabChangesFocus(True)
+
         # Create and Set Layout
         self.Layout = QGridLayout()
+
+        self.HeaderFrame = QFrame()
+        self.HeaderFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.HeaderLayout = QGridLayout()
+        self.HeaderLayout.addWidget(self.NameLabel, 0, 0)
+        self.HeaderLayout.addWidget(self.NameLineEdit, 0, 1)
+        self.HeaderLayout.addWidget(self.CRLabel, 0, 2)
+        self.HeaderLayout.addWidget(self.CRLineEdit, 0, 3)
+        self.HeaderLayout.addWidget(self.ExperienceLabel, 0, 4)
+        self.HeaderLayout.addWidget(self.ExperienceLineEdit, 0, 5)
+        self.HeaderTextEditsLayout = QGridLayout()
+        self.HeaderTextEditsLayout.addWidget(self.DescriptionLabel, 0, 0)
+        self.HeaderTextEditsLayout.addWidget(self.DescriptionTextEdit, 1, 0)
+        self.HeaderTextEditsLayout.addWidget(self.RewardsLabel, 0, 1)
+        self.HeaderTextEditsLayout.addWidget(self.RewardsTextEdit, 1, 1)
+        self.HeaderTextEditsLayout.addWidget(self.NotesLabel, 0, 2)
+        self.HeaderTextEditsLayout.addWidget(self.NotesTextEdit, 1, 2)
+        self.HeaderLayout.addLayout(self.HeaderTextEditsLayout, 1, 0, 1, 6)
+        self.HeaderFrame.setLayout(self.HeaderLayout)
+        self.Layout.addWidget(self.HeaderFrame, 0, 0, 1, 2)
 
         self.Frame.setLayout(self.Layout)
 
@@ -214,7 +265,13 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         # TODO
         # Updating Fields from Encounter
         if self.UpdatingFieldsFromEncounter:
-            pass
+            # Header
+            self.NameLineEdit.setText(self.Encounter.EncounterData["Encounter Name"])
+            self.CRLineEdit.setText(self.Encounter.EncounterData["Encounter CR"])
+            self.ExperienceLineEdit.setText(self.Encounter.EncounterData["Encounter Experience"])
+            self.DescriptionTextEdit.setPlainText(self.Encounter.EncounterData["Encounter Description"])
+            self.RewardsTextEdit.setPlainText(self.Encounter.EncounterData["Encounter Rewards"])
+            self.NotesTextEdit.setPlainText(self.Encounter.EncounterData["Encounter Notes"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
