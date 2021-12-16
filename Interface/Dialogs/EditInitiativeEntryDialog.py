@@ -1,8 +1,9 @@
 import copy
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QLineEdit, QMessageBox, QPushButton, QSpinBox
+from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QMessageBox, QPushButton, QSpinBox
 
+from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.ToggleButtons import AliveButton, TurnTakenButton
 
 
@@ -33,7 +34,7 @@ class EditInitiativeEntryDialog(QDialog):
         self.NotesLabel = QLabel("Notes:")
 
         # Entry Inputs
-        self.CreatureNameLineEdit = QLineEdit()
+        self.CreatureNameLineEdit = CenteredLineEdit()
         self.CreatureNameLineEdit.setText(self.Entry["Creature Name"])
         self.CreatureNameLineEdit.textChanged.connect(self.UpdateEntry)
 
@@ -51,15 +52,15 @@ class EditInitiativeEntryDialog(QDialog):
         self.TiePrioritySpinBox.setValue(self.Entry["Tie Priority"])
         self.TiePrioritySpinBox.valueChanged.connect(self.UpdateEntry)
 
-        self.ConditionsLineEdit = QLineEdit()
+        self.ConditionsLineEdit = CenteredLineEdit()
         self.ConditionsLineEdit.setText(self.Entry["Conditions"])
         self.ConditionsLineEdit.textChanged.connect(self.UpdateEntry)
 
-        self.LocationLineEdit = QLineEdit()
+        self.LocationLineEdit = CenteredLineEdit()
         self.LocationLineEdit.setText(self.Entry["Location"])
         self.LocationLineEdit.textChanged.connect(self.UpdateEntry)
 
-        self.NotesLineEdit = QLineEdit()
+        self.NotesLineEdit = CenteredLineEdit()
         self.NotesLineEdit.setText(self.Entry["Notes"])
         self.NotesLineEdit.textChanged.connect(self.UpdateEntry)
 
@@ -72,6 +73,8 @@ class EditInitiativeEntryDialog(QDialog):
         # Dialog Buttons
         self.DoneButton = QPushButton("Done")
         self.DoneButton.clicked.connect(self.Done)
+        self.DoneButton.setDefault(True)
+        self.DoneButton.setAutoDefault(True)
         self.CancelButton = QPushButton("Cancel")
         self.CancelButton.clicked.connect(self.Cancel)
 
