@@ -305,7 +305,6 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
             self.UpdateDisplay()
         else:
             self.UpdateUnsavedChangesFlag(True)
-            self.InitiativeOrderTreeWidget.SelectIndex(EntryIndex)
 
     def DeleteEntry(self):
         CurrentSelection = self.InitiativeOrderTreeWidget.selectedItems()
@@ -315,9 +314,6 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
                 CurrentEntryIndex = CurrentEntry.Index
                 self.Encounter.DeleteInitiativeEntry(CurrentEntryIndex)
                 self.UpdateUnsavedChangesFlag(True)
-                InitiativeOrderLength = len(self.Encounter.EncounterData["Initiative Order"])
-                if InitiativeOrderLength > 0:
-                    self.InitiativeOrderTreeWidget.SelectIndex(CurrentEntryIndex if CurrentEntryIndex < InitiativeOrderLength else InitiativeOrderLength - 1)
 
     def EditEntry(self):
         CurrentSelection = self.InitiativeOrderTreeWidget.selectedItems()
@@ -327,7 +323,6 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
             EditInitiativeEntryDialogInst = EditInitiativeEntryDialog(self, self.Encounter.EncounterData["Initiative Order"], CurrentEntryIndex)
             if EditInitiativeEntryDialogInst.UnsavedChanges:
                 self.UpdateUnsavedChangesFlag(True)
-                self.InitiativeOrderTreeWidget.SelectIndex(CurrentEntryIndex)
 
     def CopyEntry(self):
         CurrentSelection = self.InitiativeOrderTreeWidget.selectedItems()
