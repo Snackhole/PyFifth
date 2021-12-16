@@ -3,13 +3,14 @@ import json
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QAction, QFrame, QGridLayout, QLabel, QMessageBox
+from PyQt5.QtWidgets import QAction, QFrame, QGridLayout, QLabel, QMessageBox, QPushButton, QSizePolicy, QSpinBox
 
-from Core.DiceRoller import DiceRoller
 from Core.Encounter import Encounter
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
+from Interface.Widgets.IconButtons import AddButton, DeleteButton, EditButton, SortButton
 from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
+from Interface.Widgets.InitiativeOrderTreeWidget import InitiativeOrderTreeWidget
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -31,11 +32,14 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         # Header Label Margin
         self.HeaderLabelMargin = 5
 
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
         # Initialize Window
         super().__init__(ScriptName, AbsoluteDirectoryPath, AppInst)
 
         # Set Up Save and Open
-        self.SetUpSaveAndOpen(".pyfifthencounter", "PyFifth Encounter Sheet", (Encounter, DiceRoller))
+        self.SetUpSaveAndOpen(".pyfifthencounter", "PyFifth Encounter Sheet", (Encounter,))
 
         # Create Encounter
         self.Encounter = Encounter()
@@ -66,16 +70,52 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.DescriptionLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.DescriptionTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Encounter Description", self.DescriptionTextEdit.toPlainText()))
         self.DescriptionTextEdit.setTabChangesFocus(True)
+        self.DescriptionTextEdit.setMinimumHeight(200)
 
         self.RewardsLabel = QLabel("Rewards:")
         self.RewardsLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.RewardsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Encounter Rewards", self.RewardsTextEdit.toPlainText()))
         self.RewardsTextEdit.setTabChangesFocus(True)
+        self.RewardsTextEdit.setMinimumHeight(200)
 
         self.NotesLabel = QLabel("Notes:")
         self.NotesLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.NotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Encounter Notes", self.NotesTextEdit.toPlainText()))
         self.NotesTextEdit.setTabChangesFocus(True)
+        self.NotesTextEdit.setMinimumHeight(200)
+
+        # Initiative Order
+        self.InitiativeOrderLabel = QLabel("Initiative Order")
+        self.InitiativeOrderLabel.setStyleSheet(self.SectionLabelStyle)
+        self.InitiativeOrderLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.InitiativeOrderLabel.setMargin(self.HeaderLabelMargin)
+
+        self.RoundLabel = QLabel("Round:")
+        self.RoundLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.RoundSpinBox = QSpinBox()
+        self.RoundSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.RoundSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.RoundSpinBox.setButtonSymbols(self.RoundSpinBox.NoButtons)
+        self.RoundSpinBox.setRange(1, 1000000000)
+        self.RoundSpinBox.setValue(1)
+        self.RoundSpinBox.valueChanged.connect(lambda: self.UpdateData("Round", self.RoundSpinBox.value()))
+
+        self.InitiativeOrderTreeWidget = InitiativeOrderTreeWidget(self)
+        self.InitiativeOrderTreeWidget.itemActivated.connect(self.EditEntry)
+        self.InitiativeOrderTreeWidget.setMinimumWidth(700)
+        self.InitiativeOrderTreeWidget.setMinimumHeight(400)
+
+        self.NewRoundButton = QPushButton("New Round")
+        self.NewRoundButton.clicked.connect(self.NewRound)
+        self.NextTurnButton = QPushButton("Next Turn")
+        self.NextTurnButton.clicked.connect(self.NextTurn)
+        self.ClearTurnsButton = QPushButton("Clear Turns")
+        self.ClearTurnsButton.clicked.connect(self.ClearTurns)
+
+        self.AddEntryButton = AddButton(self.AddEntry, "Add Entry")
+        self.DeleteEntryButton = DeleteButton(self.DeleteEntry, "Delete Entry")
+        self.EditEntryButton = EditButton(self.EditEntry, "Edit Entry")
+        self.SortInitiativeButton = SortButton(self.SortInitiative, "Sort Initiative")
 
         # Create and Set Layout
         self.Layout = QGridLayout()
@@ -98,7 +138,33 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.HeaderTextEditsLayout.addWidget(self.NotesTextEdit, 1, 2)
         self.HeaderLayout.addLayout(self.HeaderTextEditsLayout, 1, 0, 1, 6)
         self.HeaderFrame.setLayout(self.HeaderLayout)
-        self.Layout.addWidget(self.HeaderFrame, 0, 0, 1, 2)
+        self.Layout.addWidget(self.HeaderFrame, 0, 0)
+
+        self.InitiativeOrderFrame = QFrame()
+        self.InitiativeOrderFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.InitiativeOrderLayout = QGridLayout()
+        self.InitiativeOrderLayout.addWidget(self.InitiativeOrderLabel, 0, 0, 1, 2)
+        self.RoundLayout = QGridLayout()
+        self.RoundLayout.addWidget(self.RoundLabel, 0, 0)
+        self.RoundLayout.addWidget(self.RoundSpinBox, 1, 0)
+        self.InitiativeOrderLayout.addLayout(self.RoundLayout, 1, 0, 2, 1)
+        self.TextButtonsLayout = QGridLayout()
+        self.TextButtonsLayout.addWidget(self.NewRoundButton, 0, 0)
+        self.TextButtonsLayout.addWidget(self.NextTurnButton, 0, 1)
+        self.TextButtonsLayout.addWidget(self.ClearTurnsButton, 0, 2)
+        self.InitiativeOrderLayout.addLayout(self.TextButtonsLayout, 1, 1)
+        self.IconButtonsLayout = QGridLayout()
+        self.IconButtonsLayout.addWidget(self.AddEntryButton, 0, 0)
+        self.IconButtonsLayout.addWidget(self.DeleteEntryButton, 0, 1)
+        self.IconButtonsLayout.addWidget(self.EditEntryButton, 0, 2)
+        self.IconButtonsLayout.addWidget(self.SortInitiativeButton, 0, 3)
+        self.InitiativeOrderLayout.addLayout(self.IconButtonsLayout, 2, 1)
+        self.InitiativeOrderLayout.addWidget(self.InitiativeOrderTreeWidget, 3, 0, 1, 2)
+        self.InitiativeOrderLayout.setRowStretch(3, 1)
+        self.InitiativeOrderFrame.setLayout(self.InitiativeOrderLayout)
+        self.Layout.addWidget(self.InitiativeOrderFrame, 1, 0)
+
+        self.Layout.setRowStretch(1, 1)
 
         self.Frame.setLayout(self.Layout)
 
@@ -138,6 +204,18 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.CoinCalculatorAction = QAction("Coin Calculator")
         self.CoinCalculatorAction.triggered.connect(self.ShowCoinCalculator)
 
+        self.NewRoundAction = QAction("New Round")
+        self.NewRoundAction.triggered.connect(self.NewRound)
+
+        self.NextTurnAction = QAction("Next Turn")
+        self.NextTurnAction.triggered.connect(self.NextTurn)
+
+        self.ClearTurnsAction = QAction("Clear Turns")
+        self.ClearTurnsAction.triggered.connect(self.ClearTurns)
+
+        self.SortInitiativeAction = QAction("Sort Initiative")
+        self.SortInitiativeAction.triggered.connect(self.SortInitiative)
+
     def CreateMenuBar(self):
         self.MenuBar = self.menuBar()
 
@@ -152,6 +230,12 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction(self.QuitAction)
 
+        self.InitiativeOrderMenu = self.MenuBar.addMenu("Initiative Order")
+        self.InitiativeOrderMenu.addAction(self.NewRoundAction)
+        self.InitiativeOrderMenu.addAction(self.NextTurnAction)
+        self.InitiativeOrderMenu.addAction(self.ClearTurnsAction)
+        self.InitiativeOrderMenu.addAction(self.SortInitiativeAction)
+
         self.MenuBar.addAction(self.CoinCalculatorAction)
 
     def CreateKeybindings(self):
@@ -161,6 +245,10 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.DefaultKeybindings["SaveAction"] = "Ctrl+S"
         self.DefaultKeybindings["SaveAsAction"] = "Ctrl+Shift+S"
         self.DefaultKeybindings["QuitAction"] = "Ctrl+Q"
+        self.DefaultKeybindings["NewRoundAction"] = "Ctrl+R"
+        self.DefaultKeybindings["NextTurnAction"] = "Ctrl+T"
+        self.DefaultKeybindings["ClearTurnsAction"] = "Ctrl+Shift+T"
+        self.DefaultKeybindings["SortInitiativeAction"] = "Ctrl+I"
 
     def LoadConfigs(self):
         # Keybindings
@@ -201,6 +289,27 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         if not self.UpdatingFieldsFromEncounter:
             self.Encounter.UpdateData(Data, NewValue)
             self.UpdateUnsavedChangesFlag(True)
+
+    def AddEntry(self):
+        pass
+
+    def DeleteEntry(self):
+        pass
+
+    def EditEntry(self):
+        pass
+
+    def SortInitiative(self):
+        pass
+
+    def NewRound(self):
+        pass
+
+    def NextTurn(self):
+        pass
+
+    def ClearTurns(self):
+        pass
 
     # View Methods
     def ShowCoinCalculator(self):
@@ -258,11 +367,9 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
     def UpdateDisplay(self):
         self.UpdateWindowTitle()
 
-        # TODO
-        # # Initiative Order
-        # self.InitiativeOrderTreeWidget.FillFromInitiativeOrder()
+        # Initiative Order
+        self.InitiativeOrderTreeWidget.FillFromInitiativeOrder()
 
-        # TODO
         # Updating Fields from Encounter
         if self.UpdatingFieldsFromEncounter:
             # Header
@@ -272,6 +379,9 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
             self.DescriptionTextEdit.setPlainText(self.Encounter.EncounterData["Encounter Description"])
             self.RewardsTextEdit.setPlainText(self.Encounter.EncounterData["Encounter Rewards"])
             self.NotesTextEdit.setPlainText(self.Encounter.EncounterData["Encounter Notes"])
+
+            # Round
+            self.RoundSpinBox.setValue(self.Encounter.EncounterData["Round"])
 
     def UpdateWindowTitle(self):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
