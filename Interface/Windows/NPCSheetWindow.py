@@ -426,6 +426,9 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.GzipMode = not self.GzipMode
 
     def closeEvent(self, event):
+        # TODO Remove these print calls
+        print(self.NonPlayerCharacterStatsWidgetInst.VulnerabilitiesResistancesAndImmunitiesTextEdit.width())
+        print(self.size())
         Close = True
         if self.UnsavedChanges:
             SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
