@@ -256,15 +256,15 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.SpecialTraitsTextEdit.setTabChangesFocus(True)
         self.SpecialTraitsTextEdit.setMinimumWidth(380)
 
-        # Actions
-        self.ActionsLabel = QLabel("Actions")
-        self.ActionsLabel.setStyleSheet(self.SectionLabelStyle)
-        self.ActionsLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.ActionsLabel.setMargin(self.HeaderLabelMargin)
+        # Actions and Reactions
+        self.ActionsAndReactionsLabel = QLabel("Actions and Reactions")
+        self.ActionsAndReactionsLabel.setStyleSheet(self.SectionLabelStyle)
+        self.ActionsAndReactionsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ActionsAndReactionsLabel.setMargin(self.HeaderLabelMargin)
 
-        self.ActionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Actions", self.ActionsTextEdit.toPlainText()))
-        self.ActionsTextEdit.setTabChangesFocus(True)
-        self.ActionsTextEdit.setMinimumWidth(380)
+        self.ActionsAndReactionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Actions and Reactions", self.ActionsAndReactionsTextEdit.toPlainText()))
+        self.ActionsAndReactionsTextEdit.setTabChangesFocus(True)
+        self.ActionsAndReactionsTextEdit.setMinimumWidth(380)
 
         # Saving Throws
         self.SavingThrowsLabel = QLabel("Saving Throws")
@@ -295,26 +295,6 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.InventoryTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Inventory", self.InventoryTextEdit.toPlainText()))
         self.InventoryTextEdit.setTabChangesFocus(True)
         self.InventoryTextEdit.setMinimumWidth(380)
-
-        # Reactions
-        self.ReactionsLabel = QLabel("Reactions")
-        self.ReactionsLabel.setStyleSheet(self.SectionLabelStyle)
-        self.ReactionsLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.ReactionsLabel.setMargin(self.HeaderLabelMargin)
-
-        self.ReactionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Reactions", self.ReactionsTextEdit.toPlainText()))
-        self.ReactionsTextEdit.setTabChangesFocus(True)
-        self.ReactionsTextEdit.setMinimumWidth(380)
-
-        # Legendary Actions and Lair Actions
-        self.LegendaryActionsAndLairActionsLabel = QLabel("Legendary Actions and Lair Actions")
-        self.LegendaryActionsAndLairActionsLabel.setStyleSheet(self.SectionLabelStyle)
-        self.LegendaryActionsAndLairActionsLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.LegendaryActionsAndLairActionsLabel.setMargin(self.HeaderLabelMargin)
-
-        self.LegendaryActionsAndLairActionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Legendary Actions and Lair Actions", self.LegendaryActionsAndLairActionsTextEdit.toPlainText()))
-        self.LegendaryActionsAndLairActionsTextEdit.setTabChangesFocus(True)
-        self.LegendaryActionsAndLairActionsTextEdit.setMinimumWidth(380)
 
         # Notes
         self.NotesLabel = QLabel("Notes")
@@ -405,11 +385,11 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.SpecialTraitsLayout.addWidget(self.SpecialTraitsTextEdit, 1, 0)
         self.Layout.addLayout(self.SpecialTraitsLayout, 0, 2)
 
-        # Actions
-        self.ActionsLayout = QGridLayout()
-        self.ActionsLayout.addWidget(self.ActionsLabel, 0, 0)
-        self.ActionsLayout.addWidget(self.ActionsTextEdit, 1, 0)
-        self.Layout.addLayout(self.ActionsLayout, 1, 2, 4, 1)
+        # Actions and Reactions
+        self.ActionsAndReactionsLayout = QGridLayout()
+        self.ActionsAndReactionsLayout.addWidget(self.ActionsAndReactionsLabel, 0, 0)
+        self.ActionsAndReactionsLayout.addWidget(self.ActionsAndReactionsTextEdit, 1, 0)
+        self.Layout.addLayout(self.ActionsAndReactionsLayout, 1, 2, 4, 1)
 
         # Saving Throws
         self.SavingThrowsLayout = QGridLayout()
@@ -427,33 +407,21 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.InventoryLayout = QGridLayout()
         self.InventoryLayout.addWidget(self.InventoryLabel, 0, 0)
         self.InventoryLayout.addWidget(self.InventoryTextEdit, 1, 0)
-        self.Layout.addLayout(self.InventoryLayout, 7, 0, 1, 2)
-
-        # Reactions
-        self.ReactionsLayout = QGridLayout()
-        self.ReactionsLayout.addWidget(self.ReactionsLabel, 0, 0)
-        self.ReactionsLayout.addWidget(self.ReactionsTextEdit, 1, 0)
-        self.Layout.addLayout(self.ReactionsLayout, 5, 2)
-
-        # Legendary Actions and Lair Actions
-        self.LegendaryActionsAndLairActionsLayout = QGridLayout()
-        self.LegendaryActionsAndLairActionsLayout.addWidget(self.LegendaryActionsAndLairActionsLabel, 0, 0)
-        self.LegendaryActionsAndLairActionsLayout.addWidget(self.LegendaryActionsAndLairActionsTextEdit, 1, 0)
-        self.Layout.addLayout(self.LegendaryActionsAndLairActionsLayout, 6, 2)
+        self.Layout.addLayout(self.InventoryLayout, 5, 2)
 
         # Notes
         self.NotesLayout = QGridLayout()
         self.NotesLayout.addWidget(self.NotesLabel, 0, 0)
         self.NotesLayout.addWidget(self.NotesTextEdit, 1, 0)
-        self.Layout.addLayout(self.NotesLayout, 7, 2)
+        self.Layout.addLayout(self.NotesLayout, 6, 2)
 
         # Concentrating Button
-        self.Layout.addWidget(self.ConcentratingButton, 8, 0, 1, 3)
+        self.Layout.addWidget(self.ConcentratingButton, 7, 0, 1, 3)
 
         # Layout Stretching
         for Column in range(1, 3):
             self.Layout.setColumnStretch(Column, 1)
-        for Row in range(5, 8):
+        for Row in range(5, 7):
             self.Layout.setRowStretch(Row, 1)
 
         # Set Layout

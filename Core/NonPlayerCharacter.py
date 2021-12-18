@@ -104,7 +104,7 @@ class NonPlayerCharacter(Character, SerializableMixin):
         self.Stats["Special Traits"] = ""
 
         # Actions
-        self.Stats["Actions"] = ""
+        self.Stats["Actions and Reactions"] = ""
 
         # Saving Throws
         self.Stats["Saving Throws"] = ""
@@ -114,12 +114,6 @@ class NonPlayerCharacter(Character, SerializableMixin):
 
         # Inventory
         self.Stats["Inventory"] = ""
-
-        # Reactions
-        self.Stats["Reactions"] = ""
-
-        # Legendary Actions and Lair Actions
-        self.Stats["Legendary Actions and Lair Actions"] = ""
 
         # Notes
         self.Stats["Notes"] = ""
@@ -146,12 +140,10 @@ class NonPlayerCharacter(Character, SerializableMixin):
             "Experience",
             "Skills, Senses, and Languages",
             "Special Traits",
-            "Actions",
+            "Actions and Reactions",
             "Saving Throws",
             "Vulnerabilities, Resistances, and Immunities",
             "Inventory",
-            "Reactions",
-            "Legendary Actions and Lair Actions",
             "Notes",
             "Crit Minimum"
         ]:

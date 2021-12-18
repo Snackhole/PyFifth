@@ -426,9 +426,6 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.GzipMode = not self.GzipMode
 
     def closeEvent(self, event):
-        # TODO Remove these print calls
-        print(self.NonPlayerCharacterStatsWidgetInst.VulnerabilitiesResistancesAndImmunitiesTextEdit.width())
-        print(self.size())
         Close = True
         if self.UnsavedChanges:
             SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
@@ -527,7 +524,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
             self.NonPlayerCharacterStatsWidgetInst.SpecialTraitsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Special Traits"])
 
             # Actions
-            self.NonPlayerCharacterStatsWidgetInst.ActionsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Actions"])
+            self.NonPlayerCharacterStatsWidgetInst.ActionsAndReactionsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Actions and Reactions"])
 
             # Saving Throws
             self.NonPlayerCharacterStatsWidgetInst.SavingThrowsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Saving Throws"])
@@ -537,12 +534,6 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
 
             # Inventory
             self.NonPlayerCharacterStatsWidgetInst.InventoryTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Inventory"])
-
-            # Reactions
-            self.NonPlayerCharacterStatsWidgetInst.ReactionsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Reactions"])
-
-            # Legendary Actions and Lair Actions
-            self.NonPlayerCharacterStatsWidgetInst.LegendaryActionsAndLairActionsTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Legendary Actions and Lair Actions"])
 
             # Notes
             self.NonPlayerCharacterStatsWidgetInst.NotesTextEdit.setPlainText(self.NonPlayerCharacter.Stats["Notes"])
