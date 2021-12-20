@@ -332,7 +332,7 @@ class PlayerCharacter(Character, SerializableMixin):
         self.Stats["Additional Notes"] = []
 
         # Dice Roller
-        self.Stats["Dice Roller"] = DiceRoller(Character=self)
+        self.Stats["Dice Roller"] = DiceRoller(self)
 
         # Crit Minimum
         self.Stats["Crit Minimum"] = 20
@@ -838,6 +838,7 @@ class PlayerCharacter(Character, SerializableMixin):
     # Serialization Methods
     def SetState(self, NewState):
         self.Stats = NewState["Stats"]
+        self.Stats["Dice Roller"].Character = self
 
     def GetState(self):
         State = {}

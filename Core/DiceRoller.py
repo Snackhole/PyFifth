@@ -36,7 +36,7 @@ class DiceRoller(SerializableMixin):
         if ResultMessages is None:
             ResultMessages = []
 
-        if type(Modifier) is dict and not self.Character is None:
+        if type(Modifier) is dict:
             Modifier = self.Character.CalculateStatModifier(Modifier)
 
         # Results Dictionary
