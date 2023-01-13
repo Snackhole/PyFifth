@@ -45,3 +45,6 @@ The `Configs` folder should be left in place as it stores settings and contexts 
 Uninstalling PyFifth itself only requires deleting the directory you extracted it to, along with any shortcuts you created.
 
 If you need to uninstall Python 3.10 or, on Linux, PyQT5, consult their documentation.
+
+## Licensing
+All D&D 5E content referenced in PyFifth is licensed under the OGL Version 1.0a.  All other content is covered by the MIT license.
