@@ -47,4 +47,4 @@ Uninstalling PyFifth itself only requires deleting the directory you extracted i
 If you need to uninstall Python 3.10 or, on Linux, PyQT5, consult their documentation.
 
 ## Licensing
-All D&D 5E content referenced in PyFifth is licensed under the OGL Version 1.0a.  All other content is covered by the MIT license.
+All D&D 5E content referenced in PyFifth is licensed under the OGL Version 1.0a and [Wizards of the Coast's Fan Content Policy] (https://company.wizards.com/en/legal/fancontentpolicy).  All other content is covered by the MIT license.
