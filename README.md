@@ -22,7 +22,15 @@ First, download the .zip file of the latest Linux release from this repository, 
 python3 PyFifth.pyzw
 ```
 
-However, for convenience, consider running `python3 CreateLinuxDesktopFile.py` (also in the app's directory; it will not work properly with any other working directory).  This will generate a .desktop file, which you should then copy to `usr/share/applications`  with `sudo cp PyFifth.desktop /usr/share/applications`.  Now PyFifth should show up along with your other apps in your desktop menus.
+Alternatively, you can use the included Python interpreter (after giving `Python Interpreter - Linux/bin/python3` executable permissions):
+
+```
+"Python Interpreter - Linux/bin/python3" PyFifth.pyzw
+```
+
+However, for convenience, consider running `python3 CreateLinuxDesktopFile.py` or `python3 CreateLinuxDesktopFileForIncludedInterpreter.py` (also in the app's directory; they will not work properly with any other working directory).  This will generate a .desktop file, which you should then copy to `usr/share/applications`  with `sudo cp PyFifth.desktop /usr/share/applications`.  Now PyFifth should show up along with your other apps in your desktop menus.
+
+If you prefer not to use the included interpreter, consider deleting the `Python Interpreter - Linux` folder to save space.
 
 If PyFifth does not run at first, you probably need to resolve some dependencies.  First, try `sudo apt install libxcb-xinerama0`.  If that doesn't resolve the issue, try installing PyQT5 with `sudo apt install python3-pyqt5`; if this does resolve the issue, you might even be able to (partially) uninstall it with `sudo apt remove python3-pyqt5` and still run PyFifth, as long as you don't autoremove the additional packages that were installed with it.  If installing PyQT5 through APT doesn't work, try installing it through pip; if you don't have pip already, use `sudo apt install python3-pip`, then run `pip3 install pyqt5`.  Other issues have not yet been encountered and will require you to do some research and troubleshooting to resolve on your system.
 
@@ -37,7 +45,7 @@ To save an existing uncompressed file as a compressed file, just open it, turn o
 It can take noticeably longer to save and open larger files in gzip mode, due to the compression.
 
 ## Updates
-Updating PyFifth is as simple as deleting all files wherever you installed it *except* the `Configs` folder, and then extracting the contents of the latest release to the installation folder.  Any shortcuts in place should resolve without issue to the updated version.
+Updating PyFifth is as simple as deleting all files wherever you installed it *except* the `Configs` folder, and then extracting the contents of the latest release to the installation folder.  Any shortcuts in place should resolve without issue to the updated version.  If you are using the included interpreter, you likely must give it executable permissions after updating.
 
 The `Configs` folder should be left in place as it stores settings and contexts between uses of the app.
 
