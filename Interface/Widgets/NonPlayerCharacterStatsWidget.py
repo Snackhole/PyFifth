@@ -437,7 +437,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
             self.CharacterWindow.UpdatingFieldsFromNonPlayerCharacter = False
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)
             if ConcentrationDC is not None:
-                self.CharacterWindow.DisplayMessageBox("DC " + str(ConcentrationDC) + " Constitution saving throw required to maintain concentration.", Parent=self)
+                self.CharacterWindow.DisplayMessageBox(f"DC {str(ConcentrationDC)} Constitution saving throw required to maintain concentration.", Parent=self)
 
     def Heal(self):
         HealAmount, OK = QInputDialog.getInt(self, "Heal", "Heal how much?", 1, 1, 1000000000)

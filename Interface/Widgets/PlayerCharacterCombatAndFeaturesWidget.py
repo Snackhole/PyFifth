@@ -426,7 +426,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
             self.CharacterWindow.UpdatingFieldsFromPlayerCharacter = False
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)
             if ConcentrationDC is not None:
-                self.CharacterWindow.DisplayMessageBox("DC " + str(ConcentrationDC) + " Constitution saving throw required to maintain concentration.", Parent=self)
+                self.CharacterWindow.DisplayMessageBox(f"DC {str(ConcentrationDC)} Constitution saving throw required to maintain concentration.", Parent=self)
 
     def Heal(self):
         HealAmount, OK = QInputDialog.getInt(self, "Heal", "Heal how much?", 1, 1, 1000000000)
@@ -443,7 +443,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)
 
     def EditAC(self, AC):
-        self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["AC Stat Modifier " + AC], "AC Stat Modifier " + AC)
+        self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats[f"AC Stat Modifier {AC}"], f"AC Stat Modifier {AC}")
 
     def RollInitiative(self):
         self.CharacterWindow.PlayerCharacter.Stats["Dice Roller"].RollDice(1, 20, self.CharacterWindow.PlayerCharacter.Stats["Initiative Stat Modifier"], LogPrefix="Initiative:\n")

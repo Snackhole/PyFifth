@@ -41,10 +41,10 @@ class PlayerCharacterInventoryWidgetItem(QTreeWidgetItem):
         # Variables
         self.NameText = Item["Item Name"]
         self.CountText = str(Item["Item Count"])
-        self.UnitWeightText = str(Item["Item Unit Weight"]) + " lbs."
-        self.UnitValueText = str(Item["Item Unit Value"]) + " " + Item["Item Unit Value Denomination"]
-        self.TotalWeightText = str(self.CharacterWindow.PlayerCharacter.CalculateItemTotalWeightAndValue(self.Index)["Item Total Weight"].quantize(Decimal("0.01"))) + " lbs."
-        self.TotalValueText = str(self.CharacterWindow.PlayerCharacter.CalculateItemTotalWeightAndValue(self.Index)["Item Total Value"].quantize(Decimal("0.01"))) + " GP"
+        self.UnitWeightText = f"{str(Item["Item Unit Weight"])} lbs."
+        self.UnitValueText = f"{str(Item["Item Unit Value"])} {Item["Item Unit Value Denomination"]}"
+        self.TotalWeightText = f"{str(self.CharacterWindow.PlayerCharacter.CalculateItemTotalWeightAndValue(self.Index)["Item Total Weight"].quantize(Decimal("0.01")))} lbs."
+        self.TotalValueText = f"{str(self.CharacterWindow.PlayerCharacter.CalculateItemTotalWeightAndValue(self.Index)["Item Total Value"].quantize(Decimal("0.01")))} GP"
         self.TagText = Item["Item Tag"]
         self.ColumnTextList = [self.NameText, self.CountText, self.UnitWeightText, self.UnitValueText, self.TotalWeightText, self.TotalValueText, self.TagText]
 

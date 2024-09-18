@@ -80,15 +80,15 @@ class AbilityScoreDerivativeWidget(QFrame):
     def EditSaveDC(self):
         Ability = self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][self.Index]
         if Ability != "":
-            self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"], Ability + " Save DC Stat Modifier")
+            self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"][f"{Ability} Save DC Stat Modifier"], f"{Ability} Save DC Stat Modifier")
 
     def RollAttackModifier(self):
         Ability = self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][self.Index]
         if Ability != "":
-            self.CharacterWindow.PlayerCharacter.Stats["Dice Roller"].RollDice(1, 20, self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"], LogPrefix=Ability + " Attack:\n")
+            self.CharacterWindow.PlayerCharacter.Stats["Dice Roller"].RollDice(1, 20, self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"][f"{Ability} Attack Modifier Stat Modifier"], LogPrefix=f"{Ability} Attack:\n")
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)
 
     def EditAttackModifier(self):
         Ability = self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"][self.Index]
         if Ability != "":
-            self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"], Ability + " Attack Modifier Stat Modifier")
+            self.CharacterWindow.EditStatModifier(self, self.CharacterWindow.PlayerCharacter.Stats["Ability Score Derivatives"][f"{Ability} Attack Modifier Stat Modifier"], f"{Ability} Attack Modifier Stat Modifier")

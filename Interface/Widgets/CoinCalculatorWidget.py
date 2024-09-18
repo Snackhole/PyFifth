@@ -214,7 +214,7 @@ class CoinCalculatorWidget(QFrame):
 
         # Window Mode
         if self.WindowMode:
-            self.setWindowTitle(self.ScriptName + " Coin Calculator")
+            self.setWindowTitle(f"{self.ScriptName} Coin Calculator")
             self.show()
             self.SetGeometryToMinimum()
             self.Center()
@@ -258,7 +258,7 @@ class CoinCalculatorWidget(QFrame):
         self.LoadOutputSpinBox.setValue(CoinLoad)
 
     def GetResourcePath(self, RelativeLocation):
-        return self.AbsoluteDirectoryPath + "/" + RelativeLocation
+        return os.path.join(self.AbsoluteDirectoryPath, RelativeLocation)
 
     def SetGeometryToMinimum(self):
         FrameGeometryRectangle = self.frameGeometry()

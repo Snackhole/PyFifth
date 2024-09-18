@@ -464,9 +464,9 @@ class PlayerCharacterInventoryWidget(QFrame):
             self.PPSpinBox.setValue(SpendCoinsDialogInst.RemainingCoins["PP"])
 
     def EditConsumptionRate(self, Consumed):
-        ConsumedRate, OK = QInputDialog.getDouble(self.CharacterWindow, "Edit " + Consumed + " Consumption Rate", Consumed + " consumption rate:", self.CharacterWindow.PlayerCharacter.Stats[Consumed + " Consumption Rate"], 0, 1000000000)
+        ConsumedRate, OK = QInputDialog.getDouble(self.CharacterWindow, f"Edit {Consumed} Consumption Rate", f"{Consumed} consumption rate:", self.CharacterWindow.PlayerCharacter.Stats[f"{Consumed} Consumption Rate"], 0, 1000000000)
         if OK:
-            self.CharacterWindow.UpdateStat(Consumed + " Consumption Rate", ConsumedRate)
+            self.CharacterWindow.UpdateStat(f"{Consumed} Consumption Rate", ConsumedRate)
 
     def AddItem(self):
         ItemIndex = self.CharacterWindow.PlayerCharacter.AddInventoryItem()

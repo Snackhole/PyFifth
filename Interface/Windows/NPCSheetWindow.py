@@ -307,7 +307,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         DieType = self.DiceRollerWidget.DieTypeSpinBox.value()
         Modifier = self.DiceRollerWidget.ModifierSpinBox.value()
         AverageResult = self.NonPlayerCharacter.Stats["Dice Roller"].AverageRoll(DiceNumber, DieType, Modifier)
-        AverageResultText = "The average result of " + str(DiceNumber) + "d" + str(DieType) + ("+" if Modifier >= 0 else "") + str(Modifier) + " is:\n\n" + str(AverageResult)
+        AverageResultText = f"The average result of {str(DiceNumber)}d{str(DieType)}{"+" if Modifier >= 0 else ""}{str(Modifier)} is:\n\n{str(AverageResult)}"
         self.DisplayMessageBox(AverageResultText)
 
     def SetCritMinimumActionTriggered(self):
@@ -454,7 +454,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.DerivedStats = self.NonPlayerCharacter.GetDerivedStats()
 
         # Proficiency Bonus
-        ProficiencyBonusText = "+" + str(self.DerivedStats["Proficiency Bonus"])
+        ProficiencyBonusText = f"+{str(self.DerivedStats["Proficiency Bonus"])}"
         self.ProficiencyBonusLineEdit.setText(ProficiencyBonusText)
 
         # Portrait Enabled
@@ -546,6 +546,6 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
             self.PortraitEnabledAction.setChecked(self.NonPlayerCharacter.Stats["Portrait Enabled"])
 
     def UpdateWindowTitle(self):
-        CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
+        CurrentFileTitleSection = f" [{os.path.basename(self.CurrentOpenFileName)}]" if self.CurrentOpenFileName != "" else ""
         UnsavedChangesIndicator = " *" if self.UnsavedChanges else ""
-        self.setWindowTitle(self.ScriptName + " NPC Sheet" + CurrentFileTitleSection + UnsavedChangesIndicator)
+        self.setWindowTitle(f"{self.ScriptName} NPC Sheet{CurrentFileTitleSection}{UnsavedChangesIndicator}")

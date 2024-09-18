@@ -22,7 +22,7 @@ class SpendOrRestoreSpellPointsDialog(QDialog):
         self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Prompt
-        self.PromptLabel = QLabel(self.ModeString + " spell points:")
+        self.PromptLabel = QLabel(f"{self.ModeString} spell points:")
         self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Spell Slots
