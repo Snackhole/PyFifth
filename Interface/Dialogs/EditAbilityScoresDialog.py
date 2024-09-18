@@ -560,7 +560,7 @@ class EditAbilityScoresDialog(QDialog):
             self.UnsavedChanges = True
 
     def UpdateAbilityScores(self, Ability, AbilitySubScore, NewValue):
-        self.AbilityScores[Ability + " " + AbilitySubScore] = NewValue
+        self.AbilityScores[f"{Ability} {AbilitySubScore}"] = NewValue
         for Ability, TotalSpinBox in self.AbilityScoreTotalSpinBoxesDictionary.items():
             TotalSpinBox.setValue(self.PlayerCharacter.GetTotalAbilityScore(Ability))
         self.UnsavedChanges = True

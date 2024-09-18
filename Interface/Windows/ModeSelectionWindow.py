@@ -56,7 +56,7 @@ class ModeSelectionWindow(Window):
         self.Frame.setLayout(self.Layout)
 
     def UpdateWindowTitle(self):
-        self.setWindowTitle(self.ScriptName + " Mode Selection")
+        self.setWindowTitle(f"{self.ScriptName} Mode Selection")
 
     def SelectMode(self, Mode):
         self.Mode = Mode

@@ -172,10 +172,10 @@ class NonPlayerCharacter(Character, SerializableMixin):
     def CreateStatModifier(self):
         StatModifier = {}
         for Ability in self.Abilities:
-            StatModifier[Ability + " Multiplier"] = 0
-            StatModifier[Ability + " Multiplier Round Up"] = False
-            StatModifier[Ability + " Min"] = None
-            StatModifier[Ability + " Max"] = None
+            StatModifier[f"{Ability} Multiplier"] = 0
+            StatModifier[f"{Ability} Multiplier Round Up"] = False
+            StatModifier[f"{Ability} Min"] = None
+            StatModifier[f"{Ability} Max"] = None
         StatModifier["Proficiency Multiplier"] = 0
         StatModifier["Proficiency Multiplier Round Up"] = False
         StatModifier["Proficiency Min"] = None
@@ -188,15 +188,15 @@ class NonPlayerCharacter(Character, SerializableMixin):
 
         # Ability Modifiers
         for Ability in self.Abilities:
-            AbilityMod = self.Stats["Ability Score Modifiers"][Ability] * StatModifier[Ability + " Multiplier"]
-            if StatModifier[Ability + " Multiplier Round Up"]:
+            AbilityMod = self.Stats["Ability Score Modifiers"][Ability] * StatModifier[f"{Ability} Multiplier"]
+            if StatModifier[f"{Ability} Multiplier Round Up"]:
                 AbilityMod = math.ceil(AbilityMod)
             else:
                 AbilityMod = math.floor(AbilityMod)
-            if StatModifier[Ability + " Max"] is not None:
-                AbilityMod = min(AbilityMod, StatModifier[Ability + " Max"])
-            if StatModifier[Ability + " Min"] is not None:
-                AbilityMod = max(AbilityMod, StatModifier[Ability + " Min"])
+            if StatModifier[f"{Ability} Max"] is not None:
+                AbilityMod = min(AbilityMod, StatModifier[f"{Ability} Max"])
+            if StatModifier[f"{Ability} Min"] is not None:
+                AbilityMod = max(AbilityMod, StatModifier[f"{Ability} Min"])
             CalculatedModifier += AbilityMod
 
         # Proficiency Modifier

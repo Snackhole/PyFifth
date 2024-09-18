@@ -427,6 +427,6 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
             self.RoundSpinBox.setValue(self.Encounter.EncounterData["Round"])
 
     def UpdateWindowTitle(self):
-        CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
+        CurrentFileTitleSection = f" [{os.path.basename(self.CurrentOpenFileName)}]" if self.CurrentOpenFileName != "" else ""
         UnsavedChangesIndicator = " *" if self.UnsavedChanges else ""
-        self.setWindowTitle(self.ScriptName + " Encounter Sheet" + CurrentFileTitleSection + UnsavedChangesIndicator)
+        self.setWindowTitle(f"{self.ScriptName} Encounter Sheet{CurrentFileTitleSection}{UnsavedChangesIndicator}")

@@ -21,7 +21,7 @@ class EditModifierDialog(QDialog):
         self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Prompt Label
-        self.PromptLabel = QLabel("Edit " + StatModifierDescription + ":")
+        self.PromptLabel = QLabel(f"Edit {StatModifierDescription}:")
         self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Base AC
@@ -492,9 +492,9 @@ class EditModifierDialog(QDialog):
                 StyleSheetPrefix = "QDoubleSpinBox "
             else:
                 StyleSheetPrefix = "QSpinBox "
-            PositiveStyleSheet = StyleSheetPrefix + "{background-color: darkgreen;}"
-            ZeroStyleSheet = StyleSheetPrefix + "{}"
-            NegativeStyleSheet = StyleSheetPrefix + "{background-color: darkred;}"
+            PositiveStyleSheet = f"{StyleSheetPrefix}{{background-color: darkgreen;}}"
+            ZeroStyleSheet = f"{StyleSheetPrefix}{{}}"
+            NegativeStyleSheet = f"{StyleSheetPrefix}{{background-color: darkred;}}"
             if SpinBox.value() > 0.0:
                 SpinBox.setStyleSheet(PositiveStyleSheet)
             elif SpinBox.value() == 0.0:

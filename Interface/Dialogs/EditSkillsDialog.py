@@ -34,13 +34,13 @@ class EditSkillsDialog(QDialog):
         for Skill in self.Skills:
             # Label
             LabelText = Skill[:-len(" Stat Modifier")]
-            self.SkillInputs[Skill + " Label"] = QLabel(LabelText)
-            Label = self.SkillInputs[Skill + " Label"]
+            self.SkillInputs[f"{Skill} Label"] = QLabel(LabelText)
+            Label = self.SkillInputs[f"{Skill} Label"]
             Label.setAlignment(QtCore.Qt.AlignCenter)
 
             # Edit Button
-            self.SkillInputs[Skill + " Edit Button"] = EditButton(functools.partial(self.EditModifier, Skill), "Edit " + Skill)
-            Button = self.SkillInputs[Skill + " Edit Button"]
+            self.SkillInputs[f"{Skill} Edit Button"] = EditButton(functools.partial(self.EditModifier, Skill), f"Edit {Skill}")
+            Button = self.SkillInputs[f"{Skill} Edit Button"]
             Button.setSizePolicy(self.InputsSizePolicy)
 
             # Append to List

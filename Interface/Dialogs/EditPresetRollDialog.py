@@ -129,7 +129,7 @@ class EditPresetRollDialog(QDialog):
         self.exec_()
 
     def EditModifier(self):
-        StatModifierDescription = ("modifier for " + self.NameLineEdit.text()) if self.NameLineEdit.text() != "" else "modifier"
+        StatModifierDescription = f"modifier for {self.NameLineEdit.text()}" if self.NameLineEdit.text() != "" else "modifier"
         EditModifierDialogInst = EditModifierDialog(self, self.CharacterWindow, self.PresetRoll["Modifier"], StatModifierDescription)
         self.UnsavedChanges = EditModifierDialogInst.UnsavedChanges
 

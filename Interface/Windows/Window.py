@@ -60,7 +60,7 @@ class Window(QMainWindow):
         QTimer.singleShot(Duration, self.StatusBar.clearMessage)
 
     def GetResourcePath(self, RelativeLocation):
-        return self.AbsoluteDirectoryPath + "/" + RelativeLocation
+        return os.path.join(self.AbsoluteDirectoryPath, RelativeLocation)
 
     # Window Management Methods
     def SetGeometryToMinimum(self):

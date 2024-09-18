@@ -204,13 +204,13 @@ class PlayerCharacter(Character, SerializableMixin):
         # Ability Score Derivatives
         self.Stats["Ability Score Derivatives"] = {}
         for Ability in self.Abilities:
-            self.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"] = self.CreateStatModifier()
-            self.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"][Ability + " Multiplier"] = 1
-            self.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"]["Proficiency Multiplier"] = 1
-            self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"] = self.CreateStatModifier()
-            self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"][Ability + " Multiplier"] = 1
-            self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"]["Proficiency Multiplier"] = 1
-            self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"]["Manual Modifier"] = 8
+            self.Stats["Ability Score Derivatives"][f"{Ability} Attack Modifier Stat Modifier"] = self.CreateStatModifier()
+            self.Stats["Ability Score Derivatives"][f"{Ability} Attack Modifier Stat Modifier"][f"{Ability} Multiplier"] = 1
+            self.Stats["Ability Score Derivatives"][f"{Ability} Attack Modifier Stat Modifier"]["Proficiency Multiplier"] = 1
+            self.Stats["Ability Score Derivatives"][f"{Ability} Save DC Stat Modifier"] = self.CreateStatModifier()
+            self.Stats["Ability Score Derivatives"][f"{Ability} Save DC Stat Modifier"][f"{Ability} Multiplier"] = 1
+            self.Stats["Ability Score Derivatives"][f"{Ability} Save DC Stat Modifier"]["Proficiency Multiplier"] = 1
+            self.Stats["Ability Score Derivatives"][f"{Ability} Save DC Stat Modifier"]["Manual Modifier"] = 8
         self.Stats["Ability Score Derivatives"]["Ability Score Derivatives Displayed"] = ["", "", "", "", "", ""]
 
         # Skills
@@ -394,24 +394,24 @@ class PlayerCharacter(Character, SerializableMixin):
     def CreateAbilityScoresStats(self):
         AbilityScores = {}
         for Ability in self.Abilities:
-            AbilityScores[Ability + " Base"] = 8
-            AbilityScores[Ability + " Racial"] = 0
-            AbilityScores[Ability + " ASI"] = 0
-            AbilityScores[Ability + " Miscellaneous"] = 0
-            AbilityScores[Ability + " Override"] = None
-            AbilityScores[Ability + " Stat Modifier"] = self.CreateStatModifier()
-            AbilityScores[Ability + " Stat Modifier"][Ability + " Multiplier"] = 1
-            AbilityScores[Ability + " Save Stat Modifier"] = self.CreateStatModifier()
-            AbilityScores[Ability + " Save Stat Modifier"][Ability + " Multiplier"] = 1
+            AbilityScores[f"{Ability} Base"] = 8
+            AbilityScores[f"{Ability} Racial"] = 0
+            AbilityScores[f"{Ability} ASI"] = 0
+            AbilityScores[f"{Ability} Miscellaneous"] = 0
+            AbilityScores[f"{Ability} Override"] = None
+            AbilityScores[f"{Ability} Stat Modifier"] = self.CreateStatModifier()
+            AbilityScores[f"{Ability} Stat Modifier"][f"{Ability} Multiplier"] = 1
+            AbilityScores[f"{Ability} Save Stat Modifier"] = self.CreateStatModifier()
+            AbilityScores[f"{Ability} Save Stat Modifier"][f"{Ability} Multiplier"] = 1
         AbilityScores["Ability Score Notes"] = ""
         return AbilityScores
 
     def CreateSkillsStats(self):
         Skills = {}
         for Skill in self.Skills:
-            Skills[Skill + " Stat Modifier"] = self.CreateStatModifier()
+            Skills[f"{Skill} Stat Modifier"] = self.CreateStatModifier()
             AssociatedAbility = self.SkillsAssociatedAbilities[Skill]
-            Skills[Skill + " Stat Modifier"][AssociatedAbility + " Multiplier"] = 1
+            Skills[f"{Skill} Stat Modifier"][f"{AssociatedAbility} Multiplier"] = 1
         Skills["Passive Perception Stat Modifier"] = self.CreateStatModifier()
         Skills["Passive Perception Stat Modifier"]["Manual Modifier"] = 10
         Skills["Passive Perception Stat Modifier"]["Wisdom Multiplier"] = 1
@@ -433,13 +433,13 @@ class PlayerCharacter(Character, SerializableMixin):
         # Ability and Saving Throw Modifiers
         for Ability in self.Abilities:
             TotalAbilityScore = self.GetTotalAbilityScore(Ability)
-            DerivedStats[Ability + " Total Score"] = TotalAbilityScore
-            DerivedStats[Ability + " Modifier"] = self.CalculateStatModifier(self.Stats["Ability Scores"][Ability + " Stat Modifier"])
-            DerivedStats[Ability + " Saving Throw Modifier"] = self.CalculateStatModifier(self.Stats["Ability Scores"][Ability + " Save Stat Modifier"])
+            DerivedStats[f"{Ability} Total Score"] = TotalAbilityScore
+            DerivedStats[f"{Ability} Modifier"] = self.CalculateStatModifier(self.Stats["Ability Scores"][f"{Ability} Stat Modifier"])
+            DerivedStats[f"{Ability} Saving Throw Modifier"] = self.CalculateStatModifier(self.Stats["Ability Scores"][f"{Ability} Save Stat Modifier"])
 
         # Skill Modifiers
         for Skill in self.Skills:
-            DerivedStats[Skill + " Modifier"] = self.CalculateStatModifier(self.Stats["Skills"][Skill + " Stat Modifier"])
+            DerivedStats[f"{Skill} Modifier"] = self.CalculateStatModifier(self.Stats["Skills"][f"{Skill} Stat Modifier"])
 
         # Passive Perception and Investigation
         DerivedStats["Passive Perception"] = self.CalculateStatModifier(self.Stats["Skills"]["Passive Perception Stat Modifier"])
@@ -458,8 +458,8 @@ class PlayerCharacter(Character, SerializableMixin):
 
         # Ability Score Derivatives
         for Ability in self.Abilities:
-            DerivedStats[Ability + " Attack Modifier Stat Modifier"] = self.CalculateStatModifier(self.Stats["Ability Score Derivatives"][Ability + " Attack Modifier Stat Modifier"])
-            DerivedStats[Ability + " Save DC Stat Modifier"] = self.CalculateStatModifier(self.Stats["Ability Score Derivatives"][Ability + " Save DC Stat Modifier"])
+            DerivedStats[f"{Ability} Attack Modifier Stat Modifier"] = self.CalculateStatModifier(self.Stats["Ability Score Derivatives"][f"{Ability} Attack Modifier Stat Modifier"])
+            DerivedStats[f"{Ability} Save DC Stat Modifier"] = self.CalculateStatModifier(self.Stats["Ability Score Derivatives"][f"{Ability} Save DC Stat Modifier"])
 
         # Spell Points
         if self.Stats["Spell Points Enabled"]:
@@ -580,10 +580,10 @@ class PlayerCharacter(Character, SerializableMixin):
     def CreateStatModifier(self, ACMode=False):
         StatModifier = {}
         for Ability in self.Abilities:
-            StatModifier[Ability + " Multiplier"] = 0
-            StatModifier[Ability + " Multiplier Round Up"] = False
-            StatModifier[Ability + " Min"] = None
-            StatModifier[Ability + " Max"] = None
+            StatModifier[f"{Ability} Multiplier"] = 0
+            StatModifier[f"{Ability} Multiplier Round Up"] = False
+            StatModifier[f"{Ability} Min"] = None
+            StatModifier[f"{Ability} Max"] = None
         StatModifier["Proficiency Multiplier"] = 0
         StatModifier["Proficiency Multiplier Round Up"] = False
         StatModifier["Proficiency Min"] = None
@@ -602,15 +602,15 @@ class PlayerCharacter(Character, SerializableMixin):
 
         # Ability Modifiers
         for Ability in self.Abilities:
-            AbilityMod = math.floor((self.GetTotalAbilityScore(Ability) - 10) / 2) * StatModifier[Ability + " Multiplier"]
-            if StatModifier[Ability + " Multiplier Round Up"]:
+            AbilityMod = math.floor((self.GetTotalAbilityScore(Ability) - 10) / 2) * StatModifier[f"{Ability} Multiplier"]
+            if StatModifier[f"{Ability} Multiplier Round Up"]:
                 AbilityMod = math.ceil(AbilityMod)
             else:
                 AbilityMod = math.floor(AbilityMod)
-            if StatModifier[Ability + " Max"] is not None:
-                AbilityMod = min(AbilityMod, StatModifier[Ability + " Max"])
-            if StatModifier[Ability + " Min"] is not None:
-                AbilityMod = max(AbilityMod, StatModifier[Ability + " Min"])
+            if StatModifier[f"{Ability} Max"] is not None:
+                AbilityMod = min(AbilityMod, StatModifier[f"{Ability} Max"])
+            if StatModifier[f"{Ability} Min"] is not None:
+                AbilityMod = max(AbilityMod, StatModifier[f"{Ability} Min"])
             CalculatedModifier += AbilityMod
 
         # Level Modifier
@@ -648,12 +648,12 @@ class PlayerCharacter(Character, SerializableMixin):
         return CalculatedModifier
 
     def GetTotalAbilityScore(self, Ability):
-        TotalAbilityScore = self.Stats["Ability Scores"][Ability + " Base"]
-        TotalAbilityScore += self.Stats["Ability Scores"][Ability + " Racial"]
-        TotalAbilityScore += self.Stats["Ability Scores"][Ability + " ASI"]
-        TotalAbilityScore += self.Stats["Ability Scores"][Ability + " Miscellaneous"]
-        if self.Stats["Ability Scores"][Ability + " Override"] is not None:
-            TotalAbilityScore = self.Stats["Ability Scores"][Ability + " Override"]
+        TotalAbilityScore = self.Stats["Ability Scores"][f"{Ability} Base"]
+        TotalAbilityScore += self.Stats["Ability Scores"][f"{Ability} Racial"]
+        TotalAbilityScore += self.Stats["Ability Scores"][f"{Ability} ASI"]
+        TotalAbilityScore += self.Stats["Ability Scores"][f"{Ability} Miscellaneous"]
+        if self.Stats["Ability Scores"][f"{Ability} Override"] is not None:
+            TotalAbilityScore = self.Stats["Ability Scores"][f"{Ability} Override"]
         return TotalAbilityScore
 
     def GetRolledAbilityScores(self):

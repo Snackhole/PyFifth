@@ -94,12 +94,12 @@ class AlternateAbilityScoreSkillRollDialog(QDialog):
         self.RollData = {}
 
         # Roll Data Prefix
-        self.RollData["Prefix"] = Skill + " (" + AbilityAbbreviation + ") Check:\n"
+        self.RollData["Prefix"] = f"{Skill} ({AbilityAbbreviation}) Check:\n"
 
         # Roll Data Stat Modifier
         self.RollData["Stat Modifier"] = self.CharacterWindow.PlayerCharacter.CreateStatModifier()
-        self.RollData["Stat Modifier"][Ability + " Multiplier"] = 1
-        SkillStatModifier = self.CharacterWindow.PlayerCharacter.Stats["Skills"][Skill + " Stat Modifier"]
+        self.RollData["Stat Modifier"][f"{Ability} Multiplier"] = 1
+        SkillStatModifier = self.CharacterWindow.PlayerCharacter.Stats["Skills"][f"{Skill} Stat Modifier"]
         self.RollData["Stat Modifier"]["Proficiency Multiplier"] = SkillStatModifier["Proficiency Multiplier"]
         self.RollData["Stat Modifier"]["Proficiency Multiplier Round Up"] = SkillStatModifier["Proficiency Multiplier Round Up"]
         self.RollData["Stat Modifier"]["Proficiency Min"] = SkillStatModifier["Proficiency Min"]
