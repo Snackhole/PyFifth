@@ -1,8 +1,8 @@
 import copy
 import functools
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSizePolicy, QMessageBox
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSizePolicy, QMessageBox
 
 from Interface.Dialogs.EditModifierDialog import EditModifierDialog
 from Interface.Widgets.IconButtons import EditButton
@@ -22,11 +22,11 @@ class EditSkillsDialog(QDialog):
         self.Cancelled = False
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Prompt Label
         self.PromptLabel = QLabel("Set your skill modifiers:")
-        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Skill Inputs
         self.SkillInputs = {}
@@ -36,7 +36,7 @@ class EditSkillsDialog(QDialog):
             LabelText = Skill[:-len(" Stat Modifier")]
             self.SkillInputs[f"{Skill} Label"] = QLabel(LabelText)
             Label = self.SkillInputs[f"{Skill} Label"]
-            Label.setAlignment(QtCore.Qt.AlignCenter)
+            Label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
             # Edit Button
             self.SkillInputs[f"{Skill} Edit Button"] = EditButton(functools.partial(self.EditModifier, Skill), f"Edit {Skill}")
@@ -92,7 +92,7 @@ class EditSkillsDialog(QDialog):
         self.setWindowIcon(self.CharacterWindow.WindowIcon)
 
         # Execute Dialog
-        self.exec_()
+        self.exec()
 
     def EditModifier(self, Modifier):
         EditModifierDialogInst = EditModifierDialog(self, self.CharacterWindow, self.Skills[Modifier], Modifier)
@@ -102,8 +102,8 @@ class EditSkillsDialog(QDialog):
         self.close()
 
     def SetToDefault(self):
-        Confirm = self.CharacterWindow.DisplayMessageBox("Are you sure you want to set skills data to default values?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self)
-        if Confirm == QMessageBox.Yes:
+        Confirm = self.CharacterWindow.DisplayMessageBox("Are you sure you want to set skills data to default values?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No), Parent=self)
+        if Confirm == QMessageBox.StandardButton.Yes:
             DefaultSkillsData = self.CharacterWindow.PlayerCharacter.CreateSkillsStats()
             self.Skills.update(DefaultSkillsData)
             self.UnsavedChanges = True

@@ -1,5 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QSizePolicy
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QFrame, QGridLayout, QLabel, QSizePolicy
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
@@ -20,7 +20,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
         self.HeaderLabelMargin = 5
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Create Interface Elements
         self.CreateInterfaceElements()
@@ -31,7 +31,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
     def CreateInterfaceElements(self):
         # Race
         self.RaceLabel = QLabel("Race")
-        self.RaceLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.RaceLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.RaceLabel.setStyleSheet(self.SectionLabelStyle)
         self.RaceLabel.setMargin(self.HeaderLabelMargin)
         self.RaceLineEdit = CenteredLineEdit()
@@ -39,7 +39,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
 
         # Background
         self.BackgroundLabel = QLabel("Background")
-        self.BackgroundLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.BackgroundLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.BackgroundLabel.setStyleSheet(self.SectionLabelStyle)
         self.BackgroundLabel.setMargin(self.HeaderLabelMargin)
         self.BackgroundLineEdit = CenteredLineEdit()
@@ -47,7 +47,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
 
         # Alignment
         self.AlignmentLabel = QLabel("Alignment")
-        self.AlignmentLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.AlignmentLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.AlignmentLabel.setStyleSheet(self.SectionLabelStyle)
         self.AlignmentLabel.setMargin(self.HeaderLabelMargin)
         self.AlignmentLineEdit = CenteredLineEdit()
@@ -55,7 +55,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
 
         # Age
         self.AgeLabel = QLabel("Age")
-        self.AgeLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.AgeLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.AgeLabel.setStyleSheet(self.SectionLabelStyle)
         self.AgeLabel.setMargin(self.HeaderLabelMargin)
         self.AgeLineEdit = CenteredLineEdit()
@@ -63,7 +63,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
 
         # Physical Appearance
         self.PhysicalAppearanceLabel = QLabel("Physical Appearance")
-        self.PhysicalAppearanceLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PhysicalAppearanceLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.PhysicalAppearanceLabel.setStyleSheet(self.SectionLabelStyle)
         self.PhysicalAppearanceLabel.setMargin(self.HeaderLabelMargin)
         self.PhysicalAppearanceTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Physical Appearance", self.PhysicalAppearanceTextEdit.toPlainText()))
@@ -71,7 +71,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
 
         # Personality Traits
         self.PersonalityTraitsLabel = QLabel("Personality Traits")
-        self.PersonalityTraitsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PersonalityTraitsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.PersonalityTraitsLabel.setStyleSheet(self.SectionLabelStyle)
         self.PersonalityTraitsLabel.setMargin(self.HeaderLabelMargin)
         self.PersonalityTraitsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Personality Traits", self.PersonalityTraitsTextEdit.toPlainText()))
@@ -79,7 +79,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
 
         # Bonds
         self.BondsLabel = QLabel("Bonds")
-        self.BondsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.BondsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.BondsLabel.setStyleSheet(self.SectionLabelStyle)
         self.BondsLabel.setMargin(self.HeaderLabelMargin)
         self.BondsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Bonds", self.BondsTextEdit.toPlainText()))
@@ -87,7 +87,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
 
         # Ideals
         self.IdealsLabel = QLabel("Ideals")
-        self.IdealsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.IdealsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.IdealsLabel.setStyleSheet(self.SectionLabelStyle)
         self.IdealsLabel.setMargin(self.HeaderLabelMargin)
         self.IdealsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Ideals", self.IdealsTextEdit.toPlainText()))
@@ -95,7 +95,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
 
         # Flaws
         self.FlawsLabel = QLabel("Flaws")
-        self.FlawsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.FlawsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.FlawsLabel.setStyleSheet(self.SectionLabelStyle)
         self.FlawsLabel.setMargin(self.HeaderLabelMargin)
         self.FlawsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Flaws", self.FlawsTextEdit.toPlainText()))
@@ -103,7 +103,7 @@ class PlayerCharacterPersonalityAndBackstoryWidget(QFrame):
 
         # Backstory
         self.BackstoryLabel = QLabel("Backstory")
-        self.BackstoryLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.BackstoryLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.BackstoryLabel.setStyleSheet(self.SectionLabelStyle)
         self.BackstoryLabel.setMargin(self.HeaderLabelMargin)
         self.BackstoryTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Character Backstory", self.BackstoryTextEdit.toPlainText()))

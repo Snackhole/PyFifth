@@ -1,5 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QMessageBox, QSizePolicy, QGridLayout, QSpinBox, QTabWidget
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QCheckBox, QFrame, QInputDialog, QLabel, QMessageBox, QSizePolicy, QGridLayout, QSpinBox, QTabWidget
 
 from Interface.Dialogs.EditFeatureDialog import EditFeatureDialog
 from Interface.Dialogs.EditMaxHPDialog import EditMaxHPDialog
@@ -28,7 +28,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.HeaderLabelMargin = 5
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Create Vitality Table
         self.CreateVitalityTable()
@@ -58,48 +58,48 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         # Header Label
         self.VitalityLabel = QLabel("Vitality")
         self.VitalityLabel.setStyleSheet(self.SectionLabelStyle)
-        self.VitalityLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.VitalityLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.VitalityLabel.setMargin(self.HeaderLabelMargin)
 
         # Temp HP
         self.TempHPLabel = QLabel("Temp HP:")
-        self.TempHPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.TempHPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.TempHPSpinBox = QSpinBox()
         self.TempHPSpinBox.setRange(0, 1000000000)
-        self.TempHPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.TempHPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.TempHPSpinBox.setStyleSheet(self.HPSpinBoxStyle)
         self.TempHPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.TempHPSpinBox.setButtonSymbols(self.TempHPSpinBox.NoButtons)
+        self.TempHPSpinBox.setButtonSymbols(self.TempHPSpinBox.ButtonSymbols.NoButtons)
         self.TempHPSpinBox.setValue(0)
         self.TempHPSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Temp Health", self.TempHPSpinBox.value()))
 
         # Current HP
         self.CurrentHPLabel = QLabel("Current HP:")
-        self.CurrentHPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CurrentHPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.CurrentHPSpinBox = QSpinBox()
         self.CurrentHPSpinBox.setRange(-1000000000, 1000000000)
-        self.CurrentHPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CurrentHPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CurrentHPSpinBox.setStyleSheet(self.HPSpinBoxStyle)
         self.CurrentHPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.CurrentHPSpinBox.setButtonSymbols(self.CurrentHPSpinBox.NoButtons)
+        self.CurrentHPSpinBox.setButtonSymbols(self.CurrentHPSpinBox.ButtonSymbols.NoButtons)
         self.CurrentHPSpinBox.setValue(5)
         self.CurrentHPSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Current Health", self.CurrentHPSpinBox.value()))
 
         # Max HP
         self.MaxHPLabel = QLabel("Max HP:")
-        self.MaxHPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.MaxHPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.MaxHPSpinBox = QSpinBox()
         self.MaxHPSpinBox.setRange(0, 1000000000)
-        self.MaxHPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.MaxHPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.MaxHPSpinBox.setStyleSheet(self.HPSpinBoxStyle)
         self.MaxHPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.MaxHPSpinBox.setButtonSymbols(self.MaxHPSpinBox.NoButtons)
+        self.MaxHPSpinBox.setButtonSymbols(self.MaxHPSpinBox.ButtonSymbols.NoButtons)
         self.MaxHPSpinBox.setValue(0)
         self.MaxHPSpinBox.setReadOnly(True)
-        self.MaxHPSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.MaxHPSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         # HP Buttons
         self.DamageButton = DamageButton(self.Damage)
@@ -108,24 +108,24 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
 
         # Total Hit Dice
         self.TotalHitDiceLabel = QLabel("Total Hit Dice:")
-        self.TotalHitDiceLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.TotalHitDiceLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.TotalHitDiceLineEdit = CenteredLineEdit()
         self.TotalHitDiceLineEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Total Hit Dice", self.TotalHitDiceLineEdit.text()))
 
         # Hit Dice Remaining
         self.HitDiceRemainingLabel = QLabel("Hit Dice Remaining:")
-        self.HitDiceRemainingLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.HitDiceRemainingLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.HitDiceRemainingLineEdit = CenteredLineEdit()
         self.HitDiceRemainingLineEdit.textChanged.connect(lambda: self.CharacterWindow.UpdateStat("Hit Dice Remaining", self.HitDiceRemainingLineEdit.text()))
 
         # Death Saving Throws
         self.DeathSavingThrowsLabel = QLabel("Death Saving Throws:")
-        self.DeathSavingThrowsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.DeathSavingThrowsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.DeathSavingThrowsSuccessesLabel = QLabel("Success")
-        self.DeathSavingThrowsSuccessesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.DeathSavingThrowsSuccessesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.DeathSavingThrowsSuccessCheckBoxOne = QCheckBox()
         self.DeathSavingThrowsSuccessCheckBoxOne.setSizePolicy(self.InputsSizePolicy)
@@ -138,7 +138,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         self.DeathSavingThrowsSuccessCheckBoxThree.stateChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Death Saving Throws", "Success 3"), self.DeathSavingThrowsSuccessCheckBoxThree.isChecked()))
 
         self.DeathSavingThrowsFailuresLabel = QLabel("Fail")
-        self.DeathSavingThrowsFailuresLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.DeathSavingThrowsFailuresLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.DeathSavingThrowsFailureCheckBoxOne = QCheckBox()
         self.DeathSavingThrowsFailureCheckBoxOne.setSizePolicy(self.InputsSizePolicy)
@@ -168,33 +168,33 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
         # AC Spin Boxes
         self.AC1SpinBox = QSpinBox()
         self.AC1SpinBox.setRange(0, 1000000000)
-        self.AC1SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.AC1SpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.AC1SpinBox.setStyleSheet(self.CombatAndFeaturesSpinBoxStyle)
         self.AC1SpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.AC1SpinBox.setButtonSymbols(self.AC1SpinBox.NoButtons)
+        self.AC1SpinBox.setButtonSymbols(self.AC1SpinBox.ButtonSymbols.NoButtons)
         self.AC1SpinBox.setValue(0)
         self.AC1SpinBox.setReadOnly(True)
-        self.AC1SpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.AC1SpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.AC2SpinBox = QSpinBox()
         self.AC2SpinBox.setRange(0, 1000000000)
-        self.AC2SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.AC2SpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.AC2SpinBox.setStyleSheet(self.CombatAndFeaturesSpinBoxStyle)
         self.AC2SpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.AC2SpinBox.setButtonSymbols(self.AC2SpinBox.NoButtons)
+        self.AC2SpinBox.setButtonSymbols(self.AC2SpinBox.ButtonSymbols.NoButtons)
         self.AC2SpinBox.setValue(0)
         self.AC2SpinBox.setReadOnly(True)
-        self.AC2SpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.AC2SpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.AC3SpinBox = QSpinBox()
         self.AC3SpinBox.setRange(0, 1000000000)
-        self.AC3SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.AC3SpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.AC3SpinBox.setStyleSheet(self.CombatAndFeaturesSpinBoxStyle)
         self.AC3SpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.AC3SpinBox.setButtonSymbols(self.AC3SpinBox.NoButtons)
+        self.AC3SpinBox.setButtonSymbols(self.AC3SpinBox.ButtonSymbols.NoButtons)
         self.AC3SpinBox.setValue(0)
         self.AC3SpinBox.setReadOnly(True)
-        self.AC3SpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.AC3SpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         # AC Edit Buttons
         self.AC1EditButton = EditButton(lambda: self.EditAC("1"), "Edit AC Stat Modifier 1")
@@ -207,20 +207,20 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
     def CreateInitiative(self):
         # Initiative Label
         self.InitiativeLabel = QLabel("Initiative")
-        self.InitiativeLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.InitiativeLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.InitiativeLabel.setStyleSheet(self.SectionLabelStyle)
         self.InitiativeLabel.setMargin(self.HeaderLabelMargin)
 
         # Initiative Spin Box
         self.InitiativeSpinBox = QSpinBox()
         self.InitiativeSpinBox.setRange(-1000000000, 1000000000)
-        self.InitiativeSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.InitiativeSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.InitiativeSpinBox.setStyleSheet(self.CombatAndFeaturesSpinBoxStyle)
         self.InitiativeSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.InitiativeSpinBox.setButtonSymbols(self.InitiativeSpinBox.NoButtons)
+        self.InitiativeSpinBox.setButtonSymbols(self.InitiativeSpinBox.ButtonSymbols.NoButtons)
         self.InitiativeSpinBox.setValue(0)
         self.InitiativeSpinBox.setReadOnly(True)
-        self.InitiativeSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.InitiativeSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         # Initiative Roll Button
         self.InitiativeRollButton = RollButton(self.RollInitiative, "Roll Initiative")
@@ -233,17 +233,17 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
     def CreateSpeed(self):
         # Speed Label
         self.SpeedLabel = QLabel("Speed")
-        self.SpeedLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpeedLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.SpeedLabel.setStyleSheet(self.SectionLabelStyle)
         self.SpeedLabel.setMargin(self.HeaderLabelMargin)
 
         # Speed Spin Box
         self.SpeedSpinBox = QSpinBox()
         self.SpeedSpinBox.setRange(0, 1000000000)
-        self.SpeedSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpeedSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.SpeedSpinBox.setStyleSheet(self.CombatAndFeaturesSpinBoxStyle)
         self.SpeedSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.SpeedSpinBox.setButtonSymbols(self.SpeedSpinBox.NoButtons)
+        self.SpeedSpinBox.setButtonSymbols(self.SpeedSpinBox.ButtonSymbols.NoButtons)
         self.SpeedSpinBox.setValue(30)
         self.SpeedSpinBox.setSuffix(" ft.")
         self.SpeedSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Speed", self.SpeedSpinBox.value()))
@@ -251,7 +251,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
     def CreateAbilityScoreDerivatives(self):
         # Ability Score Derivatives Label
         self.AbilityScoreDerivativesLabel = QLabel("Ability Score Derivatives")
-        self.AbilityScoreDerivativesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.AbilityScoreDerivativesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.AbilityScoreDerivativesLabel.setStyleSheet(self.SectionLabelStyle)
         self.AbilityScoreDerivativesLabel.setMargin(self.HeaderLabelMargin)
 
@@ -263,7 +263,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
     def CreateCombatAndFeaturesNotes(self):
         # Combat and Features Notes Label
         self.CombatAndFeaturesNotesLabel = QLabel("Combat and Features Notes")
-        self.CombatAndFeaturesNotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CombatAndFeaturesNotesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CombatAndFeaturesNotesLabel.setStyleSheet(self.SectionLabelStyle)
         self.CombatAndFeaturesNotesLabel.setMargin(self.HeaderLabelMargin)
 
@@ -274,7 +274,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
     def CreateFeaturesList(self):
         # Features Label
         self.FeaturesLabel = QLabel("Features")
-        self.FeaturesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.FeaturesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.FeaturesLabel.setStyleSheet(self.SectionLabelStyle)
         self.FeaturesLabel.setMargin(self.HeaderLabelMargin)
 
@@ -466,7 +466,7 @@ class PlayerCharacterCombatAndFeaturesWidget(QFrame):
     def DeleteFeature(self):
         CurrentSelection = self.FeaturesTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
-            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this feature?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this feature?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)) == QMessageBox.StandardButton.Yes:
                 CurrentFeature = CurrentSelection[0]
                 CurrentFeatureIndex = CurrentFeature.Index
                 self.CharacterWindow.PlayerCharacter.DeleteFeature(CurrentFeatureIndex)

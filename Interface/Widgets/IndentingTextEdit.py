@@ -1,5 +1,5 @@
-from PyQt5.QtGui import QTextCursor
-from PyQt5.QtWidgets import QTextEdit
+from PyQt6.QtGui import QTextCursor
+from PyQt6.QtWidgets import QTextEdit
 
 
 class IndentingTextEdit(QTextEdit):

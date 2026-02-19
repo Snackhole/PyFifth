@@ -1,5 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QSizePolicy, QSpinBox, QLabel, QTextEdit
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QFrame, QGridLayout, QSizePolicy, QSpinBox, QLabel, QTextEdit
 
 from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
 from Interface.Widgets.IconButtons import AddButton, CopyButton, DeleteButton, EditButton, MoveDownButton, MoveUpButton, RollButton
@@ -23,7 +23,7 @@ class DiceRollerWidget(QFrame):
         self.HeaderLabelMargin = 5
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Dice Roller Width
         self.DiceRollerWidth = 80
@@ -31,44 +31,44 @@ class DiceRollerWidget(QFrame):
 
         # Dice Number Spin Box
         self.DiceNumberSpinBox = QSpinBox()
-        self.DiceNumberSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DiceNumberSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.DiceNumberSpinBox.setStyleSheet(self.SpinBoxStyle)
         self.DiceNumberSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DiceNumberSpinBox.setFixedWidth(self.DiceRollerWidth)
         self.DiceNumberSpinBox.setMinimumHeight(self.DiceRollerInputsHeight)
-        self.DiceNumberSpinBox.setButtonSymbols(self.DiceNumberSpinBox.NoButtons)
+        self.DiceNumberSpinBox.setButtonSymbols(self.DiceNumberSpinBox.ButtonSymbols.NoButtons)
         self.DiceNumberSpinBox.setRange(1, 1000000000)
         self.DiceNumberSpinBox.setValue(1)
 
         # Die Type Label
         self.DieTypeLabel = QLabel("d")
         self.DieTypeLabel.setStyleSheet(self.RollLabelStyle)
-        self.DieTypeLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.DieTypeLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Die Type Spin Box
         self.DieTypeSpinBox = DieTypeSpinBox()
-        self.DieTypeSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DieTypeSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.DieTypeSpinBox.setStyleSheet(self.SpinBoxStyle)
         self.DieTypeSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.DieTypeSpinBox.setFixedWidth(self.DiceRollerWidth)
         self.DieTypeSpinBox.setMinimumHeight(self.DiceRollerInputsHeight)
-        self.DieTypeSpinBox.setButtonSymbols(self.DieTypeSpinBox.NoButtons)
+        self.DieTypeSpinBox.setButtonSymbols(self.DieTypeSpinBox.ButtonSymbols.NoButtons)
         self.DieTypeSpinBox.setRange(1, 1000000000)
         self.DieTypeSpinBox.setValue(20)
 
         # Modifier Label
         self.ModifierLabel = QLabel("+")
         self.ModifierLabel.setStyleSheet(self.RollLabelStyle)
-        self.ModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ModifierLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Modifier Spin Box
         self.ModifierSpinBox = QSpinBox()
-        self.ModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ModifierSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ModifierSpinBox.setStyleSheet(self.SpinBoxStyle)
         self.ModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ModifierSpinBox.setFixedWidth(self.DiceRollerWidth)
         self.ModifierSpinBox.setMinimumHeight(self.DiceRollerInputsHeight)
-        self.ModifierSpinBox.setButtonSymbols(self.ModifierSpinBox.NoButtons)
+        self.ModifierSpinBox.setButtonSymbols(self.ModifierSpinBox.ButtonSymbols.NoButtons)
         self.ModifierSpinBox.setRange(-1000000000, 1000000000)
         self.ModifierSpinBox.setValue(0)
 
@@ -80,7 +80,7 @@ class DiceRollerWidget(QFrame):
         # Preset Rolls Label
         self.PresetRollsLabel = QLabel("Preset Rolls")
         self.PresetRollsLabel.setStyleSheet(self.SectionLabelStyle)
-        self.PresetRollsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PresetRollsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.PresetRollsLabel.setMargin(self.HeaderLabelMargin)
 
         # Preset Rolls Tree Widget
@@ -112,7 +112,7 @@ class DiceRollerWidget(QFrame):
         # Results Log Label
         self.ResultsLogLabel = QLabel("Results Log")
         self.ResultsLogLabel.setStyleSheet(self.SectionLabelStyle)
-        self.ResultsLogLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ResultsLogLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ResultsLogLabel.setMargin(self.HeaderLabelMargin)
 
         # Results Log Text Edit

@@ -1,7 +1,7 @@
 import copy
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QMessageBox, QPushButton, QGridLayout
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QDialog, QLabel, QLineEdit, QMessageBox, QPushButton, QGridLayout
 
 from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 from Interface.Widgets.ToggleButtons import PreparedButton
@@ -26,60 +26,60 @@ class EditSpellDialog(QDialog):
 
         # Prompt Label
         self.PromptLabel = QLabel("Add this spell:" if AddMode else "Edit this spell:")
-        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Spell Name
         self.NameLabel = QLabel("Name:")
-        self.NameLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.NameLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.NameLineEdit = QLineEdit()
         self.NameLineEdit.setText(self.Spell["Spell Name"])
         self.NameLineEdit.textChanged.connect(self.UpdateSpell)
 
         # Spell Level
         self.LevelLabel = QLabel("Level:")
-        self.LevelLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.LevelLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.LevelLineEdit = QLineEdit()
         self.LevelLineEdit.setText(self.Spell["Spell Level"])
         self.LevelLineEdit.textChanged.connect(self.UpdateSpell)
 
         # Spell School
         self.SchoolLabel = QLabel("School:")
-        self.SchoolLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SchoolLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.SchoolLineEdit = QLineEdit()
         self.SchoolLineEdit.setText(self.Spell["Spell School"])
         self.SchoolLineEdit.textChanged.connect(self.UpdateSpell)
 
         # Spell Casting Time
         self.CastingTimeLabel = QLabel("Casting Time:")
-        self.CastingTimeLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CastingTimeLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CastingTimeTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateSpell, InitialContent=self.Spell["Spell Casting Time"])
         self.CastingTimeTextEdit.setMaximumHeight(self.SmallTextEditMaxHeight)
         self.CastingTimeTextEdit.setTabChangesFocus(True)
 
         # Spell Range
         self.RangeLabel = QLabel("Range:")
-        self.RangeLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.RangeLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.RangeTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateSpell, InitialContent=self.Spell["Spell Range"])
         self.RangeTextEdit.setMaximumHeight(self.SmallTextEditMaxHeight)
         self.RangeTextEdit.setTabChangesFocus(True)
 
         # Spell Components
         self.ComponentsLabel = QLabel("Components:")
-        self.ComponentsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ComponentsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ComponentsTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateSpell, InitialContent=self.Spell["Spell Components"])
         self.ComponentsTextEdit.setMaximumHeight(self.SmallTextEditMaxHeight)
         self.ComponentsTextEdit.setTabChangesFocus(True)
 
         # Spell Duration
         self.DurationLabel = QLabel("Duration:")
-        self.DurationLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.DurationLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.DurationTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateSpell, InitialContent=self.Spell["Spell Duration"])
         self.DurationTextEdit.setMaximumHeight(self.SmallTextEditMaxHeight)
         self.DurationTextEdit.setTabChangesFocus(True)
 
         # Spell Description
         self.DescriptionLabel = QLabel("Description:")
-        self.DescriptionLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.DescriptionLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.DescriptionTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateSpell, InitialContent=self.Spell["Spell Text"])
         self.DescriptionTextEdit.setTabChangesFocus(True)
 
@@ -142,7 +142,7 @@ class EditSpellDialog(QDialog):
         self.NameLineEdit.selectAll()
 
         # Execute Dialog
-        self.exec_()
+        self.exec()
 
     def UpdateSpell(self):
         if not self.ValidInput():
@@ -173,6 +173,6 @@ class EditSpellDialog(QDialog):
     def ValidInput(self, Alert=False):
         if self.NameLineEdit.text() == "":
             if Alert:
-                self.CharacterWindow.DisplayMessageBox("Spells must have a name.", Icon=QMessageBox.Warning, Parent=self)
+                self.CharacterWindow.DisplayMessageBox("Spells must have a name.", Icon=QMessageBox.Icon.Warning, Parent=self)
             return False
         return True

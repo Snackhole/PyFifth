@@ -1,5 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QLabel, QSizePolicy, QMessageBox
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QFrame, QGridLayout, QLabel, QSizePolicy, QMessageBox
 from Interface.Dialogs.EditAdditionalNoteDialog import EditAdditionalNoteDialog
 
 from Interface.Widgets.AdditionalNotesTreeWidget import AdditionalNotesTreeWidget
@@ -22,7 +22,7 @@ class PlayerCharacterNotesWidget(QFrame):
         self.HeaderLabelMargin = 5
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Create Notes
         self.CreateNotes()
@@ -42,7 +42,7 @@ class PlayerCharacterNotesWidget(QFrame):
     def CreateAdditionalNotes(self):
         # Additional Notes Label
         self.AdditionalNotesLabel = QLabel("Additional Notes")
-        self.AdditionalNotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.AdditionalNotesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.AdditionalNotesLabel.setStyleSheet(self.SectionLabelStyle)
         self.AdditionalNotesLabel.setMargin(self.HeaderLabelMargin)
 
@@ -103,7 +103,7 @@ class PlayerCharacterNotesWidget(QFrame):
     def DeleteAdditionalNote(self):
         CurrentSelection = self.AdditionalNotesTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
-            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this note?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to delete this note?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)) == QMessageBox.StandardButton.Yes:
                 CurrentNote = CurrentSelection[0]
                 CurrentNoteIndex = CurrentNote.Index
                 self.CharacterWindow.PlayerCharacter.DeleteAdditionalNote(CurrentNoteIndex)

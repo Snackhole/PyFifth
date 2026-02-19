@@ -2,8 +2,9 @@ import copy
 import json
 import os
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QAction, QFrame, QGridLayout, QLabel, QMessageBox, QPushButton, QSizePolicy, QSpinBox
+from PyQt6 import QtCore
+from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import QFrame, QGridLayout, QLabel, QMessageBox, QPushButton, QSizePolicy, QSpinBox
 
 from Core.Encounter import Encounter
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
@@ -35,7 +36,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.HeaderLabelMargin = 5
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Initialize Window
         super().__init__(ScriptName, AbsoluteDirectoryPath, AppInst)
@@ -69,19 +70,19 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.ExperienceLineEdit.textChanged.connect(lambda: self.UpdateData("Encounter Experience", self.ExperienceLineEdit.text()))
 
         self.DescriptionLabel = QLabel("Description:")
-        self.DescriptionLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.DescriptionLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.DescriptionTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Encounter Description", self.DescriptionTextEdit.toPlainText()))
         self.DescriptionTextEdit.setTabChangesFocus(True)
         self.DescriptionTextEdit.setMinimumHeight(200)
 
         self.RewardsLabel = QLabel("Rewards:")
-        self.RewardsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.RewardsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.RewardsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Encounter Rewards", self.RewardsTextEdit.toPlainText()))
         self.RewardsTextEdit.setTabChangesFocus(True)
         self.RewardsTextEdit.setMinimumHeight(200)
 
         self.NotesLabel = QLabel("Notes:")
-        self.NotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.NotesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.NotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Encounter Notes", self.NotesTextEdit.toPlainText()))
         self.NotesTextEdit.setTabChangesFocus(True)
         self.NotesTextEdit.setMinimumHeight(200)
@@ -89,16 +90,16 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         # Initiative Order
         self.InitiativeOrderLabel = QLabel("Initiative Order")
         self.InitiativeOrderLabel.setStyleSheet(self.SectionLabelStyle)
-        self.InitiativeOrderLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.InitiativeOrderLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.InitiativeOrderLabel.setMargin(self.HeaderLabelMargin)
 
         self.RoundLabel = QLabel("Round:")
-        self.RoundLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.RoundLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.RoundSpinBox = QSpinBox()
-        self.RoundSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.RoundSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.RoundSpinBox.setStyleSheet(self.RoundSpinBoxStyle)
         self.RoundSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.RoundSpinBox.setButtonSymbols(self.RoundSpinBox.NoButtons)
+        self.RoundSpinBox.setButtonSymbols(self.RoundSpinBox.ButtonSymbols.NoButtons)
         self.RoundSpinBox.setRange(1, 1000000000)
         self.RoundSpinBox.setValue(1)
         self.RoundSpinBox.valueChanged.connect(lambda: self.UpdateData("Round", self.RoundSpinBox.value()))
@@ -125,7 +126,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.Layout = QGridLayout()
 
         self.HeaderFrame = QFrame()
-        self.HeaderFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.HeaderFrame.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Plain)
         self.HeaderLayout = QGridLayout()
         self.HeaderLayout.addWidget(self.NameLabel, 0, 0)
         self.HeaderLayout.addWidget(self.NameLineEdit, 0, 1)
@@ -145,7 +146,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.Layout.addWidget(self.HeaderFrame, 0, 0)
 
         self.InitiativeOrderFrame = QFrame()
-        self.InitiativeOrderFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.InitiativeOrderFrame.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Plain)
         self.InitiativeOrderLayout = QGridLayout()
         self.InitiativeOrderLayout.addWidget(self.InitiativeOrderLabel, 0, 0, 1, 2)
         self.RoundLayout = QGridLayout()
@@ -309,7 +310,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
     def DeleteEntry(self):
         CurrentSelection = self.InitiativeOrderTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
-            if self.DisplayMessageBox("Are you sure you want to delete this entry?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            if self.DisplayMessageBox("Are you sure you want to delete this entry?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)) == QMessageBox.StandardButton.Yes:
                 CurrentEntry = CurrentSelection[0]
                 CurrentEntryIndex = CurrentEntry.Index
                 self.Encounter.DeleteInitiativeEntry(CurrentEntryIndex)
@@ -339,7 +340,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.UpdateUnsavedChangesFlag(True)
 
     def NewRound(self):
-        if self.DisplayMessageBox("Start a new round and clear all turns taken?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self) == QMessageBox.Yes:
+        if self.DisplayMessageBox("Start a new round and clear all turns taken?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No), Parent=self) == QMessageBox.StandardButton.Yes:
             self.Encounter.NewRound()
             self.UpdatingFieldsFromEncounter = True
             self.UpdateUnsavedChangesFlag(True)
@@ -350,7 +351,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.UpdateUnsavedChangesFlag(True)
 
     def ClearTurns(self):
-        if self.DisplayMessageBox("Clear all turns taken?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self) == QMessageBox.Yes:
+        if self.DisplayMessageBox("Clear all turns taken?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No), Parent=self) == QMessageBox.StandardButton.Yes:
             self.Encounter.ClearTurns()
             self.UpdateUnsavedChangesFlag(True)
 
@@ -388,13 +389,13 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
     def closeEvent(self, event):
         Close = True
         if self.UnsavedChanges:
-            SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
-            if SavePrompt == QMessageBox.Yes:
+            SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel))
+            if SavePrompt == QMessageBox.StandardButton.Yes:
                 if not self.Save(self.Encounter):
                     Close = False
-            elif SavePrompt == QMessageBox.No:
+            elif SavePrompt == QMessageBox.StandardButton.No:
                 pass
-            elif SavePrompt == QMessageBox.Cancel:
+            elif SavePrompt == QMessageBox.StandardButton.Cancel:
                 Close = False
         if not Close:
             event.ignore()

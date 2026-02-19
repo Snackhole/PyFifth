@@ -1,7 +1,7 @@
 from decimal import Decimal
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QHeaderView
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QTreeWidget, QTreeWidgetItem, QHeaderView
 
 
 class PlayerCharacterInventoryTreeWidget(QTreeWidget):
@@ -13,7 +13,7 @@ class PlayerCharacterInventoryTreeWidget(QTreeWidget):
 
         # Header Setup
         self.setRootIsDecorated(False)
-        self.header().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.header().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self.setColumnCount(7)
         self.setHeaderLabels(["Name", "Count", "Unit Weight", "Unit Value", "Total Weight", "Total Value", "Tag"])
 
@@ -25,7 +25,7 @@ class PlayerCharacterInventoryTreeWidget(QTreeWidget):
     def SelectIndex(self, Index):
         DestinationIndex = self.model().index(Index, 0)
         self.setCurrentIndex(DestinationIndex)
-        self.scrollToItem(self.currentItem(), self.PositionAtCenter)
+        self.scrollToItem(self.currentItem(), self.ScrollHint.PositionAtCenter)
         self.horizontalScrollBar().setValue(0)
 
 
@@ -55,4 +55,4 @@ class PlayerCharacterInventoryWidgetItem(QTreeWidgetItem):
 
         # Set Alignment
         for Column in range(len(self.ColumnTextList) - 1):
-            self.setTextAlignment(Column, QtCore.Qt.AlignCenter)
+            self.setTextAlignment(Column, QtCore.Qt.AlignmentFlag.AlignCenter)

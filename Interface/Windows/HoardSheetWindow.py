@@ -2,8 +2,9 @@ import copy
 import json
 import os
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QAction, QDoubleSpinBox, QFrame, QGridLayout, QLabel, QMessageBox, QSizePolicy, QSpinBox
+from PyQt6 import QtCore
+from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import QDoubleSpinBox, QFrame, QGridLayout, QLabel, QMessageBox, QSizePolicy, QSpinBox
 
 from Core.Hoard import Hoard
 from Interface.Dialogs.CoinCalculatorDialog import CoinCalculatorDialog
@@ -36,7 +37,7 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.HeaderLabelMargin = 5
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Initialize Window
         super().__init__(ScriptName, AbsoluteDirectoryPath, AppInst)
@@ -75,66 +76,66 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         # Coins
         self.CoinsLabel = QLabel("Coins")
         self.CoinsLabel.setStyleSheet(self.SectionLabelStyle)
-        self.CoinsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CoinsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CoinsLabel.setMargin(self.HeaderLabelMargin)
 
         # CP
         self.CPLabel = QLabel("CP")
-        self.CPLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.CPLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.CPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.CPLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.CPLabel.setMargin(5)
         self.CPSpinBox = QSpinBox()
-        self.CPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.CPSpinBox.setButtonSymbols(self.CPSpinBox.NoButtons)
+        self.CPSpinBox.setButtonSymbols(self.CPSpinBox.ButtonSymbols.NoButtons)
         self.CPSpinBox.setRange(0, 1000000000)
         self.CPSpinBox.valueChanged.connect(lambda: self.UpdateData(("Coins", "CP"), self.CPSpinBox.value()))
 
         # SP
         self.SPLabel = QLabel("SP")
-        self.SPLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.SPLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.SPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.SPLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.SPLabel.setMargin(5)
         self.SPSpinBox = QSpinBox()
-        self.SPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.SPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.SPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.SPSpinBox.setButtonSymbols(self.SPSpinBox.NoButtons)
+        self.SPSpinBox.setButtonSymbols(self.SPSpinBox.ButtonSymbols.NoButtons)
         self.SPSpinBox.setRange(0, 1000000000)
         self.SPSpinBox.valueChanged.connect(lambda: self.UpdateData(("Coins", "SP"), self.SPSpinBox.value()))
 
         # EP
         self.EPLabel = QLabel("EP")
-        self.EPLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.EPLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.EPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.EPLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.EPLabel.setMargin(5)
         self.EPSpinBox = QSpinBox()
-        self.EPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.EPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.EPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.EPSpinBox.setButtonSymbols(self.EPSpinBox.NoButtons)
+        self.EPSpinBox.setButtonSymbols(self.EPSpinBox.ButtonSymbols.NoButtons)
         self.EPSpinBox.setRange(0, 1000000000)
         self.EPSpinBox.valueChanged.connect(lambda: self.UpdateData(("Coins", "EP"), self.EPSpinBox.value()))
 
         # GP
         self.GPLabel = QLabel("GP")
-        self.GPLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.GPLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.GPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.GPLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.GPLabel.setMargin(5)
         self.GPSpinBox = QSpinBox()
-        self.GPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.GPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.GPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.GPSpinBox.setButtonSymbols(self.GPSpinBox.NoButtons)
+        self.GPSpinBox.setButtonSymbols(self.GPSpinBox.ButtonSymbols.NoButtons)
         self.GPSpinBox.setRange(0, 1000000000)
         self.GPSpinBox.valueChanged.connect(lambda: self.UpdateData(("Coins", "GP"), self.GPSpinBox.value()))
 
         # PP
         self.PPLabel = QLabel("PP")
-        self.PPLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.PPLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.PPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.PPLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.PPLabel.setMargin(5)
         self.PPSpinBox = QSpinBox()
-        self.PPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.PPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.PPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.PPSpinBox.setButtonSymbols(self.PPSpinBox.NoButtons)
+        self.PPSpinBox.setButtonSymbols(self.PPSpinBox.ButtonSymbols.NoButtons)
         self.PPSpinBox.setRange(0, 1000000000)
         self.PPSpinBox.valueChanged.connect(lambda: self.UpdateData(("Coins", "PP"), self.PPSpinBox.value()))
 
@@ -145,86 +146,86 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         # Hoard Stats
         self.HoardStatsLabel = QLabel("Hoard Stats")
         self.HoardStatsLabel.setStyleSheet(self.SectionLabelStyle)
-        self.HoardStatsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.HoardStatsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.HoardStatsLabel.setMargin(self.HeaderLabelMargin)
 
         self.ValueColumnLabel = QLabel("Value")
-        self.ValueColumnLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.ValueColumnLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.ValueColumnLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.ValueColumnLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.ValueColumnLabel.setMargin(5)
 
         self.LoadColumnLabel = QLabel("Load (lbs.)")
-        self.LoadColumnLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.LoadColumnLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.LoadColumnLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.LoadColumnLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.LoadColumnLabel.setMargin(5)
 
         self.CoinsRowLabel = QLabel("Coins")
-        self.CoinsRowLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.CoinsRowLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.CoinsRowLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.CoinsRowLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.CoinsRowLabel.setMargin(5)
 
         self.ItemsRowLabel = QLabel("Items")
-        self.ItemsRowLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.ItemsRowLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.ItemsRowLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.ItemsRowLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.ItemsRowLabel.setMargin(5)
 
         self.TotalRowLabel = QLabel("Total")
-        self.TotalRowLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.TotalRowLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.TotalRowLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.TotalRowLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.TotalRowLabel.setMargin(5)
 
         self.CoinValueSpinBox = QDoubleSpinBox()
-        self.CoinValueSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CoinValueSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CoinValueSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.CoinValueSpinBox.setButtonSymbols(self.CoinValueSpinBox.NoButtons)
+        self.CoinValueSpinBox.setButtonSymbols(self.CoinValueSpinBox.ButtonSymbols.NoButtons)
         self.CoinValueSpinBox.setRange(0, 1000000000)
         self.CoinValueSpinBox.setReadOnly(True)
-        self.CoinValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.CoinValueSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.CoinLoadSpinBox = QDoubleSpinBox()
-        self.CoinLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CoinLoadSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CoinLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.CoinLoadSpinBox.setButtonSymbols(self.CoinLoadSpinBox.NoButtons)
+        self.CoinLoadSpinBox.setButtonSymbols(self.CoinLoadSpinBox.ButtonSymbols.NoButtons)
         self.CoinLoadSpinBox.setRange(0, 1000000000)
         self.CoinLoadSpinBox.setReadOnly(True)
-        self.CoinLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.CoinLoadSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.ItemsValueSpinBox = QDoubleSpinBox()
-        self.ItemsValueSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ItemsValueSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ItemsValueSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.ItemsValueSpinBox.setButtonSymbols(self.ItemsValueSpinBox.NoButtons)
+        self.ItemsValueSpinBox.setButtonSymbols(self.ItemsValueSpinBox.ButtonSymbols.NoButtons)
         self.ItemsValueSpinBox.setRange(0, 1000000000)
         self.ItemsValueSpinBox.setReadOnly(True)
-        self.ItemsValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ItemsValueSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.ItemsLoadSpinBox = QDoubleSpinBox()
-        self.ItemsLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ItemsLoadSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ItemsLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.ItemsLoadSpinBox.setButtonSymbols(self.ItemsLoadSpinBox.NoButtons)
+        self.ItemsLoadSpinBox.setButtonSymbols(self.ItemsLoadSpinBox.ButtonSymbols.NoButtons)
         self.ItemsLoadSpinBox.setRange(0, 1000000000)
         self.ItemsLoadSpinBox.setReadOnly(True)
-        self.ItemsLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ItemsLoadSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.TotalValueSpinBox = QDoubleSpinBox()
-        self.TotalValueSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.TotalValueSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.TotalValueSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.TotalValueSpinBox.setButtonSymbols(self.TotalValueSpinBox.NoButtons)
+        self.TotalValueSpinBox.setButtonSymbols(self.TotalValueSpinBox.ButtonSymbols.NoButtons)
         self.TotalValueSpinBox.setRange(0, 1000000000)
         self.TotalValueSpinBox.setReadOnly(True)
-        self.TotalValueSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.TotalValueSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.TotalLoadSpinBox = QDoubleSpinBox()
-        self.TotalLoadSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.TotalLoadSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.TotalLoadSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.TotalLoadSpinBox.setButtonSymbols(self.TotalLoadSpinBox.NoButtons)
+        self.TotalLoadSpinBox.setButtonSymbols(self.TotalLoadSpinBox.ButtonSymbols.NoButtons)
         self.TotalLoadSpinBox.setRange(0, 1000000000)
         self.TotalLoadSpinBox.setReadOnly(True)
-        self.TotalLoadSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.TotalLoadSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         # Notes
         self.NotesLabel = QLabel("Notes")
         self.NotesLabel.setStyleSheet(self.SectionLabelStyle)
-        self.NotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.NotesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.NotesLabel.setMargin(self.HeaderLabelMargin)
 
         self.NotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.UpdateData("Notes", self.NotesTextEdit.toPlainText()))
@@ -233,7 +234,7 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
 
         # Inventory
         self.InventoryLabel = QLabel("Inventory")
-        self.InventoryLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.InventoryLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.InventoryLabel.setStyleSheet(self.SectionLabelStyle)
         self.InventoryLabel.setMargin(self.HeaderLabelMargin)
 
@@ -251,7 +252,7 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.Layout = QGridLayout()
 
         self.HeaderFrame = QFrame()
-        self.HeaderFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.HeaderFrame.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Plain)
         self.HeaderLayout = QGridLayout()
         self.HeaderLayout.addWidget(self.NameOrOwnersLabel, 0, 0)
         self.HeaderLayout.addWidget(self.NameOrOwnersLineEdit, 0, 1)
@@ -265,7 +266,7 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
         self.Layout.addWidget(self.HeaderFrame, 0, 0)
 
         self.HoardFrame = QFrame()
-        self.HoardFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.HoardFrame.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Plain)
         self.HoardLayout = QGridLayout()
 
         self.CoinsLayout = QGridLayout()
@@ -466,7 +467,7 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
     def DeleteItem(self):
         CurrentSelection = self.InventoryTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
-            if self.DisplayMessageBox("Are you sure you want to delete this item?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            if self.DisplayMessageBox("Are you sure you want to delete this item?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)) == QMessageBox.StandardButton.Yes:
                 CurrentItem = CurrentSelection[0]
                 CurrentItemIndex = CurrentItem.Index
                 self.Hoard.DeleteInventoryItem(CurrentItemIndex)
@@ -534,13 +535,13 @@ class HoardSheetWindow(Window, SaveAndOpenMixin):
     def closeEvent(self, event):
         Close = True
         if self.UnsavedChanges:
-            SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
-            if SavePrompt == QMessageBox.Yes:
+            SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel))
+            if SavePrompt == QMessageBox.StandardButton.Yes:
                 if not self.Save(self.Hoard):
                     Close = False
-            elif SavePrompt == QMessageBox.No:
+            elif SavePrompt == QMessageBox.StandardButton.No:
                 pass
-            elif SavePrompt == QMessageBox.Cancel:
+            elif SavePrompt == QMessageBox.StandardButton.Cancel:
                 Close = False
         if not Close:
             event.ignore()

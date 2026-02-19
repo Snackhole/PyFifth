@@ -1,5 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QComboBox, QFrame, QGridLayout, QLabel, QSizePolicy
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QComboBox, QFrame, QGridLayout, QLabel, QSizePolicy
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.IconButtons import EditButton, RollButton
@@ -14,11 +14,11 @@ class AbilityScoreDerivativeWidget(QFrame):
         self.Index = Index
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Ability
         self.AbilityLabel = QLabel("Ability:")
-        self.AbilityLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.AbilityLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.AbilityComboBox = QComboBox()
         self.AbilityComboBox.setSizePolicy(self.InputsSizePolicy)
@@ -28,26 +28,26 @@ class AbilityScoreDerivativeWidget(QFrame):
 
         # Save DC
         self.SaveDCLabel = QLabel("Save DC:")
-        self.SaveDCLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SaveDCLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.SaveDCLineEdit = CenteredLineEdit()
         self.SaveDCLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.SaveDCLineEdit.setText("N/A")
         self.SaveDCLineEdit.setReadOnly(True)
-        self.SaveDCLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.SaveDCLineEdit.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.SaveDCEditButton = EditButton(self.EditSaveDC, "Edit Save DC")
         self.SaveDCEditButton.setSizePolicy(self.InputsSizePolicy)
 
         # Attack Modifier
         self.AttackModifierLabel = QLabel("Attack Mod:")
-        self.AttackModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.AttackModifierLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.AttackModifierLineEdit = CenteredLineEdit()
         self.AttackModifierLineEdit.setSizePolicy(self.InputsSizePolicy)
         self.AttackModifierLineEdit.setText("N/A")
         self.AttackModifierLineEdit.setReadOnly(True)
-        self.AttackModifierLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.AttackModifierLineEdit.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.AttackModifierRollButton = RollButton(self.RollAttackModifier, "Roll Attack Modifier")
         self.AttackModifierRollButton.setSizePolicy(self.InputsSizePolicy)

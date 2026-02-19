@@ -1,5 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QComboBox, QDialog, QGridLayout, QPushButton, QSpinBox, QMessageBox, QSizePolicy
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QComboBox, QDialog, QGridLayout, QPushButton, QSpinBox, QMessageBox, QSizePolicy
 
 
 class RollForAbilityScoresDialog(QDialog):
@@ -15,7 +15,7 @@ class RollForAbilityScoresDialog(QDialog):
         self.InputsSuffixes = ["One", "Two", "Three", "Four", "Five", "Six"]
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Roll Button
         self.RollAbilityScoresButton = QPushButton("Roll Ability Scores")
@@ -34,14 +34,14 @@ class RollForAbilityScoresDialog(QDialog):
             # SpinBox
             self.Inputs[f"SpinBox {InputsSuffix}"] = QSpinBox()
             SpinBox = self.Inputs[f"SpinBox {InputsSuffix}"]
-            SpinBox.setAlignment(QtCore.Qt.AlignCenter)
+            SpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
             SpinBox.setSizePolicy(self.InputsSizePolicy)
-            SpinBox.setButtonSymbols(self.Inputs[f"SpinBox {InputsSuffix}"].NoButtons)
+            SpinBox.setButtonSymbols(self.Inputs[f"SpinBox {InputsSuffix}"].ButtonSymbols.NoButtons)
             SpinBox.setRange(0, 18)
             SpinBox.setSpecialValueText("Not Rolled")
             SpinBox.setValue(0)
             SpinBox.setReadOnly(True)
-            SpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+            SpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
             SpinBox.setMinimumWidth(70)
 
         # Dialog Buttons
@@ -79,7 +79,7 @@ class RollForAbilityScoresDialog(QDialog):
         self.setWindowIcon(self.CharacterWindow.WindowIcon)
 
         # Execute Dialog
-        self.exec_()
+        self.exec()
 
     def RollAbilityScores(self):
         RolledScores = self.CharacterWindow.PlayerCharacter.GetRolledAbilityScores()
@@ -106,11 +106,11 @@ class RollForAbilityScoresDialog(QDialog):
         for InputsSuffix in self.InputsSuffixes:
             if self.Inputs[f"SpinBox {InputsSuffix}"].value() == 0:
                 if Alert:
-                    self.CharacterWindow.DisplayMessageBox("No scores have been rolled.", Icon=QMessageBox.Warning, Parent=self)
+                    self.CharacterWindow.DisplayMessageBox("No scores have been rolled.", Icon=QMessageBox.Icon.Warning, Parent=self)
                 return False
             AbilitiesSet.add(self.Inputs[f"ComboBox {InputsSuffix}"].currentText())
         if len(AbilitiesSet) != 6:
             if Alert:
-                self.CharacterWindow.DisplayMessageBox("Each rolled score must be uniquely assigned to one of the six ability scores.", Icon=QMessageBox.Warning, Parent=self)
+                self.CharacterWindow.DisplayMessageBox("Each rolled score must be uniquely assigned to one of the six ability scores.", Icon=QMessageBox.Icon.Warning, Parent=self)
             return False
         return True

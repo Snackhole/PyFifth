@@ -1,7 +1,7 @@
 import copy
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QLabel, QMessageBox, QPushButton, QGridLayout
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QDialog, QLabel, QMessageBox, QPushButton, QGridLayout
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
@@ -24,7 +24,7 @@ class EditFeatureDialog(QDialog):
 
         # Labels
         self.PromptLabel = QLabel("Add this feature:" if AddMode else "Edit this feature:")
-        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Feature Inputs
         self.NameLineEdit = CenteredLineEdit()
@@ -59,7 +59,7 @@ class EditFeatureDialog(QDialog):
         self.NameLineEdit.selectAll()
 
         # Execute Dialog
-        self.exec_()
+        self.exec()
 
     def UpdateFeature(self):
         if not self.ValidInput():
@@ -81,6 +81,6 @@ class EditFeatureDialog(QDialog):
     def ValidInput(self, Alert=False):
         if self.NameLineEdit.text() == "":
             if Alert:
-                self.CharacterWindow.DisplayMessageBox("Features must have a name.", Icon=QMessageBox.Warning, Parent=self)
+                self.CharacterWindow.DisplayMessageBox("Features must have a name.", Icon=QMessageBox.Icon.Warning, Parent=self)
             return False
         return True

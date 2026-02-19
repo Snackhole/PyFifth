@@ -1,6 +1,6 @@
-from PyQt5 import QtCore
-from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QHeaderView
+from PyQt6 import QtCore
+from PyQt6.QtGui import QColor
+from PyQt6.QtWidgets import QTreeWidget, QTreeWidgetItem, QHeaderView
 
 
 class InitiativeOrderTreeWidget(QTreeWidget):
@@ -12,7 +12,7 @@ class InitiativeOrderTreeWidget(QTreeWidget):
 
         # Header Setup
         self.setRootIsDecorated(False)
-        self.header().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.header().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self.setColumnCount(6)
         self.setHeaderLabels(["Initiative", "Tie Priority", "Creature Name", "Conditions", "Location", "Notes"])
 
@@ -24,7 +24,7 @@ class InitiativeOrderTreeWidget(QTreeWidget):
     def SelectIndex(self, Index):
         DestinationIndex = self.model().index(Index, 0)
         self.setCurrentIndex(DestinationIndex)
-        self.scrollToItem(self.currentItem(), self.PositionAtCenter)
+        self.scrollToItem(self.currentItem(), self.ScrollHint.PositionAtCenter)
         self.horizontalScrollBar().setValue(0)
 
 
@@ -57,4 +57,4 @@ class InitiativeOrderWidgetItem(QTreeWidgetItem):
 
         # Set Alignment
         for Column in range(len(self.ColumnTextList) - 1):
-            self.setTextAlignment(Column, QtCore.Qt.AlignCenter)
+            self.setTextAlignment(Column, QtCore.Qt.AlignmentFlag.AlignCenter)

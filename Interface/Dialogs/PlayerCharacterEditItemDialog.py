@@ -1,7 +1,7 @@
 import copy
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QComboBox, QDialog, QDoubleSpinBox, QLabel, QLineEdit, QMessageBox, QPushButton, QGridLayout, QSpinBox
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QComboBox, QDialog, QDoubleSpinBox, QLabel, QLineEdit, QMessageBox, QPushButton, QGridLayout, QSpinBox
 
 from Interface.Widgets.IndentingTextEdit import IndentingTextEdit
 
@@ -23,7 +23,7 @@ class PlayerCharacterEditItemDialog(QDialog):
 
         # Prompt Label
         self.PromptLabel = QLabel("Add this item:" if AddMode else "Edit this item:")
-        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Item Name
         self.ItemNameLabel = QLabel("Name:")
@@ -45,20 +45,20 @@ class PlayerCharacterEditItemDialog(QDialog):
 
         # Item Count
         self.ItemCountLabel = QLabel("Count:")
-        self.ItemCountLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ItemCountLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ItemCountSpinBox = QSpinBox()
-        self.ItemCountSpinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.ItemCountSpinBox.setButtonSymbols(self.ItemCountSpinBox.NoButtons)
+        self.ItemCountSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.ItemCountSpinBox.setButtonSymbols(self.ItemCountSpinBox.ButtonSymbols.NoButtons)
         self.ItemCountSpinBox.setRange(1, 1000000000)
         self.ItemCountSpinBox.setValue(self.Item["Item Count"])
         self.ItemCountSpinBox.valueChanged.connect(self.UpdateItem)
 
         # Item Unit Weight
         self.ItemUnitWeightLabel = QLabel("Unit Weight:")
-        self.ItemUnitWeightLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ItemUnitWeightLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ItemUnitWeightSpinBox = QDoubleSpinBox()
-        self.ItemUnitWeightSpinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.ItemUnitWeightSpinBox.setButtonSymbols(self.ItemUnitWeightSpinBox.NoButtons)
+        self.ItemUnitWeightSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.ItemUnitWeightSpinBox.setButtonSymbols(self.ItemUnitWeightSpinBox.ButtonSymbols.NoButtons)
         self.ItemUnitWeightSpinBox.setRange(0, 1000000000)
         self.ItemUnitWeightSpinBox.setSuffix(" lbs.")
         self.ItemUnitWeightSpinBox.setValue(self.Item["Item Unit Weight"])
@@ -66,10 +66,10 @@ class PlayerCharacterEditItemDialog(QDialog):
 
         # Item Unit Value
         self.ItemUnitValueLabel = QLabel("Unit Value:")
-        self.ItemUnitValueLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ItemUnitValueLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ItemUnitValueSpinBox = QDoubleSpinBox()
-        self.ItemUnitValueSpinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.ItemUnitValueSpinBox.setButtonSymbols(self.ItemUnitValueSpinBox.NoButtons)
+        self.ItemUnitValueSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.ItemUnitValueSpinBox.setButtonSymbols(self.ItemUnitValueSpinBox.ButtonSymbols.NoButtons)
         self.ItemUnitValueSpinBox.setRange(0, 1000000000)
         self.ItemUnitValueSpinBox.setValue(self.Item["Item Unit Value"])
         self.ItemUnitValueSpinBox.valueChanged.connect(self.UpdateItem)
@@ -81,7 +81,7 @@ class PlayerCharacterEditItemDialog(QDialog):
 
         # Item Tag
         self.ItemTagLabel = QLabel("Tag:")
-        self.ItemTagLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ItemTagLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ItemTagComboBox = QComboBox()
         self.ItemTagComboBox.setEditable(False)
         self.ItemTagComboBox.addItems(["", "Gear", "Food", "Water", "Treasure", "Misc."])
@@ -90,7 +90,7 @@ class PlayerCharacterEditItemDialog(QDialog):
 
         # Item Description
         self.ItemDescriptionLabel = QLabel("Description:")
-        self.ItemDescriptionLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ItemDescriptionLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ItemDescriptionTextEdit = IndentingTextEdit(TextChangedSlot=self.UpdateItem)
         self.ItemDescriptionTextEdit.setTabChangesFocus(True)
         self.ItemDescriptionTextEdit.setPlainText(self.Item["Item Description"])
@@ -147,7 +147,7 @@ class PlayerCharacterEditItemDialog(QDialog):
         self.ItemNameLineEdit.selectAll()
 
         # Execute Dialog
-        self.exec_()
+        self.exec()
 
     def UpdateItem(self):
         if not self.ValidInput():
@@ -176,6 +176,6 @@ class PlayerCharacterEditItemDialog(QDialog):
     def ValidInput(self, Alert=False):
         if self.ItemNameLineEdit.text() == "":
             if Alert:
-                self.CharacterWindow.DisplayMessageBox("Items must have a name.", Icon=QMessageBox.Warning, Parent=self)
+                self.CharacterWindow.DisplayMessageBox("Items must have a name.", Icon=QMessageBox.Icon.Warning, Parent=self)
             return False
         return True

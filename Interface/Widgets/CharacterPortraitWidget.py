@@ -1,7 +1,6 @@
-from PyQt5 import QtCore
-
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QFileDialog, QFrame, QGridLayout, QLabel, QMessageBox, QScrollArea
+from PyQt6 import QtCore
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import QFileDialog, QFrame, QGridLayout, QLabel, QMessageBox, QScrollArea
 
 from Interface.Widgets.IconButtons import AddButton, CopyButton, DeleteButton
 
@@ -35,7 +34,7 @@ class CharacterPortraitWidget(QFrame):
         self.PortraitDisplay = QLabel()
         self.PortraitDisplayScrollArea = QScrollArea()
         self.PortraitDisplayScrollArea.setWidget(self.PortraitDisplay)
-        self.PortraitDisplayScrollArea.setAlignment(QtCore.Qt.AlignCenter)
+        self.PortraitDisplayScrollArea.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
     def CreateButtons(self):
         self.AddButton = AddButton(self.AddPortrait, "Add Portrait")
@@ -73,7 +72,7 @@ class CharacterPortraitWidget(QFrame):
     def AddPortrait(self):
         Character = self.CharacterWindow.GetCharacter()
         if Character.Stats["Portrait"] is not None:
-            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to replace the current portrait?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self) == QMessageBox.No:
+            if self.CharacterWindow.DisplayMessageBox("Are you sure you want to replace the current portrait?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No), Parent=self) == QMessageBox.StandardButton.No:
                 return
         ImageFilePath = QFileDialog.getOpenFileName(parent=self, caption="Add Portrait", filter="Images (*.jpg *.jpeg *.png *.gif *.bmp)")[0]
         if ImageFilePath != "":
@@ -90,7 +89,7 @@ class CharacterPortraitWidget(QFrame):
             Character.ExportPortrait(ExportFilePath)
 
     def ClearPortrait(self):
-        if self.CharacterWindow.DisplayMessageBox("Are you sure you want to clear the portrait?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No), Parent=self) == QMessageBox.Yes:
+        if self.CharacterWindow.DisplayMessageBox("Are you sure you want to clear the portrait?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No), Parent=self) == QMessageBox.StandardButton.Yes:
             Character = self.CharacterWindow.GetCharacter()
             Character.DeletePortrait()
             self.CharacterWindow.UpdateUnsavedChangesFlag(True)

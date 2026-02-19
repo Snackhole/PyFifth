@@ -1,5 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox, QSizePolicy, QMessageBox
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton, QSpinBox, QSizePolicy, QMessageBox
 
 
 class PointBuyAbilityScoresDialog(QDialog):
@@ -14,96 +14,96 @@ class PointBuyAbilityScoresDialog(QDialog):
         self.AbilitiesList = self.CharacterWindow.PlayerCharacter.Abilities
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Prompt Label
         self.PromptLabel = QLabel("Buy ability scores with points:")
-        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Strength Input
         self.StrengthLabel = QLabel("Strength")
-        self.StrengthLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.StrengthLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.StrengthSpinBox = QSpinBox()
-        self.StrengthSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.StrengthSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.StrengthSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.StrengthSpinBox.setButtonSymbols(self.StrengthSpinBox.NoButtons)
+        self.StrengthSpinBox.setButtonSymbols(self.StrengthSpinBox.ButtonSymbols.NoButtons)
         self.StrengthSpinBox.setRange(8, 15)
         self.StrengthSpinBox.setValue(8)
         self.StrengthSpinBox.valueChanged.connect(self.UpdateDisplay)
 
         # Dexterity Input
         self.DexterityLabel = QLabel("Dexterity")
-        self.DexterityLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.DexterityLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.DexteritySpinBox = QSpinBox()
-        self.DexteritySpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DexteritySpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.DexteritySpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.DexteritySpinBox.setButtonSymbols(self.DexteritySpinBox.NoButtons)
+        self.DexteritySpinBox.setButtonSymbols(self.DexteritySpinBox.ButtonSymbols.NoButtons)
         self.DexteritySpinBox.setRange(8, 15)
         self.DexteritySpinBox.setValue(8)
         self.DexteritySpinBox.valueChanged.connect(self.UpdateDisplay)
 
         # Constitution Input
         self.ConstitutionLabel = QLabel("Constitution")
-        self.ConstitutionLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ConstitutionLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.ConstitutionSpinBox = QSpinBox()
-        self.ConstitutionSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ConstitutionSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ConstitutionSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.ConstitutionSpinBox.setButtonSymbols(self.ConstitutionSpinBox.NoButtons)
+        self.ConstitutionSpinBox.setButtonSymbols(self.ConstitutionSpinBox.ButtonSymbols.NoButtons)
         self.ConstitutionSpinBox.setRange(8, 15)
         self.ConstitutionSpinBox.setValue(8)
         self.ConstitutionSpinBox.valueChanged.connect(self.UpdateDisplay)
 
         # Intelligence Input
         self.IntelligenceLabel = QLabel("Intelligence")
-        self.IntelligenceLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.IntelligenceLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.IntelligenceSpinBox = QSpinBox()
-        self.IntelligenceSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.IntelligenceSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.IntelligenceSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.IntelligenceSpinBox.setButtonSymbols(self.IntelligenceSpinBox.NoButtons)
+        self.IntelligenceSpinBox.setButtonSymbols(self.IntelligenceSpinBox.ButtonSymbols.NoButtons)
         self.IntelligenceSpinBox.setRange(8, 15)
         self.IntelligenceSpinBox.setValue(8)
         self.IntelligenceSpinBox.valueChanged.connect(self.UpdateDisplay)
 
         # Wisdom Input
         self.WisdomLabel = QLabel("Wisdom")
-        self.WisdomLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.WisdomLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.WisdomSpinBox = QSpinBox()
-        self.WisdomSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.WisdomSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.WisdomSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.WisdomSpinBox.setButtonSymbols(self.WisdomSpinBox.NoButtons)
+        self.WisdomSpinBox.setButtonSymbols(self.WisdomSpinBox.ButtonSymbols.NoButtons)
         self.WisdomSpinBox.setRange(8, 15)
         self.WisdomSpinBox.setValue(8)
         self.WisdomSpinBox.valueChanged.connect(self.UpdateDisplay)
 
         # Charisma Input
         self.CharismaLabel = QLabel("Charisma")
-        self.CharismaLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CharismaLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.CharismaSpinBox = QSpinBox()
-        self.CharismaSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CharismaSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CharismaSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.CharismaSpinBox.setButtonSymbols(self.CharismaSpinBox.NoButtons)
+        self.CharismaSpinBox.setButtonSymbols(self.CharismaSpinBox.ButtonSymbols.NoButtons)
         self.CharismaSpinBox.setRange(8, 15)
         self.CharismaSpinBox.setValue(8)
         self.CharismaSpinBox.valueChanged.connect(self.UpdateDisplay)
 
         # Points Remaining
         self.PointsRemainingLabel = QLabel("Points Remaining")
-        self.PointsRemainingLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PointsRemainingLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.PointsRemainingSpinBox = QSpinBox()
-        self.PointsRemainingSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.PointsRemainingSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.PointsRemainingSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.PointsRemainingSpinBox.setButtonSymbols(self.PointsRemainingSpinBox.NoButtons)
+        self.PointsRemainingSpinBox.setButtonSymbols(self.PointsRemainingSpinBox.ButtonSymbols.NoButtons)
         self.PointsRemainingSpinBox.setRange(-27, 27)
         self.PointsRemainingSpinBox.setValue(27)
         self.PointsRemainingSpinBox.setReadOnly(True)
-        self.PointsRemainingSpinBox.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.PointsRemainingSpinBox.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         # Point Costs Label
         self.PointCostsLabel = QLabel("Min Score:  8\nMax Score:  15\n\nCosts:\n8:  0\n9:  1\n10:  2\n11:  3\n12:  4\n13:  5\n14:  7\n15:  9")
@@ -157,7 +157,7 @@ class PointBuyAbilityScoresDialog(QDialog):
         self.UpdateDisplay()
 
         # Execute Dialog
-        self.exec_()
+        self.exec()
 
     def UpdateDisplay(self):
         Scores = []
@@ -192,6 +192,6 @@ class PointBuyAbilityScoresDialog(QDialog):
     def ValidInput(self, Alert=False):
         if self.PointsRemainingSpinBox.value() < 0:
             if Alert:
-                self.CharacterWindow.DisplayMessageBox("Not enough points remain for these scores.", Icon=QMessageBox.Warning, Parent=self)
+                self.CharacterWindow.DisplayMessageBox("Not enough points remain for these scores.", Icon=QMessageBox.Icon.Warning, Parent=self)
             return False
         return True

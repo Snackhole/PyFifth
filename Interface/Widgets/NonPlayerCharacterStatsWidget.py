@@ -1,5 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QComboBox, QFrame, QGridLayout, QInputDialog, QLabel, QSizePolicy, QSpinBox
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QComboBox, QFrame, QGridLayout, QInputDialog, QLabel, QSizePolicy, QSpinBox
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.IconButtons import DamageButton, HealButton
@@ -25,7 +25,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         self.HeaderLabelMargin = 5
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Create Vitality Table
         self.CreateVitalityTable()
@@ -46,45 +46,45 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Header Label
         self.VitalityLabel = QLabel("Vitality")
         self.VitalityLabel.setStyleSheet(self.SectionLabelStyle)
-        self.VitalityLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.VitalityLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.VitalityLabel.setMargin(self.HeaderLabelMargin)
 
         # Temp HP
         self.TempHPLabel = QLabel("Temp HP:")
-        self.TempHPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.TempHPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.TempHPSpinBox = QSpinBox()
         self.TempHPSpinBox.setRange(0, 1000000000)
-        self.TempHPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.TempHPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.TempHPSpinBox.setStyleSheet(self.HPSpinBoxStyle)
         self.TempHPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.TempHPSpinBox.setButtonSymbols(self.TempHPSpinBox.NoButtons)
+        self.TempHPSpinBox.setButtonSymbols(self.TempHPSpinBox.ButtonSymbols.NoButtons)
         self.TempHPSpinBox.setValue(0)
         self.TempHPSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Temp Health", self.TempHPSpinBox.value()))
 
         # Current HP
         self.CurrentHPLabel = QLabel("Current HP:")
-        self.CurrentHPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CurrentHPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.CurrentHPSpinBox = QSpinBox()
         self.CurrentHPSpinBox.setRange(-1000000000, 1000000000)
-        self.CurrentHPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CurrentHPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CurrentHPSpinBox.setStyleSheet(self.HPSpinBoxStyle)
         self.CurrentHPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.CurrentHPSpinBox.setButtonSymbols(self.CurrentHPSpinBox.NoButtons)
+        self.CurrentHPSpinBox.setButtonSymbols(self.CurrentHPSpinBox.ButtonSymbols.NoButtons)
         self.CurrentHPSpinBox.setValue(1)
         self.CurrentHPSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Current Health", self.CurrentHPSpinBox.value()))
 
         # Max HP
         self.MaxHPLabel = QLabel("Max HP:")
-        self.MaxHPLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.MaxHPLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.MaxHPSpinBox = QSpinBox()
         self.MaxHPSpinBox.setRange(0, 1000000000)
-        self.MaxHPSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.MaxHPSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.MaxHPSpinBox.setStyleSheet(self.HPSpinBoxStyle)
         self.MaxHPSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.MaxHPSpinBox.setButtonSymbols(self.MaxHPSpinBox.NoButtons)
+        self.MaxHPSpinBox.setButtonSymbols(self.MaxHPSpinBox.ButtonSymbols.NoButtons)
         self.MaxHPSpinBox.setValue(1)
         self.MaxHPSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat("Max Health", self.MaxHPSpinBox.value()))
 
@@ -96,101 +96,101 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Header Label
         self.AbilityScoreModifiersLabel = QLabel("Ability Score Modifiers")
         self.AbilityScoreModifiersLabel.setStyleSheet(self.SectionLabelStyle)
-        self.AbilityScoreModifiersLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.AbilityScoreModifiersLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.AbilityScoreModifiersLabel.setMargin(self.HeaderLabelMargin)
 
         # Strength Modifier
         self.StrengthModifierLabel = QLabel("Strength")
-        self.StrengthModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.StrengthModifierLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.StrengthModifierLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.StrengthModifierLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.StrengthModifierLabel.setMargin(5)
 
         self.StrengthModifierSpinBox = QSpinBox()
         self.StrengthModifierSpinBox.setRange(-1000000000, 1000000000)
-        self.StrengthModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.StrengthModifierSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.StrengthModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.StrengthModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.StrengthModifierSpinBox.setButtonSymbols(self.StrengthModifierSpinBox.NoButtons)
+        self.StrengthModifierSpinBox.setButtonSymbols(self.StrengthModifierSpinBox.ButtonSymbols.NoButtons)
         self.StrengthModifierSpinBox.setMaximumWidth(75)
         self.StrengthModifierSpinBox.setValue(0)
         self.StrengthModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Strength"), self.StrengthModifierSpinBox.value()))
 
         # Dexterity Modifier
         self.DexterityModifierLabel = QLabel("Dexterity")
-        self.DexterityModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.DexterityModifierLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.DexterityModifierLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.DexterityModifierLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.DexterityModifierLabel.setMargin(5)
 
         self.DexterityModifierSpinBox = QSpinBox()
         self.DexterityModifierSpinBox.setRange(-1000000000, 1000000000)
-        self.DexterityModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DexterityModifierSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.DexterityModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.DexterityModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.DexterityModifierSpinBox.setButtonSymbols(self.DexterityModifierSpinBox.NoButtons)
+        self.DexterityModifierSpinBox.setButtonSymbols(self.DexterityModifierSpinBox.ButtonSymbols.NoButtons)
         self.DexterityModifierSpinBox.setMaximumWidth(75)
         self.DexterityModifierSpinBox.setValue(0)
         self.DexterityModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Dexterity"), self.DexterityModifierSpinBox.value()))
 
         # Constitution Modifier
         self.ConstitutionModifierLabel = QLabel("Constitution")
-        self.ConstitutionModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.ConstitutionModifierLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.ConstitutionModifierLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.ConstitutionModifierLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.ConstitutionModifierLabel.setMargin(5)
 
         self.ConstitutionModifierSpinBox = QSpinBox()
         self.ConstitutionModifierSpinBox.setRange(-1000000000, 1000000000)
-        self.ConstitutionModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ConstitutionModifierSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ConstitutionModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.ConstitutionModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.ConstitutionModifierSpinBox.setButtonSymbols(self.ConstitutionModifierSpinBox.NoButtons)
+        self.ConstitutionModifierSpinBox.setButtonSymbols(self.ConstitutionModifierSpinBox.ButtonSymbols.NoButtons)
         self.ConstitutionModifierSpinBox.setMaximumWidth(75)
         self.ConstitutionModifierSpinBox.setValue(0)
         self.ConstitutionModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Constitution"), self.ConstitutionModifierSpinBox.value()))
 
         # Intelligence Modifier
         self.IntelligenceModifierLabel = QLabel("Intelligence")
-        self.IntelligenceModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.IntelligenceModifierLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.IntelligenceModifierLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.IntelligenceModifierLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.IntelligenceModifierLabel.setMargin(5)
 
         self.IntelligenceModifierSpinBox = QSpinBox()
         self.IntelligenceModifierSpinBox.setRange(-1000000000, 1000000000)
-        self.IntelligenceModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.IntelligenceModifierSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.IntelligenceModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.IntelligenceModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.IntelligenceModifierSpinBox.setButtonSymbols(self.IntelligenceModifierSpinBox.NoButtons)
+        self.IntelligenceModifierSpinBox.setButtonSymbols(self.IntelligenceModifierSpinBox.ButtonSymbols.NoButtons)
         self.IntelligenceModifierSpinBox.setMaximumWidth(75)
         self.IntelligenceModifierSpinBox.setValue(0)
         self.IntelligenceModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Intelligence"), self.IntelligenceModifierSpinBox.value()))
 
         # Wisdom Modifier
         self.WisdomModifierLabel = QLabel("Wisdom")
-        self.WisdomModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.WisdomModifierLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.WisdomModifierLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.WisdomModifierLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.WisdomModifierLabel.setMargin(5)
 
         self.WisdomModifierSpinBox = QSpinBox()
         self.WisdomModifierSpinBox.setRange(-1000000000, 1000000000)
-        self.WisdomModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.WisdomModifierSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.WisdomModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.WisdomModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.WisdomModifierSpinBox.setButtonSymbols(self.WisdomModifierSpinBox.NoButtons)
+        self.WisdomModifierSpinBox.setButtonSymbols(self.WisdomModifierSpinBox.ButtonSymbols.NoButtons)
         self.WisdomModifierSpinBox.setMaximumWidth(75)
         self.WisdomModifierSpinBox.setValue(0)
         self.WisdomModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Wisdom"), self.WisdomModifierSpinBox.value()))
 
         # Charisma Modifier
         self.CharismaModifierLabel = QLabel("Charisma")
-        self.CharismaModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.CharismaModifierLabel.setFrameStyle(QLabel.StyledPanel | QLabel.Plain)
+        self.CharismaModifierLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.CharismaModifierLabel.setFrameStyle(QLabel.Shape.StyledPanel | QLabel.Shadow.Plain)
         self.CharismaModifierLabel.setMargin(5)
 
         self.CharismaModifierSpinBox = QSpinBox()
         self.CharismaModifierSpinBox.setRange(-1000000000, 1000000000)
-        self.CharismaModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CharismaModifierSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CharismaModifierSpinBox.setStyleSheet(self.AbilityScoreModifierSpinBoxStyle)
         self.CharismaModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
-        self.CharismaModifierSpinBox.setButtonSymbols(self.CharismaModifierSpinBox.NoButtons)
+        self.CharismaModifierSpinBox.setButtonSymbols(self.CharismaModifierSpinBox.ButtonSymbols.NoButtons)
         self.CharismaModifierSpinBox.setMaximumWidth(75)
         self.CharismaModifierSpinBox.setValue(0)
         self.CharismaModifierSpinBox.valueChanged.connect(lambda: self.CharacterWindow.UpdateStat(("Ability Score Modifiers", "Charisma"), self.CharismaModifierSpinBox.value()))
@@ -202,7 +202,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # AC
         self.ACLabel = QLabel("AC")
         self.ACLabel.setStyleSheet(self.SectionLabelStyle)
-        self.ACLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ACLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ACLabel.setMargin(self.HeaderLabelMargin)
 
         self.ACLineEdit = CenteredLineEdit()
@@ -211,7 +211,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Speed
         self.SpeedLabel = QLabel("Speed")
         self.SpeedLabel.setStyleSheet(self.SectionLabelStyle)
-        self.SpeedLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpeedLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.SpeedLabel.setMargin(self.HeaderLabelMargin)
 
         self.SpeedLineEdit = CenteredLineEdit()
@@ -220,7 +220,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # CR
         self.CRLabel = QLabel("CR")
         self.CRLabel.setStyleSheet(self.SectionLabelStyle)
-        self.CRLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.CRLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.CRLabel.setMargin(self.HeaderLabelMargin)
 
         self.CRComboBox = QComboBox()
@@ -231,7 +231,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Experience
         self.ExperienceLabel = QLabel("Experience")
         self.ExperienceLabel.setStyleSheet(self.SectionLabelStyle)
-        self.ExperienceLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ExperienceLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ExperienceLabel.setMargin(self.HeaderLabelMargin)
 
         self.ExperienceLineEdit = CenteredLineEdit()
@@ -240,7 +240,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Skills, Senses, and Languages
         self.SkillsSensesAndLanguagesLabel = QLabel("Skills, Senses, and Languages")
         self.SkillsSensesAndLanguagesLabel.setStyleSheet(self.SectionLabelStyle)
-        self.SkillsSensesAndLanguagesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SkillsSensesAndLanguagesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.SkillsSensesAndLanguagesLabel.setMargin(self.HeaderLabelMargin)
 
         self.SkillsSensesAndLanguagesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Skills, Senses, and Languages", self.SkillsSensesAndLanguagesTextEdit.toPlainText()))
@@ -249,7 +249,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Special Traits
         self.SpecialTraitsLabel = QLabel("Special Traits")
         self.SpecialTraitsLabel.setStyleSheet(self.SectionLabelStyle)
-        self.SpecialTraitsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpecialTraitsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.SpecialTraitsLabel.setMargin(self.HeaderLabelMargin)
 
         self.SpecialTraitsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Special Traits", self.SpecialTraitsTextEdit.toPlainText()))
@@ -259,7 +259,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Actions and Reactions
         self.ActionsAndReactionsLabel = QLabel("Actions and Reactions")
         self.ActionsAndReactionsLabel.setStyleSheet(self.SectionLabelStyle)
-        self.ActionsAndReactionsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ActionsAndReactionsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.ActionsAndReactionsLabel.setMargin(self.HeaderLabelMargin)
 
         self.ActionsAndReactionsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Actions and Reactions", self.ActionsAndReactionsTextEdit.toPlainText()))
@@ -269,7 +269,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Saving Throws
         self.SavingThrowsLabel = QLabel("Saving Throws")
         self.SavingThrowsLabel.setStyleSheet(self.SectionLabelStyle)
-        self.SavingThrowsLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SavingThrowsLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.SavingThrowsLabel.setMargin(self.HeaderLabelMargin)
 
         self.SavingThrowsTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Saving Throws", self.SavingThrowsTextEdit.toPlainText()))
@@ -279,7 +279,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Vulnerabilities, Resistances, and Immunities
         self.VulnerabilitiesResistancesAndImmunitiesLabel = QLabel("Vulnerabilities, Resistances, and Immunities")
         self.VulnerabilitiesResistancesAndImmunitiesLabel.setStyleSheet(self.SectionLabelStyle)
-        self.VulnerabilitiesResistancesAndImmunitiesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.VulnerabilitiesResistancesAndImmunitiesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.VulnerabilitiesResistancesAndImmunitiesLabel.setMargin(self.HeaderLabelMargin)
 
         self.VulnerabilitiesResistancesAndImmunitiesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Vulnerabilities, Resistances, and Immunities", self.VulnerabilitiesResistancesAndImmunitiesTextEdit.toPlainText()))
@@ -289,7 +289,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Inventory
         self.InventoryLabel = QLabel("Inventory")
         self.InventoryLabel.setStyleSheet(self.SectionLabelStyle)
-        self.InventoryLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.InventoryLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.InventoryLabel.setMargin(self.HeaderLabelMargin)
 
         self.InventoryTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Inventory", self.InventoryTextEdit.toPlainText()))
@@ -299,7 +299,7 @@ class NonPlayerCharacterStatsWidget(QFrame):
         # Notes
         self.NotesLabel = QLabel("Notes")
         self.NotesLabel.setStyleSheet(self.SectionLabelStyle)
-        self.NotesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.NotesLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.NotesLabel.setMargin(self.HeaderLabelMargin)
 
         self.NotesTextEdit = IndentingTextEdit(TextChangedSlot=lambda: self.CharacterWindow.UpdateStat("Notes", self.NotesTextEdit.toPlainText()))

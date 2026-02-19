@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog, QPushButton, QGridLayout
+from PyQt6.QtWidgets import QDialog, QPushButton, QGridLayout
 
 from Interface.Widgets.CoinCalculatorWidget import CoinCalculatorWidget
 
@@ -31,4 +31,4 @@ class CoinCalculatorDialog(QDialog):
         self.setWindowIcon(self.CharacterWindow.WindowIcon)
 
         # Execute Dialog
-        self.exec_()
+        self.exec()

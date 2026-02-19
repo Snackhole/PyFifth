@@ -2,8 +2,9 @@ import copy
 import json
 import os
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QFrame, QGridLayout, QInputDialog, QLabel, QSpinBox, QMessageBox, QAction, QTabWidget
+from PyQt6 import QtCore
+from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import QFrame, QGridLayout, QInputDialog, QLabel, QSpinBox, QMessageBox, QTabWidget
 
 from Core.PlayerCharacter import PlayerCharacter
 from Core.DiceRoller import DiceRoller
@@ -73,27 +74,27 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
 
         self.LevelLabel = QLabel("Level:")
         self.LevelSpinBox = QSpinBox()
-        self.LevelSpinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.LevelSpinBox.setButtonSymbols(self.LevelSpinBox.NoButtons)
+        self.LevelSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.LevelSpinBox.setButtonSymbols(self.LevelSpinBox.ButtonSymbols.NoButtons)
         self.LevelSpinBox.setRange(1, 20)
         self.LevelSpinBox.valueChanged.connect(lambda: self.UpdateStat("Character Level", self.LevelSpinBox.value()))
 
         self.ProficiencyBonusLabel = QLabel("Proficiency Bonus:")
         self.ProficiencyBonusLineEdit = CenteredLineEdit()
         self.ProficiencyBonusLineEdit.setReadOnly(True)
-        self.ProficiencyBonusLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ProficiencyBonusLineEdit.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         self.ExperienceLabel = QLabel("Exp.:")
         self.ExperienceSpinBox = QSpinBox()
-        self.ExperienceSpinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.ExperienceSpinBox.setButtonSymbols(self.ExperienceSpinBox.NoButtons)
+        self.ExperienceSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.ExperienceSpinBox.setButtonSymbols(self.ExperienceSpinBox.ButtonSymbols.NoButtons)
         self.ExperienceSpinBox.setRange(0, 1000000000)
         self.ExperienceSpinBox.valueChanged.connect(lambda: self.UpdateStat("Character Experience Earned", self.ExperienceSpinBox.value()))
 
         self.NeededExperienceLabel = QLabel("Needed Exp.:")
         self.NeededExperienceLineEdit = CenteredLineEdit()
         self.NeededExperienceLineEdit.setReadOnly(True)
-        self.NeededExperienceLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.NeededExperienceLineEdit.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         # Stats Tab Widget
         self.StatsTabWidget = QTabWidget()
@@ -121,7 +122,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.Layout = QGridLayout()
 
         self.HeaderFrame = QFrame()
-        self.HeaderFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.HeaderFrame.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Plain)
         self.HeaderLayout = QGridLayout()
         self.HeaderLayout.addWidget(self.NameLabel, 0, 0)
         self.HeaderLayout.addWidget(self.NameLineEdit, 0, 1)
@@ -141,14 +142,14 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.Layout.addWidget(self.HeaderFrame, 0, 0, 1, 2)
 
         self.StatsFrame = QFrame()
-        self.StatsFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.StatsFrame.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Plain)
         self.StatsLayout = QGridLayout()
         self.StatsLayout.addWidget(self.StatsTabWidget, 0, 0)
         self.StatsFrame.setLayout(self.StatsLayout)
         self.Layout.addWidget(self.StatsFrame, 1, 0)
 
         self.DiceRollerFrame = QFrame()
-        self.DiceRollerFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.DiceRollerFrame.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Plain)
         self.DiceRollerLayout = QGridLayout()
         self.DiceRollerLayout.addWidget(self.DiceRollerWidget, 0, 0)
         self.DiceRollerLayout.addWidget(self.InspirationButton, 1, 0)
@@ -447,7 +448,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
     def DeletePresetRoll(self):
         CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
-            if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)) == QMessageBox.StandardButton.Yes:
                 CurrentPresetRoll = CurrentSelection[0]
                 CurrentPresetRollIndex = CurrentPresetRoll.Index
                 self.PlayerCharacter.Stats["Dice Roller"].DeletePresetRoll(CurrentPresetRollIndex)
@@ -500,12 +501,12 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
             self.UpdateUnsavedChangesFlag(True)
 
     def RemoveLastLogEntryActionTriggered(self):
-        if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+        if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)) == QMessageBox.StandardButton.Yes:
             self.PlayerCharacter.Stats["Dice Roller"].RemoveLastLogEntry()
             self.UpdateUnsavedChangesFlag(True)
 
     def ClearLogActionTriggered(self):
-        if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+        if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)) == QMessageBox.StandardButton.Yes:
             self.PlayerCharacter.Stats["Dice Roller"].ClearLog()
             self.UpdateUnsavedChangesFlag(True)
 
@@ -572,13 +573,13 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
     def closeEvent(self, event):
         Close = True
         if self.UnsavedChanges:
-            SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
-            if SavePrompt == QMessageBox.Yes:
+            SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel))
+            if SavePrompt == QMessageBox.StandardButton.Yes:
                 if not self.Save(self.PlayerCharacter):
                     Close = False
-            elif SavePrompt == QMessageBox.No:
+            elif SavePrompt == QMessageBox.StandardButton.No:
                 pass
-            elif SavePrompt == QMessageBox.Cancel:
+            elif SavePrompt == QMessageBox.StandardButton.Cancel:
                 Close = False
         if not Close:
             event.ignore()

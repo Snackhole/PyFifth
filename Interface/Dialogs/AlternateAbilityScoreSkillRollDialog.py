@@ -1,7 +1,7 @@
 import copy
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QComboBox, QDialog, QPushButton, QGridLayout, QLabel, QSizePolicy
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QComboBox, QDialog, QPushButton, QGridLayout, QLabel, QSizePolicy
 
 
 class AlternateAbilityScoreSkillRollDialog(QDialog):
@@ -22,11 +22,11 @@ class AlternateAbilityScoreSkillRollDialog(QDialog):
         self.AbilityScoreAbbreviations["Charisma"] = "CHA"
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Prompt Label
         self.PromptLabel = QLabel("Roll a skill with an alternative ability score:")
-        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Skills
         self.SkillsLabel = QLabel("Skill:")
@@ -72,7 +72,7 @@ class AlternateAbilityScoreSkillRollDialog(QDialog):
         self.UpdateAbilityScoresComboBox()
 
         # Execute Dialog
-        self.exec_()
+        self.exec()
 
     def UpdateAbilityScoresComboBox(self):
         Skill = self.SkillsComboBox.currentText()

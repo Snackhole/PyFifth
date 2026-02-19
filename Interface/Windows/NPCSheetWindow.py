@@ -2,8 +2,9 @@ import copy
 import json
 import os
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QAction, QFrame, QInputDialog, QLabel, QMessageBox, QGridLayout, QTabWidget
+from PyQt6 import QtCore
+from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import QFrame, QInputDialog, QLabel, QMessageBox, QGridLayout, QTabWidget
 
 from Core.DiceRoller import DiceRoller
 from Core.NonPlayerCharacter import NonPlayerCharacter
@@ -69,7 +70,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.ProficiencyBonusLabel = QLabel("Proficiency Bonus:")
         self.ProficiencyBonusLineEdit = CenteredLineEdit()
         self.ProficiencyBonusLineEdit.setReadOnly(True)
-        self.ProficiencyBonusLineEdit.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ProficiencyBonusLineEdit.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
 
         # Tab Widget
         self.TabWidget = QTabWidget()
@@ -86,7 +87,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.Layout = QGridLayout()
 
         self.HeaderFrame = QFrame()
-        self.HeaderFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.HeaderFrame.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Plain)
         self.HeaderLayout = QGridLayout()
         self.HeaderLayout.addWidget(self.NameLabel, 0, 0)
         self.HeaderLayout.addWidget(self.NameLineEdit, 0, 1)
@@ -105,14 +106,14 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.Layout.addWidget(self.HeaderFrame, 0, 0, 1, 2)
 
         self.StatsFrame = QFrame()
-        self.StatsFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.StatsFrame.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Plain)
         self.StatsLayout = QGridLayout()
         self.StatsLayout.addWidget(self.TabWidget, 0, 0)
         self.StatsFrame.setLayout(self.StatsLayout)
         self.Layout.addWidget(self.StatsFrame, 1, 0)
 
         self.DiceRollerFrame = QFrame()
-        self.DiceRollerFrame.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.DiceRollerFrame.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Plain)
         self.DiceRollerLayout = QGridLayout()
         self.DiceRollerLayout.addWidget(self.DiceRollerWidget, 0, 0)
         self.DiceRollerFrame.setLayout(self.DiceRollerLayout)
@@ -329,7 +330,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
     def DeletePresetRoll(self):
         CurrentSelection = self.DiceRollerWidget.PresetRollsTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
-            if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)) == QMessageBox.StandardButton.Yes:
                 CurrentPresetRoll = CurrentSelection[0]
                 CurrentPresetRollIndex = CurrentPresetRoll.Index
                 self.NonPlayerCharacter.Stats["Dice Roller"].DeletePresetRoll(CurrentPresetRollIndex)
@@ -382,12 +383,12 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
             self.UpdateUnsavedChangesFlag(True)
 
     def RemoveLastLogEntryActionTriggered(self):
-        if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+        if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)) == QMessageBox.StandardButton.Yes:
             self.NonPlayerCharacter.Stats["Dice Roller"].RemoveLastLogEntry()
             self.UpdateUnsavedChangesFlag(True)
 
     def ClearLogActionTriggered(self):
-        if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+        if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)) == QMessageBox.StandardButton.Yes:
             self.NonPlayerCharacter.Stats["Dice Roller"].ClearLog()
             self.UpdateUnsavedChangesFlag(True)
 
@@ -428,13 +429,13 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
     def closeEvent(self, event):
         Close = True
         if self.UnsavedChanges:
-            SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
-            if SavePrompt == QMessageBox.Yes:
+            SavePrompt = self.DisplayMessageBox("Save unsaved changes before closing?", Icon=QMessageBox.Icon.Warning, Buttons=(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel))
+            if SavePrompt == QMessageBox.StandardButton.Yes:
                 if not self.Save(self.NonPlayerCharacter):
                     Close = False
-            elif SavePrompt == QMessageBox.No:
+            elif SavePrompt == QMessageBox.StandardButton.No:
                 pass
-            elif SavePrompt == QMessageBox.Cancel:
+            elif SavePrompt == QMessageBox.StandardButton.Cancel:
                 Close = False
         if not Close:
             event.ignore()

@@ -1,7 +1,7 @@
 from decimal import Decimal
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QHeaderView, QTreeWidget, QTreeWidgetItem
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QHeaderView, QTreeWidget, QTreeWidgetItem
 
 
 class HoardInventoryTreeWidget(QTreeWidget):
@@ -13,7 +13,7 @@ class HoardInventoryTreeWidget(QTreeWidget):
 
         # Header Setup
         self.setRootIsDecorated(False)
-        self.header().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.header().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self.setColumnCount(6)
         self.setHeaderLabels(["Name", "Count", "Unit Weight", "Unit Value", "Total Weight", "Total Value"])
 
@@ -25,7 +25,7 @@ class HoardInventoryTreeWidget(QTreeWidget):
     def SelectIndex(self, Index):
         DestinationIndex = self.model().index(Index, 0)
         self.setCurrentIndex(DestinationIndex)
-        self.scrollToItem(self.currentItem(), self.PositionAtCenter)
+        self.scrollToItem(self.currentItem(), self.ScrollHint.PositionAtCenter)
         self.horizontalScrollBar().setValue(0)
 
 
@@ -54,4 +54,4 @@ class HoardInventoryTreeWidgetItem(QTreeWidgetItem):
 
         # Set Alignment
         for Column in range(len(self.ColumnTextList) - 1):
-            self.setTextAlignment(Column, QtCore.Qt.AlignCenter)
+            self.setTextAlignment(Column, QtCore.Qt.AlignmentFlag.AlignCenter)

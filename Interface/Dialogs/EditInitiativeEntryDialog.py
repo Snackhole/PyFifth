@@ -1,7 +1,7 @@
 import copy
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QGridLayout, QLabel, QMessageBox, QPushButton, QSpinBox
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QDialog, QGridLayout, QLabel, QMessageBox, QPushButton, QSpinBox
 
 from Interface.Widgets.CenteredLineEdit import CenteredLineEdit
 from Interface.Widgets.ToggleButtons import AliveButton, TurnTakenButton
@@ -24,7 +24,7 @@ class EditInitiativeEntryDialog(QDialog):
 
         # Labels
         self.PromptLabel = QLabel("Add this initiative entry:" if AddMode else "Edit this initiative entry:")
-        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.CreatureNameLabel = QLabel("Creature Name:")
         self.InitiativeLabel = QLabel("Initiative:")
@@ -39,15 +39,15 @@ class EditInitiativeEntryDialog(QDialog):
         self.CreatureNameLineEdit.textChanged.connect(self.UpdateEntry)
 
         self.InitiativeSpinBox = QSpinBox()
-        self.InitiativeSpinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.InitiativeSpinBox.setButtonSymbols(self.InitiativeSpinBox.NoButtons)
+        self.InitiativeSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.InitiativeSpinBox.setButtonSymbols(self.InitiativeSpinBox.ButtonSymbols.NoButtons)
         self.InitiativeSpinBox.setRange(-1000000000, 1000000000)
         self.InitiativeSpinBox.setValue(self.Entry["Initiative"])
         self.InitiativeSpinBox.valueChanged.connect(self.UpdateEntry)
 
         self.TiePrioritySpinBox = QSpinBox()
-        self.TiePrioritySpinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.TiePrioritySpinBox.setButtonSymbols(self.TiePrioritySpinBox.NoButtons)
+        self.TiePrioritySpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.TiePrioritySpinBox.setButtonSymbols(self.TiePrioritySpinBox.ButtonSymbols.NoButtons)
         self.TiePrioritySpinBox.setRange(1, 1000000000)
         self.TiePrioritySpinBox.setValue(self.Entry["Tie Priority"])
         self.TiePrioritySpinBox.valueChanged.connect(self.UpdateEntry)
@@ -111,7 +111,7 @@ class EditInitiativeEntryDialog(QDialog):
         self.CreatureNameLineEdit.selectAll()
 
         # Execute Dialog
-        self.exec_()
+        self.exec()
 
     def UpdateEntry(self):
         if not self.ValidInput():
@@ -139,6 +139,6 @@ class EditInitiativeEntryDialog(QDialog):
     def ValidInput(self, Alert=False):
         if self.CreatureNameLineEdit.text() == "":
             if Alert:
-                self.EncounterWindow.DisplayMessageBox("Initiative entries must have a creature name.", Icon=QMessageBox.Warning, Parent=self)
+                self.EncounterWindow.DisplayMessageBox("Initiative entries must have a creature name.", Icon=QMessageBox.Icon.Warning, Parent=self)
             return False
         return True

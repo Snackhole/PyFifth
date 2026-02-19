@@ -1,5 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QComboBox, QLabel, QPushButton, QDialog, QGridLayout, QSizePolicy, QSpinBox
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QComboBox, QLabel, QPushButton, QDialog, QGridLayout, QSizePolicy, QSpinBox
 
 
 class SpendOrRestoreSpellPointsDialog(QDialog):
@@ -19,15 +19,15 @@ class SpendOrRestoreSpellPointsDialog(QDialog):
         self.Submitted = False
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Prompt
         self.PromptLabel = QLabel(f"{self.ModeString} spell points:")
-        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Spell Slots
         self.SpellSlotLevelLabel = QLabel("Spell Slot Level:")
-        self.SpellSlotLevelLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotLevelLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.SpellSlotLevelComboBox = QComboBox()
         self.SpellSlotLevelComboBox.setSizePolicy(self.InputsSizePolicy)
@@ -35,22 +35,22 @@ class SpendOrRestoreSpellPointsDialog(QDialog):
         self.SpellSlotLevelComboBox.setEditable(False)
 
         self.SpellSlotAmountLabel = QLabel("Spell Slot Amount:")
-        self.SpellSlotAmountLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SpellSlotAmountLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.SpellSlotAmountSpinBox = QSpinBox()
-        self.SpellSlotAmountSpinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.SpellSlotAmountSpinBox.setButtonSymbols(self.SpellSlotAmountSpinBox.NoButtons)
+        self.SpellSlotAmountSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.SpellSlotAmountSpinBox.setButtonSymbols(self.SpellSlotAmountSpinBox.ButtonSymbols.NoButtons)
         self.SpellSlotAmountSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.SpellSlotAmountSpinBox.setRange(0, 1000000000)
         self.SpellSlotAmountSpinBox.setValue(0)
 
         # Manual Amount
         self.ManualAmountLabel = QLabel("Manual Amount:")
-        self.ManualAmountLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ManualAmountLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
         self.ManualAmountSpinBox = QSpinBox()
-        self.ManualAmountSpinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.ManualAmountSpinBox.setButtonSymbols(self.ManualAmountSpinBox.NoButtons)
+        self.ManualAmountSpinBox.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.ManualAmountSpinBox.setButtonSymbols(self.ManualAmountSpinBox.ButtonSymbols.NoButtons)
         self.ManualAmountSpinBox.setSizePolicy(self.InputsSizePolicy)
         self.ManualAmountSpinBox.setRange(0, 1000000000)
         self.ManualAmountSpinBox.setValue(0)
@@ -84,7 +84,7 @@ class SpendOrRestoreSpellPointsDialog(QDialog):
         self.setWindowIcon(self.CharacterWindow.WindowIcon)
 
         # Execute Dialog
-        self.exec_()
+        self.exec()
 
     def Submit(self):
         self.SpellSlotLevel = self.SpellSlotLevelComboBox.currentText()

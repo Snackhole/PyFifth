@@ -1,8 +1,8 @@
 import json
 import os
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QPushButton, QGridLayout, QComboBox, QLabel, QInputDialog, QSizePolicy
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QPushButton, QGridLayout, QComboBox, QLabel, QInputDialog, QSizePolicy
 
 from Interface.Windows.Window import Window
 
@@ -22,7 +22,7 @@ class ModeSelectionWindow(Window):
         self.ModeComboBoxStyle = "QComboBox {font-size: 16pt;}"
 
         # Inputs Size Policy
-        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         # Mode Label
         self.ModeLabel = QLabel("PyFifth Mode:")
@@ -64,7 +64,7 @@ class ModeSelectionWindow(Window):
 
     def keyPressEvent(self, QKeyEvent):
         KeyPressed = QKeyEvent.key()
-        if KeyPressed == QtCore.Qt.Key_Return or KeyPressed == QtCore.Qt.Key_Enter:
+        if KeyPressed == QtCore.Qt.Key.Key_Return or KeyPressed == QtCore.Qt.Key.Key_Enter:
             self.SelectMode(self.ModeComboBox.currentText())
         else:
             super().keyPressEvent(QKeyEvent)
@@ -83,4 +83,4 @@ class ModeSelectionWindow(Window):
         Theme, OK = QInputDialog.getItem(self, "Set Theme", "Set theme (requires restart to take effect):", Themes, current=CurrentThemeIndex, editable=False)
         if OK:
             self.Theme = Theme
-            self.DisplayMessageBox("The new theme will be active after PyFifth is restarted or a mode is selected.")
+            self.DisplayMessageBox(f"The new theme will be active after {self.ScriptName} is restarted or a mode is selected.")

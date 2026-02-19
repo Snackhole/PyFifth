@@ -7,7 +7,7 @@ if AbsoluteDirectoryPath.endswith(".pyz") or AbsoluteDirectoryPath.endswith(".py
 if sys.path[0] != AbsoluteDirectoryPath:
     sys.path.insert(0, AbsoluteDirectoryPath)
 
-from PyQt5.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication
 
 from Interface.Widgets.CoinCalculatorWidget import CoinCalculatorWidget
 from Interface.Windows.EncounterSheetWindow import EncounterSheetWindow
@@ -28,7 +28,7 @@ def StartApp():
     ModeSelectionWindowInst = ModeSelectionWindow(ScriptName, AbsoluteDirectoryPath, AppInst)
 
     # Enter Mode Selection Loop
-    AppInst.exec_()
+    AppInst.exec()
 
     # Initialize Mode
     Mode = ModeSelectionWindowInst.Mode
@@ -45,7 +45,7 @@ def StartApp():
         ModeWindowInst = Modes[Mode](ScriptName, AbsoluteDirectoryPath, AppInst)
 
         # Enter Mode Loop
-        sys.exit(AppInst.exec_())
+        sys.exit(AppInst.exec())
 
 
 if __name__ == "__main__":
