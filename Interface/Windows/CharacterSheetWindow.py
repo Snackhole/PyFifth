@@ -270,7 +270,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
     def CreateMenuBar(self):
         self.MenuBar = self.menuBar()
 
-        self.FileMenu = self.MenuBar.addMenu("File")
+        self.FileMenu = self.MenuBar.addMenu("&File")
         self.FileMenu.addAction(self.NewAction)
         self.FileMenu.addAction(self.OpenAction)
         self.FileMenu.addSeparator()
@@ -281,7 +281,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction(self.QuitAction)
 
-        self.ViewMenu = self.MenuBar.addMenu("View")
+        self.ViewMenu = self.MenuBar.addMenu("&View")
         self.ViewMenu.addAction(self.CoinCalculatorAction)
         self.ViewMenu.addSeparator()
         self.ViewMenu.addAction(self.ViewPreviousTabAction)
@@ -294,7 +294,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.ViewMenu.addAction(self.ViewPersonalityAndBackstoryTabAction)
         self.ViewMenu.addAction(self.ViewPortraitTabAction)
 
-        self.CharacterSettingsMenu = self.MenuBar.addMenu("Character Settings")
+        self.CharacterSettingsMenu = self.MenuBar.addMenu("&Character Settings")
         self.CharacterSettingsMenu.addAction(self.SpellcastingEnabledAction)
         self.CharacterSettingsMenu.addAction(self.ConcentrationCheckPromptEnabledAction)
         self.CharacterSettingsMenu.addAction(self.SpellPointsEnabledAction)
@@ -303,7 +303,7 @@ class CharacterSheetWindow(Window, SaveAndOpenMixin):
         self.CharacterSettingsMenu.addSeparator()
         self.CharacterSettingsMenu.addAction(self.SetCritMinimumAction)
 
-        self.RollerMenu = self.MenuBar.addMenu("Roller")
+        self.RollerMenu = self.MenuBar.addMenu("&Roller")
         self.RollerMenu.addAction(self.RollAction)
         self.RollerMenu.addAction(self.RollPresetRollAction)
         self.RollerMenu.addAction(self.AverageRollAction)

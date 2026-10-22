@@ -208,7 +208,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.QuitAction = QAction("Quit")
         self.QuitAction.triggered.connect(self.close)
 
-        self.CoinCalculatorAction = QAction("Coin Calculator")
+        self.CoinCalculatorAction = QAction("&Coin Calculator")
         self.CoinCalculatorAction.triggered.connect(self.ShowCoinCalculator)
 
         self.NewRoundAction = QAction("New Round")
@@ -226,7 +226,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
     def CreateMenuBar(self):
         self.MenuBar = self.menuBar()
 
-        self.FileMenu = self.MenuBar.addMenu("File")
+        self.FileMenu = self.MenuBar.addMenu("&File")
         self.FileMenu.addAction(self.NewAction)
         self.FileMenu.addAction(self.OpenAction)
         self.FileMenu.addSeparator()
@@ -237,7 +237,7 @@ class EncounterSheetWindow(Window, SaveAndOpenMixin):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction(self.QuitAction)
 
-        self.InitiativeOrderMenu = self.MenuBar.addMenu("Initiative Order")
+        self.InitiativeOrderMenu = self.MenuBar.addMenu("&Initiative Order")
         self.InitiativeOrderMenu.addAction(self.NewRoundAction)
         self.InitiativeOrderMenu.addAction(self.NextTurnAction)
         self.InitiativeOrderMenu.addAction(self.ClearTurnsAction)

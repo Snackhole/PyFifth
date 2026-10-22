@@ -194,7 +194,7 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
     def CreateMenuBar(self):
         self.MenuBar = self.menuBar()
 
-        self.FileMenu = self.MenuBar.addMenu("File")
+        self.FileMenu = self.MenuBar.addMenu("&File")
         self.FileMenu.addAction(self.NewAction)
         self.FileMenu.addAction(self.OpenAction)
         self.FileMenu.addSeparator()
@@ -205,18 +205,18 @@ class NPCSheetWindow(Window, SaveAndOpenMixin):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction(self.QuitAction)
 
-        self.ViewMenu = self.MenuBar.addMenu("View")
+        self.ViewMenu = self.MenuBar.addMenu("&View")
         self.ViewMenu.addAction(self.CoinCalculatorAction)
         self.ViewMenu.addSeparator()
         self.ViewMenu.addAction(self.SwitchTabAction)
 
-        self.NPCSettingsMenu = self.MenuBar.addMenu("NPC Settings")
+        self.NPCSettingsMenu = self.MenuBar.addMenu("&NPC Settings")
         self.NPCSettingsMenu.addAction(self.ConcentrationCheckPromptEnabledAction)
         self.NPCSettingsMenu.addAction(self.PortraitEnabledAction)
         self.NPCSettingsMenu.addSeparator()
         self.NPCSettingsMenu.addAction(self.SetCritMinimumAction)
 
-        self.RollerMenu = self.MenuBar.addMenu("Roller")
+        self.RollerMenu = self.MenuBar.addMenu("&Roller")
         self.RollerMenu.addAction(self.RollAction)
         self.RollerMenu.addAction(self.RollPresetRollAction)
         self.RollerMenu.addAction(self.AverageRollAction)
